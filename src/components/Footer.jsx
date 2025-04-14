@@ -13,6 +13,17 @@ import coinLogo from "../assets/images/coin-logo.png";
 import googlePlay from "../assets/images/google-play.png";
 import appStore from "../assets/images/app-store.png";
 import anchorMediaLlc from "../assets/images/anchor-media-llc.png";
+import LanguageIcon from "../assets/icons/language.svg?react";
+import HelpIcon from "../assets/icons/help-support.svg?react";
+import YoutubeIcon from "../assets/icons/youtube.svg?react";
+import TiktokIcon from "../assets/icons/tiktok.svg?react";
+import RedditIcon from "../assets/icons/reddit.svg?react";
+import InstagramIcon from "../assets/icons/instagram.svg?react";
+import LinkedinIcon from "../assets/icons/linkedin.svg?react";
+import XIcon from "../assets/icons/x.svg?react";
+import DiscordIcon from "../assets/icons/discord.svg?react";
+import SnapchatIcon from "../assets/icons/snapchat.svg?react";
+import TelegramIcon from "../assets/icons/telegram.svg?react";
 const Footer = () => {
   return (
     <footer className="bg-black text-white w-full px-6 py-10">
@@ -27,10 +38,10 @@ const Footer = () => {
         <div className="space-y-4">
           <img src={coinLogo} alt="Coin Logo" className="h-auto w-full" />
           <div className="flex items-center gap-2 text-sm">
-            <FaGlobe /> US (International) / English
+            <LanguageIcon /> US (International) / English
           </div>
           <div className="flex items-center gap-2 text-sm">
-            <FaQuestionCircle /> Help & Support
+            <HelpIcon /> Help & Support
           </div>
          
         </div>
@@ -79,17 +90,24 @@ const Footer = () => {
           </div>
         </div>
       </motion.div>
-     <div className="flex"> <div className="flex gap-3 text-xl mt-4 text-yellow-400">
-            <FaTwitter className="hover:text-white transition" />
-            <FaTiktok className="hover:text-white transition" />
-            <FaYoutube className="hover:text-white transition" />
-            <FaInstagram className="hover:text-white transition" />
-            <FaLinkedin className="hover:text-white transition" />
-            <FaTelegramPlane className="hover:text-white transition" />
+     <div className="flex items-end"> 
+      <div className="grid grid-cols-5 gap-x-10 gap-y-5 text-xl mt-16">
+
+            <YoutubeIcon className="hover:scale-105 transition" />
+            <TiktokIcon className="hover:scale-105 transition" />
+            <RedditIcon className="hover:scale-105 transition" />
+            <InstagramIcon className="hover:scale-105-white transition" />
+            <LinkedinIcon className="hover:scale-105 transition" />
+            <XIcon className="hover:scale-105 transition" />
+            <DiscordIcon className="hover:scale-105 transition" />
+            <SnapchatIcon className="hover:scale-105 transition" />
+            <TelegramIcon className="hover:scale-105 transition" />
     
           </div>
           <div className="flex w-full justify-center">
-            <img src={anchorMediaLlc} className="h-[85px] w-[290px]" alt="Anchor Media LLC" /></div></div>
+            <img src={anchorMediaLlc} className="h-[85px] w-[290px]" alt="Anchor Media LLC" /></div>
+            </div>
+           
       {/* Bottom bar */}
       <div className="border-t border-gray-700 mt-10 pt-4 text-sm text-center text-gray-400">
         <div className="flex flex-col md:flex-row justify-between items-center max-w-7xl mx-auto px-4 gap-2">

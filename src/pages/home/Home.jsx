@@ -1,9 +1,13 @@
-import React from 'react'
+import Hero from "../../components/Hero";
+import Futures from "../../components/Futures";
 
 const Home = () => {
   return (
-    <div>Home</div>
-  )
-}
+    <div className="pt-20">
+      <Hero />
+      <Futures />
+    </div>
+  );
+};
 
-export default Home
+export default Home;

@@ -1,6 +1,6 @@
-@import "tailwindcss";
 @import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
-body, *{
+@import "tailwindcss";
+body{
     font-family: "Poppins", sans-serif;
 }
 @theme {
@@ -11,4 +11,26 @@ body, *{
   --color-gray:#0B0B0B;
   --color-zinc: #4B4B4B;
   --color-accent: #FF4500;
+  --text-h1:70px;
+  --text-h2:65px;
+  --text-h3:60px;
+  --text-h4:50px;
+  --text-h5:36px;
+  --text-h6:35px;
+  --text-p1:30px;
+  --text-p2:25px;
+  --text-p3:20px;
+  --text-p4:15px;
+  --font-weight-normal: 400;
+  --font-weight-medium: 500;
+  --font-weight-semibold: 600;
+  --font-weight-bold: 700;
+
+}
+
+.hero-bg {
+  background-image: url('/src/assets/images/hero-bg.png');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
 }
