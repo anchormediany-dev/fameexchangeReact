@@ -14,7 +14,10 @@ const Hero = () => {
         playsInline
       />
 
-      <div className="absolute inset-0 bg-black bg-opacity-50 hero-bg w-full  text-white">
+      <div
+        id="videos"
+        className="absolute inset-0 bg-black bg-opacity-50 hero-bg w-full  text-white"
+      >
         <div className="container h-full py-16">
           <div className="flex flex-col h-full justify-between items-center">
             <h1 className="font-semibold text-p4 lg:text-p3 xl:text-p1 2xl:text-h5 leading-snug">
@@ -31,12 +34,12 @@ const Hero = () => {
               Play Video
               <div className="text-xs font-normal">Click Here</div>
             </button> */}
-            <button className="play-video-button text-black font-semibold text-lg px-8 transition duration-300">
-              <div className="leading-tight text-center">
-                <div className="2xl:text-p1 md:text-p2 text-p3 font-medium">
+            <button className="play-video-button hover:scale-105 text-black font-semibold text-lg px-8 transition duration-300">
+              <div className="leading-tight  text-center">
+                <div className="2xl:text-p1 md:text-p3 text-p4 font-medium">
                   Play Video
                 </div>
-                <div className="2xl:text-p3 md:text-p4 text-p5 font-medium">
+                <div className="text-black font-medium transition-all duration-300  text-p5  2xl:text-p1">
                   Click Here
                 </div>
               </div>

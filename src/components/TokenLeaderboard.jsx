@@ -92,7 +92,10 @@ const tokenData = [
 
 const TokenLeaderboard = () => {
   return (
-    <section className="bg-gradient-to-tr from-[#1a1a1a] via-[#111] to-black text-white px-4 py-12 min-h-screen">
+    <section
+      id="token-leaderboard"
+      className="bg-gradient-to-tr from-[#1a1a1a] via-[#111] to-black text-white px-4 py-12 min-h-screen"
+    >
       <div className="container">
         {/* Heading */}
         <h2 className="text-p2 py-10 sm:text-p1 md:text-h6 lg:text-h5 xl:text-h4 2xl:text-h3 lg:text-5xl font-bold text-center text-primary">

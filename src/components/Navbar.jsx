@@ -4,17 +4,30 @@ import { motion, AnimatePresence } from "framer-motion";
 import { FaBars, FaTimes } from "react-icons/fa";
 import siteLogo from "../assets/images/site-logo.png";
 const navLinks = [
-  { name: "Trading Chart", path: "/trading-chart" },
-  { name: "Videos", path: "/videos" },
-  { name: "20 Top Talent Tokens", path: "/talent-tokens" },
-  { name: "NFT", path: "/nft" },
-  { name: "In-Verse", path: "/in-verse" },
-  { name: "Futured", path: "/futured" },
-  { name: "FAQ's", path: "/faqs" },
+  { name: "Trading Chart", scrollTo: "trading-chart" },
+  { name: "Videos", scrollTo: "videos" },
+  { name: "20 Top Talent Tokens", scrollTo: "token-leaderboard" },
+  { name: "NFT", scrollTo: "nft" },
+  { name: "In-Verse", scrollTo: "in-verse" },
+  { name: "Futured", scrollTo: "futured" },
+  { name: "FAQ's", scrollTo: "faqs" },
 ];
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
+  const handleScroll = (id) => {
+    const element = document.getElementById(id);
+    if (element) {
+      const yOffset = -80; // scroll 50px above the element
+      const y =
+        element.getBoundingClientRect().top + window.pageYOffset + yOffset;
+
+      window.scrollTo({
+        top: y,
+        behavior: "smooth",
+      });
+    }
+  };
 
   return (
     <nav className="bg-black fixed top-0 left-0 right-0 z-50">
@@ -27,15 +40,26 @@ const Navbar = () => {
 
           {/* Desktop Nav */}
           <div className="hidden lg:flex text-white xl:text-p3 text-p4 font-medium xl:space-x-6 space-x-3 items-center">
-            {navLinks.map(({ name, path }) => (
-              <Link
-                key={name}
-                to={path}
-                className="text-p4 hover:text-primary transition"
-              >
-                {name}
-              </Link>
-            ))}
+            {navLinks.map(({ name, path, scrollTo }) =>
+              path ? (
+                <Link
+                  key={name}
+                  to={path}
+                  className="text-p4 hover:text-primary transition"
+                >
+                  {name}
+                </Link>
+              ) : (
+                <span
+                  key={name}
+                  onClick={() => handleScroll(scrollTo)}
+                  className="cursor-pointer text-p4 hover:text-primary transition"
+                >
+                  {name}
+                </span>
+              )
+            )}
+            {/* Buttons remain unchanged */}
             <Link
               to="/login"
               className="relative inline-block text-p5 font-medium text-white group overflow-hidden px-5 py-2"

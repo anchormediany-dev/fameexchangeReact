@@ -3,7 +3,10 @@ import menSinging from "../assets/images/men-singing.png";
 import raphaelRenter from "../assets/images/raphael-renter.png";
 const Futures = () => {
   return (
-    <section className="bg-black relative text-white pt-16 px-4 md:px-10 lg:px-20">
+    <section
+      id="futured"
+      className="bg-black relative text-white pt-16 px-4 md:px-10 lg:px-20"
+    >
       <div className="text-center container max-w-4xl mx-auto">
         <h2 className="text-p2 py-5 sm:text-p1 md:text-h6 lg:text-h5 xl:text-h4 2xl:text-h3 lg:text-5xl font-bold text-center text-white">
           FUTURES

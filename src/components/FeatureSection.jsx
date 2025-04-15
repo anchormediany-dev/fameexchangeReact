@@ -5,7 +5,10 @@ import personalities from "../assets/images/personalities.png";
 import checkoutOurInVerse from "../assets/images/checkout-our-in-verse.png";
 const FeatureSection = () => {
   return (
-    <section className="bg-gradient-to-tr from-[#1a1a1a] via-[#111] to-black text-white px-4 py-12">
+    <section
+      id="nft"
+      className="bg-gradient-to-tr from-[#1a1a1a] via-[#111] to-black text-white px-4 py-12"
+    >
       <div className="container grid grid-cols-1 md:grid-cols-2 gap-28">
         {/* Feature Card 1 */}
         <div className="relative">
@@ -33,7 +36,7 @@ const FeatureSection = () => {
           </p>
         </div>
         {/* Feature Card 3 */}
-        <div>
+        <div id="in-verse">
           <img src={fansGetTo} alt="Man trading" className="w-full" />
           <h3 className="text-p1 font-bold text-primary mt-4">Personalities</h3>
           <p className="text-grayLight text-sm mt-1">

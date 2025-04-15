@@ -18,13 +18,6 @@ export default function App() {
           <Route path="/" element={<Home />} />
           <Route path="/login" element={<Page title="Login Page" />} />
           <Route path="/signup" element={<Page title="Sign Up Page" />} />
-          <Route path="/trading-chart" element={<Page title="Trading Chart Page" />} />
-          <Route path="/videos" element={<Page title="Videos Page" />} />
-          <Route path="/talent-tokens" element={<Page title="20 Top Talent Tokens Page" />} />
-          <Route path="/nft" element={<Page title="NFT Page" />} />
-          <Route path="/in-verse" element={<Page title="In Verse Page" />} />
-          <Route path="/futured" element={<Page title="Futured Page" />} />
-          <Route path="/faqs" element={<Page title="FAQ's Page" />} />
         </Routes>
       </main>
       <Footer />
