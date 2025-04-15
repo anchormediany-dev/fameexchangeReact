@@ -15,12 +15,13 @@ body{
   --text-h2:65px;
   --text-h3:60px;
   --text-h4:50px;
-  --text-h5:36px;
+  --text-h5:40px;
   --text-h6:35px;
   --text-p1:30px;
   --text-p2:25px;
   --text-p3:20px;
   --text-p4:15px;
+  --text-p5:12px;
   --font-weight-normal: 400;
   --font-weight-medium: 500;
   --font-weight-semibold: 600;
