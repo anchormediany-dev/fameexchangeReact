@@ -3,7 +3,7 @@ import menSinging from "../assets/images/men-singing.png";
 import raphaelRenter from "../assets/images/raphael-renter.png";
 const Futures = () => {
   return (
-    <section className="bg-black text-white py-16 px-4 md:px-10 lg:px-20">
+    <section className="bg-black relative text-white pt-16 px-4 md:px-10 lg:px-20">
       <div className="text-center container max-w-4xl mx-auto">
         <h2 className="text-p2 py-5 sm:text-p1 md:text-h6 lg:text-h5 xl:text-h4 2xl:text-h3 lg:text-5xl font-bold text-center text-white">
           FUTURES
@@ -37,11 +37,14 @@ const Futures = () => {
         />
       </div>
 
-      <div className="flex justify-center mt-10">
+      <div className="flex justify-center mt-10 pb-16">
         <button class="bg-lightYellow hover:scale-105 text-black font-medium px-6 py-3 rounded-md transition-all duration-300  relative group text-p5  2xl:text-p1">
           Discover More
         </button>
       </div>
+      <h2 className="text-p2 pb-16 sm:text-p1 md:text-h6 lg:text-h5 xl:text-h4 2xl:text-h3 lg:text-5xl font-bold text-center text-primary">
+        <span className="text-white">Import Your</span> Famecoin
+      </h2>
     </section>
   );
 };
