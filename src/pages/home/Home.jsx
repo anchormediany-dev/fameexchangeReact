@@ -3,6 +3,7 @@ import Futures from "../../components/Futures";
 import FameCoin from "../../components/FameCoin";
 import NetworkStatistics from "../../components/NetworkStatistics";
 import TokenLeaderboard from "../../components/TokenLeaderboard";
+import FeatureSection from "../../components/FeatureSection";
 
 const Home = () => {
   return (
@@ -10,6 +11,7 @@ const Home = () => {
       <Hero />
       <NetworkStatistics />
       <TokenLeaderboard />
+      <FeatureSection />
       <Futures />
       <FameCoin />
     </div>
