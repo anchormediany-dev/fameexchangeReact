@@ -18,8 +18,8 @@ const Navbar = () => {
 
   return (
     <nav className="bg-black fixed top-0 left-0 right-0 z-50">
-      <div className="max-w-7xl 2xl:max-w-[1582x] mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex justify-between items-center h-20">
+      <div className="container">
+        <div className="flex  justify-between items-center h-20">
           {/* Logo */}
           <Link to="/">
             <img src={siteLogo} alt="Logo" className="h-12" />
@@ -27,15 +27,15 @@ const Navbar = () => {
 
           {/* Desktop Nav */}
           <div className="hidden lg:flex text-white xl:text-p3 text-p4 font-medium xl:space-x-6 space-x-3 items-center">
-            {navLinks.map(({name,path}) => (
+            {navLinks.map(({ name, path }) => (
               <Link
-              key={name}
-              to={path}
-              className="text-p4 hover:text-primary transition"
-            >
-              {name}
-            </Link>
-          ))}
+                key={name}
+                to={path}
+                className="text-p4 hover:text-primary transition"
+              >
+                {name}
+              </Link>
+            ))}
             <Link
               to="/login"
               className="relative inline-block text-p5 font-medium text-white group overflow-hidden px-5 py-2"
@@ -71,7 +71,7 @@ const Navbar = () => {
             exit={{ height: 0, opacity: 0 }}
             className="lg:hidden bg-black text-white px-6 pt-4 pb-6 space-y-4"
           >
-            {navLinks.map(({name,path}) => (
+            {navLinks.map(({ name, path }) => (
               <Link
                 key={name}
                 to={path}
