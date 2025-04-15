@@ -4,6 +4,7 @@ import FameCoin from "../../components/FameCoin";
 import NetworkStatistics from "../../components/NetworkStatistics";
 import TokenLeaderboard from "../../components/TokenLeaderboard";
 import FeatureSection from "../../components/FeatureSection";
+import Process from "../../components/Process";
 
 const Home = () => {
   return (
@@ -14,6 +15,7 @@ const Home = () => {
       <FeatureSection />
       <Futures />
       <FameCoin />
+      <Process />
     </div>
   );
 };

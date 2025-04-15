@@ -11,7 +11,7 @@ const Futures = () => {
         <h2 className="text-p2 py-5 sm:text-p1 md:text-h6 lg:text-h5 xl:text-h4 2xl:text-h3 lg:text-5xl font-bold text-center text-white">
           FUTURES
         </h2>
-        <p className="text-grayLight text-sm mt-1">
+        <p className="text-grayLight font-medium text-p3 mt-5">
           Haven’t Been Able To Qualify? Welcome, You Are Now An Integral Part Of
           Our Platform.
           <br />
