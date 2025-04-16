@@ -5,6 +5,9 @@ import Footer from "./components/Footer";
 import Home from "./pages/home/Home";
 import Login from "./pages/login/Login";
 import MotionPageWrapper from "./components/MotionPageWrapper";
+import ForgotPassword from "./pages/ForgotPassword";
+import Verification from "./pages/Verification";
+import ResetPassword from "./pages/ResetPassword";
 
 const Page = ({ title }) => (
   <MotionPageWrapper>
@@ -40,6 +43,30 @@ export default function App() {
               }
             />
             <Route path="/signup" element={<Page title="Sign Up Page" />} />
+            <Route
+              path="/forgot-password"
+              element={
+                <MotionPageWrapper>
+                  <ForgotPassword />
+                </MotionPageWrapper>
+              }
+            />
+            <Route
+              path="/verification"
+              element={
+                <MotionPageWrapper>
+                  <Verification />
+                </MotionPageWrapper>
+              }
+            />
+            <Route
+              path="/reset-password"
+              element={
+                <MotionPageWrapper>
+                  <ResetPassword />
+                </MotionPageWrapper>
+              }
+            />
           </Routes>
         </AnimatePresence>
       </main>

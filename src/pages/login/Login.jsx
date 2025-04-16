@@ -4,7 +4,7 @@ import { FcGoogle } from "react-icons/fc";
 import { FaFacebookF } from "react-icons/fa";
 import { IoEyeOffSharp, IoEyeSharp } from "react-icons/io5"; // 👈 Eye icons
 import MotionPageWrapper from "../../components/MotionPageWrapper";
-
+import { Link } from "react-router-dom";
 const LoginPage = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -101,9 +101,12 @@ const LoginPage = () => {
                   </button>
                 </div>
                 <div className="flex justify-end mt-1">
-                  <a href="#" className="text-xs text-white hover:underline">
+                  <Link
+                    to="/forgot-password"
+                    className="text-xs text-white hover:underline"
+                  >
                     Forgot Password?
-                  </a>
+                  </Link>
                 </div>
                 {touched.password && !isPasswordValid && (
                   <p className="text-red-500 text-xs mt-1">
