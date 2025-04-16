@@ -1,11 +1,5 @@
 import React from "react";
-import {
-  LineChart,
-  Line,
-  ResponsiveContainer,
-  Tooltip,
-  LabelList,
-} from "recharts";
+import { LineChart, Line, ResponsiveContainer } from "recharts";
 
 const tokenData = [
   {
@@ -94,46 +88,39 @@ const TokenLeaderboard = () => {
   return (
     <section
       id="token-leaderboard"
-      className="bg-gradient-to-tr from-[#1a1a1a] via-[#111] to-black text-white px-4 py-12 min-h-screen"
+      className="text-white px-4 py-12 min-h-screen"
+      style={{
+        background:
+          "radial-gradient(circle at top left, #2a2a2a 0%, #0b0b0b 100%)",
+      }}
     >
       <div className="container">
-        {/* Heading */}
         <h2 className="text-p2 py-10 sm:text-p1 md:text-h6 lg:text-h5 xl:text-h4 2xl:text-h3 lg:text-5xl font-bold text-center text-primary">
           20
           <span className="text-white"> TOP BRANDED TALENT TOKENS</span>
         </h2>
 
-        {/* Token Cards */}
         <div className="space-y-6">
           {tokenData.map((token, idx) => (
             <div
               key={idx}
               className="flex flex-col md:flex-row items-center justify-between bg-[#111111] rounded-xl px-6 py-4 shadow-lg hover:scale-[1.01] transition-transform"
             >
-              {/* Name */}
-              <div className="text-p4  2xl:text-p1  font-bold w-[320px]">
+              <div className="text-p4 2xl:text-p1 font-bold w-[320px]">
                 {token.name}{" "}
                 <span className="text-sm text-gray-400 font-light">
                   {token.ticker}
                 </span>
               </div>
-
-              {/* Price */}
               <div className="w-28 text-right md:text-left text-white font-medium">
                 {token.price}
               </div>
-
-              {/* Change */}
               <div className="w-20 text-right md:text-left text-darkOrange font-medium">
                 {token.change}
               </div>
-
-              {/* Volume */}
               <div className="flex-1 text-gray-300 text-sm text-right md:text-left truncate">
                 {token.volume}
               </div>
-
-              {/* Chart */}
               <div className="flex-1 mr-3 h-10">
                 <ResponsiveContainer width="100%" height="100%">
                   <LineChart data={token.graphData}>
@@ -148,10 +135,8 @@ const TokenLeaderboard = () => {
                   </LineChart>
                 </ResponsiveContainer>
               </div>
-
-              {/* Button */}
               <div>
-                <button className="bg-gray  text-yellow-400 px-8 py-3 rounded-xl  transition-colors duration-300 shadow-[4px_4px_4px_#000000EB,_-4px_-4px_12px_#FFFFFF08]">
+                <button className="bg-gray text-yellow-400 px-8 py-3 rounded-xl transition-colors duration-300 shadow-[4px_4px_4px_#000000EB,_-4px_-4px_12px_#FFFFFF08]">
                   Trade
                 </button>
               </div>
@@ -159,9 +144,8 @@ const TokenLeaderboard = () => {
           ))}
         </div>
 
-        {/* Discover More Button */}
         <div className="mt-12 flex justify-center">
-          <button className="bg-lightYellow hover:scale-105 text-black font-medium px-6 py-3 rounded-md transition-all duration-300  relative group text-p5  2xl:text-p1">
+          <button className="bg-lightYellow hover:scale-105 text-black font-medium px-6 py-3 rounded-md transition-all duration-300 relative group text-p5 2xl:text-p1">
             Discover More
           </button>
         </div>
