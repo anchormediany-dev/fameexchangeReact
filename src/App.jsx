@@ -5,9 +5,6 @@ import Footer from "./components/Footer";
 import Home from "./pages/home/Home";
 import Login from "./pages/login/Login";
 import MotionPageWrapper from "./components/MotionPageWrapper";
-import ForgotPassword from "./pages/ForgotPassword";
-import Verification from "./pages/Verification";
-import ResetPassword from "./pages/ResetPassword";
 import Signup from "./pages/signup/Signup";
 
 const Page = ({ title }) => (
@@ -48,30 +45,6 @@ export default function App() {
               element={
                 <MotionPageWrapper>
                   <Signup />
-                </MotionPageWrapper>
-              }
-            />
-            <Route
-              path="/forgot-password"
-              element={
-                <MotionPageWrapper>
-                  <ForgotPassword />
-                </MotionPageWrapper>
-              }
-            />
-            <Route
-              path="/verification"
-              element={
-                <MotionPageWrapper>
-                  <Verification />
-                </MotionPageWrapper>
-              }
-            />
-            <Route
-              path="/reset-password"
-              element={
-                <MotionPageWrapper>
-                  <ResetPassword />
                 </MotionPageWrapper>
               }
             />
