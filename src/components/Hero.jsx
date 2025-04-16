@@ -1,40 +1,42 @@
-import { useState } from "react";
+import { useRef } from "react";
 import VideoPlayIcon from "../assets/icons/video-play.svg?react";
 const Hero = () => {
-  const [playing, setPlaying] = useState(false);
+  const videoRef = useRef(null);
+
+  const handlePlay = () => {
+    if (videoRef.current) {
+      videoRef.current.play();
+    }
+  };
 
   return (
-    <section className="relative w-full   min-h-screen overflow-hidden">
+    <section className="w-full max-h-[600px] relative bg-black flex flex-col items-center justify-center">
+      {/* Video */}
       <video
-        className="absolute top-0 left-0 w-full h-full object-cover"
+        ref={videoRef}
         src="/sample-video.mp4"
-        autoPlay
-        loop
+        className="w-full h-full object-cover"
         muted
+        loop
         playsInline
+        preload="auto"
       />
 
-      <div
-        id="videos"
-        className="absolute inset-0 bg-black bg-opacity-50 hero-bg w-full  text-white"
-      >
+      {/* Play Button */}
+      <div className="absolute h-full top-0 left-0">
         <div className="container h-full py-16">
           <div className="flex flex-col h-full justify-between items-center">
             <h1 className="font-semibold text-p4 lg:text-p3 xl:text-p1 2xl:text-h5 leading-snug">
               WELCOME TO THE TALENT, ATHLETE & INFLUENCER BASED PLATFORM FOR
               FANS!
             </h1>
-            <button>
+            <button onClick={handlePlay}>
               <VideoPlayIcon className="hover:scale-105" />
             </button>
-            {/* <button
-              onClick={() => setPlaying(!playing)}
-              className="bg-lightYellow hover:scale-105 text-dark font-semibold text-base px-6 py-3 rounded-lg shadow-md transition"
+            <button
+              onClick={handlePlay}
+              className="play-video-button hover:scale-105 text-black font-semibold text-lg px-8 transition duration-300"
             >
-              Play Video
-              <div className="text-xs font-normal">Click Here</div>
-            </button> */}
-            <button className="play-video-button hover:scale-105 text-black font-semibold text-lg px-8 transition duration-300">
               <div className="leading-tight  text-center">
                 <div className="2xl:text-p1 md:text-p3 text-p4 font-medium">
                   Play Video
