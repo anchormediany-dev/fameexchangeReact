@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { FaBars, FaTimes } from "react-icons/fa";
 import siteLogo from "../assets/images/site-logo.png";
+import LoginModal from "../components/LoginModal";
 const navLinks = [
   { name: "Trading Chart", scrollTo: "trading-chart" },
   { name: "Videos", scrollTo: "videos" },
@@ -15,6 +16,7 @@ const navLinks = [
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
+  const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
   const handleScroll = (id) => {
     const element = document.getElementById(id);
     if (element) {
@@ -28,7 +30,15 @@ const Navbar = () => {
       });
     }
   };
+  // for login modals
+  const openLoginModal = () => {
+    setIsLoginModalOpen(true);
+    setIsOpen(false); // Close mobile menu if open
+  };
 
+  const closeLoginModal = () => {
+    setIsLoginModalOpen(false);
+  };
   return (
     <nav className="bg-black fixed top-0 left-0 right-0 z-50">
       <div className="container">
@@ -60,20 +70,17 @@ const Navbar = () => {
               )
             )}
             {/* Buttons remain unchanged */}
-            <Link
-              to="/login"
+            <button
+              onClick={openLoginModal}
               className="relative inline-block text-p5 font-medium text-white group overflow-hidden px-5 py-2"
             >
               <span className="absolute inset-0 w-full h-full bg-primary transition-transform duration-300 ease-out transform -translate-x-full group-hover:translate-x-0"></span>
               <span className="absolute inset-0 border border-primary rounded"></span>
               <span className="relative z-10">Log In</span>
-            </Link>
-            <Link
-              to="/signup"
-              className="relative inline-block text-p5 font-medium text-black bg-primary px-5 py-2 rounded hover:opacity-90 transition-all duration-300 shadow-md hover:shadow-xl"
-            >
+            </button>
+            <button className="relative inline-block text-p5 font-medium text-black bg-primary px-5 py-2 rounded hover:opacity-90 transition-all duration-300 shadow-md hover:shadow-xl">
               <span className="relative z-10">Sign Up</span>
-            </Link>
+            </button>
           </div>
 
           {/* Mobile Menu Icon */}
@@ -84,7 +91,6 @@ const Navbar = () => {
           </div>
         </div>
       </div>
-
       {/* Mobile Nav */}
       {/* Mobile Nav */}
       <AnimatePresence>
@@ -107,23 +113,24 @@ const Navbar = () => {
             ))}
 
             {/* Mobile Buttons */}
-            <Link
-              to="/login"
-              onClick={() => setIsOpen(false)}
+            <button
+              onClick={openLoginModal}
               className="block text-p5 font-medium text-white border border-primary px-4 py-2 rounded hover:bg-primary hover:text-black transition"
             >
               Log In
-            </Link>
-            <Link
+            </button>
+            <button
               to="/signup"
               onClick={() => setIsOpen(false)}
               className="block text-p5 font-medium bg-primary text-black px-4 py-2 rounded hover:bg-primary transition"
             >
               Sign Up
-            </Link>
+            </button>
           </motion.div>
         )}
-      </AnimatePresence>
+      </AnimatePresence>{" "}
+      {/* Login Modal */}
+      <LoginModal isOpen={isLoginModalOpen} onClose={closeLoginModal} />
     </nav>
   );
 };
