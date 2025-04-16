@@ -8,7 +8,7 @@ import Process from "../../components/Process";
 
 const Home = () => {
   return (
-    <div className="pt-20">
+    <div className="mt-20">
       <Hero />
       <NetworkStatistics />
       <TokenLeaderboard />

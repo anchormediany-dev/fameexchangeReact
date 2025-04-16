@@ -1,24 +1,47 @@
-import { Routes, Route } from "react-router-dom";
+import { Routes, Route, useLocation } from "react-router-dom";
+import { AnimatePresence } from "framer-motion";
 import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
 import Home from "./pages/home/Home";
+import Login from "./pages/login/Login";
+import MotionPageWrapper from "./components/MotionPageWrapper";
 
 const Page = ({ title }) => (
-  <div className="pt-28 p-4 min-h-screen bg-gray-100">
-    <h1 className="text-3xl font-semibold text-center">{title}</h1>
-  </div>
+  <MotionPageWrapper>
+    <div className="pt-28 p-4 min-h-screen bg-gray-100">
+      <h1 className="text-3xl font-semibold text-center">{title}</h1>
+    </div>
+  </MotionPageWrapper>
 );
 
 export default function App() {
+  const location = useLocation();
+
   return (
     <div className="flex flex-col min-h-screen">
       <Navbar />
-      <main className="flex-grow">
-        <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/login" element={<Page title="Login Page" />} />
-          <Route path="/signup" element={<Page title="Sign Up Page" />} />
-        </Routes>
+      <main className="flex-grow overflow-x-hidden">
+        <AnimatePresence mode="wait">
+          <Routes location={location} key={location.pathname}>
+            <Route
+              path="/"
+              element={
+                <MotionPageWrapper>
+                  <Home />
+                </MotionPageWrapper>
+              }
+            />
+            <Route
+              path="/login"
+              element={
+                <MotionPageWrapper>
+                  <Login />
+                </MotionPageWrapper>
+              }
+            />
+            <Route path="/signup" element={<Page title="Sign Up Page" />} />
+          </Routes>
+        </AnimatePresence>
       </main>
       <Footer />
     </div>
