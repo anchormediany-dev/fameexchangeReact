@@ -44,14 +44,14 @@ const LoginModal = ({ isOpen, onClose }) => {
             <Link
               to="/login"
               onClick={onClose}
-              className="bg-gray cursor-pointer hover:bg-gray-700 text-white font-medium py-3 px-6 rounded-md w-full mb-3"
+              className="bg-gray cursor-pointer hover:bg-primary hover:scale-105 text-white font-medium py-3 px-6 w-full mb-3  rounded-md transition-all duration-300 text-p5  2xl:text-p1"
             >
               TRADER/FAN
             </Link>
             <Link
               to="/login"
               onClick={onClose}
-              className="bg-gray cursor-pointer hover:bg-gray-700 text-white font-medium py-3 px-6 rounded-md w-full"
+              className="bg-gray cursor-pointer hover:bg-primary hover:scale-105 text-white font-medium py-3 px-6 w-full mb-3  rounded-md transition-all duration-300 text-p5  2xl:text-p1"
             >
               TALENT/ATHLETE/INFLUENCER
             </Link>

@@ -33,14 +33,14 @@ const ForgotPassword = () => {
                 Email
               </label>
               <div className="flex items-center border border-[#F3BA18] rounded-md px-3 py-2 mt-1 bg-transparent focus-within:ring-2 focus-within:ring-[#F3BA18]">
-                <FaEnvelope className="text-[#F3BA18] mr-2" />
+                <FaEnvelope className="text-grayDescription mr-2" />
                 <input
                   type="email"
                   id="email"
                   placeholder="Email"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  className="bg-transparent outline-none w-full text-white placeholder-gray-400"
+                  className="bg-transparent outline-none w-full text-white text-p5 placeholder:font-normal placeholder-grayDescription"
                   required
                 />
               </div>
@@ -48,7 +48,7 @@ const ForgotPassword = () => {
 
             <button
               type="submit"
-              className="w-full bg-black text-[#F3BA18] py-2 rounded-md hover:bg-[#F3BA18] hover:text-black transition-all duration-300 font-semibold"
+              className="w-full bg-black text-[#F3BA18] py-2  hover:bg-[#F3BA18] hover:text-black  font-medium  rounded-md transition-all duration-300  text-p5  2xl:text-p1"
             >
               Continue
             </button>

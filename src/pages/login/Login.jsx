@@ -47,7 +47,7 @@ const LoginPage = () => {
                       : "border-[#F3BA18]"
                   }`}
                 >
-                  <FaEnvelope className="text-[#F3BA18] mr-2" />
+                  <FaEnvelope className="text-grayDescription mr-2" />
                   <input
                     type="email"
                     id="email"
@@ -55,7 +55,7 @@ const LoginPage = () => {
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                     onBlur={() => setTouched({ ...touched, email: true })}
-                    className="bg-transparent outline-none w-full text-white placeholder-gray-400 "
+                    className="bg-transparent outline-none w-full text-white text-p5 placeholder:font-normal placeholder-grayDescription"
                   />
                 </div>
                 {touched.email && !isEmailValid && (
@@ -77,7 +77,7 @@ const LoginPage = () => {
                       : "border-[#F3BA18]"
                   }`}
                 >
-                  <FaLock className="text-[#F3BA18] mr-2" />
+                  <FaLock className="text-grayDescription mr-2" />
                   <input
                     type={showPassword ? "text" : "password"}
                     id="password"
@@ -85,7 +85,7 @@ const LoginPage = () => {
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
                     onBlur={() => setTouched({ ...touched, password: true })}
-                    className="bg-transparent outline-none w-full text-white placeholder-gray-400"
+                    className="bg-transparent outline-none w-full text-white text-p5 placeholder:font-normal placeholder-grayDescription"
                   />
                   {/* 👁 Show/Hide toggle */}
                   <button
@@ -117,7 +117,8 @@ const LoginPage = () => {
 
               <button
                 type="submit"
-                className="w-full bg-black text-primary py-2 rounded-md hover:bg-[#F3BA18] hover:text-black transition-all duration-300 font-semibold"
+                className="bg-black w-full hover:scale-105 text-primary font-medium px-6 py-3 rounded-md transition-all duration-300  relative group text-p5  2xl:text-p1"
+                // className="w-full bg-black text-primary py-2 rounded-md hover:bg-[#F3BA18] hover:text-black transition-all duration-300 font-semibold"
               >
                 Log In
               </button>
@@ -131,18 +132,18 @@ const LoginPage = () => {
 
             {/* Social */}
             <div className="space-y-3">
-              <button className="w-full flex items-center justify-center gap-3 bg-black text-white py-2 rounded-md hover:bg-white hover:text-black transition">
+              <button className="w-full flex cursor-pointer hover:opacity-50 text-white font-medium  text-p5  2xl:text-p1 items-center justify-center gap-3 bg-black py-2 rounded-md  transition">
                 <FcGoogle size={20} />
                 Continue With Google
               </button>
-              <button className="w-full flex items-center justify-center gap-3 bg-black text-white py-2 rounded-md hover:bg-white hover:text-black transition">
+              <button className="w-full flex cursor-pointer hover:opacity-50 text-white font-medium  text-p5  2xl:text-p1 items-center justify-center gap-3 bg-black py-2 rounded-md  transition">
                 <FaFacebookF size={20} className="text-[#1877F2]" />
-                Continue With Facebook
+                <span> Continue With Facebook</span>
               </button>
             </div>
 
             {/* Sign Up */}
-            <p className="text-xs text-gray-500 text-center mt-4">
+            <p className="text-p5 text-gray-500 text-center mt-4">
               Don’t have an account?{" "}
               <a href="#" className="text-[#F3BA18] hover:underline">
                 Sign Up
@@ -151,9 +152,9 @@ const LoginPage = () => {
           </div>
 
           {/* Right: Welcome */}
-          <div className="hidden md:flex flex-col md:mt-14 items-start text-white space-y-4 px-4">
+          <div className="hidden md:flex flex-col md:mt-14 max-w-[400px] items-start text-white space-y-4 px-4">
             <h1 className="text-4xl font-bold">Welcome!</h1>
-            <p className="text-gray-400 text-lg">
+            <p className="text-grayDescription text-lg">
               Lorem ipsum dolor sit amet, consectetur adipiscing elit
             </p>
           </div>

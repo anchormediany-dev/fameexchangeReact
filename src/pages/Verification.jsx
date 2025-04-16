@@ -60,7 +60,7 @@ const Verification = () => {
           {/* Continue Button */}
           <button
             onClick={handleContinue}
-            className="w-full bg-black text-[#F3BA18] py-2 rounded-md hover:bg-[#F3BA18] hover:text-black transition-all duration-300 font-semibold mt-4"
+            className="w-full bg-black text-[#F3BA18] py-2  hover:bg-[#F3BA18] hover:text-black  font-medium  rounded-md transition-all duration-300  text-p5  2xl:text-p1"
           >
             Continue
           </button>
