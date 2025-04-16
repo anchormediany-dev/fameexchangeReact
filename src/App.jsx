@@ -8,6 +8,7 @@ import MotionPageWrapper from "./components/MotionPageWrapper";
 import ForgotPassword from "./pages/ForgotPassword";
 import Verification from "./pages/Verification";
 import ResetPassword from "./pages/ResetPassword";
+import Signup from "./pages/signup/Signup";
 
 const Page = ({ title }) => (
   <MotionPageWrapper>
@@ -42,7 +43,14 @@ export default function App() {
                 </MotionPageWrapper>
               }
             />
-            <Route path="/signup" element={<Page title="Sign Up Page" />} />
+            <Route
+              path="/signup"
+              element={
+                <MotionPageWrapper>
+                  <Signup />
+                </MotionPageWrapper>
+              }
+            />
             <Route
               path="/forgot-password"
               element={

@@ -59,9 +59,7 @@ const LoginPage = () => {
                   />
                 </div>
                 {touched.email && !isEmailValid && (
-                  <p className="text-red-500 text-xs mt-1">
-                    Invalid email address
-                  </p>
+                  <p className="text-red text-xs mt-1">Invalid email address</p>
                 )}
               </div>
 
@@ -109,7 +107,7 @@ const LoginPage = () => {
                   </Link>
                 </div>
                 {touched.password && !isPasswordValid && (
-                  <p className="text-red-500 text-xs mt-1">
+                  <p className="text-red text-xs mt-1">
                     Password must be at least 6 characters
                   </p>
                 )}
@@ -145,9 +143,9 @@ const LoginPage = () => {
             {/* Sign Up */}
             <p className="text-p5 text-gray-500 text-center mt-4">
               Don’t have an account?{" "}
-              <a href="#" className="text-[#F3BA18] hover:underline">
+              <Link to="/signup" className="text-[#F3BA18] hover:underline">
                 Sign Up
-              </a>
+              </Link>
             </p>
           </div>
 
