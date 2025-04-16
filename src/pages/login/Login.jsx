@@ -153,7 +153,8 @@ const LoginPage = () => {
           <div className="hidden md:flex flex-col md:mt-14 max-w-[400px] items-start text-white space-y-4 px-4">
             <h1 className="text-4xl font-bold">Welcome!</h1>
             <p className="text-grayDescription text-lg">
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit
+              Secure, fast, and fair — your trusted partner in global currency
+              exchange.
             </p>
           </div>
         </div>
