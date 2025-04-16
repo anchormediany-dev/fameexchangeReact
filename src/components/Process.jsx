@@ -10,7 +10,7 @@ const Process = () => {
           <h1 className="text-p2 sm:text-p1 md:text-h6 lg:text-h5 xl:text-h4 2xl:text-h3 lg:text-5xl font-bold text-center text-white">
             The Process
           </h1>
-          <p className="text-grayLight text-center font-medium text-p3 mt-8 text-primary">
+          <p className="text-center font-medium text-p3 mt-8 text-primary">
             Reverse this process to convers your Famecoin into Fiat Currency
           </p>
         </div>

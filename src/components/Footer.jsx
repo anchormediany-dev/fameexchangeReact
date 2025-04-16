@@ -126,8 +126,8 @@ const Footer = () => {
             </div>
           </div>
         </motion.div>
-        <div className="flex items-end">
-          <div className="grid grid-cols-5 gap-x-10 gap-y-5 text-xl mt-16">
+        <div className="flex md:flex-row flex-col items-end">
+          <div className="grid grid-cols-5 gap-x-10 gap-y-5 text-xl md:mb-0 mb-5 mt-16">
             <YoutubeIcon className="hover:scale-105 transition" />
             <TiktokIcon className="hover:scale-105 transition" />
             <RedditIcon className="hover:scale-105 transition" />
@@ -138,7 +138,7 @@ const Footer = () => {
             <SnapchatIcon className="hover:scale-105 transition" />
             <TelegramIcon className="hover:scale-105 transition" />
           </div>
-          <div className="flex w-full justify-center">
+          <div className="flex w-full justify-start md:justify-center">
             <img
               src={anchorMediaLlc}
               className="h-[85px] w-[290px]"
