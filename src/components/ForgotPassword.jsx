@@ -33,14 +33,14 @@ const ForgotPassword = () => {
                     Email
                   </label>
                   <div className="flex items-center border border-[#F3BA18] rounded-md px-3 py-2 mt-1 bg-transparent focus-within:ring-2 focus-within:ring-[#F3BA18]">
-                    <FaEnvelope className="text-grayDescription mr-2" />
+                    <FaEnvelope className="text-white mr-2" />
                     <input
                       type="email"
                       id="email"
                       placeholder="Email"
                       value={email}
                       onChange={(e) => setEmail(e.target.value)}
-                      className="bg-transparent outline-none w-full text-white text-p5 placeholder:font-normal placeholder-grayDescription"
+                      className="bg-transparent outline-none w-full text-white text-p5 placeholder:font-normal placeholder-white"
                       required
                     />
                   </div>

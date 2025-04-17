@@ -33,18 +33,18 @@ const ResetPassword = () => {
           <div className="text-left space-y-1">
             <label className="text-white text-sm">New Password</label>
             <div className="flex items-center border rounded-md px-3 py-2 bg-transparent border-[#F3BA18]">
-              <FaLock className="text-grayDescription mr-2" />
+              <FaLock className="text-white mr-2" />
               <input
                 type={showNewPassword ? "text" : "password"}
                 placeholder="New Password"
                 value={newPassword}
                 onChange={(e) => setNewPassword(e.target.value)}
-                className="bg-transparent outline-none w-full text-white text-p5 placeholder:font-normal placeholder-grayDescription"
+                className="bg-transparent outline-none w-full text-white text-p5 placeholder:font-normal placeholder-white"
               />
               <button
                 type="button"
                 onClick={() => setShowNewPassword(!showNewPassword)}
-                className="ml-2 text-grayDescription hover:text-[#F3BA18]"
+                className="ml-2 text-white hover:text-[#F3BA18]"
               >
                 {showNewPassword ? (
                   <IoEyeOffSharp size={20} />
@@ -59,23 +59,23 @@ const ResetPassword = () => {
           <div className="text-left space-y-1">
             <label className="text-white text-sm">Confirm Password</label>
             <div className="flex items-center border rounded-md px-3 py-2 bg-transparent border-[#F3BA18]">
-              <FaLock className="text-grayDescription mr-2" />
+              <FaLock className="text-white mr-2" />
               <input
                 type={showConfirmPassword ? "text" : "password"}
                 placeholder="Confirm Password"
                 value={confirmPassword}
                 onChange={(e) => setConfirmPassword(e.target.value)}
-                className="bg-transparent outline-none w-full text-white text-p5 placeholder:font-normal placeholder-grayDescription"
+                className="bg-transparent outline-none w-full text-white text-p5 placeholder:font-normal placeholder-white"
               />
               <button
                 type="button"
                 onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-                className="ml-2 text-grayDescription hover:text-[#F3BA18]"
+                className="ml-2 text-white hover:text-[#F3BA18]"
               >
                 {showConfirmPassword ? (
-                  <IoEyeOffSharp size={20} />
-                ) : (
                   <IoEyeSharp size={20} />
+                ) : (
+                  <IoEyeOffSharp size={20} />
                 )}
               </button>
             </div>

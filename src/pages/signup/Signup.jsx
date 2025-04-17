@@ -68,7 +68,7 @@ const Signup = () => {
                           : "border-[#F3BA18]"
                       }`}
                     >
-                      <FaEnvelope className="text-grayDescription mr-2" />
+                      <FaEnvelope className="text-white mr-2" />
                       <input
                         type="email"
                         id="email"
@@ -76,7 +76,7 @@ const Signup = () => {
                         value={email}
                         onChange={(e) => setEmail(e.target.value)}
                         onBlur={() => setTouched({ ...touched, email: true })}
-                        className="bg-transparent outline-none w-full text-white text-p5 placeholder:font-normal placeholder-grayDescription"
+                        className="bg-transparent outline-none w-full text-white text-p5 placeholder:font-normal placeholder-white"
                       />
                     </div>
                     {touched.email && !isEmailValid && (
@@ -98,7 +98,7 @@ const Signup = () => {
                           : "border-[#F3BA18]"
                       }`}
                     >
-                      <FaLock className="text-grayDescription mr-2" />
+                      <FaLock className="text-white mr-2" />
                       <input
                         type={showPassword ? "text" : "password"}
                         id="password"
@@ -108,12 +108,12 @@ const Signup = () => {
                         onBlur={() =>
                           setTouched({ ...touched, password: true })
                         }
-                        className="bg-transparent outline-none w-full text-white text-p5 placeholder:font-normal placeholder-grayDescription"
+                        className="bg-transparent outline-none w-full text-white text-p5 placeholder:font-normal placeholder-white"
                       />
                       <button
                         type="button"
                         onClick={() => setShowPassword(!showPassword)}
-                        className="ml-2 text-grayDescription hover:text-[#F3BA18] focus:outline-none"
+                        className="ml-2 text-white hover:text-[#F3BA18] focus:outline-none"
                       >
                         {showPassword ? (
                           <IoEyeOffSharp size={20} />
@@ -144,7 +144,7 @@ const Signup = () => {
                           : "border-[#F3BA18]"
                       }`}
                     >
-                      <FaLock className="text-grayDescription mr-2" />
+                      <FaLock className="text-white mr-2" />
                       <input
                         type={showPassword ? "text" : "password"}
                         id="confirm-password"
@@ -154,12 +154,12 @@ const Signup = () => {
                         onBlur={() =>
                           setTouched({ ...touched, confirmPassword: true })
                         }
-                        className="bg-transparent outline-none w-full text-white text-p5 placeholder:font-normal placeholder-grayDescription"
+                        className="bg-transparent outline-none w-full text-white text-p5 placeholder:font-normal placeholder-white"
                       />
                       <button
                         type="button"
                         onClick={() => setShowPassword(!showPassword)}
-                        className="ml-2 text-grayDescription hover:text-[#F3BA18] focus:outline-none"
+                        className="ml-2 text-white hover:text-[#F3BA18] focus:outline-none"
                       >
                         {showPassword ? (
                           <IoEyeOffSharp size={20} />
@@ -285,7 +285,7 @@ const Signup = () => {
               {/* Right: Welcome */}
               <div className="hidden md:flex flex-col md:mt-14 max-w-[400px] items-start text-white space-y-4 px-4">
                 <h1 className="text-4xl font-bold">Welcome!</h1>
-                <p className="text-grayDescription text-lg">
+                <p className="text-white text-lg">
                   Secure, fast, and fair — your trusted partner in global
                   currency exchange.
                 </p>
