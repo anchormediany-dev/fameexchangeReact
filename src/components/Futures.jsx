@@ -54,7 +54,7 @@ const Futures = () => {
 
       {/* Button */}
       <div className="relative z-10 flex justify-center mt-10 pb-16">
-        <button className="bg-lightYellow hover:scale-105 text-black font-medium px-6 py-3 rounded-md transition-all duration-300 relative group text-p5 2xl:text-p1">
+        <button className="bg-lightYellow cursor-pointer hover:scale-105 text-black font-medium px-6 py-3 rounded-md transition-all duration-300 relative group text-p5 2xl:text-p1">
           Discover More
         </button>
       </div>

@@ -25,11 +25,12 @@ const LoginPage = () => {
     <>
       {!showForgotPassword ? (
         <MotionPageWrapper>
-          <div className=" flex items-center justify-center px-4 py-12 mt-20 relative overflow-hidden custom-login-bg">
+          <div className=" flex items-center justify-center px-4 py-12 relative bg-[#0b0b0b] overflow-hidden ">
             {/* Overlay circles */}
             <div className="absolute top-[-100px] left-[-100px] w-[300px] h-[300px] rounded-full bg-white opacity-[0.03]" />
             <div className="absolute top-[120px] right-[180px] w-[120px] h-[120px] rounded-full bg-white opacity-[0.06]" />
             <div className="absolute bottom-[100px] left-[80px] w-[50px] h-[50px] rounded-full bg-white opacity-[0.06]" />
+            <div className="absolute bottom-[40px] right-[40px] w-[80px] h-[80px] rounded-full bg-white opacity-[0.04]" />
 
             <div className="container w-full grid md:grid-cols-2 gap-5 z-10">
               {/* Left: Login Form */}
@@ -95,7 +96,7 @@ const LoginPage = () => {
                       <button
                         type="button"
                         onClick={() => setShowPassword(!showPassword)}
-                        className="ml-2 text-white hover:text-[#F3BA18] focus:outline-none"
+                        className="ml-2 text-grayDescription hover:text-[#F3BA18] focus:outline-none"
                       >
                         {showPassword ? (
                           <IoEyeOffSharp size={20} />
@@ -107,7 +108,7 @@ const LoginPage = () => {
                     <div className="flex justify-end mt-1">
                       <button
                         onClick={() => setShowForgotPassword(true)}
-                        className="text-xs text-white hover:underline"
+                        className="text-xs text-white hover:underline cursor-pointer"
                       >
                         Forgot Password?
                       </button>
@@ -121,8 +122,7 @@ const LoginPage = () => {
 
                   <button
                     type="submit"
-                    className="bg-black w-full hover:scale-105 text-primary font-medium px-6 py-3 rounded-md transition-all duration-300  relative group text-p5  2xl:text-p1"
-                    // className="w-full bg-black text-primary py-2 rounded-md hover:bg-[#F3BA18] hover:text-black transition-all duration-300 font-semibold"
+                    className="bg-black w-full hover:scale-105 text-primary font-medium px-6 py-3 rounded-md transition-all duration-300  relative group text-p5 cursor-pointer 2xl:text-p1"
                   >
                     Log In
                   </button>

@@ -30,12 +30,12 @@ const Hero = () => {
               WELCOME TO THE TALENT, ATHLETE & INFLUENCER BASED PLATFORM FOR
               FANS!
             </h1>
-            <button onClick={handlePlay}>
-              <VideoPlayIcon className="hover:scale-105" />
+            <button className="cursor-pointer" onClick={handlePlay}>
+              <VideoPlayIcon className="hover:scale-105 " />
             </button>
             <button
               onClick={handlePlay}
-              className="play-video-button hover:scale-105 text-black font-semibold text-lg px-8 transition duration-300"
+              className="play-video-button cursor-pointer hover:scale-105 text-black font-semibold text-lg px-8 transition duration-300"
             >
               <div className="leading-tight  text-center">
                 <div className="2xl:text-p1 md:text-p3 text-p4 font-medium">

@@ -111,14 +111,7 @@ body {
   position: relative;
 }
 /* login page */
-.custom-login-bg {
-  background: linear-gradient(
-      315.43deg,
-      rgba(11, 11, 11, 0.235) 22.56%,
-      rgba(243, 242, 242, 0.053) 103.29%
-    ),
-    #0b0b0b;
-}
+
 @layer components {
   .shimmer-loader {
     position: relative;

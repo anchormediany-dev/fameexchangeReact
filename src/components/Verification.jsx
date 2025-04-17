@@ -29,7 +29,7 @@ const Verification = () => {
     <>
       {!isCode ? (
         <MotionPageWrapper>
-          <div className="flex items-center justify-center px-4 py-16 mt-20 relative overflow-hidden custom-login-bg">
+          <div className="flex items-center justify-center px-4 py-16  relative overflow-hidden bg-[#0b0b0b]">
             {/* Background circles */}
             <div className="absolute top-[-100px] left-[-100px] w-[300px] h-[300px] rounded-full bg-white opacity-[0.03]" />
             <div className="absolute top-[120px] right-[180px] w-[120px] h-[120px] rounded-full bg-white opacity-[0.06]" />
@@ -60,7 +60,7 @@ const Verification = () => {
               {/* Continue Button */}
               <button
                 onClick={handleContinue}
-                className="w-full bg-black text-[#F3BA18] py-2  hover:bg-[#F3BA18] hover:text-black  font-medium  rounded-md transition-all duration-300  text-p5  2xl:text-p1"
+                className="w-full bg-black cursor-pointer text-[#F3BA18] py-2  hover:bg-[#F3BA18] hover:text-black  font-medium  rounded-md transition-all duration-300  text-p5  2xl:text-p1"
               >
                 Continue
               </button>
@@ -68,7 +68,7 @@ const Verification = () => {
               {/* Resend */}
               <p className="text-xs text-white mt-2">
                 I Don't Receive A Code{" "}
-                <button className="text-[#F3BA18] underline hover:underline ml-1">
+                <button className="text-[#F3BA18] underline cursor-pointer hover:underline ml-1">
                   Resend
                 </button>
               </p>

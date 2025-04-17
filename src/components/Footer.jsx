@@ -37,12 +37,12 @@ const Footer = () => {
             </div>
 
             {/* Text Items */}
-            <div className="flex items-center gap-8 text-sm">
+            <button className="flex cursor-pointer items-center gap-8 text-sm">
               <LanguageIcon /> <p>US (International) / English</p>
-            </div>
-            <div className="flex items-center gap-8 text-sm">
+            </button>
+            <button className="flex cursor-pointer items-center  gap-8 text-sm">
               <HelpIcon /> <p>Help & Support</p>
-            </div>
+            </button>
           </div>
 
           {/* Corporate */}
@@ -117,26 +117,30 @@ const Footer = () => {
           <div>
             <h3 className="text-primary font-semibold mb-5 text-p3">Apps</h3>
             <div className="flex flex-col gap-8">
-              <img src={appStore} alt="App Store" className="object-cover" />
+              <img
+                src={appStore}
+                alt="App Store"
+                className="object-cover max-w-48 cursor-pointer"
+              />
               <img
                 src={googlePlay}
                 alt="Google Play"
-                className="object-cover"
+                className="object-cover max-w-48 cursor-pointer"
               />
             </div>
           </div>
         </motion.div>
         <div className="flex md:flex-row flex-col items-end">
           <div className="grid grid-cols-5 gap-x-10 gap-y-5 text-xl md:mb-0 mb-5 mt-16">
-            <YoutubeIcon className="hover:scale-105 transition" />
-            <TiktokIcon className="hover:scale-105 transition" />
-            <RedditIcon className="hover:scale-105 transition" />
-            <InstagramIcon className="hover:scale-105-white transition" />
-            <LinkedinIcon className="hover:scale-105 transition" />
-            <XIcon className="hover:scale-105 transition" />
-            <DiscordIcon className="hover:scale-105 transition" />
-            <SnapchatIcon className="hover:scale-105 transition" />
-            <TelegramIcon className="hover:scale-105 transition" />
+            <YoutubeIcon className="hover:scale-105 transition cursor-pointer" />
+            <TiktokIcon className="hover:scale-105 transition cursor-pointer" />
+            <RedditIcon className="hover:scale-105 transition cursor-pointer" />
+            <InstagramIcon className="hover:scale-105-white transition cursor-pointer" />
+            <LinkedinIcon className="hover:scale-105 transition cursor-pointer" />
+            <XIcon className="hover:scale-105 transition cursor-pointer" />
+            <DiscordIcon className="hover:scale-105 transition cursor-pointer" />
+            <SnapchatIcon className="hover:scale-105 transition cursor-pointer" />
+            <TelegramIcon className="hover:scale-105 transition cursor-pointer" />
           </div>
           <div className="flex w-full justify-start md:justify-center">
             <img

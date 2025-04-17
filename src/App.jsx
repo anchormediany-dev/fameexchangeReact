@@ -20,7 +20,6 @@ export default function App() {
 
   return (
     <div className="flex flex-col min-h-screen">
-      <Navbar />
       <main className="flex-grow overflow-x-hidden">
         <AnimatePresence mode="wait">
           <Routes location={location} key={location.pathname}>
@@ -51,7 +50,6 @@ export default function App() {
           </Routes>
         </AnimatePresence>
       </main>
-      <Footer />
     </div>
   );
 }

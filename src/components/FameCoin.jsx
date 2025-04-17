@@ -10,7 +10,7 @@ const FameCoin = () => {
         </h1>
         <FameCoinLogo className="max-w-[424px] h-full" />
 
-        <button className="bg-lightYellow hover:scale-105 text-black font-medium px-6 py-3 rounded-md transition-all duration-300  relative group text-p5  2xl:text-p1">
+        <button className="bg-lightYellow cursor-pointer hover:scale-105 text-black font-medium px-6 py-3 rounded-md transition-all duration-300  relative group text-p5  2xl:text-p1">
           Transfer Your Fame Coin To The Platform Now
         </button>
       </div>

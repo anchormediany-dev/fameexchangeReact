@@ -5,10 +5,13 @@ import NetworkStatistics from "../../components/NetworkStatistics";
 import TokenLeaderboard from "../../components/TokenLeaderboard";
 import FeatureSection from "../../components/FeatureSection";
 import Process from "../../components/Process";
+import Navbar from "../../components/Navbar";
+import Footer from "../../components/Footer";
 
 const Home = () => {
   return (
     <div className="mt-20">
+      <Navbar />
       <Hero />
       <NetworkStatistics />
       <TokenLeaderboard />
@@ -16,6 +19,7 @@ const Home = () => {
       <Futures />
       <FameCoin />
       <Process />
+      <Footer />
     </div>
   );
 };

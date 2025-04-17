@@ -136,7 +136,7 @@ const TokenLeaderboard = () => {
                 </ResponsiveContainer>
               </div>
               <div>
-                <button className="bg-gray text-yellow-400 px-8 py-3 rounded-xl transition-colors duration-300 shadow-[4px_4px_4px_#000000EB,_-4px_-4px_12px_#FFFFFF08]">
+                <button className="bg-gray cursor-pointer text-yellow-400 px-8 py-3 rounded-xl transition-colors duration-300 shadow-[4px_4px_4px_#000000EB,_-4px_-4px_12px_#FFFFFF08]">
                   Trade
                 </button>
               </div>
@@ -145,7 +145,7 @@ const TokenLeaderboard = () => {
         </div>
 
         <div className="mt-12 flex justify-center">
-          <button className="bg-lightYellow hover:scale-105 text-black font-medium px-6 py-3 rounded-md transition-all duration-300 relative group text-p5 2xl:text-p1">
+          <button className="bg-lightYellow hover:scale-105 cursor-pointer text-black font-medium px-6 py-3 rounded-md transition-all duration-300 relative group text-p5 2xl:text-p1">
             Discover More
           </button>
         </div>

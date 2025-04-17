@@ -17,7 +17,7 @@ const ResetPassword = () => {
 
   return (
     <MotionPageWrapper>
-      <div className="flex items-center justify-center px-4 py-16 mt-20 relative overflow-hidden custom-login-bg">
+      <div className="flex items-center justify-center px-4 py-16 relative overflow-hidden bg-[#0b0b0b]">
         {/* Background Circles */}
         <div className="absolute top-[-100px] left-[-100px] w-[300px] h-[300px] rounded-full bg-white opacity-[0.03]" />
         <div className="absolute top-[120px] right-[180px] w-[120px] h-[120px] rounded-full bg-white opacity-[0.06]" />
@@ -84,7 +84,7 @@ const ResetPassword = () => {
           {/* Submit Button */}
           <button
             onClick={handleReset}
-            className="w-full bg-black text-[#F3BA18] py-2  hover:bg-[#F3BA18] hover:text-black  font-medium  rounded-md transition-all duration-300  text-p5  2xl:text-p1"
+            className="w-full cursor-pointer bg-black text-[#F3BA18] py-2  hover:bg-[#F3BA18] hover:text-black  font-medium  rounded-md transition-all duration-300  text-p5  2xl:text-p1"
           >
             Reset Password
           </button>
