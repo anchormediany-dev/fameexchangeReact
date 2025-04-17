@@ -51,6 +51,11 @@ const Verification = () => {
                     type="text"
                     value={digit}
                     maxLength={1}
+                    onKeyPress={(event) => {
+                      if (!/[0-9]/.test(event.key)) {
+                        event.preventDefault();
+                      }
+                    }}
                     onChange={(e) => handleChange(e.target.value, idx)}
                     className="w-12 h-12 md:w-14 md:h-14 text-center text-white text-xl rounded border border-[#F3BA18] bg-transparent outline-none focus:ring-2 focus:ring-[#F3BA18] transition"
                   />
