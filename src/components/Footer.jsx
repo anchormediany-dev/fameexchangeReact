@@ -28,7 +28,7 @@ const Footer = () => {
           {/* Left Block */}
           <div className="space-y-4">
             {/* Logo Row */}
-            <div className="flex items-start">
+            <div className="md:flex hidden items-start">
               <img
                 src={coinLogo}
                 alt="Coin Logo"
@@ -37,10 +37,10 @@ const Footer = () => {
             </div>
 
             {/* Text Items */}
-            <button className="flex cursor-pointer items-center gap-8 text-sm">
+            <button className="flex cursor-pointer items-center gap-3 lg:gap-8 text-sm">
               <LanguageIcon /> <p>US (International) / English</p>
             </button>
-            <button className="flex cursor-pointer items-center  gap-8 text-sm">
+            <button className="flex cursor-pointer items-center  gap-3 lg:gap-8  text-sm">
               <HelpIcon /> <p>Help & Support</p>
             </button>
           </div>
@@ -130,8 +130,8 @@ const Footer = () => {
             </div>
           </div>
         </motion.div>
-        <div className="flex md:flex-row flex-col items-end">
-          <div className="grid grid-cols-5 gap-x-10 gap-y-5 text-xl md:mb-0 mb-5 mt-16">
+        <div className="flex md:flex-row flex-col md:items-end">
+          <div className="grid grid-cols-5 max-w-[70%] sm:max-w-[50%] md:w-auto gap-x-10 gap-y-5 text-xl md:mb-0 mb-5 mt-16">
             <YoutubeIcon className="hover:scale-105 transition cursor-pointer" />
             <TiktokIcon className="hover:scale-105 transition cursor-pointer" />
             <RedditIcon className="hover:scale-105 transition cursor-pointer" />
