@@ -33,8 +33,8 @@ const MotionPageWrapper = ({ children }) => {
       {/* ✨ Shimmer Loader */}
       {isAnimating && (
         <div className="absolute inset-0 flex items-center justify-center bg-[#0b0b0b] z-50">
-          <div className="shimmer-loader w-48 h-4 rounded bg-[#1a1a1a] relative overflow-hidden">
-            <div className="shimmer-light absolute top-0 left-[-100%] w-full h-full bg-gradient-to-r from-transparent via-white/10 to-transparent animate-shimmer" />
+          <div className="shimmer-loader w-48 h-4 rounded bg-white relative overflow-hidden">
+            <div className="shimmer-light absolute top-0 left-[-100%] w-full h-full bg-gradient-to-r from-transparent via-white/30 to-transparent animate-shimmer" />
           </div>
         </div>
       )}

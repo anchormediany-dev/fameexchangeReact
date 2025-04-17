@@ -97,7 +97,7 @@ const NetworthCalculator = () => {
               type="text"
               id="fullName"
               placeholder="Full Name"
-              className={`bg-transparent border border-primary rounded-md px-4 py-2 w-full text-white placeholder:text-text-gray-400 focus:outline-none focus:border-[2px] ${
+              className={`bg-transparent border border-primary rounded-xl px-4 py-2 w-full text-white placeholder:text-text-gray-400 focus:outline-none focus:border-[2px] ${
                 errors.fullName ? "border-red-500" : ""
               }`}
               value={fullName}
@@ -119,7 +119,7 @@ const NetworthCalculator = () => {
                   type="text"
                   id="tokenBrand"
                   placeholder="Token Brand Name"
-                  className={`bg-transparent border border-primary rounded-md px-4 py-2 w-full text-white placeholder:text-text-gray-400 focus:outline-none focus:border-[2px] ${
+                  className={`bg-transparent border border-primary rounded-xl px-4 py-2 w-full text-white placeholder:text-text-gray-400 focus:outline-none focus:border-[2px] ${
                     errors.tokenBrand ? "border-red-500" : ""
                   }`}
                   value={tokenBrand}
@@ -137,7 +137,7 @@ const NetworthCalculator = () => {
                   type="text"
                   id="tokenPrice"
                   placeholder="Current Token Price"
-                  className={`bg-transparent border border-primary rounded-md px-4 py-2 w-full text-white placeholder:text-text-gray-400 focus:outline-none focus:border-[2px] ${
+                  className={`bg-transparent border border-primary rounded-xl px-4 py-2 w-full text-white placeholder:text-text-gray-400 focus:outline-none focus:border-[2px] ${
                     errors.tokenPrice ? "border-red-500" : ""
                   }`}
                   value={tokenPrice}
@@ -165,7 +165,7 @@ const NetworthCalculator = () => {
                   type="text"
                   id="twitter"
                   placeholder="Twitter"
-                  className="bg-transparent border border-primary rounded-md px-4 py-2 w-full text-white placeholder:text-text-gray-400 focus:outline-none focus:border-[2px]"
+                  className="bg-transparent border border-primary rounded-xl px-4 py-2 w-full text-white placeholder:text-text-gray-400 focus:outline-none focus:border-[2px]"
                   value={twitter}
                   onChange={(e) => setTwitter(e.target.value)}
                 />
@@ -175,7 +175,7 @@ const NetworthCalculator = () => {
                   type="text"
                   id="youtube"
                   placeholder="Youtube"
-                  className="bg-transparent border border-primary rounded-md px-4 py-2 w-full text-white placeholder:text-text-gray-400 focus:outline-none focus:border-[2px]"
+                  className="bg-transparent border border-primary rounded-xl px-4 py-2 w-full text-white placeholder:text-text-gray-400 focus:outline-none focus:border-[2px]"
                   value={youtube}
                   onChange={(e) => setYoutube(e.target.value)}
                 />
@@ -185,7 +185,7 @@ const NetworthCalculator = () => {
                   type="text"
                   id="facebook"
                   placeholder="Facebook"
-                  className="bg-transparent border border-primary rounded-md px-4 py-2 w-full text-white placeholder:text-text-gray-400 focus:outline-none focus:border-[2px]"
+                  className="bg-transparent border border-primary rounded-xl px-4 py-2 w-full text-white placeholder:text-text-gray-400 focus:outline-none focus:border-[2px]"
                   value={facebook}
                   onChange={(e) => setFacebook(e.target.value)}
                 />
@@ -195,7 +195,7 @@ const NetworthCalculator = () => {
                   type="text"
                   id="tiktok"
                   placeholder="Tiktok"
-                  className="bg-transparent border border-primary rounded-md px-4 py-2 w-full text-white placeholder:text-text-gray-400 focus:outline-none focus:border-[2px]"
+                  className="bg-transparent border border-primary rounded-xl px-4 py-2 w-full text-white placeholder:text-text-gray-400 focus:outline-none focus:border-[2px]"
                   value={tiktok}
                   onChange={(e) => setTiktok(e.target.value)}
                 />
@@ -205,7 +205,7 @@ const NetworthCalculator = () => {
                   type="text"
                   id="instagram"
                   placeholder="Instagram"
-                  className="bg-transparent border border-primary rounded-md px-4 py-2 w-full text-white placeholder:text-text-gray-400 focus:outline-none focus:border-[2px]"
+                  className="bg-transparent border border-primary rounded-xl px-4 py-2 w-full text-white placeholder:text-text-gray-400 focus:outline-none focus:border-[2px]"
                   value={instagram}
                   onChange={(e) => setInstagram(e.target.value)}
                 />
@@ -215,7 +215,7 @@ const NetworthCalculator = () => {
                   type="text"
                   id="snapchat"
                   placeholder="Snapchat"
-                  className="bg-transparent border border-primary rounded-md px-4 py-2 w-full text-white placeholder:text-text-gray-400 focus:outline-none focus:border-[2px]"
+                  className="bg-transparent border border-primary rounded-xl px-4 py-2 w-full text-white placeholder:text-text-gray-400 focus:outline-none focus:border-[2px]"
                   value={snapchat}
                   onChange={(e) => setSnapchat(e.target.value)}
                 />
