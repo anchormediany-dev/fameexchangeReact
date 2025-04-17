@@ -4,6 +4,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { FaBars, FaTimes } from "react-icons/fa";
 import siteLogo from "../assets/images/site-logo.png";
 import LoginModal from "../components/LoginModal";
+import SignupModal from "./SignupModal";
 const navLinks = [
   { name: "Trading Chart", scrollTo: "trading-chart" },
   { name: "Videos", scrollTo: "videos" },
@@ -17,6 +18,7 @@ const navLinks = [
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
+  const [isSignupModalOpen, setIsSignupModalOpen] = useState(false);
   const handleScroll = (id) => {
     const element = document.getElementById(id);
     if (element) {
@@ -33,11 +35,20 @@ const Navbar = () => {
   // for login modals
   const openLoginModal = () => {
     setIsLoginModalOpen(true);
-    setIsOpen(false); // Close mobile menu if open
+    setIsOpen(false);
   };
 
   const closeLoginModal = () => {
     setIsLoginModalOpen(false);
+  };
+  // for signup modals
+  const openSignupModal = () => {
+    setIsSignupModalOpen(true);
+    setIsOpen(false);
+  };
+
+  const closeSignupModal = () => {
+    setIsSignupModalOpen(false);
   };
   return (
     <nav className="bg-black fixed top-0 left-0 right-0 z-50">
@@ -78,7 +89,10 @@ const Navbar = () => {
               <span className="absolute inset-0 border border-primary rounded"></span>
               <span className="relative z-10">Log In</span>
             </button>
-            <button className="relative cursor-pointer inline-block text-p5 font-medium text-black bg-primary px-5 py-2 rounded hover:opacity-90 transition-all duration-300 shadow-md hover:shadow-xl">
+            <button
+              onClick={openSignupModal}
+              className="relative cursor-pointer inline-block text-p5 font-medium text-black bg-primary px-5 py-2 rounded hover:opacity-90 transition-all duration-300 shadow-md hover:shadow-xl"
+            >
               <span className="relative z-10">Sign Up</span>
             </button>
           </div>
@@ -120,8 +134,7 @@ const Navbar = () => {
               Log In
             </button>
             <button
-              to="/signup"
-              onClick={() => setIsOpen(false)}
+              onClick={openSignupModal}
               className="block text-p5 font-medium cursor-pointer bg-primary text-black px-4 py-2 rounded hover:bg-primary transition"
             >
               Sign Up
@@ -131,6 +144,8 @@ const Navbar = () => {
       </AnimatePresence>{" "}
       {/* Login Modal */}
       <LoginModal isOpen={isLoginModalOpen} onClose={closeLoginModal} />
+      {/* Signup Modal */}
+      <SignupModal isOpen={isSignupModalOpen} onClose={closeSignupModal} />
     </nav>
   );
 };

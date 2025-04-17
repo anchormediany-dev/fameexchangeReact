@@ -2,22 +2,38 @@ import React, { useState } from "react";
 import { FaEnvelope, FaLock } from "react-icons/fa";
 import { FcGoogle } from "react-icons/fc";
 import { FaFacebookF } from "react-icons/fa";
-import { IoEyeOffSharp, IoEyeSharp } from "react-icons/io5"; // 👈 Eye icons
+import { IoEyeOffSharp, IoEyeSharp } from "react-icons/io5";
 import MotionPageWrapper from "../../components/MotionPageWrapper";
 import ForgotPassword from "../../components/ForgotPassword";
 import { Link } from "react-router-dom";
+const representationOptions = [
+  "Agent",
+  "Manager",
+  "Attorney",
+  "Business Manager",
+];
 const Signup = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [touched, setTouched] = useState({ email: false, password: false });
-  const [showPassword, setShowPassword] = useState(false); // 👈 New state
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const [touched, setTouched] = useState({
+    email: false,
+    password: false,
+    confirmPassword: false,
+  });
+  const [showPassword, setShowPassword] = useState(false);
   const [showForgotPassword, setShowForgotPassword] = useState(false);
+  const [hasRepresentation, setHasRepresentation] = useState(false);
+  const [representationType, setRepresentationType] = useState("");
+  const [isOver18, setIsOver18] = useState(false);
+
   const isEmailValid = email.includes("@");
   const isPasswordValid = password.length >= 6;
+  const passwordsMatch = password === confirmPassword;
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    if (!isEmailValid || !isPasswordValid) return;
+    if (!isEmailValid || !isPasswordValid || !passwordsMatch) return;
     console.log("Submit", { email, password });
   };
 
@@ -25,7 +41,7 @@ const Signup = () => {
     <>
       {!showForgotPassword ? (
         <MotionPageWrapper>
-          <div className=" flex items-center justify-center px-4 py-12 relative bg-[#0b0b0b] overflow-hidden ">
+          <div className="flex items-center justify-center px-4 py-12 relative bg-[#0b0b0b] overflow-hidden">
             {/* Overlay circles */}
             <div className="absolute top-[-100px] left-[-100px] w-[300px] h-[300px] rounded-full bg-white opacity-[0.03]" />
             <div className="absolute top-[120px] right-[180px] w-[120px] h-[120px] rounded-full bg-white opacity-[0.06]" />
@@ -33,11 +49,11 @@ const Signup = () => {
             <div className="absolute bottom-[40px] right-[40px] w-[80px] h-[80px] rounded-full bg-white opacity-[0.04]" />
 
             <div className="container w-full grid md:grid-cols-2 gap-5 z-10">
-              {/* Left: Login Form */}
+              {/* Left: Signup Form */}
               <div className="bg-transparent p-8 rounded-lg space-y-6 border border-[#686868] w-full max-w-md">
-                <h2 className="text-2xl font-bold text-white">Log In</h2>
+                <h2 className="text-2xl font-bold text-white">Sign Up</h2>
 
-                <form onSubmit={handleSubmit} className="space-y-6 ">
+                <form onSubmit={handleSubmit} className="space-y-6">
                   {/* Email */}
                   <div>
                     <label htmlFor="email" className="text-white text-sm">
@@ -92,7 +108,6 @@ const Signup = () => {
                         }
                         className="bg-transparent outline-none w-full text-white text-p5 placeholder:font-normal placeholder-grayDescription"
                       />
-                      {/* 👁 Show/Hide toggle */}
                       <button
                         type="button"
                         onClick={() => setShowPassword(!showPassword)}
@@ -105,14 +120,6 @@ const Signup = () => {
                         )}
                       </button>
                     </div>
-                    <div className="flex justify-end mt-1">
-                      <button
-                        onClick={() => setShowForgotPassword(true)}
-                        className="text-xs text-white hover:underline cursor-pointer"
-                      >
-                        Forgot Password?
-                      </button>
-                    </div>
                     {touched.password && !isPasswordValid && (
                       <p className="text-red text-xs mt-1">
                         Password must be at least 6 characters
@@ -120,11 +127,129 @@ const Signup = () => {
                     )}
                   </div>
 
+                  {/* Confirm Password */}
+                  <div>
+                    <label
+                      htmlFor="confirm-password"
+                      className="text-white text-sm"
+                    >
+                      Confirm Password
+                    </label>
+                    <div
+                      className={`flex items-center border rounded-md px-3 py-2 mt-1 bg-transparent ${
+                        touched.confirmPassword && !passwordsMatch
+                          ? "border-red-500"
+                          : "border-[#F3BA18]"
+                      }`}
+                    >
+                      <FaLock className="text-grayDescription mr-2" />
+                      <input
+                        type={showPassword ? "text" : "password"}
+                        id="confirm-password"
+                        placeholder="Password"
+                        value={confirmPassword}
+                        onChange={(e) => setConfirmPassword(e.target.value)}
+                        onBlur={() =>
+                          setTouched({ ...touched, confirmPassword: true })
+                        }
+                        className="bg-transparent outline-none w-full text-white text-p5 placeholder:font-normal placeholder-grayDescription"
+                      />
+                      <button
+                        type="button"
+                        onClick={() => setShowPassword(!showPassword)}
+                        className="ml-2 text-grayDescription hover:text-[#F3BA18] focus:outline-none"
+                      >
+                        {showPassword ? (
+                          <IoEyeOffSharp size={20} />
+                        ) : (
+                          <IoEyeSharp size={20} />
+                        )}
+                      </button>
+                    </div>
+                    {touched.confirmPassword && !passwordsMatch && (
+                      <p className="text-red text-xs mt-1">
+                        Passwords do not match
+                      </p>
+                    )}
+                  </div>
+                  <div className="flex flex-col gap-4 mt-4 text-white text-sm">
+                    {/* I Have Representation */}
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center space-x-3">
+                        <input
+                          type="checkbox"
+                          id="representation"
+                          checked={hasRepresentation}
+                          onChange={(e) => {
+                            setHasRepresentation(e.target.checked);
+                            if (!e.target.checked) setRepresentationType("");
+                          }}
+                          className="custom-checkbox"
+                        />
+                        <label
+                          htmlFor="representation"
+                          className={`${
+                            hasRepresentation
+                              ? "text-primary"
+                              : "text-grayLabel2"
+                          }`}
+                        >
+                          I Have Representation
+                        </label>
+                      </div>
+
+                      {hasRepresentation && (
+                        <div className="relative">
+                          <select
+                            value={representationType}
+                            onChange={(e) =>
+                              setRepresentationType(e.target.value)
+                            }
+                            className="bg-black  text-primary font-normal text-sm px-3 py-2 rounded-md w-48 focus:outline-none"
+                          >
+                            <option value="" disabled hidden>
+                              Representation Type
+                            </option>
+                            {representationOptions.map((option) => (
+                              <option
+                                key={option}
+                                value={option}
+                                className="text-white"
+                              >
+                                {option}
+                              </option>
+                            ))}
+                          </select>
+                        </div>
+                      )}
+                    </div>
+
+                    {/* I'm over 18 */}
+                    <div className="flex items-center space-x-3">
+                      <input
+                        type="checkbox"
+                        id="over18"
+                        checked={isOver18}
+                        onChange={(e) => setIsOver18(e.target.checked)}
+                        className="custom-checkbox"
+                      />
+                      <label
+                        htmlFor="over18"
+                        className={`${
+                          isOver18 ? "text-primary" : "text-grayLabel2"
+                        }`}
+                      >
+                        I'm over 18 years old
+                      </label>
+                    </div>
+                  </div>
+
+                  {/* Submit Button */}
                   <button
                     type="submit"
-                    className="bg-black w-full hover:scale-105 text-primary font-medium px-6 py-3 rounded-md transition-all duration-300  relative group text-p5 cursor-pointer 2xl:text-p1"
+                    className="bg-black w-full hover:scale-105 text-primary font-medium px-6 py-3 rounded-md transition-all duration-300 relative group text-p5 cursor-pointer 2xl:text-p1"
                   >
-                    Log In
+                    Sign Up
                   </button>
                 </form>
 
@@ -134,23 +259,23 @@ const Signup = () => {
                   <span className="bg-[#0b0b0b] px-4 z-10 relative">OR</span>
                 </div>
 
-                {/* Social */}
+                {/* Social Login */}
                 <div className="space-y-3">
-                  <button className="w-full flex cursor-pointer hover:opacity-50 text-white font-medium  text-p5  2xl:text-p1 items-center justify-center gap-3 bg-black py-2 rounded-md  transition">
+                  <button className="w-full flex cursor-pointer hover:opacity-50 text-white font-medium text-p5 2xl:text-p1 items-center justify-center gap-3 bg-black py-2 rounded-md transition">
                     <FcGoogle size={20} />
                     Continue With Google
                   </button>
-                  <button className="w-full flex cursor-pointer hover:opacity-50 text-white font-medium  text-p5  2xl:text-p1 items-center justify-center gap-3 bg-black py-2 rounded-md  transition">
+                  <button className="w-full flex cursor-pointer hover:opacity-50 text-white font-medium text-p5 2xl:text-p1 items-center justify-center gap-3 bg-black py-2 rounded-md transition">
                     <FaFacebookF size={20} className="text-[#1877F2]" />
-                    <span> Continue With Facebook</span>
+                    <span>Continue With Facebook</span>
                   </button>
                 </div>
 
-                {/* Sign Up */}
+                {/* Link to Login */}
                 <p className="text-p5 text-gray-500 text-center mt-4">
-                  Don’t have an account?{" "}
-                  <Link to="/signup" className="text-[#F3BA18] hover:underline">
-                    Sign Up
+                  Already have an account?
+                  <Link to="/login" className="text-[#F3BA18] ml-1 underline">
+                    Log In
                   </Link>
                 </p>
               </div>
@@ -167,12 +292,10 @@ const Signup = () => {
           </div>
         </MotionPageWrapper>
       ) : (
-        <>
-          <ForgotPassword />
-        </>
+        <ForgotPassword />
       )}
     </>
   );
 };
 
-export default LSignup;
+export default Signup;

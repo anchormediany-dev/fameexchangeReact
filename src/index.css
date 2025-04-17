@@ -18,6 +18,7 @@ body {
   --color-grayLabel: #686868;
   --color-grayDescription: #303030;
   --color-red: #ff0000;
+  --color-grayLabel2: #696969;
   --text-h1: 70px;
   --text-h2: 65px;
   --text-h3: 60px;
@@ -154,4 +155,27 @@ select:-webkit-autofill:focus {
   box-shadow: 0 0 0px 1000px transparent inset !important;
   -webkit-text-fill-color: #fff !important;
   transition: background-color 9999s ease-in-out 0s;
+}
+/* Signup page checkbox */
+.custom-checkbox {
+  @apply w-4 h-4 border border-[#3b3b3b] rounded-sm bg-transparent cursor-pointer relative appearance-none transition-all duration-200;
+}
+
+.custom-checkbox:checked {
+  @apply bg-[#F3BA18];
+}
+
+.custom-checkbox:checked::after {
+  content: "✓";
+  color: black;
+  font-size: 0.75rem;
+  position: absolute;
+  top: 0;
+  left: 2px;
+}
+option {
+  border: none !important;
+}
+select {
+  border: none !important;
 }
