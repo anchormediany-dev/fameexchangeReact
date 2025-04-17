@@ -10,7 +10,10 @@ const Hero = () => {
   };
 
   return (
-    <section className="w-full max-h-[600px] relative bg-black flex flex-col items-center justify-center">
+    <section
+      id="videos"
+      className="w-full max-h-[600px] relative bg-black flex flex-col items-center justify-center"
+    >
       {/* Video */}
       <video
         ref={videoRef}
