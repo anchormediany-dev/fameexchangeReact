@@ -6,6 +6,7 @@ import { IoEyeOffSharp, IoEyeSharp } from "react-icons/io5";
 import MotionPageWrapper from "../../components/MotionPageWrapper";
 import ForgotPassword from "../../components/ForgotPassword";
 import { Link } from "react-router-dom";
+import VerifyId from "../../components/VerifyId";
 const representationOptions = [
   "Agent",
   "Manager",
@@ -26,7 +27,7 @@ const Signup = () => {
   const [hasRepresentation, setHasRepresentation] = useState(false);
   const [representationType, setRepresentationType] = useState("");
   const [isOver18, setIsOver18] = useState(false);
-
+  const [isVerify, setIsVerify] = useState(false);
   const isEmailValid = email.includes("@");
   const isPasswordValid = password.length >= 6;
   const passwordsMatch = password === confirmPassword;
@@ -35,11 +36,12 @@ const Signup = () => {
     e.preventDefault();
     if (!isEmailValid || !isPasswordValid || !passwordsMatch) return;
     console.log("Submit", { email, password });
+    setIsVerify(true);
   };
 
   return (
     <>
-      {!showForgotPassword ? (
+      {!isVerify ? (
         <MotionPageWrapper>
           <div className="flex items-center justify-center px-4 py-12 relative bg-[#0b0b0b] overflow-hidden">
             {/* Overlay circles */}
@@ -292,7 +294,7 @@ const Signup = () => {
           </div>
         </MotionPageWrapper>
       ) : (
-        <ForgotPassword />
+        <VerifyId />
       )}
     </>
   );

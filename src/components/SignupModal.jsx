@@ -27,12 +27,12 @@ const SignupModal = ({ isOpen, onClose }) => {
           onClick={onClose}
         >
           <motion.div
-            className="bg-black rounded-md p-16 text-white relative flex flex-col justify-center items-center" // Modal background
+            className="bg-black rounded-md p-16 text-white relative flex flex-col justify-center items-center"
             variants={contentVariants}
             initial="hidden"
             animate="visible"
             exit="exit"
-            onClick={(e) => e.stopPropagation()} // Prevent click on content from closing modal
+            onClick={(e) => e.stopPropagation()}
           >
             <button
               onClick={onClose}

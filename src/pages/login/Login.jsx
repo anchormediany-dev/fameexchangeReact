@@ -56,7 +56,13 @@ const LoginPage = () => {
                         id="email"
                         placeholder="Email"
                         value={email}
-                        onChange={(e) => setEmail(e.target.value)}
+                        onChange={(e) => {
+                          const value = e.target.value;
+                          if (value.length === 1 && /[0-9]/.test(value[0])) {
+                            return;
+                          }
+                          setEmail(value);
+                        }}
                         onBlur={() => setTouched({ ...touched, email: true })}
                         className="bg-transparent outline-none w-full text-white text-p5 placeholder:font-normal placeholder-grayDescription"
                       />
