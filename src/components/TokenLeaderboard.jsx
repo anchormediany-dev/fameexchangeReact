@@ -95,7 +95,7 @@ const TokenLeaderboard = () => {
       }}
     >
       <div className="container">
-        <h2 className="text-p2 py-10 sm:text-p1 md:text-h6 lg:text-h5 xl:text-h4 2xl:text-h3 lg:text-5xl font-bold text-center text-primary">
+        <h2 className="text-p2 py-5 sm:text-p1 md:text-h6 lg:text-h5 xl:text-h4 2xl:text-h3 lg:text-5xl font-bold text-center text-primary">
           20
           <span className="text-white"> TOP BRANDED TALENT TOKENS</span>
         </h2>
@@ -104,9 +104,9 @@ const TokenLeaderboard = () => {
           {tokenData.map((token, idx) => (
             <div
               key={idx}
-              className="flex flex-col md:flex-row items-center justify-between bg-[#111111] rounded-xl px-6 py-4 shadow-lg hover:scale-[1.01] transition-transform"
+              className="flex flex-col md:flex-row items-center gap-1 md:justify-between bg-[#111111] rounded-xl px-6 py-4 shadow-lg hover:scale-[1.01] transition-transform"
             >
-              <div className="text-p4 2xl:text-p1 font-bold w-[320px]">
+              <div className="text-p4 pl-5 md:pl-0 2xl:text-p1 font-bold md:w-[160px] lg:w-[240px] xl:w-[320px]">
                 {token.name}{" "}
                 <span className="text-sm text-gray-400 font-light">
                   {token.ticker}
