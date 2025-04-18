@@ -80,7 +80,12 @@ const Navbar = () => {
     <nav className="bg-black fixed top-0 left-0 right-0 z-50">
       <div className="container">
         <div className="flex justify-between items-center h-20">
-          <Link to="/">
+          <Link
+            to="/"
+            onClick={() =>
+              window.scrollTo({ top: 0, left: 0, behavior: "smooth" })
+            }
+          >
             <img src={siteLogo} alt="Logo" className="h-12" />
           </Link>
 
