@@ -6,6 +6,7 @@ import { IoEyeOffSharp, IoEyeSharp } from "react-icons/io5";
 import MotionPageWrapper from "../../components/MotionPageWrapper";
 import { Link } from "react-router-dom";
 import SignupOtpVerification from "../../components/SignupOtpVerification";
+import siteLogo from "../../assets/images/site-logo.png";
 const representationOptions = [
   "Agent",
   "Manager",
@@ -281,9 +282,12 @@ const Signup = () => {
                 </p>
               </div>
 
-              {/* Right: Welcome */}
+              {/* Right Side Welcome */}
               <div className="hidden md:flex flex-col md:mt-14 max-w-[400px] items-start text-white space-y-4 px-4">
-                <h1 className="text-4xl font-bold">Welcome!</h1>
+                <Link to="/">
+                  <img className="w-96 h-40" src={siteLogo} alt="Logo" />
+                </Link>
+                <h1 className="text-4xl font-bold mt-5">Welcome!</h1>
                 <p className="text-white text-lg">
                   Secure, fast, and fair — your trusted partner in global
                   currency exchange.
