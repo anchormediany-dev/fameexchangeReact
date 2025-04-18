@@ -57,7 +57,7 @@ const LoginSignupModal = ({ isOpen, onClose, setIsOpenLoginSignup }) => {
             onClick={onClose}
           >
             <motion.div
-              className="bg-black rounded-md p-16 max-w-[500px] text-white relative flex flex-col justify-center items-center" // Modal background
+              className="bg-black rounded-[20px] p-16 max-w-[500px] text-white relative flex flex-col justify-center items-center" // Modal background
               variants={contentVariants}
               initial="hidden"
               animate="visible"
@@ -75,13 +75,13 @@ const LoginSignupModal = ({ isOpen, onClose, setIsOpenLoginSignup }) => {
               </h2>
               <button
                 onClick={openLoginModal}
-                className="bg-gray cursor-pointer hover:bg-primary hover:scale-105 text-white font-medium py-3 px-6 w-full mb-3  rounded-md transition-all duration-300 text-p5  2xl:text-p1"
+                className="bg-gray cursor-pointer hover:bg-primary hover:scale-105 text-white font-medium py-3 px-6 w-full mb-3  rounded-xl transition-all duration-300 text-p5  2xl:text-p1"
               >
                 Log In
               </button>
               <button
                 onClick={openSignupModal}
-                className="bg-gray cursor-pointer hover:bg-primary hover:scale-105 text-white font-medium py-3 px-6 w-full mb-3  rounded-md transition-all duration-300 text-p5  2xl:text-p1"
+                className="bg-gray cursor-pointer hover:bg-primary hover:scale-105 text-white font-medium py-3 px-6 w-full mb-3  rounded-xl transition-all duration-300 text-p5  2xl:text-p1"
               >
                 Sign Up
               </button>
