@@ -1,10 +1,11 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { FaBars, FaTimes } from "react-icons/fa";
 import siteLogo from "../assets/images/site-logo.png";
 import LoginModal from "../components/LoginModal";
 import SignupModal from "./SignupModal";
+
 const navLinks = [
   { name: "Trading Chart", scrollTo: "trading-chart" },
   { name: "Videos", scrollTo: "videos" },
@@ -19,6 +20,8 @@ const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
   const [isSignupModalOpen, setIsSignupModalOpen] = useState(false);
+  const [activeSection, setActiveSection] = useState(null);
+
   const handleScroll = (id) => {
     const element = document.getElementById(id);
     if (element) {
@@ -32,7 +35,29 @@ const Navbar = () => {
       });
     }
   };
-  // for login modals
+
+  // Detect active section on scroll
+  useEffect(() => {
+    const handleScrollSpy = () => {
+      const scrollPosition = window.scrollY + 100; // Adjust for header height
+      for (let i = 0; i < navLinks.length; i++) {
+        const section = document.getElementById(navLinks[i].scrollTo);
+        if (section) {
+          const offsetTop = section.offsetTop;
+          const offsetBottom = offsetTop + section.offsetHeight;
+
+          if (scrollPosition >= offsetTop && scrollPosition < offsetBottom) {
+            setActiveSection(navLinks[i].scrollTo);
+            break;
+          }
+        }
+      }
+    };
+
+    window.addEventListener("scroll", handleScrollSpy);
+    return () => window.removeEventListener("scroll", handleScrollSpy);
+  }, []);
+
   const openLoginModal = () => {
     setIsLoginModalOpen(true);
     setIsOpen(false);
@@ -41,7 +66,7 @@ const Navbar = () => {
   const closeLoginModal = () => {
     setIsLoginModalOpen(false);
   };
-  // for signup modals
+
   const openSignupModal = () => {
     setIsSignupModalOpen(true);
     setIsOpen(false);
@@ -50,37 +75,31 @@ const Navbar = () => {
   const closeSignupModal = () => {
     setIsSignupModalOpen(false);
   };
+
   return (
     <nav className="bg-black fixed top-0 left-0 right-0 z-50">
       <div className="container">
-        <div className="flex  justify-between items-center h-20">
-          {/* Logo */}
+        <div className="flex justify-between items-center h-20">
           <Link to="/">
             <img src={siteLogo} alt="Logo" className="h-12" />
           </Link>
 
           {/* Desktop Nav */}
           <div className="hidden lg:flex text-white xl:text-p3 text-p4 font-medium xl:space-x-6 space-x-3 items-center">
-            {navLinks.map(({ name, path, scrollTo }) =>
-              path ? (
-                <Link
-                  key={name}
-                  to={path}
-                  className="text-p4 hover:text-primary transition"
-                >
-                  {name}
-                </Link>
-              ) : (
-                <span
-                  key={name}
-                  onClick={() => handleScroll(scrollTo)}
-                  className="cursor-pointer text-p4 hover:text-primary transition"
-                >
-                  {name}
-                </span>
-              )
-            )}
-            {/* Buttons remain unchanged */}
+            {navLinks.map(({ name, scrollTo }) => (
+              <span
+                key={name}
+                onClick={() => handleScroll(scrollTo)}
+                className={`cursor-pointer text-p4 transition ${
+                  activeSection === scrollTo
+                    ? "text-primary"
+                    : "hover:text-primary"
+                }`}
+              >
+                {name}
+              </span>
+            ))}
+
             <button
               onClick={openLoginModal}
               className="relative cursor-pointer inline-block text-p5 font-medium text-white group overflow-hidden px-5 py-2"
@@ -105,7 +124,7 @@ const Navbar = () => {
           </div>
         </div>
       </div>
-      {/* Mobile Nav */}
+
       {/* Mobile Nav */}
       <AnimatePresence>
         {isOpen && (
@@ -115,18 +134,23 @@ const Navbar = () => {
             exit={{ height: 0, opacity: 0 }}
             className="lg:hidden bg-black text-white px-6 pt-4 pb-6 space-y-4"
           >
-            {navLinks.map(({ name, path }) => (
-              <Link
+            {navLinks.map(({ name, scrollTo }) => (
+              <span
                 key={name}
-                to={path}
-                onClick={() => setIsOpen(false)}
-                className="block text-p5 hover:text-primary"
+                onClick={() => {
+                  handleScroll(scrollTo);
+                  setIsOpen(false);
+                }}
+                className={`block text-p5 cursor-pointer transition ${
+                  activeSection === scrollTo
+                    ? "text-primary"
+                    : "hover:text-primary"
+                }`}
               >
                 {name}
-              </Link>
+              </span>
             ))}
 
-            {/* Mobile Buttons */}
             <button
               onClick={openLoginModal}
               className="block text-p5 font-medium cursor-pointer text-white border border-primary px-4 py-2 rounded hover:bg-primary hover:text-black transition"
@@ -141,10 +165,9 @@ const Navbar = () => {
             </button>
           </motion.div>
         )}
-      </AnimatePresence>{" "}
-      {/* Login Modal */}
+      </AnimatePresence>
+
       <LoginModal isOpen={isLoginModalOpen} onClose={closeLoginModal} />
-      {/* Signup Modal */}
       <SignupModal isOpen={isSignupModalOpen} onClose={closeSignupModal} />
     </nav>
   );
