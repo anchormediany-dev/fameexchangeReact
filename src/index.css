@@ -179,3 +179,16 @@ option {
 select {
   border: none !important;
 }
+/* Custom Banner */
+@media (max-width: 1536px) {
+  .custom-banner {
+    padding-top: 50px;
+    padding-bottom: 50px;
+  }
+}
+@media (max-width: 768px) {
+  .custom-banner {
+    padding-top: 30px;
+    padding-bottom: 30px;
+  }
+}

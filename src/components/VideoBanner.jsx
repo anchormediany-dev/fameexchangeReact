@@ -1,6 +1,6 @@
 import { useRef } from "react";
 import VideoPlayIcon from "../assets/icons/video-play.svg?react";
-const Hero = () => {
+const VideoBanner = () => {
   const videoRef = useRef(null);
 
   const handlePlay = () => {
@@ -26,15 +26,15 @@ const Hero = () => {
       />
 
       {/* Play Button */}
-      <div className="absolute h-full top-0 left-0">
-        <div className="container h-full py-16">
+      <div className="absolute top-0 left-0 h-full w-full  z-0">
+        <div className="container custom-banner h-full">
           <div className="flex flex-col h-full justify-between items-center">
-            <h1 className="font-semibold text-p4 lg:text-p3 xl:text-p1 2xl:text-h5 leading-snug">
+            <h1 className="font-medium md:font-semibold text-p5 md:text-p4 lg:text-p3 xl:text-p1 2xl:text-h5 leading-snug">
               WELCOME TO THE TALENT, ATHLETE & INFLUENCER BASED PLATFORM FOR
               FANS!
             </h1>
-            <button className="cursor-pointer" onClick={handlePlay}>
-              <VideoPlayIcon className="hover:scale-105 " />
+            <button className="cursor-pointer max-w-40" onClick={handlePlay}>
+              <VideoPlayIcon className="hover:scale-105 w-14 h-14 sm:w-20 sm:h-20 md:w-30 md:h-30" />
             </button>
             <button
               onClick={handlePlay}
@@ -56,4 +56,4 @@ const Hero = () => {
   );
 };
 
-export default Hero;
+export default VideoBanner;

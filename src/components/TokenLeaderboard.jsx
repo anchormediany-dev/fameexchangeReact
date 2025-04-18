@@ -88,7 +88,7 @@ const TokenLeaderboard = () => {
   return (
     <section
       id="token-leaderboard"
-      className="text-white px-4 py-12 min-h-screen"
+      className="text-white px-4 py-12 min-h-screen blurredOverlay"
       style={{
         background:
           "radial-gradient(circle at top left, #2a2a2a 0%, #0b0b0b 100%)",
