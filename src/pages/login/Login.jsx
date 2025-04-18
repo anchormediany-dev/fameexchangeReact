@@ -1,43 +1,63 @@
 import React, { useState } from "react";
+import { useForm } from "react-hook-form";
+import { yupResolver } from "@hookform/resolvers/yup";
+import * as yup from "yup";
 import { FaEnvelope, FaLock } from "react-icons/fa";
 import { FcGoogle } from "react-icons/fc";
 import { FaFacebookF } from "react-icons/fa";
-import { IoEyeOffSharp, IoEyeSharp } from "react-icons/io5"; // 👈 Eye icons
+import { IoEyeOffSharp, IoEyeSharp } from "react-icons/io5";
 import MotionPageWrapper from "../../components/MotionPageWrapper";
 import ForgotPassword from "../../components/ForgotPassword";
 import { Link } from "react-router-dom";
-const LoginPage = () => {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [touched, setTouched] = useState({ email: false, password: false });
-  const [showPassword, setShowPassword] = useState(false); // 👈 New state
-  const [showForgotPassword, setShowForgotPassword] = useState(false);
-  const isEmailValid = email.includes("@");
-  const isPasswordValid = password.length >= 6;
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    if (!isEmailValid || !isPasswordValid) return;
-    console.log("Submit", { email, password });
+// Yup validation schema
+const schema = yup.object().shape({
+  email: yup
+    .string()
+    .required("Email is required")
+    .matches(/^[^\d][\w.-]+@[\w.-]+\.\w+$/, "Invalid email format"),
+  password: yup
+    .string()
+    .required("Password is required")
+    .min(8, "Password must be at least 8 characters")
+    .matches(/[A-Z]/, "Must include one uppercase letter")
+    .matches(/[0-9]/, "Must include one number")
+    .matches(/[^A-Za-z0-9]/, "Must include one special character"),
+});
+
+const LoginPage = () => {
+  const [showForgotPassword, setShowForgotPassword] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
+
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm({
+    resolver: yupResolver(schema),
+  });
+
+  const onSubmit = (data) => {
+    console.log("Login submitted: ", data);
   };
 
   return (
     <>
       {!showForgotPassword ? (
         <MotionPageWrapper>
-          <div className=" flex items-center justify-center px-4 py-12 relative bg-[#0b0b0b] overflow-hidden ">
-            {/* Overlay circles */}
+          <div className="flex items-center justify-center px-4 py-12 relative bg-[#0b0b0b] overflow-hidden">
+            {/* Circles */}
             <div className="absolute top-[-100px] left-[-100px] w-[300px] h-[300px] rounded-full bg-white opacity-[0.03]" />
             <div className="absolute top-[120px] right-[180px] w-[120px] h-[120px] rounded-full bg-white opacity-[0.06]" />
             <div className="absolute bottom-[100px] left-[80px] w-[50px] h-[50px] rounded-full bg-white opacity-[0.06]" />
             <div className="absolute bottom-[40px] right-[40px] w-[80px] h-[80px] rounded-full bg-white opacity-[0.04]" />
 
             <div className="container w-full grid md:grid-cols-2 gap-5 z-10">
-              {/* Left: Login Form */}
+              {/* Login Form */}
               <div className="bg-transparent p-8 rounded-lg space-y-6 border border-[#686868] w-full max-w-md">
                 <h2 className="text-2xl font-bold text-white">Log In</h2>
 
-                <form onSubmit={handleSubmit} className="space-y-6 ">
+                <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
                   {/* Email */}
                   <div>
                     <label htmlFor="email" className="text-white text-sm">
@@ -45,9 +65,7 @@ const LoginPage = () => {
                     </label>
                     <div
                       className={`flex items-center border rounded-md px-3 py-2 mt-1 bg-transparent ${
-                        touched.email && !isEmailValid
-                          ? "border-red-500"
-                          : "border-[#F3BA18]"
+                        errors.email ? "border-red-500" : "border-[#F3BA18]"
                       }`}
                     >
                       <FaEnvelope className="text-white mr-2" />
@@ -55,21 +73,13 @@ const LoginPage = () => {
                         type="email"
                         id="email"
                         placeholder="Email"
-                        value={email}
-                        onChange={(e) => {
-                          const value = e.target.value;
-                          if (value.length === 1 && /[0-9]/.test(value[0])) {
-                            return;
-                          }
-                          setEmail(value);
-                        }}
-                        onBlur={() => setTouched({ ...touched, email: true })}
-                        className="bg-transparent outline-none w-full text-white text-p5 placeholder:font-normal placeholder-white"
+                        {...register("email")}
+                        className="bg-transparent outline-none w-full text-white placeholder-white text-p5"
                       />
                     </div>
-                    {touched.email && !isEmailValid && (
+                    {errors.email && (
                       <p className="text-red text-xs mt-1">
-                        Invalid email address
+                        {errors.email.message}
                       </p>
                     )}
                   </div>
@@ -81,9 +91,7 @@ const LoginPage = () => {
                     </label>
                     <div
                       className={`flex items-center border rounded-md px-3 py-2 mt-1 bg-transparent ${
-                        touched.password && !isPasswordValid
-                          ? "border-red-500"
-                          : "border-[#F3BA18]"
+                        errors.password ? "border-red-500" : "border-[#F3BA18]"
                       }`}
                     >
                       <FaLock className="text-white mr-2" />
@@ -91,18 +99,13 @@ const LoginPage = () => {
                         type={showPassword ? "text" : "password"}
                         id="password"
                         placeholder="Password"
-                        value={password}
-                        onChange={(e) => setPassword(e.target.value)}
-                        onBlur={() =>
-                          setTouched({ ...touched, password: true })
-                        }
-                        className="bg-transparent outline-none w-full text-white text-p5 placeholder:font-normal placeholder-white"
+                        {...register("password")}
+                        className="bg-transparent outline-none w-full text-white placeholder-white text-p5"
                       />
-                      {/* 👁 Show/Hide toggle */}
                       <button
                         type="button"
                         onClick={() => setShowPassword(!showPassword)}
-                        className="ml-2 text-white hover:text-[#F3BA18] focus:outline-none"
+                        className="ml-2 text-white hover:text-[#F3BA18]"
                       >
                         {showPassword ? (
                           <IoEyeSharp size={20} />
@@ -113,22 +116,23 @@ const LoginPage = () => {
                     </div>
                     <div className="flex justify-end mt-1">
                       <button
+                        type="button"
                         onClick={() => setShowForgotPassword(true)}
-                        className="text-xs text-white hover:underline cursor-pointer"
+                        className="text-xs text-white hover:underline"
                       >
                         Forgot Password?
                       </button>
                     </div>
-                    {touched.password && !isPasswordValid && (
+                    {errors.password && (
                       <p className="text-red text-xs mt-1">
-                        Password must be at least 6 characters
+                        {errors.password.message}
                       </p>
                     )}
                   </div>
 
                   <button
                     type="submit"
-                    className="bg-black w-full hover:scale-105 text-primary font-medium px-6 py-3 rounded-md transition-all duration-300  relative group text-p5 cursor-pointer 2xl:text-p1"
+                    className="bg-black w-full hover:scale-105 text-primary font-medium px-6 py-3 rounded-md transition-all duration-300 group text-p5 cursor-pointer 2xl:text-p1"
                   >
                     Log In
                   </button>
@@ -140,15 +144,15 @@ const LoginPage = () => {
                   <span className="bg-[#0b0b0b] px-4 z-10 relative">OR</span>
                 </div>
 
-                {/* Social */}
+                {/* Social Auth */}
                 <div className="space-y-3">
-                  <button className="w-full flex cursor-pointer hover:opacity-50 text-white font-medium  text-p5  2xl:text-p1 items-center justify-center gap-3 bg-black py-2 rounded-md  transition">
+                  <button className="w-full flex cursor-pointer hover:opacity-50 text-white font-medium text-p5 2xl:text-p1 items-center justify-center gap-3 bg-black py-2 rounded-md transition">
                     <FcGoogle size={20} />
                     Continue With Google
                   </button>
-                  <button className="w-full flex cursor-pointer hover:opacity-50 text-white font-medium  text-p5  2xl:text-p1 items-center justify-center gap-3 bg-black py-2 rounded-md  transition">
+                  <button className="w-full flex cursor-pointer hover:opacity-50 text-white font-medium text-p5 2xl:text-p1 items-center justify-center gap-3 bg-black py-2 rounded-md transition">
                     <FaFacebookF size={20} className="text-[#1877F2]" />
-                    <span> Continue With Facebook</span>
+                    <span>Continue With Facebook</span>
                   </button>
                 </div>
 
@@ -161,7 +165,7 @@ const LoginPage = () => {
                 </p>
               </div>
 
-              {/* Right: Welcome */}
+              {/* Right Side Welcome */}
               <div className="hidden md:flex flex-col md:mt-14 max-w-[400px] items-start text-white space-y-4 px-4">
                 <h1 className="text-4xl font-bold">Welcome!</h1>
                 <p className="text-white text-lg">
@@ -173,9 +177,7 @@ const LoginPage = () => {
           </div>
         </MotionPageWrapper>
       ) : (
-        <>
-          <ForgotPassword />
-        </>
+        <ForgotPassword />
       )}
     </>
   );
