@@ -9,6 +9,7 @@ import FameCoin from "../../components/FameCoin";
 import Process from "../../components/Process";
 import CalculatingNetworthPopup from "../../components/CalculatingNetworthPopup";
 import CongratulationsPopup from "../../components/CongratulationsPopup";
+import FAQ from "../FAQ";
 
 const Home = () => {
   const location = useLocation();
@@ -41,6 +42,7 @@ const Home = () => {
       <TokenLeaderboard />
       <FameCoin />
       <Process />
+      <FAQ />
       <Footer />
 
       {isCalculatingNetworthOpen && <CalculatingNetworthPopup />}

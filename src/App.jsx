@@ -6,6 +6,7 @@ import Home from "./pages/home/Home";
 import Login from "./pages/login/Login";
 import MotionPageWrapper from "./components/MotionPageWrapper";
 import Signup from "./pages/signup/Signup";
+import FAQ from "./pages/FAQ";
 
 const Page = ({ title }) => (
   <MotionPageWrapper>
@@ -44,6 +45,14 @@ export default function App() {
               element={
                 <MotionPageWrapper>
                   <Signup />
+                </MotionPageWrapper>
+              }
+            />
+            <Route
+              path="/faqs"
+              element={
+                <MotionPageWrapper>
+                  <FAQ />
                 </MotionPageWrapper>
               }
             />
