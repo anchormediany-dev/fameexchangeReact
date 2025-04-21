@@ -134,8 +134,8 @@ const NetworthCalculator = () => {
 
               <div>
                 <input
-                  type="text"
                   id="tokenPrice"
+                  type="number"
                   placeholder="Current Token Price"
                   className={`bg-transparent border border-primary rounded-xl px-4 py-2 w-full text-white placeholder:text-text-gray-400 focus:outline-none focus:border-[2px] ${
                     errors.tokenPrice ? "border-red-500" : ""
@@ -155,8 +155,8 @@ const NetworthCalculator = () => {
           </div>
 
           {/* Social Media */}
-          <div className="md:col-span-2 mt-8">
-            <h2 className="text-white text-p1 font-medium mb-3">
+          <div className="md:col-span-2">
+            <h2 className="text-white text-p2 2xl:text-p1 font-medium mb-3">
               Social Media
             </h2>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
