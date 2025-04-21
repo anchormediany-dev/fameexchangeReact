@@ -42,7 +42,6 @@ const Home = () => {
       <TokenLeaderboard />
       <FameCoin />
       <Process />
-      <FAQ />
       <Footer />
 
       {isCalculatingNetworthOpen && <CalculatingNetworthPopup />}
