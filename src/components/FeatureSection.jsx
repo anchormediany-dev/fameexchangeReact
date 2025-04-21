@@ -9,16 +9,7 @@ const FeatureSection = () => {
     <section
       id="nft"
       className="relative text-white px-4 py-12 overflow-hidden"
-      style={{
-        background:
-          "radial-gradient(circle at top left, #2d2d2d 0%, #0b0b0b 80%)",
-      }}
     >
-      {/* Decorative Bubbles */}
-      <div className="absolute w-60 h-60 bg-white/10 rounded-full top-[-80px] left-[-60px] z-0" />
-      <div className="absolute w-40 h-40 bg-white/10 rounded-full bottom-[-40px] right-[-40px] z-0" />
-      <div className="absolute w-32 h-32 bg-white/5 rounded-full bottom-[100px] right-[50px] z-0" />
-
       {/* Main Content */}
       <div className="relative z-10 container grid grid-cols-1 md:grid-cols-2 gap-28">
         {/* Feature Card 1 */}

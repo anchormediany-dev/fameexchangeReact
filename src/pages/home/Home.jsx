@@ -5,8 +5,6 @@ import Footer from "../../components/Footer";
 import VideoBanner from "../../components/VideoBanner";
 import NetworkStatistics from "../../components/NetworkStatistics";
 import TokenLeaderboard from "../../components/TokenLeaderboard";
-import FeatureSection from "../../components/FeatureSection";
-import Futures from "../../components/Futures";
 import FameCoin from "../../components/FameCoin";
 import Process from "../../components/Process";
 import CalculatingNetworthPopup from "../../components/CalculatingNetworthPopup";
@@ -41,8 +39,6 @@ const Home = () => {
       <VideoBanner />
       <NetworkStatistics />
       <TokenLeaderboard />
-      <FeatureSection />
-      <Futures />
       <FameCoin />
       <Process />
       <Footer />

@@ -33,15 +33,12 @@ const Futures = () => {
       <section
         id="futured"
         className="relative text-white pt-12 px-4 md:px-10 lg:px-20"
-        style={{
-          background: "linear-gradient(180deg, #0B0B0B 0%, #1a1a1a 100%)",
-        }}
       >
         {/* Fixed Bubbles */}
-        <div className="absolute top-0 left-0 w-full h-full overflow-hidden z-0 pointer-events-none">
+        {/* <div className="absolute top-0 left-0 w-full h-full overflow-hidden z-0 pointer-events-none">
           <div className="absolute w-60 h-60 bg-white/5 rounded-full top-[-100px] left-[-100px]" />
           <div className="absolute w-40 h-40 bg-white/5 rounded-full bottom-[-50px] right-[-50px]" />
-        </div>
+        </div> */}
 
         {/* Content Layer */}
         <div className="relative z-10 text-center container max-w-4xl mx-auto">
