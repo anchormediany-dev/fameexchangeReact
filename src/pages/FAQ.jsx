@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { FaChevronDown } from "react-icons/fa";
+import Footer from "../components/Footer";
+import Navbar from "../components/Navbar";
 
 const faqData = [
   {
@@ -77,24 +79,28 @@ const FAQ = () => {
   };
 
   return (
-    <div className="bg-[#0b0b0b] py-12" id="faqs">
-      <div className="container mx-auto px-4 md:px-8 lg:px-12">
-        <h2 className="text-3xl font-bold text-primary text-center mb-8">
-          Frequently Asked Questions
-        </h2>
-        <div className="max-w-2xl mx-auto">
-          {faqData.map((faq, index) => (
-            <FAQItem
-              key={index}
-              faq={faq}
-              index={index}
-              isOpen={openIndex === index}
-              toggleOpen={toggleOpen}
-            />
-          ))}
+    <section className="mt-16">
+      <Navbar />
+      <div className="bg-[#0b0b0b] py-12" id="faqs">
+        <div className="container mx-auto px-4 md:px-8 lg:px-12">
+          <h2 className="text-3xl font-bold text-primary text-center mb-8">
+            Frequently Asked Questions
+          </h2>
+          <div className="max-w-2xl mx-auto">
+            {faqData.map((faq, index) => (
+              <FAQItem
+                key={index}
+                faq={faq}
+                index={index}
+                isOpen={openIndex === index}
+                toggleOpen={toggleOpen}
+              />
+            ))}
+          </div>
         </div>
       </div>
-    </div>
+      <Footer />
+    </section>
   );
 };
 

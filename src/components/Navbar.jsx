@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { FaBars, FaTimes } from "react-icons/fa";
 import siteLogo from "../assets/images/site-logo.png";
@@ -13,14 +13,21 @@ const navLinks = [
   { name: "NFT", scrollTo: "nft" },
   { name: "In-Verse", scrollTo: "in-verse" },
   { name: "Futured", scrollTo: "futured" },
-  { name: "FAQ's", scrollTo: "faqs" },
+  { name: "FAQ's", path: "/faqs", isRoute: true },
 ];
+
+const history = {
+  scrollTarget: null,
+};
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
   const [isSignupModalOpen, setIsSignupModalOpen] = useState(false);
   const [activeSection, setActiveSection] = useState(null);
+
+  const location = useLocation();
+  const navigate = useNavigate();
 
   const handleScroll = (id) => {
     const element = document.getElementById(id);
@@ -29,29 +36,50 @@ const Navbar = () => {
       const y =
         element.getBoundingClientRect().top + window.pageYOffset + yOffset;
 
-      window.scrollTo({
-        top: y,
-        behavior: "smooth",
-      });
+      window.scrollTo({ top: y, behavior: "smooth" });
     }
   };
 
-  // Detect active section on scroll
+  const handleNavClick = ({ scrollTo, path, isRoute }) => {
+    setIsOpen(false);
+
+    if (isRoute && path) {
+      navigate(path);
+    } else {
+      if (location.pathname !== "/") {
+        history.scrollTarget = scrollTo;
+        navigate("/");
+      } else {
+        handleScroll(scrollTo);
+      }
+    }
+  };
+
+  useEffect(() => {
+    if (location.pathname === "/" && history.scrollTarget) {
+      const id = history.scrollTarget;
+      setTimeout(() => handleScroll(id), 200);
+      history.scrollTarget = null;
+    }
+  }, [location]);
+
   useEffect(() => {
     const handleScrollSpy = () => {
-      const scrollPosition = window.scrollY + 100; // Adjust for header height
-      for (let i = 0; i < navLinks.length; i++) {
-        const section = document.getElementById(navLinks[i].scrollTo);
-        if (section) {
-          const offsetTop = section.offsetTop;
-          const offsetBottom = offsetTop + section.offsetHeight;
+      const scrollPos = window.innerHeight / 2;
 
-          if (scrollPosition >= offsetTop && scrollPosition < offsetBottom) {
-            setActiveSection(navLinks[i].scrollTo);
-            break;
+      let currentSection = null;
+      navLinks.forEach(({ scrollTo }) => {
+        if (!scrollTo) return;
+        const section = document.getElementById(scrollTo);
+        if (section) {
+          const rect = section.getBoundingClientRect();
+          if (rect.top <= scrollPos && rect.bottom > scrollPos) {
+            currentSection = scrollTo;
           }
         }
-      }
+      });
+
+      setActiveSection(currentSection);
     };
 
     window.addEventListener("scroll", handleScrollSpy);
@@ -63,18 +91,14 @@ const Navbar = () => {
     setIsOpen(false);
   };
 
-  const closeLoginModal = () => {
-    setIsLoginModalOpen(false);
-  };
+  const closeLoginModal = () => setIsLoginModalOpen(false);
 
   const openSignupModal = () => {
     setIsSignupModalOpen(true);
     setIsOpen(false);
   };
 
-  const closeSignupModal = () => {
-    setIsSignupModalOpen(false);
-  };
+  const closeSignupModal = () => setIsSignupModalOpen(false);
 
   return (
     <nav className="bg-black fixed top-0 left-0 right-0 z-50">
@@ -91,17 +115,17 @@ const Navbar = () => {
 
           {/* Desktop Nav */}
           <div className="hidden lg:flex text-white xl:text-p3 text-p4 font-medium xl:space-x-6 space-x-3 items-center">
-            {navLinks.map(({ name, scrollTo }) => (
+            {navLinks.map((link) => (
               <span
-                key={name}
-                onClick={() => handleScroll(scrollTo)}
+                key={link.name}
+                onClick={() => handleNavClick(link)}
                 className={`cursor-pointer text-p4 transition ${
-                  activeSection === scrollTo
+                  activeSection === link.scrollTo
                     ? "text-primary"
                     : "hover:text-primary"
                 }`}
               >
-                {name}
+                {link.name}
               </span>
             ))}
 
@@ -121,7 +145,7 @@ const Navbar = () => {
             </button>
           </div>
 
-          {/* Mobile Menu Icon */}
+          {/* Mobile Nav Toggle */}
           <div className="lg:hidden text-white">
             <button onClick={() => setIsOpen(!isOpen)}>
               {isOpen ? <FaTimes size={24} /> : <FaBars size={24} />}
@@ -139,20 +163,17 @@ const Navbar = () => {
             exit={{ height: 0, opacity: 0 }}
             className="lg:hidden bg-black text-white px-6 pt-4 pb-6 space-y-4"
           >
-            {navLinks.map(({ name, scrollTo }) => (
+            {navLinks.map((link) => (
               <span
-                key={name}
-                onClick={() => {
-                  handleScroll(scrollTo);
-                  setIsOpen(false);
-                }}
+                key={link.name}
+                onClick={() => handleNavClick(link)}
                 className={`block text-p5 cursor-pointer transition ${
-                  activeSection === scrollTo
+                  activeSection === link.scrollTo
                     ? "text-primary"
                     : "hover:text-primary"
                 }`}
               >
-                {name}
+                {link.name}
               </span>
             ))}
 
