@@ -50,7 +50,7 @@ const Signup = () => {
             <div className="absolute bottom-[100px] left-[80px] w-[50px] h-[50px] rounded-full bg-white opacity-[0.06]" />
             <div className="absolute bottom-[40px] right-[40px] w-[80px] h-[80px] rounded-full bg-white opacity-[0.04]" />
 
-            <div className="container w-full grid md:grid-cols-2 gap-5 z-10">
+            <div className="container w-full md:flex-row flex-col-reverse  flex gap-5 z-10">
               {/* Left: Signup Form */}
               <div className="bg-transparent p-8 rounded-lg space-y-6 border border-[#686868] w-full max-w-md">
                 <h2 className="text-2xl font-bold text-white">Sign Up</h2>
@@ -283,7 +283,7 @@ const Signup = () => {
               </div>
 
               {/* Right Side Welcome */}
-              <div className="hidden md:flex flex-col md:mt-14 max-w-[400px] items-start text-white space-y-4 px-4">
+              <div className=" md:flex flex-col mb-5 md:mb-0 md:mt-14 max-w-[400px] items-start text-white space-y-4 px-4">
                 <Link to="/">
                   <img className="w-96 h-40" src={siteLogo} alt="Logo" />
                 </Link>

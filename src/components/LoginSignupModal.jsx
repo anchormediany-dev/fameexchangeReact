@@ -49,7 +49,7 @@ const LoginSignupModal = ({ isOpen, onClose, setIsOpenLoginSignup }) => {
       <AnimatePresence>
         {isOpen && (
           <motion.div
-            className="fixed top-0 left-0 w-full h-full z-50 bg-transparent backdrop-blur-sm flex justify-center items-center"
+            className="fixed top-0 left-0 w-full h-full px-10 z-50 bg-transparent backdrop-blur-sm flex justify-center items-center"
             variants={modalVariants}
             initial="hidden"
             animate="visible"
@@ -57,7 +57,7 @@ const LoginSignupModal = ({ isOpen, onClose, setIsOpenLoginSignup }) => {
             onClick={onClose}
           >
             <motion.div
-              className="bg-black rounded-[20px] p-16 max-w-[500px] text-white relative flex flex-col justify-center items-center" // Modal background
+              className="bg-black rounded-[20px] p-8 sm:p-16 max-w-[500px] text-white relative flex flex-col justify-center items-center" // Modal background
               variants={contentVariants}
               initial="hidden"
               animate="visible"
