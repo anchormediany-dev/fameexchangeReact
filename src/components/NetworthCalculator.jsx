@@ -15,7 +15,6 @@ const NetworthCalculator = () => {
   const [snapchat, setSnapchat] = useState("");
 
   const [errors, setErrors] = useState({});
-
   const validateForm = () => {
     let isValid = true;
     const newErrors = {};
@@ -65,8 +64,10 @@ const NetworthCalculator = () => {
         instagram,
         snapchat,
       });
-      navigate("/"); // Navigate to the home page
     }
+    navigate("/", {
+      state: { isCalculatingNetworth: true },
+    });
   };
 
   return (
