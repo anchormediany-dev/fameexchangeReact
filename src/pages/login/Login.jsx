@@ -10,6 +10,7 @@ import MotionPageWrapper from "../../components/MotionPageWrapper";
 import ForgotPassword from "../../components/ForgotPassword";
 import { Link } from "react-router-dom";
 import siteLogo from "../../assets/images/site-logo.png";
+import { useNavigate } from "react-router-dom";
 // Yup validation schema
 const schema = yup.object().shape({
   email: yup
@@ -28,7 +29,7 @@ const schema = yup.object().shape({
 const LoginPage = () => {
   const [showForgotPassword, setShowForgotPassword] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
-
+  const navigate = useNavigate();
   const {
     register,
     handleSubmit,
@@ -39,6 +40,7 @@ const LoginPage = () => {
 
   const onSubmit = (data) => {
     console.log("Login submitted: ", data);
+    navigate("/dashboard");
   };
 
   return (
