@@ -5,6 +5,7 @@ import { Link } from "react-router-dom";
 import { useState } from "react";
 import LoginModal from "./LoginModal";
 import SignupModal from "./SignupModal";
+import { useEffect } from "react";
 const LoginSignupModal = ({ isOpen, onClose, setIsOpenLoginSignup }) => {
   const modalVariants = {
     hidden: { opacity: 0 },
@@ -44,6 +45,17 @@ const LoginSignupModal = ({ isOpen, onClose, setIsOpenLoginSignup }) => {
   const closeLoginSignupModal = () => {
     setIsLoginSignupOpen(false);
   };
+  useEffect(() => {
+    if (isOpen) {
+      document.body.classList.add("body-no-scroll");
+    } else {
+      document.body.classList.remove("body-no-scroll");
+    }
+
+    return () => {
+      document.body.classList.remove("body-no-scroll");
+    };
+  }, [isOpen]);
   return (
     <>
       <AnimatePresence>

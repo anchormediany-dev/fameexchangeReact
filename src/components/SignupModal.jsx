@@ -2,6 +2,7 @@ import React from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { FaTimes } from "react-icons/fa";
 import { Link } from "react-router-dom";
+import { useEffect } from "react";
 const SignupModal = ({ isOpen, onClose }) => {
   const modalVariants = {
     hidden: { opacity: 0 },
@@ -14,7 +15,24 @@ const SignupModal = ({ isOpen, onClose }) => {
     visible: { y: 0, opacity: 1, transition: { delay: 0.1 } },
     exit: { y: 50, opacity: 0 },
   };
+  const scrollDisabled = React.useRef(false);
 
+  useEffect(() => {
+    if (isOpen && !scrollDisabled.current) {
+      document.body.style.overflow = "hidden";
+      scrollDisabled.current = true;
+    } else if (!isOpen && scrollDisabled.current) {
+      document.body.style.overflow = "";
+      scrollDisabled.current = false;
+    }
+
+    return () => {
+      if (scrollDisabled.current) {
+        document.body.style.overflow = "";
+        scrollDisabled.current = false;
+      }
+    };
+  }, [isOpen]);
   return (
     <AnimatePresence>
       {isOpen && (
