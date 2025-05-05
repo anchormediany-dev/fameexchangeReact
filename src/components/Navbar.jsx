@@ -25,6 +25,7 @@ const Navbar = () => {
   const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
   const [isSignupModalOpen, setIsSignupModalOpen] = useState(false);
   const [activeSection, setActiveSection] = useState(null);
+  const [activeRoute, setActiveRoute] = useState(null);
 
   const location = useLocation();
   const navigate = useNavigate();
@@ -61,6 +62,7 @@ const Navbar = () => {
       setTimeout(() => handleScroll(id), 200);
       history.scrollTarget = null;
     }
+    setActiveRoute(location.pathname);
   }, [location]);
 
   useEffect(() => {
@@ -120,7 +122,11 @@ const Navbar = () => {
                 key={link.name}
                 onClick={() => handleNavClick(link)}
                 className={`cursor-pointer text-p4 transition ${
-                  activeSection === link.scrollTo
+                  link.isRoute
+                    ? activeRoute === link.path
+                      ? "text-primary"
+                      : "hover:text-primary"
+                    : activeSection === link.scrollTo
                     ? "text-primary"
                     : "hover:text-primary"
                 }`}
@@ -168,7 +174,11 @@ const Navbar = () => {
                 key={link.name}
                 onClick={() => handleNavClick(link)}
                 className={`block text-p5 cursor-pointer transition ${
-                  activeSection === link.scrollTo
+                  link.isRoute
+                    ? activeRoute === link.path
+                      ? "text-primary"
+                      : "hover:text-primary"
+                    : activeSection === link.scrollTo
                     ? "text-primary"
                     : "hover:text-primary"
                 }`}
