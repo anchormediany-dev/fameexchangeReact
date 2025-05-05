@@ -131,7 +131,7 @@ const Footer = () => {
           </div>
         </motion.div>
         <div className="flex md:flex-row flex-col md:items-end">
-          <div className="grid grid-cols-5 max-w-[70%] sm:max-w-[50%] md:w-auto gap-x-10 gap-y-5 text-xl md:mb-0 mb-5 mt-16">
+          <div className="grid grid-cols-5 max-w-[70%] sm:max-w-[50%] md:w-auto gap-x-10 gap-y-5 text-xl md:mb-0 mb-5 ">
             <YoutubeIcon className="hover:scale-105 transition cursor-pointer" />
             <TiktokIcon className="hover:scale-105 transition cursor-pointer" />
             <RedditIcon className="hover:scale-105 transition cursor-pointer" />
