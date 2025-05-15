@@ -233,3 +233,11 @@ select {
     #111
   );
 }
+/* tailwind css gredients2 */
+.bg-gradient-custom-vertical2 {
+  background-image: linear-gradient(to bottom, #1a1a1a, #0b0b0b);
+}
+
+.bg-gradient-custom-horizontal2 {
+  background-image: linear-gradient(to right, #111, #1a1a1a, #111);
+}
