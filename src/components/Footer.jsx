@@ -16,7 +16,7 @@ import SnapchatIcon from "../assets/icons/snapchat.svg?react";
 import TelegramIcon from "../assets/icons/telegram.svg?react";
 const Footer = () => {
   return (
-    <footer className="bg-black absolute bottom-0 left-0 right-0 text-white w-full">
+    <footer className="bg-black  text-white w-full">
       <div className="container relative z-10 space-y-8 py-12">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
