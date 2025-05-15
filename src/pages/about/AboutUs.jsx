@@ -7,12 +7,12 @@ const AboutUs = () => {
       <Navbar />
 
       <div className="flex-grow py-10 bg-gradient-custom-vertical2 bg-gradient-custom-horizontal2">
-        <div className="container max-w-screen-xl mx-auto flex flex-col gap-8 px-4 sm:px-6 md:px-8 lg:px-12">
-          <h3 className="text-primary text-2xl sm:text-3xl md:text-4xl lg:text-5xl text-center font-bold">
+        <div className="container  flex flex-col gap-8 px-4 sm:px-6 md:px-8 lg:px-12">
+          <h3 className="text-primary max-w-[1407px] text-2xl sm:text-3xl md:text-4xl lg:text-5xl text-center font-bold">
             About Us
           </h3>
 
-          <p className="text-[#5F5F5F] text-sm sm:text-base md:text-lg lg:text-xl leading-relaxed sm:leading-[180%] tracking-wide font-normal text-justify">
+          <p className="text-[#5F5F5F] max-w-[1407px] text-sm sm:text-base md:text-lg lg:text-xl leading-relaxed sm:leading-[180%] tracking-wide font-normal text-justify">
             THE FAME EXCHANGE Is A Website That Utilizes The Blockchain
             Technologies And Focuses On Creating A Trading Platform Which Will
             Allow For The Promotion, Leveraging And Transparent Use Of Social
