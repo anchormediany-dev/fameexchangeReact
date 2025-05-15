@@ -2,6 +2,7 @@ import React from "react";
 import { LineChart, Line, ResponsiveContainer } from "recharts";
 import FeatureSection from "./FeatureSection";
 import Futures from "./Futures";
+import { Link } from "react-router-dom";
 
 const tokenData = [
   {
@@ -156,9 +157,12 @@ const TokenLeaderboard = () => {
         </div>
 
         <div className="mt-12 flex justify-center">
-          <button className="bg-lightYellow hover:scale-105 cursor-pointer text-black font-medium px-6 py-3 rounded-md transition-all duration-300 relative group text-p5 2xl:text-p1">
+          <Link
+            to="/talent-tokens"
+            className="bg-lightYellow hover:scale-105 cursor-pointer text-black font-medium px-6 py-3 rounded-md transition-all duration-300 relative group text-p5 2xl:text-p1"
+          >
             Discover More
-          </button>
+          </Link>
         </div>
       </div>
       <FeatureSection />

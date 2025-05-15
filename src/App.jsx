@@ -7,6 +7,7 @@ import Signup from "./pages/signup/Signup";
 import FAQ from "./pages/FAQ";
 import Dashboard from "./pages/dashboard/Dashboard";
 import BrandedTokens from "./pages/branded_tokens/BrandedTokens";
+import TalentTokens from "./pages/talent_tokens/TalentTokens";
 
 const Page = ({ title }) => (
   <MotionPageWrapper>
@@ -69,6 +70,14 @@ export default function App() {
               element={
                 <MotionPageWrapper>
                   <BrandedTokens />
+                </MotionPageWrapper>
+              }
+            />
+            <Route
+              path="/talent-tokens"
+              element={
+                <MotionPageWrapper>
+                  <TalentTokens />
                 </MotionPageWrapper>
               }
             />
