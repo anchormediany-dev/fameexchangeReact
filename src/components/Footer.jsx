@@ -16,7 +16,7 @@ import SnapchatIcon from "../assets/icons/snapchat.svg?react";
 import TelegramIcon from "../assets/icons/telegram.svg?react";
 const Footer = () => {
   return (
-    <footer className="bg-black text-white w-full">
+    <footer className="bg-black absolute bottom-0 left-0 right-0 text-white w-full">
       <div className="container relative z-10 space-y-8 py-12">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -153,7 +153,7 @@ const Footer = () => {
 
         {/* Bottom bar */}
         <div className="border-t border-gray-700 mt-10 pt-4 text-sm text-center text-gray-400">
-          <div className="flex flex-col md:flex-row justify-between items-center max-w-7xl mx-auto px-4 gap-2">
+          <div className="flex flex-col md:flex-row justify-between items-center   gap-2">
             <p>All Rights Reserved, Copyright 2021</p>
             <p className="uppercase">tHE fAME EXCHANGE, POWERED BY: FAMECOIN</p>
           </div>
