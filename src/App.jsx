@@ -1,14 +1,12 @@
 import { Routes, Route, useLocation } from "react-router-dom";
 import { AnimatePresence } from "framer-motion";
-import Navbar from "./components/Navbar";
-import Footer from "./components/Footer";
 import Home from "./pages/home/Home";
 import Login from "./pages/login/Login";
 import MotionPageWrapper from "./components/MotionPageWrapper";
 import Signup from "./pages/signup/Signup";
 import FAQ from "./pages/FAQ";
 import Dashboard from "./pages/dashboard/Dashboard";
-import TopTalentTokens from "./pages/TopTalentTokens";
+import BrandedTokens from "./pages/branded_tokens/BrandedTokens";
 
 const Page = ({ title }) => (
   <MotionPageWrapper>
@@ -67,10 +65,10 @@ export default function App() {
               }
             />
             <Route
-              path="/top-talent-tokens"
+              path="/branded-tokens"
               element={
                 <MotionPageWrapper>
-                  <TopTalentTokens />
+                  <BrandedTokens />
                 </MotionPageWrapper>
               }
             />

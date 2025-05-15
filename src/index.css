@@ -207,3 +207,29 @@ select {
     box-shadow: 4px 4px 4px 0px rgba(0, 0, 0, 0.92); /* EB in hex is 235 in decimal, so 235/255 ≈ 0.92 */
   }
 }
+/* tailwind css gredients */
+.bg-gradient-custom-vertical {
+  background-image: linear-gradient(
+    to bottom,
+    #1b1b1b,
+    #1a1a1a,
+    #191919,
+    #181818,
+    #171717,
+    #161616,
+    #151515,
+    #141414,
+    #0b0b0b
+  );
+}
+
+.bg-gradient-custom-horizontal {
+  background-image: linear-gradient(
+    to right,
+    #1d1d1d,
+    #1c1c1c,
+    #1b1b1b,
+    #1a1a1a,
+    #111
+  );
+}
