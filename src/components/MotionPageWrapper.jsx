@@ -28,7 +28,7 @@ const MotionPageWrapper = ({ children }) => {
       variants={pageVariants}
       transition={pageTransition}
       onAnimationComplete={() => setIsAnimating(false)}
-      className="relative min-h-screen bg-[#0b0b0b] text-white overflow-hidden"
+      className="relative min-h-screen bg-[#000] text-white overflow-hidden"
     >
       {/* ✨ Shimmer Loader */}
       {isAnimating && (
