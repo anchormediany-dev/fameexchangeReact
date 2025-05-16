@@ -56,7 +56,7 @@ const LoginPage = () => {
 
             <div className="container w-full md:flex-row flex-col-reverse  flex gap-5 z-10">
               {/* Login Form */}
-              <div className="bg-transparent p-8 rounded-lg space-y-6 border border-[#686868] w-full max-w-md">
+              <div className="bg-transparent p-8 rounded-lg space-y-6 border border-[#686868] w-full">
                 <h2 className=" text-white heading-700-40">Log In</h2>
 
                 <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
@@ -174,9 +174,9 @@ const LoginPage = () => {
               </div>
 
               {/* Right Side Welcome */}
-              <div className=" md:flex flex-col mb-5 md:mb-0 md:mt-14 max-w-[400px] items-start text-white space-y-4 px-4">
+              <div className=" md:flex flex-col mb-5 md:mb-0 md:mt-14 md:max-w-[50%] items-start text-white space-y-4 px-4">
                 <Link to="/">
-                  <img className="w-96 h-40" src={siteLogo} alt="Logo" />
+                  <img src={siteLogo} alt="Logo" />
                 </Link>
                 <h1 className="heading-700-50 mt-5">Welcome!</h1>
                 <p className="text-[#303030] heading-500-35">
