@@ -17,7 +17,7 @@ const Process = () => {
   return (
     <>
       {" "}
-      <section className="process-bg text-white relative min-h-[80vh] flex items-center justify-center">
+      <section className="process-bg text-white relative  flex items-center justify-center">
         <div className="absolute inset-0 bg-[#070707]/85 z-0" />
         <div className="container relative z-10 py-12">
           <div className="md:pb-[120px] pb-12">

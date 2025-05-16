@@ -16,7 +16,7 @@ const FameCoin = () => {
   };
   return (
     <>
-      <section className="famecoin-bg text-white relative min-h-[80vh] flex items-center justify-center">
+      <section className="famecoin-bg text-white relative  flex items-center justify-center">
         <div className="absolute inset-0 bg-[#070707]/50 z-0" />
         <div className="container relative z-10 flex flex-col items-center text-center space-y-8 py-12">
           <h1 className="font-heading-display text-primary">
