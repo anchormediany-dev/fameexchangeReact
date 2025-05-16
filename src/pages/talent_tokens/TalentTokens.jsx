@@ -131,14 +131,14 @@ const TalentTokens = () => {
       <div className="flex flex-col md:flex-row container  py-12 w-full bg-black text-white">
         {/* Sidebar */}
         <div className="w-full md:w-1/4 bg-[#0C0C0C] p-4">
-          <h2 className="text-primary font-bold  text-p5  2xl:text-p3">
+          <h2 className="text-primary font-heading-section">
             TALENT TOKENS/ BRANDS
           </h2>
           {Object.keys(tokenData).map((token) => (
             <label
               key={token}
               onClick={() => setSelectedToken(token)}
-              className={`flex items-center justify-between font-bold  text-p5  2xl:text-p3 px-2 py-3 cursor-pointer hover:bg-[#111] ${
+              className={`flex items-center justify-between font-heading-section px-2 py-3 cursor-pointer hover:bg-[#111] ${
                 selectedToken === token ? "text-primary" : "text-white"
               }`}
             >
@@ -146,7 +146,7 @@ const TalentTokens = () => {
               <span
                 className={`w-5 h-5 rounded-full border-2 ${
                   selectedToken === token
-                    ? "bg-yellow-500 border-yellow-500"
+                    ? "bg-primary border-primary"
                     : "border-white"
                 }`}
               ></span>
