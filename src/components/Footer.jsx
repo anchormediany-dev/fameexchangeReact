@@ -19,13 +19,14 @@ const Footer = () => {
   return (
     <footer className="bg-black  text-white w-full">
       <div className="container relative z-10 space-y-8 py-12">
-        <motion.div
+        {/* <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6 }}
           viewport={{ once: true }}
           className="grid grid-cols-1 md:grid-cols-5 gap-8"
-        >
+        > */}
+        <div className="grid grid-cols-1 md:grid-cols-5 gap-8">
           {/* Left Block */}
           <div className="space-y-4">
             {/* Logo Row */}
@@ -139,7 +140,8 @@ const Footer = () => {
               />
             </div>
           </div>
-        </motion.div>
+          {/* </motion.div> */}
+        </div>
         <div className="flex md:flex-row flex-col md:items-end">
           <div className="grid grid-cols-5 max-w-[70%] sm:max-w-[50%] md:w-auto gap-x-10 gap-y-5 text-xl md:mb-0 mb-5 ">
             <YoutubeIcon className="hover:scale-105 transition cursor-pointer" />
