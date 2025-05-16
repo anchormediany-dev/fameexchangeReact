@@ -86,8 +86,8 @@ const NetworthCalculator = () => {
       <div className="absolute bottom-32 left-60 w-32 h-32 rounded-full bg-white opacity-[0.02]" />
 
       {/* Content */}
-      <div className="relative z-10 flex flex-col items-center p-6 md:p-10 lg:p-16 w-full max-w-2xl">
-        <h1 className="py-5 text-p1 sm:text-h6 xl:text-h5 2xl:text-h4 font-medium text-primary mb-10">
+      <div className="relative z-10 flex flex-col items-center container p-6 md:p-10 lg:p-16 w-full">
+        <h1 className="py-5 heading-500-50 text-primary mb-10">
           Networth Calculator
         </h1>
 
@@ -98,7 +98,7 @@ const NetworthCalculator = () => {
               type="text"
               id="fullName"
               placeholder="Full Name"
-              className={`bg-transparent border border-primary rounded-xl px-4 py-2 w-full text-white placeholder:text-text-gray-400 focus:outline-none focus:border-[2px] ${
+              className={`bg-transparent border border-primary rounded-xl px-4 py-2 w-full text-white placeholder:text-text-gray-400 heading-400-15 focus:outline-none focus:border-[2px] ${
                 errors.fullName ? "border-red-500" : ""
               }`}
               value={fullName}
@@ -111,16 +111,14 @@ const NetworthCalculator = () => {
 
           {/* Token Brand */}
           <div className="md:col-span-2">
-            <h2 className="text-white text-p2 2xl:text-p1 font-medium mb-3">
-              Token Brand
-            </h2>
+            <h2 className="text-white heading-500-30 mb-3">Token Brand</h2>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
                 <input
                   type="text"
                   id="tokenBrand"
                   placeholder="Token Brand Name"
-                  className={`bg-transparent border border-primary rounded-xl px-4 py-2 w-full text-white placeholder:text-text-gray-400 focus:outline-none focus:border-[2px] ${
+                  className={`bg-transparent border border-primary rounded-xl heading-400-15 px-4 py-2 w-full text-white placeholder:text-text-gray-400 focus:outline-none focus:border-[2px] ${
                     errors.tokenBrand ? "border-red-500" : ""
                   }`}
                   value={tokenBrand}
@@ -138,7 +136,7 @@ const NetworthCalculator = () => {
                   id="tokenPrice"
                   type="number"
                   placeholder="Current Token Price"
-                  className={`bg-transparent border border-primary rounded-xl px-4 py-2 w-full text-white placeholder:text-text-gray-400 focus:outline-none focus:border-[2px] ${
+                  className={`bg-transparent border heading-400-15 border-primary rounded-xl px-4 py-2 w-full text-white placeholder:text-text-gray-400 focus:outline-none focus:border-[2px] ${
                     errors.tokenPrice ? "border-red-500" : ""
                   }`}
                   value={tokenPrice}
@@ -157,16 +155,14 @@ const NetworthCalculator = () => {
 
           {/* Social Media */}
           <div className="md:col-span-2">
-            <h2 className="text-white text-p2 2xl:text-p1 font-medium mb-3">
-              Social Media
-            </h2>
+            <h2 className="text-white heading-500-30 mb-3">Social Media</h2>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
                 <input
                   type="text"
                   id="twitter"
                   placeholder="Twitter"
-                  className="bg-transparent border border-primary rounded-xl px-4 py-2 w-full text-white placeholder:text-text-gray-400 focus:outline-none focus:border-[2px]"
+                  className="bg-transparent heading-400-15 border border-primary rounded-xl px-4 py-2 w-full text-white placeholder:text-text-gray-400 focus:outline-none focus:border-[2px]"
                   value={twitter}
                   onChange={(e) => setTwitter(e.target.value)}
                 />
@@ -176,7 +172,7 @@ const NetworthCalculator = () => {
                   type="text"
                   id="youtube"
                   placeholder="Youtube"
-                  className="bg-transparent border border-primary rounded-xl px-4 py-2 w-full text-white placeholder:text-text-gray-400 focus:outline-none focus:border-[2px]"
+                  className="bg-transparent heading-400-15 heading-400-15 border border-primary rounded-xl px-4 py-2 w-full text-white placeholder:text-text-gray-400 focus:outline-none focus:border-[2px]"
                   value={youtube}
                   onChange={(e) => setYoutube(e.target.value)}
                 />
@@ -186,7 +182,7 @@ const NetworthCalculator = () => {
                   type="text"
                   id="facebook"
                   placeholder="Facebook"
-                  className="bg-transparent border border-primary rounded-xl px-4 py-2 w-full text-white placeholder:text-text-gray-400 focus:outline-none focus:border-[2px]"
+                  className="bg-transparent heading-400-15 border border-primary rounded-xl px-4 py-2 w-full text-white placeholder:text-text-gray-400 focus:outline-none focus:border-[2px]"
                   value={facebook}
                   onChange={(e) => setFacebook(e.target.value)}
                 />
@@ -196,7 +192,7 @@ const NetworthCalculator = () => {
                   type="text"
                   id="tiktok"
                   placeholder="Tiktok"
-                  className="bg-transparent border border-primary rounded-xl px-4 py-2 w-full text-white placeholder:text-text-gray-400 focus:outline-none focus:border-[2px]"
+                  className="bg-transparent heading-400-15 border border-primary rounded-xl px-4 py-2 w-full text-white placeholder:text-text-gray-400 focus:outline-none focus:border-[2px]"
                   value={tiktok}
                   onChange={(e) => setTiktok(e.target.value)}
                 />
@@ -206,7 +202,7 @@ const NetworthCalculator = () => {
                   type="text"
                   id="instagram"
                   placeholder="Instagram"
-                  className="bg-transparent border border-primary rounded-xl px-4 py-2 w-full text-white placeholder:text-text-gray-400 focus:outline-none focus:border-[2px]"
+                  className="bg-transparent border heading-400-15 border-primary rounded-xl px-4 py-2 w-full text-white placeholder:text-text-gray-400 focus:outline-none focus:border-[2px]"
                   value={instagram}
                   onChange={(e) => setInstagram(e.target.value)}
                 />
@@ -216,7 +212,7 @@ const NetworthCalculator = () => {
                   type="text"
                   id="snapchat"
                   placeholder="Snapchat"
-                  className="bg-transparent border border-primary rounded-xl px-4 py-2 w-full text-white placeholder:text-text-gray-400 focus:outline-none focus:border-[2px]"
+                  className="bg-transparent border heading-400-15 border-primary rounded-xl px-4 py-2 w-full text-white placeholder:text-text-gray-400 focus:outline-none focus:border-[2px]"
                   value={snapchat}
                   onChange={(e) => setSnapchat(e.target.value)}
                 />
@@ -227,7 +223,7 @@ const NetworthCalculator = () => {
 
         <button
           onClick={handleCalculate}
-          className="bg-black w-full hover:scale-105 text-[#CCCC00] font-medium px-6 py-3 rounded-xl transition-all duration-300 relative group text-p5 cursor-pointer mt-10"
+          className="bg-black w-full hover:scale-105 text-[#CCCC00] px-6 py-3 rounded-xl transition-all duration-300 relative group heading-500-23 cursor-pointer mt-10"
         >
           Calculate
         </button>

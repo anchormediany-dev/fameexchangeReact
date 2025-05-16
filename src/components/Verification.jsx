@@ -37,10 +37,10 @@ const Verification = () => {
             <div className="absolute bottom-[30px] right-[60px] w-[50px] h-[50px] rounded-full bg-white opacity-[0.06]" />
 
             <div className="w-full max-w-md bg-transparent p-8 rounded-lg text-center space-y-6 z-10 border border-[#272727]">
-              <h2 className="text-xl md:text-2xl font-semibold text-white">
-                Verification
-              </h2>
-              <p className="text-grayLabel text-sm">Enter Your Code Here</p>
+              <h2 className=" heading-700-40 text-white">Verification</h2>
+              <p className="text-grayLabel heading-500-30">
+                Enter Your Code Here
+              </p>
 
               {/* OTP Boxes */}
               <div className="flex justify-center gap-4 mt-4">
@@ -65,13 +65,13 @@ const Verification = () => {
               {/* Continue Button */}
               <button
                 onClick={handleContinue}
-                className="w-full bg-black cursor-pointer text-[#F3BA18] py-2  hover:bg-[#F3BA18] hover:text-black  font-medium  rounded-md transition-all duration-300  text-p5  2xl:text-p1"
+                className="w-full bg-black cursor-pointer text-[#F3BA18] py-2  hover:bg-[#F3BA18] hover:text-black rounded-md transition-all duration-300 heading-500-23"
               >
                 Continue
               </button>
 
               {/* Resend */}
-              <p className="text-xs text-white mt-2">
+              <p className="heading-500-20 text-white mt-2">
                 I Don't Receive A Code{" "}
                 <button className="text-[#F3BA18] underline cursor-pointer hover:underline ml-1">
                   Resend

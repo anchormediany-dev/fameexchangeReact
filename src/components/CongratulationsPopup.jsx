@@ -44,27 +44,22 @@ const CongratulationsPopup = ({ onClose }) => {
           animate="visible"
           exit="exit"
         >
-          <h2 className="text-lg sm:text-xl font-semibold text-yellow-400 mb-2">
-            Congratulation
-          </h2>
-          <h3 className="text-lg mb-4">
-            Welcome To{" "}
-            <span className="text-yellow-400 font-semibold">
-              The Fame Exchange!
-            </span>
+          <h2 className="heading-500-30 text-primary mb-2">Congratulation</h2>
+          <h3 className="heading-400-25 mb-4">
+            Welcome To <span className="text-primary ">The Fame Exchange!</span>
           </h3>
-          <p className="text-sm text-gray-300 mb-2">
+          <p className="heading-400-20 text-gray-300 mb-2">
             We've Checked Out Your Network And Are Glad To Award You With
           </p>
-          <p className="text-2xl font-bold text-white mb-4">100000</p>
-          <p className="text-sm text-gray-300 mb-6">
+          <p className="heading-500-30 text-white mb-4">100000</p>
+          <p className="heading-400-20 text-gray-300 mb-6">
             Get The Word Out There And Share Your Coin With The World By
             Clicking The Share Button In Your Dashboard!
           </p>
           <button
             onClick={handleGoToDashboard}
             type="button"
-            className="bg-gray text-center hover:bg-primary hover:text-white w-full hover:scale-105 text-primary font-medium px-6 py-3 rounded-md transition-all duration-300 group text-p5 cursor-pointer 2xl:text-p1"
+            className="bg-gray heading-500-23 text-center hover:bg-primary hover:text-white w-full hover:scale-105 text-primary  px-6 py-3 rounded-md transition-all duration-300 group cursor-pointer"
           >
             Go To Dashboard
           </button>

@@ -81,7 +81,7 @@ const VerifyId = () => {
 
             {/* Conditional Text (Removed after image upload) */}
             {!selectedImage && (
-              <h2 className="text-white text-lg md:text-xl font-medium">
+              <h2 className="text-white heading-500-40">
                 We need to verify you id
               </h2>
             )}
@@ -90,7 +90,7 @@ const VerifyId = () => {
             {!selectedImage && (
               <button
                 onClick={handleButtonClick}
-                className="bg-black w-full hover:scale-105 text-primary font-medium px-6 py-3 rounded-xl transition-all duration-300 relative group text-p5 cursor-pointer 2xl:text-p1"
+                className="bg-black w-full hover:scale-105 text-primary heading-500-23 px-6 py-3 rounded-xl transition-all duration-300 relative group  cursor-pointer"
               >
                 Upload
               </button>
@@ -100,7 +100,7 @@ const VerifyId = () => {
             {selectedImage && (
               <button
                 onClick={handleSubmit}
-                className="bg-black w-full hover:scale-105 text-primary font-medium px-6 py-3 rounded-xl transition-all duration-300 relative group text-p5 cursor-pointer 2xl:text-p1"
+                className="bg-black w-full hover:scale-105 text-primary  px-6 py-3 rounded-xl transition-all duration-300 relative group cursor-pointer heading-500-23"
               >
                 Submit
               </button>

@@ -53,12 +53,15 @@ const Signup = () => {
             <div className="container w-full md:flex-row flex-col-reverse  flex gap-5 z-10">
               {/* Left: Signup Form */}
               <div className="bg-transparent p-8 rounded-lg space-y-6 border border-[#686868] w-full max-w-md">
-                <h2 className="text-2xl font-bold text-white">Sign Up</h2>
+                <h2 className=" text-white heading-700-40">Sign Up</h2>
 
                 <form onSubmit={handleSubmit} className="space-y-6">
                   {/* Email */}
                   <div>
-                    <label htmlFor="email" className="text-white text-sm">
+                    <label
+                      htmlFor="email"
+                      className="text-white heading-500-20"
+                    >
                       Email
                     </label>
                     <div
@@ -76,7 +79,7 @@ const Signup = () => {
                         value={email}
                         onChange={(e) => setEmail(e.target.value)}
                         onBlur={() => setTouched({ ...touched, email: true })}
-                        className="bg-transparent outline-none w-full text-white text-p5 placeholder:font-normal placeholder-white"
+                        className="bg-transparent outline-none w-full text-white heading-400-15 placeholder:font-normal placeholder-white"
                       />
                     </div>
                     {touched.email && !isEmailValid && (
@@ -88,7 +91,10 @@ const Signup = () => {
 
                   {/* Password */}
                   <div>
-                    <label htmlFor="password" className="text-white text-sm">
+                    <label
+                      htmlFor="password"
+                      className="text-white heading-500-20"
+                    >
                       Password
                     </label>
                     <div
@@ -108,7 +114,7 @@ const Signup = () => {
                         onBlur={() =>
                           setTouched({ ...touched, password: true })
                         }
-                        className="bg-transparent outline-none w-full text-white text-p5 placeholder:font-normal placeholder-white"
+                        className="bg-transparent outline-none w-full text-white heading-400-15 placeholder:font-normal placeholder-white"
                       />
                       <button
                         type="button"
@@ -133,7 +139,7 @@ const Signup = () => {
                   <div>
                     <label
                       htmlFor="confirm-password"
-                      className="text-white text-sm"
+                      className="text-white heading-500-20"
                     >
                       Confirm Password
                     </label>
@@ -148,13 +154,13 @@ const Signup = () => {
                       <input
                         type={showPassword ? "text" : "password"}
                         id="confirm-password"
-                        placeholder="Password"
+                        placeholder="Confirm Password"
                         value={confirmPassword}
                         onChange={(e) => setConfirmPassword(e.target.value)}
                         onBlur={() =>
                           setTouched({ ...touched, confirmPassword: true })
                         }
-                        className="bg-transparent outline-none w-full text-white text-p5 placeholder:font-normal placeholder-white"
+                        className="bg-transparent outline-none w-full text-white heading-400-15placeholder:font-normal placeholder-white"
                       />
                       <button
                         type="button"
@@ -190,7 +196,7 @@ const Signup = () => {
                         />
                         <label
                           htmlFor="representation"
-                          className={`${
+                          className={`heading-400-20 ${
                             hasRepresentation
                               ? "text-primary"
                               : "text-grayLabel2"
@@ -207,7 +213,7 @@ const Signup = () => {
                             onChange={(e) =>
                               setRepresentationType(e.target.value)
                             }
-                            className="bg-black  text-primary font-normal text-sm px-3 py-2 rounded-md w-48 focus:outline-none"
+                            className="bg-black  text-primary font-normal heading-400-15 px-3 py-2 rounded-md w-52 focus:outline-none"
                           >
                             <option value="" disabled hidden>
                               Representation Type
@@ -216,7 +222,7 @@ const Signup = () => {
                               <option
                                 key={option}
                                 value={option}
-                                className="text-white"
+                                className="text-white heading-400-15"
                               >
                                 {option}
                               </option>
@@ -237,7 +243,7 @@ const Signup = () => {
                       />
                       <label
                         htmlFor="over18"
-                        className={`${
+                        className={`heading-400-20 ${
                           isOver18 ? "text-primary" : "text-grayLabel2"
                         }`}
                       >
@@ -249,32 +255,32 @@ const Signup = () => {
                   {/* Submit Button */}
                   <button
                     type="submit"
-                    className="bg-black w-full hover:scale-105 text-primary font-medium px-6 py-3 rounded-md transition-all duration-300 relative group text-p5 cursor-pointer 2xl:text-p1"
+                    className="bg-black w-full hover:scale-105 text-primary  px-6 py-3 rounded-md transition-all duration-300 relative group cursor-pointer heading-500-23"
                   >
                     Sign Up
                   </button>
                 </form>
 
                 {/* Divider */}
-                <div className="text-center relative text-gray-500 text-sm">
+                <div className="text-center relative text-gray-500 heading-500-23">
                   <div className="absolute w-full h-px bg-[#272727] top-2 left-0 z-0" />
                   <span className="bg-[#0b0b0b] px-4 z-10 relative">OR</span>
                 </div>
 
                 {/* Social Login */}
                 <div className="space-y-3">
-                  <button className="w-full flex cursor-pointer hover:opacity-50 text-white font-medium text-p5 2xl:text-p1 items-center justify-center gap-3 bg-black py-2 rounded-md transition">
+                  <button className="w-full flex cursor-pointer hover:opacity-50 text-white heading-500-23 items-center justify-center gap-3 bg-black py-2 rounded-md transition">
                     <FcGoogle size={20} />
                     Continue With Google
                   </button>
-                  <button className="w-full flex cursor-pointer hover:opacity-50 text-white font-medium text-p5 2xl:text-p1 items-center justify-center gap-3 bg-black py-2 rounded-md transition">
+                  <button className="w-full flex cursor-pointer hover:opacity-50 text-white heading-500-23 items-center justify-center gap-3 bg-black py-2 rounded-md transition">
                     <FaFacebookF size={20} className="text-[#1877F2]" />
                     <span>Continue With Facebook</span>
                   </button>
                 </div>
 
                 {/* Link to Login */}
-                <p className="text-p5 text-gray-500 text-center mt-4">
+                <p className="heading-400-10 text-gray-500 text-center mt-4">
                   Already have an account?
                   <Link to="/login" className="text-[#F3BA18] ml-1 underline">
                     Log In
@@ -287,8 +293,8 @@ const Signup = () => {
                 <Link to="/">
                   <img className="w-96 h-40" src={siteLogo} alt="Logo" />
                 </Link>
-                <h1 className="text-4xl font-bold mt-5">Welcome!</h1>
-                <p className="text-white text-lg">
+                <h1 className="heading-700-50 mt-5">Welcome!</h1>
+                <p className="text-white heading-500-35">
                   Secure, fast, and fair — your trusted partner in global
                   currency exchange.
                 </p>

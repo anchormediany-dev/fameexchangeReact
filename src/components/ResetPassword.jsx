@@ -55,15 +55,15 @@ const ResetPassword = () => {
             <div className="absolute bottom-[30px] right-[60px] w-[50px] h-[50px] rounded-full bg-white opacity-[0.06]" />
 
             <div className="w-full max-w-md bg-transparent p-8 rounded-lg text-center space-y-6 z-10 border border-[#272727]">
-              <h2 className="text-xl md:text-2xl font-semibold text-white">
-                Reset Password
-              </h2>
+              <h2 className="heading-700-40 text-white">Reset Password</h2>
 
               {/* 4. Wrap inputs in a form */}
               <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
                 {/* New Password */}
-                <div className="text-left space-y-1">
-                  <label className="text-white text-sm">New Password</label>
+                <div className="text-left space-y-2">
+                  <label className="text-white heading-500-20">
+                    New Password
+                  </label>
                   <div
                     className={`flex items-center border rounded-md px-3 py-2 bg-transparent ${
                       errors.newPassword ? "border-red-500" : "border-[#F3BA18]"
@@ -74,7 +74,7 @@ const ResetPassword = () => {
                       type={showNewPassword ? "text" : "password"}
                       placeholder="New Password"
                       {...register("newPassword")}
-                      className="bg-transparent outline-none w-full text-white text-p5 placeholder:font-normal placeholder-white"
+                      className="bg-transparent outline-none w-full text-white heading-400-15 placeholder:font-normal placeholder-white"
                     />
                     <button
                       type="button"
@@ -97,7 +97,9 @@ const ResetPassword = () => {
 
                 {/* Confirm Password */}
                 <div className="text-left space-y-1">
-                  <label className="text-white text-sm">Confirm Password</label>
+                  <label className="text-white heading-500-20">
+                    Confirm Password
+                  </label>
                   <div
                     className={`flex items-center border rounded-md px-3 py-2 bg-transparent ${
                       errors.confirmPassword
@@ -110,7 +112,7 @@ const ResetPassword = () => {
                       type={showConfirmPassword ? "text" : "password"}
                       placeholder="Confirm Password"
                       {...register("confirmPassword")}
-                      className="bg-transparent outline-none w-full text-white text-p5 placeholder:font-normal placeholder-white"
+                      className="bg-transparent outline-none w-full text-white heading-400-15 placeholder:font-normal placeholder-white"
                     />
                     <button
                       type="button"
@@ -136,7 +138,7 @@ const ResetPassword = () => {
                 {/* Submit Button */}
                 <button
                   type="submit"
-                  className="w-full cursor-pointer bg-black text-[#F3BA18] py-2 hover:bg-[#F3BA18] hover:text-black font-medium rounded-md transition-all duration-300 text-p5 2xl:text-p1"
+                  className="w-full cursor-pointer bg-black text-[#F3BA18] py-2 hover:bg-[#F3BA18] hover:text-black rounded-md transition-all duration-300 heading-500-23"
                 >
                   Reset Password
                 </button>

@@ -178,7 +178,7 @@ const BrandedTokensNavbar = () => {
       <div className="flex">
         {/* Categories Column */}
         <div className="w-1/2 border-r border-gray-800">
-          <h3 className="px-4 py-3 font-normal text-primary text-sm bg-[#222]">
+          <h3 className="px-4 py-3 heading-400-15 text-primary  bg-[#222]">
             ALL CATEGORIES
           </h3>
           <ul className="max-h-[400px] overflow-y-auto">
@@ -193,7 +193,7 @@ const BrandedTokensNavbar = () => {
                 }`}
                 onClick={() => handleNavigation(path)}
               >
-                <div className="font-normal text-sm">{category}</div>
+                <div className="heading-400-15">{category}</div>
                 {activeCategory === category && (
                   <FaChevronRight className="text-white" />
                 )}
@@ -204,7 +204,7 @@ const BrandedTokensNavbar = () => {
 
         {/* Subcategories Column */}
         <div className="w-1/2">
-          <h3 className="px-4 py-3 font-normal text-primary text-sm bg-[#222]">
+          <h3 className="px-4 py-3 heading-400-15 text-primary  bg-[#222]">
             ALL SUB-CATEGORIES
           </h3>
           <ul className="max-h-[400px] overflow-y-auto">
@@ -212,7 +212,7 @@ const BrandedTokensNavbar = () => {
               ({ name, path }) => (
                 <li
                   key={name}
-                  className="px-4 py-3 cursor-pointer text-white font-normal hover:bg-primary transition-colors text-sm"
+                  className="px-4 py-3 cursor-pointer text-white  hover:bg-primary transition-colors heading-400-15"
                   onClick={() => handleNavigation(path)}
                 >
                   {name}
@@ -310,7 +310,7 @@ const BrandedTokensNavbar = () => {
           </Link>
 
           {/* Desktop Nav */}
-          <div className="hidden lg:flex text-white text-base font-medium space-x-8 items-center">
+          <div className="hidden lg:flex text-white heading-500-20 space-x-8 items-center">
             {navLinks.map((link) => (
               <div
                 key={link.name}
@@ -351,13 +351,13 @@ const BrandedTokensNavbar = () => {
             <div className="flex space-x-4 ml-4">
               <button
                 onClick={() => setIsLoginModalOpen(true)}
-                className="px-5 py-2 text-white border border-primary rounded-lg hover:bg-primary hover:text-black transition-colors"
+                className="px-5 py-2 text-white border border-primary heading-500-15 rounded-lg hover:bg-primary hover:text-black transition-colors"
               >
                 Log In
               </button>
               <button
                 onClick={() => setIsSignupModalOpen(true)}
-                className="px-5 py-2 bg-primary text-black rounded-lg hover:bg-amber-300 transition-colors font-semibold"
+                className="px-5 py-2 bg-primary text-black rounded-lg heading-500-15 hover:bg-amber-300 transition-colors"
               >
                 Sign Up
               </button>

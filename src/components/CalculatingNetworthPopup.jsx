@@ -34,10 +34,10 @@ const CalculatingNetworthPopup = () => {
           animate="visible"
           exit="exit"
         >
-          <h2 className="text-xl font-semibold text-primary">
+          <h2 className="heading-500-30 text-primary">
             Calculating Your Networth
           </h2>
-          <p className="text-gray-300 text-sm text-center">
+          <p className="text-gray-300 heading-400-25 text-center">
             Processing Your Social Media, Please Wait. <br />
             Analyzing Snapshot Account
           </p>

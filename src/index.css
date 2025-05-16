@@ -514,3 +514,56 @@ select {
     font-size: 15px;
   }
 }
+/* heading */
+.heading-700-40 {
+  font-weight: 700;
+  font-size: clamp(24px, 5vw, 40px);
+}
+.heading-700-50 {
+  font-weight: 700;
+  font-size: clamp(28px, 5vw, 50px);
+}
+.heading-500-35 {
+  font-weight: 500;
+  font-size: clamp(18px, 5vw, 35px);
+}
+.heading-500-20 {
+  font-weight: 500;
+  font-size: clamp(12px, 5vw, 20px);
+}
+.heading-400-15 {
+  font-weight: 400;
+  font-size: clamp(10px, 5vw, 15px);
+}
+.heading-500-23 {
+  font-weight: 500;
+  font-size: clamp(12px, 5vw, 23px);
+}
+.heading-400-10 {
+  font-weight: 400;
+  font-size: clamp(8px, 5vw, 10px);
+}
+.heading-500-30 {
+  font-weight: 500;
+  font-size: clamp(16px, 5vw, 30px);
+}
+.heading-500-50 {
+  font-weight: 500;
+  font-size: clamp(28px, 5vw, 50px);
+}
+.heading-500-40 {
+  font-weight: 500;
+  font-size: clamp(24px, 5vw, 40px);
+}
+.heading-500-15 {
+  font-weight: 500;
+  font-size: clamp(10px, 5vw, 15px);
+}
+.heading-400-20 {
+  font-weight: 400;
+  font-size: clamp(12px, 5vw, 20px);
+}
+.heading-400-25 {
+  font-weight: 400;
+  font-size: clamp(12px, 5vw, 25px);
+}

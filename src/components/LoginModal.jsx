@@ -58,18 +58,18 @@ const LoginModal = ({ isOpen, onClose }) => {
             >
               <FaTimes size={20} />
             </button>
-            <h2 className="text-xl font-semibold mb-4 text-primary">Log In</h2>
+            <h2 className="font-paragraph-xl mb-4 text-primary">Log In</h2>
             <Link
               to="/login"
               onClick={onClose}
-              className="bg-gray text-center cursor-pointer hover:bg-primary hover:scale-105 text-white font-medium py-3 px-6 w-full mb-3  rounded-xl transition-all duration-300 text-p5  2xl:text-p1"
+              className="bg-gray text-center cursor-pointer hover:bg-primary hover:scale-105 text-white  py-3 px-6 w-full mb-3  rounded-xl transition-all duration-300 font-button-lg-alt"
             >
               TRADER/FAN
             </Link>
             <Link
               to="/login"
               onClick={onClose}
-              className="bg-gray cursor-pointer text-center hover:bg-primary hover:scale-105 text-white font-medium py-3 px-6 w-full mb-3  rounded-xl transition-all duration-300 text-p5  2xl:text-p1"
+              className="bg-gray cursor-pointer text-center hover:bg-primary font-button-lg-alt hover:scale-105 text-white  py-3 px-6 w-full mb-3  rounded-xl transition-all duration-300"
             >
               TALENT/ATHLETE/INFLUENCER
             </Link>

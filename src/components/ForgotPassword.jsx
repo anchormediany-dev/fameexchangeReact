@@ -23,13 +23,13 @@ const ForgotPassword = () => {
             <div className="absolute bottom-[40px] right-[40px] w-[80px] h-[80px] rounded-full bg-white opacity-[0.04]" />
 
             <div className="bg-transparent border border-[#686868] w-full max-w-md p-8 rounded-lg z-10">
-              <h2 className="text-center text-2xl font-bold text-white mb-6">
+              <h2 className="text-center heading-700-40 text-white mb-6">
                 Enter Your Email
               </h2>
 
               <form onSubmit={handleSubmit} className="space-y-6">
                 <div>
-                  <label htmlFor="email" className="text-white text-sm">
+                  <label htmlFor="email" className="text-white heading-500-20">
                     Email
                   </label>
                   <div className="flex items-center border border-[#F3BA18] rounded-md px-3 py-2 mt-1 bg-transparent focus-within:ring-2 focus-within:ring-[#F3BA18]">
@@ -40,7 +40,7 @@ const ForgotPassword = () => {
                       placeholder="Email"
                       value={email}
                       onChange={(e) => setEmail(e.target.value)}
-                      className="bg-transparent outline-none w-full text-white text-p5 placeholder:font-normal placeholder-white"
+                      className="bg-transparent outline-none w-full text-white heading-400-15  placeholder-white"
                       required
                     />
                   </div>
@@ -48,7 +48,7 @@ const ForgotPassword = () => {
 
                 <button
                   type="submit"
-                  className="w-full bg-black cursor-pointer text-[#F3BA18] py-2  hover:bg-[#F3BA18] hover:text-black  font-medium  rounded-md transition-all duration-300  text-p5  2xl:text-p1"
+                  className="w-full bg-black cursor-pointer text-[#F3BA18] py-2  hover:bg-[#F3BA18] hover:text-black rounded-md transition-all duration-300 heading-500-23"
                 >
                   Continue
                 </button>

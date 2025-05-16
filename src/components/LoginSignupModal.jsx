@@ -82,18 +82,18 @@ const LoginSignupModal = ({ isOpen, onClose, setIsOpenLoginSignup }) => {
               >
                 <FaTimes size={20} />
               </button>
-              <h2 className="text-xl font-semibold mb-4 text-primary">
+              <h2 className="font-paragraph-xl mb-4 text-primary">
                 Please Sign Up Or Log In To Trade Any Talent Tokens
               </h2>
               <button
                 onClick={openLoginModal}
-                className="bg-gray cursor-pointer hover:bg-primary hover:scale-105 text-white font-medium py-3 px-6 w-full mb-3  rounded-xl transition-all duration-300 text-p5  2xl:text-p1"
+                className="bg-gray cursor-pointer hover:bg-primary hover:scale-105 text-white font-button-lg-alt py-3 px-6 w-full mb-3  rounded-xl transition-all duration-300"
               >
                 Log In
               </button>
               <button
                 onClick={openSignupModal}
-                className="bg-gray cursor-pointer hover:bg-primary hover:scale-105 text-white font-medium py-3 px-6 w-full mb-3  rounded-xl transition-all duration-300 text-p5  2xl:text-p1"
+                className="bg-gray cursor-pointer hover:bg-primary hover:scale-105 text-white py-3 px-6 w-full mb-3  rounded-xl transition-all duration-300 font-button-lg-alt"
               >
                 Sign Up
               </button>

@@ -57,12 +57,15 @@ const LoginPage = () => {
             <div className="container w-full md:flex-row flex-col-reverse  flex gap-5 z-10">
               {/* Login Form */}
               <div className="bg-transparent p-8 rounded-lg space-y-6 border border-[#686868] w-full max-w-md">
-                <h2 className="text-2xl font-bold text-white">Log In</h2>
+                <h2 className=" text-white heading-700-40">Log In</h2>
 
                 <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
                   {/* Email */}
                   <div>
-                    <label htmlFor="email" className="text-white text-sm">
+                    <label
+                      htmlFor="email"
+                      className="text-white heading-500-20"
+                    >
                       Email
                     </label>
                     <div
@@ -76,7 +79,7 @@ const LoginPage = () => {
                         id="email"
                         placeholder="Email"
                         {...register("email")}
-                        className="bg-transparent outline-none w-full text-white placeholder-white text-p5"
+                        className="bg-transparent outline-none w-full text-white placeholder-white heading-400-15"
                       />
                     </div>
                     {errors.email && (
@@ -88,7 +91,10 @@ const LoginPage = () => {
 
                   {/* Password */}
                   <div>
-                    <label htmlFor="password" className="text-white text-sm">
+                    <label
+                      htmlFor="password"
+                      className="text-white heading-500-20"
+                    >
                       Password
                     </label>
                     <div
@@ -102,7 +108,7 @@ const LoginPage = () => {
                         id="password"
                         placeholder="Password"
                         {...register("password")}
-                        className="bg-transparent outline-none w-full text-white placeholder-white text-p5"
+                        className="bg-transparent outline-none w-full text-white placeholder-white heading-400-15"
                       />
                       <button
                         type="button"
@@ -120,7 +126,7 @@ const LoginPage = () => {
                       <button
                         type="button"
                         onClick={() => setShowForgotPassword(true)}
-                        className="text-xs text-white hover:underline"
+                        className=" text-white heading-400-10 mt-1 hover:underline"
                       >
                         Forgot Password?
                       </button>
@@ -134,32 +140,32 @@ const LoginPage = () => {
 
                   <button
                     type="submit"
-                    className="bg-black w-full hover:scale-105 text-primary font-medium px-6 py-3 rounded-md transition-all duration-300 group text-p5 cursor-pointer 2xl:text-p1"
+                    className="bg-black w-full hover:scale-105 text-primary px-6 py-3 rounded-md transition-all duration-300 group  cursor-pointer heading-500-23"
                   >
                     Log In
                   </button>
                 </form>
 
                 {/* Divider */}
-                <div className="text-center relative text-gray-500 text-sm">
+                <div className="text-center relative text-gray-500 heading-500-23">
                   <div className="absolute w-full h-px bg-[#272727] top-2 left-0 z-0" />
                   <span className="bg-[#0b0b0b] px-4 z-10 relative">OR</span>
                 </div>
 
                 {/* Social Auth */}
                 <div className="space-y-3">
-                  <button className="w-full flex cursor-pointer hover:opacity-50 text-white font-medium text-p5 2xl:text-p1 items-center justify-center gap-3 bg-black py-2 rounded-md transition">
+                  <button className="w-full flex cursor-pointer hover:opacity-50 text-white heading-500-23 items-center justify-center gap-3 bg-black py-2 rounded-md transition">
                     <FcGoogle size={20} />
                     Continue With Google
                   </button>
-                  <button className="w-full flex cursor-pointer hover:opacity-50 text-white font-medium text-p5 2xl:text-p1 items-center justify-center gap-3 bg-black py-2 rounded-md transition">
+                  <button className="w-full flex cursor-pointer hover:opacity-50 text-white heading-500-23 items-center justify-center gap-3 bg-black py-2 rounded-md transition">
                     <FaFacebookF size={20} className="text-[#1877F2]" />
                     <span>Continue With Facebook</span>
                   </button>
                 </div>
 
                 {/* Sign Up */}
-                <p className="text-p5 text-gray-500 text-center mt-4">
+                <p className="heading-400-10 text-gray-500 text-center mt-4">
                   Don’t have an account?{" "}
                   <Link to="/signup" className="text-[#F3BA18] hover:underline">
                     Sign Up
@@ -172,8 +178,8 @@ const LoginPage = () => {
                 <Link to="/">
                   <img className="w-96 h-40" src={siteLogo} alt="Logo" />
                 </Link>
-                <h1 className="text-4xl font-bold mt-5">Welcome!</h1>
-                <p className="text-white text-lg">
+                <h1 className="heading-700-50 mt-5">Welcome!</h1>
+                <p className="text-[#303030] heading-500-35">
                   Secure, fast, and fair — your trusted partner in global
                   currency exchange.
                 </p>

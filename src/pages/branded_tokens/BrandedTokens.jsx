@@ -21,7 +21,7 @@ const TokenRow = ({ name, price, change, volume, marketcap, index }) => {
   const bgColor = index % 2 === 0 ? "bg-[#0b0b0b]" : "bg-[#111]";
   return (
     <div
-      className={`grid grid-cols-1 md:grid-cols-7 gap-4 md:gap-0 items-center py-4 px-3 text-white text-sm ${bgColor}`}
+      className={`grid grid-cols-1 md:grid-cols-7 gap-4 md:gap-0 items-center py-4 px-3 text-white heading-500-20 ${bgColor}`}
     >
       <div className="md:px-2">{name}</div>
       <div className="md:px-2">${price}</div>
@@ -50,7 +50,7 @@ const TokenRow = ({ name, price, change, volume, marketcap, index }) => {
         </ResponsiveContainer>
       </div>
       <div className="md:px-2">
-        <button className="w-full md:w-auto bg-[#0B0B0B] text-primary text-xs shadow-inset-light font-semibold px-5 py-3 rounded-[12px] transition duration-300 ease-in-out hover:bg-primary hover:text-[#0B0B0B] focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2">
+        <button className="w-full md:w-auto bg-[#0B0B0B] text-primary heading-500-15 shadow-inset-light px-5 py-3 rounded-[12px] transition duration-300 ease-in-out hover:bg-primary hover:text-[#0B0B0B] focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2">
           Trade
         </button>
       </div>
@@ -132,7 +132,7 @@ export default function BrandedTokens() {
 
         {/* Heading */}
         <div className="relative z-10 mb-12">
-          <h1 className="lg:text-h6 text-p3 font-medium">
+          <h1 className="heading-500-50">
             TOP TALENT <span className="text-primary">TOKENS</span>
           </h1>
         </div>
@@ -151,9 +151,7 @@ export default function BrandedTokens() {
                   alt={`${token.name} chart`}
                   className="w-20 h-20 object-contain mb-2"
                 />
-                <p className="text-p4 mt-2 font-medium lg:text-p2">
-                  {token.name}
-                </p>
+                <p className="heading-500-40 mt-2">{token.name}</p>
               </div>
               <ResponsiveContainer width={100} height={30}>
                 <LineChart data={chartData}>
@@ -180,21 +178,21 @@ export default function BrandedTokens() {
             placeholder="Search Your Favourite Talent"
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
-            className="w-[75%] pl-10 pr-4 py-3 rounded-[13px] placeholder:text-[#454545] placeholder:font-normal placeholder:text-xs bg-transparent text-white border border-[#808080] focus:outline-none focus:ring-2 focus:ring-primary"
+            className="w-[75%] pl-10 pr-4 py-3 rounded-[13px] placeholder:text-[#454545] heading-400-15 placeholder:font-normal placeholder:text-xs bg-transparent text-white border border-[#808080] focus:outline-none focus:ring-2 focus:ring-primary"
           />
         </div>
 
         {/* Token Table */}
         <div className="relative z-10 w-full border border-[#1a1a1a] mx-auto bg-black/30 rounded-lg overflow-hidden">
           {/* Header Row */}
-          <div className="hidden md:grid grid-cols-7 items-center bg-[#1a1a1a] font-medium text-[#404040] p-4 text-xs uppercase">
+          <div className="hidden md:grid grid-cols-7 items-center bg-[#1a1a1a] heading-500-20 text-[#404040] p-4 uppercase">
             <div className="px-2">Name</div>
             <div className="px-2">Price</div>
-            <div className="px-2">24h Change</div>
-            <div className="px-2">24h Volume</div>
-            <div className="px-2">Market Cap</div>
+            <div className="px-2">24 HR Change</div>
+            <div className="px-2">24 HR Volume</div>
+            <div className="px-2">24 HR Market Cap</div>
             <div className="px-2">Chart</div>
-            <div className="px-2">Actions</div>
+            <div className="px-2"></div>
           </div>
 
           {/* Rows */}
