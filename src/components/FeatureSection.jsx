@@ -19,8 +19,8 @@ const FeatureSection = () => {
             alt="Fans at Concert"
             className="w-full object-center"
           />
-          <h3 className="text-p1 font-bold text-primary mt-4">Fans Get To</h3>
-          <p className="text-grayLight text-sm mt-1">
+          <h3 className="font-heading-xl text-primary mt-4">Fans Get To</h3>
+          <p className="text-grayLight font-paragraph-xl mt-1">
             Earn With Athlete/ Artists & Personalities Talent Token
           </p>
         </div>
@@ -32,8 +32,8 @@ const FeatureSection = () => {
             alt="Man trading"
             className="w-full object-center"
           />
-          <h3 className="text-p1 font-bold text-primary mt-4">Easy To Trade</h3>
-          <p className="text-grayLight text-sm mt-1">
+          <h3 className="font-heading-xl text-primary mt-4">Easy To Trade</h3>
+          <p className="text-grayLight font-paragraph-xl mt-1">
             Famecoin For Branded Talent Token
           </p>
         </div>
@@ -41,8 +41,8 @@ const FeatureSection = () => {
         {/* Feature Card 3 */}
         <div id="in-verse">
           <img src={easyToTrade} alt="Woman with glasses" className="w-full" />
-          <h3 className="text-p1 font-bold text-primary mt-4">Personalities</h3>
-          <p className="text-grayLight text-sm mt-1">
+          <h3 className="font-heading-xl text-primary mt-4">Personalities</h3>
+          <p className="text-grayLight font-paragraph-xl mt-1">
             Get Evaluated And Receive Talent Token To BRAND
           </p>
         </div>
@@ -54,10 +54,10 @@ const FeatureSection = () => {
             alt="Virtual city"
             className="w-full object-center"
           />
-          <h3 className="text-p1 font-bold text-primary mt-4">
+          <h3 className="font-heading-xl text-primary mt-4">
             Check Out Our In-Verse
           </h3>
-          <p className="text-grayLight text-sm mt-1">
+          <p className="text-grayLight font-paragraph-xl mt-1">
             Connect And Meet With The Famous
           </p>
         </div>
