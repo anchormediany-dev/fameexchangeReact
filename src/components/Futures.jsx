@@ -42,14 +42,12 @@ const Futures = () => {
 
         {/* Content Layer */}
         <div className="relative z-10 text-center container max-w-4xl mx-auto">
-          <h2 className="text-p2 py-5 sm:text-p1 md:text-h6 lg:text-h5 xl:text-h4 2xl:text-h3 lg:text-5xl font-bold text-center text-white">
-            FUTURES
-          </h2>
-          <p className="text-grayLight font-medium text-p3">
+          <h2 className="font-heading-hero text-center text-white">FUTURES</h2>
+          <p className="text-grayLight font-paragraph-xl">
             Haven’t Been Able To Qualify? Welcome, You Are Now An Integral Part
             Of Our Platform.
             <br />
-            <span className="text-yellow-400 font-semibold">
+            <span className="text-primary font-paragraph-xl">
               Register To Be Seen And Heard!
             </span>{" "}
             You Are A Rising Star
@@ -79,7 +77,7 @@ const Futures = () => {
         <div className="relative z-10 flex justify-center mt-10 pb-12">
           <button
             onClick={openLoginModal}
-            className="bg-lightYellow cursor-pointer hover:scale-105 text-black font-medium px-6 py-3 rounded-md transition-all duration-300 relative group text-p5 2xl:text-p1"
+            className="bg-lightYellow cursor-pointer hover:scale-105 text-black font-button-xl-alt px-6 py-3 rounded-md transition-all duration-300 relative group"
           >
             Discover More
           </button>
