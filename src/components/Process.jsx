@@ -22,10 +22,10 @@ const Process = () => {
         <div className="container relative z-10 py-12">
           <div className="md:pb-[120px] pb-12">
             {" "}
-            <h1 className="text-p2 sm:text-p1 md:text-h6 lg:text-h5 xl:text-h4 2xl:text-h3 lg:text-5xl font-bold text-center text-white">
+            <h1 className="font-heading-hero text-center text-white">
               The Process
             </h1>
-            <p className="text-center font-medium text-p3 mt-8 text-primary">
+            <p className="text-center font-button-xl-alt mt-8 text-primary">
               Reverse this process to convers your Famecoin into Fiat Currency
             </p>
           </div>
@@ -35,7 +35,7 @@ const Process = () => {
           <div className="flex justify-center pt-[115px]">
             <button
               onClick={openLoginModal}
-              className="bg-lightYellow cursor-pointer hover:scale-105 text-black font-medium px-6 py-3 rounded-md transition-all duration-300  relative group text-p5  2xl:text-p1"
+              className="bg-lightYellow cursor-pointer hover:scale-105 text-black font-medium px-6 py-3 rounded-md transition-all duration-300  relative group font-button-xl-alt"
             >
               Discover More
             </button>
