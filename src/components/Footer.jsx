@@ -14,6 +14,7 @@ import XIcon from "../assets/icons/x.svg?react";
 import DiscordIcon from "../assets/icons/discord.svg?react";
 import SnapchatIcon from "../assets/icons/snapchat.svg?react";
 import TelegramIcon from "../assets/icons/telegram.svg?react";
+import { Link } from "react-router-dom";
 const Footer = () => {
   return (
     <footer className="bg-black  text-white w-full">
@@ -37,12 +38,18 @@ const Footer = () => {
             </div>
 
             {/* Text Items */}
-            <button className="flex cursor-pointer items-center gap-3 lg:gap-8 text-sm">
+            <Link
+              to="/us-international-english"
+              className="flex cursor-pointer items-center gap-3 lg:gap-8 text-sm"
+            >
               <LanguageIcon /> <p>US (International) / English</p>
-            </button>
-            <button className="flex cursor-pointer items-center  gap-3 lg:gap-8  text-sm">
+            </Link>
+            <Link
+              to="/help-support"
+              className="flex cursor-pointer items-center  gap-3 lg:gap-8  text-sm"
+            >
               <HelpIcon /> <p>Help & Support</p>
-            </button>
+            </Link>
           </div>
 
           {/* Corporate */}
@@ -69,24 +76,24 @@ const Footer = () => {
             <h3 className="text-primary text-p3 font-semibold mb-5">About</h3>
             <ul className="text-sm space-y-2">
               <li>
-                <a href="#" className="hover:text-primary ">
+                <Link to="/how-to-buy-sell" className="hover:text-primary ">
                   How To Buy/Sell
-                </a>
+                </Link>
               </li>
               <li>
-                <a href="#" className="hover:text-primary">
+                <Link to="/about-crypto" className="hover:text-primary">
                   About Crypt
-                </a>
+                </Link>
               </li>
               <li>
-                <a href="#" className="hover:text-primary">
+                <Link to="/faq" className="hover:text-primary">
                   FAQ
-                </a>
+                </Link>
               </li>
               <li>
-                <a href="#" className="hover:text-primary">
+                <Link to="/about-us" className="hover:text-primary">
                   About Us
-                </a>
+                </Link>
               </li>
             </ul>
           </div>
@@ -96,19 +103,22 @@ const Footer = () => {
             <h3 className="text-primary font-semibold  text-p3 mb-5">Terms</h3>
             <ul className="text-sm space-y-2">
               <li>
-                <a href="#" className="hover:text-primary">
+                <Link to="/privacy-policy" className="hover:text-primary">
                   Privacy Policy
-                </a>
+                </Link>
               </li>
               <li>
-                <a href="#" className="hover:text-primary">
+                <Link
+                  to="/anti-money-laundering"
+                  className="hover:text-primary"
+                >
                   Anti-Money Laundering
-                </a>
+                </Link>
               </li>
               <li>
-                <a href="#" className="hover:text-primary">
+                <Link to="/terms-conditions" className="hover:text-primary">
                   Terms And Conditions
-                </a>
+                </Link>
               </li>
             </ul>
           </div>

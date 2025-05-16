@@ -91,7 +91,7 @@ export default function App() {
               }
             />
             <Route
-              path="/support"
+              path="/help-support"
               element={
                 <MotionPageWrapper>
                   <HelpSupport />
@@ -115,7 +115,7 @@ export default function App() {
               }
             />
             <Route
-              path="/terms"
+              path="/terms-conditions"
               element={
                 <MotionPageWrapper>
                   <TermsConditions />
