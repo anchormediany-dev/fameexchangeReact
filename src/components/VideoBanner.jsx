@@ -12,7 +12,7 @@ const VideoBanner = () => {
   return (
     <section
       id="videos"
-      className="w-full max-h-[600px] relative bg-black flex flex-col items-center justify-center"
+      className="w-full h-[400px] xs:h-[450px] sm:h-[500px] md:h-[600px] relative  flex flex-col items-center justify-center overflow-hidden"
     >
       {/* Video */}
       <video
@@ -28,23 +28,21 @@ const VideoBanner = () => {
       {/* Play Button */}
       <div className="absolute top-0 left-0 h-full w-full  z-0">
         <div className="container custom-banner h-full">
-          <div className="flex flex-col h-full justify-between items-center">
-            <h1 className="font-medium md:font-semibold text-p5 md:text-p4 lg:text-p3 xl:text-p1 2xl:text-h5 leading-snug">
+          <div className="flex flex-col h-full justify-between items-center py-6 sm:py-8 md:py-10">
+            <h1 className="font-heading-lg   leading-snug  pt-4 sm:pt-6 md:pt-8 sm:mt-5 px-2 sm:px-4">
               WELCOME TO THE TALENT, ATHLETE & INFLUENCER BASED PLATFORM FOR
               FANS!
             </h1>
             <button className="cursor-pointer max-w-40" onClick={handlePlay}>
-              <VideoPlayIcon className="hover:scale-105 w-14 h-14 sm:w-20 sm:h-20 md:w-30 md:h-30" />
+              <VideoPlayIcon className="hover:scale-105 w-20 h-20 md:w-30 md:h-30 transition-transform duration-300" />
             </button>
             <button
               onClick={handlePlay}
-              className="play-video-button cursor-pointer hover:scale-105 text-black font-semibold text-lg px-8 transition duration-300"
+              className="play-video-button  cursor-pointer hover:scale-105 text-black font-semibold text-lg px-8 transition duration-300"
             >
               <div className="leading-tight  text-center">
-                <div className="2xl:text-p1 md:text-p3 text-p4 font-medium">
-                  Play Video
-                </div>
-                <div className="text-black font-medium transition-all duration-300  text-p5  2xl:text-p1">
+                <div className="font-button-xl">Play Video</div>
+                <div className="text-black  transition-all duration-300 font-button-md">
                   Click Here
                 </div>
               </div>
