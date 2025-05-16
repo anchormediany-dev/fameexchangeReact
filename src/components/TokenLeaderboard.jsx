@@ -107,7 +107,7 @@ const TokenLeaderboard = () => {
       <div className="absolute w-40 h-40 bg-white/10 rounded-full bottom-[-40px] right-[-40px] z-0" />
       <div className="absolute w-32 h-32 bg-white/5 rounded-full bottom-[100px] right-[50px] z-0" />
       <div className="container">
-        <h2 className="text-p2 py-5 sm:text-p1 md:text-h6 lg:text-h5 xl:text-h4 2xl:text-h3 lg:text-5xl font-bold text-center text-primary">
+        <h2 className=" py-5 font-heading-hero text-center text-primary">
           20
           <span className="text-white"> TOP BRANDED TALENT TOKENS</span>
         </h2>
@@ -116,24 +116,33 @@ const TokenLeaderboard = () => {
           {tokenData.map((token, idx) => (
             <div
               key={idx}
-              className="flex flex-col md:flex-row items-center gap-1 md:justify-between bg-[#111111] rounded-xl px-6 py-4 shadow-lg hover:scale-[1.01] transition-transform"
+              className="flex flex-col md:flex-row items-center gap-3 md:gap-2 md:justify-between bg-[#111111] rounded-xl px-4 md:px-6 py-4 shadow-lg hover:scale-[1.01] transition-transform"
             >
-              <div className="text-p4 pl-5 md:pl-0 2xl:text-p1 font-bold md:w-[160px] lg:w-[240px] xl:w-[320px]">
+              {/* Token Name + Ticker */}
+              <div className="w-full md:w-[180px] lg:w-[220px] xl:w-[260px] font-heading-section text-center md:text-left">
                 {token.name}{" "}
                 <span className="text-sm text-gray-400 font-light">
                   {token.ticker}
                 </span>
               </div>
-              <div className="w-28 text-right md:text-left text-white font-medium">
+
+              {/* Token Price */}
+              <div className="w-full md:w-[120px] text-center md:text-left font-paragraph-lg text-white">
                 {token.price}
               </div>
-              <div className="w-20 text-right md:text-left text-darkOrange font-medium">
+
+              {/* Token Change */}
+              <div className="w-full md:w-[100px] text-center md:text-left font-paragraph-lg text-darkOrange">
                 {token.change}
               </div>
-              <div className="flex-1 text-gray-300 text-sm text-right md:text-left truncate">
+
+              {/* Token Volume */}
+              <div className="w-full md:w-[200px] xl:w-[250px] text-center md:text-left text-gray-300 font-paragraph-lg truncate">
                 {token.volume}
               </div>
-              <div className="flex-1 mr-3 h-10">
+
+              {/* Line Chart */}
+              <div className="w-full md:w-[140px] xl:w-[180px] h-10">
                 <ResponsiveContainer width="100%" height="100%">
                   <LineChart data={token.graphData}>
                     <Line
@@ -147,8 +156,10 @@ const TokenLeaderboard = () => {
                   </LineChart>
                 </ResponsiveContainer>
               </div>
-              <div>
-                <button className="bg-gray cursor-pointer text-yellow-400 px-8 py-3 rounded-xl transition-colors duration-300 shadow-[4px_4px_4px_#000000EB,_-4px_-4px_12px_#FFFFFF08]">
+
+              {/* Trade Button */}
+              <div className="w-full md:w-[120px] flex justify-center md:justify-end">
+                <button className="bg-gray font-button-lg-alt text-yellow-400 px-6 py-2 rounded-xl transition-colors duration-300 shadow-[4px_4px_4px_#000000EB,_-4px_-4px_12px_#FFFFFF08]">
                   Trade
                 </button>
               </div>
@@ -159,7 +170,7 @@ const TokenLeaderboard = () => {
         <div className="mt-12 flex justify-center">
           <Link
             to="/talent-tokens"
-            className="bg-lightYellow hover:scale-105 cursor-pointer text-black font-medium px-6 py-3 rounded-md transition-all duration-300 relative group text-p5 2xl:text-p1"
+            className="bg-lightYellow font-button-xl-alt hover:scale-105 cursor-pointer text-black px-6 py-3 rounded-md transition-all duration-300 relative group "
           >
             Discover More
           </Link>
