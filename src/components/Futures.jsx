@@ -84,7 +84,7 @@ const Futures = () => {
         </div>
 
         {/* Import Famecoin Heading */}
-        <h2 className="relative z-10 text-p2 pb-12 sm:text-p1 md:text-h6 lg:text-h5 xl:text-h4 2xl:text-h3 lg:text-5xl font-bold text-center text-primary">
+        <h2 className="relative z-10 font-heading-display pb-12 text-center text-primary">
           <span className="text-white">Import Your</span> Famecoin
         </h2>
       </section>{" "}
