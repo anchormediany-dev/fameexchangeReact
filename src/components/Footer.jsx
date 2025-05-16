@@ -41,13 +41,13 @@ const Footer = () => {
             {/* Text Items */}
             <Link
               to="/us-international-english"
-              className="flex cursor-pointer items-center gap-3 lg:gap-8 text-sm"
+              className="flex cursor-pointer items-center gap-3 lg:gap-8 font-navlink"
             >
               <LanguageIcon /> <p>US (International) / English</p>
             </Link>
             <Link
               to="/help-support"
-              className="flex cursor-pointer items-center  gap-3 lg:gap-8  text-sm"
+              className="flex cursor-pointer items-center  gap-3 lg:gap-8  font-navlink"
             >
               <HelpIcon /> <p>Help & Support</p>
             </Link>
@@ -55,14 +55,11 @@ const Footer = () => {
 
           {/* Corporate */}
           <div>
-            <h3 className="text-primary font-semibold text-p3 mb-5">
-              Corporate
-            </h3>
-            <div className="text-sm leading-6">
+            <h3 className="text-primary font-button-bold mb-5">Corporate</h3>
+            <div className="font-navlink leading-6">
               <p className="mb-2"> The Fame Exchange / Famecoin</p>
 
               <p>
-                {" "}
                 825 East Gate Blvd
                 <br />
                 Suite 202
@@ -74,8 +71,8 @@ const Footer = () => {
 
           {/* About */}
           <div>
-            <h3 className="text-primary text-p3 font-semibold mb-5">About</h3>
-            <ul className="text-sm space-y-2">
+            <h3 className="text-primary font-button-bold mb-5">About</h3>
+            <ul className="space-y-2 font-navlink">
               <li>
                 <Link to="/how-to-buy-sell" className="hover:text-primary ">
                   How To Buy/Sell
@@ -101,8 +98,8 @@ const Footer = () => {
 
           {/* Terms */}
           <div>
-            <h3 className="text-primary font-semibold  text-p3 mb-5">Terms</h3>
-            <ul className="text-sm space-y-2">
+            <h3 className="text-primary font-button-bold mb-5">Terms</h3>
+            <ul className="font-navlink space-y-2">
               <li>
                 <Link to="/privacy-policy" className="hover:text-primary">
                   Privacy Policy
@@ -126,7 +123,7 @@ const Footer = () => {
 
           {/* Apps */}
           <div>
-            <h3 className="text-primary font-semibold mb-5 text-p3">Apps</h3>
+            <h3 className="text-primary font-button-bold mb-5 ">Apps</h3>
             <div className="flex flex-col gap-8">
               <img
                 src={appStore}
@@ -164,7 +161,7 @@ const Footer = () => {
         </div>
 
         {/* Bottom bar */}
-        <div className="border-t border-gray-700 mt-10 pt-4 text-sm text-center text-gray-400">
+        <div className="border-t border-gray-700 mt-10 pt-4 font-navlink text-center text-gray-400">
           <div className="flex flex-col md:flex-row justify-between items-center   gap-2">
             <p>All Rights Reserved, Copyright 2021</p>
             <p className="uppercase">tHE fAME EXCHANGE, POWERED BY: FAMECOIN</p>

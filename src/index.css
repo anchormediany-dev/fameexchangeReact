@@ -256,14 +256,14 @@ select {
 }
 @media (min-width: 640px) {
   .font-navlink {
+    font-size: 14px;
+  }
+}
+@media (min-width: 1024px) {
+  .font-navlink {
     font-size: 16px;
   }
 }
-/* @media (min-width: 1024px) {
-  .font-navlink {
-    font-size: 18px;
-  }
-} */
 @media (min-width: 1536px) {
   .font-navlink {
     font-size: 20px;
@@ -332,11 +332,11 @@ select {
 /* 6. Heading - Hero */
 .font-heading-hero {
   font-weight: 700;
-  font-size: 40px;
+  font-size: 30px;
 }
 @media (min-width: 1280px) {
   .font-heading-hero {
-    font-size: 60px;
+    font-size: 50px;
   }
 }
 @media (min-width: 1536px) {
