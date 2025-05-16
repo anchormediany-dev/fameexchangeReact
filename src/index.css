@@ -241,3 +241,276 @@ select {
 .bg-gradient-custom-horizontal2 {
   background-image: linear-gradient(to right, #111, #1a1a1a, #111);
 }
+
+/* Responsiveness */
+/* -----------------------------------------
+   Responsive Font Utilities
+   Target screens: 
+   sm: 640px, md: 768px, lg: 1024px, xl: 1280px, 2xl: 1536px
+------------------------------------------ */
+
+/* 1. Navlinks */
+.font-navlink {
+  font-weight: 500;
+  font-size: 14px;
+}
+@media (min-width: 640px) {
+  .font-navlink {
+    font-size: 16px;
+  }
+}
+/* @media (min-width: 1024px) {
+  .font-navlink {
+    font-size: 18px;
+  }
+} */
+@media (min-width: 1536px) {
+  .font-navlink {
+    font-size: 20px;
+  }
+}
+
+/* 2. Heading - Large */
+.font-heading-lg {
+  font-weight: 600;
+  font-size: 24px;
+}
+@media (min-width: 768px) {
+  .font-heading-lg {
+    font-size: 32px;
+  }
+}
+@media (min-width: 1536px) {
+  .font-heading-lg {
+    font-size: 40px;
+  }
+}
+
+/* 3. Button - Large */
+.font-button-xl {
+  font-weight: 500;
+  font-size: 18px;
+}
+@media (min-width: 1024px) {
+  .font-button-xl {
+    font-size: 28px;
+  }
+}
+@media (min-width: 1536px) {
+  .font-button-xl {
+    font-size: 35px;
+  }
+}
+
+/* 4. Button - Medium */
+.font-button-md {
+  font-weight: 500;
+  font-size: 16px;
+}
+@media (min-width: 1536px) {
+  .font-button-md {
+    font-size: 20px;
+  }
+}
+
+/* 5. Heading - XXL */
+.font-heading-xxl {
+  font-weight: 700;
+  font-size: 36px;
+}
+@media (min-width: 1280px) {
+  .font-heading-xxl {
+    font-size: 52px;
+  }
+}
+@media (min-width: 1536px) {
+  .font-heading-xxl {
+    font-size: 65px;
+  }
+}
+
+/* 6. Heading - Hero */
+.font-heading-hero {
+  font-weight: 700;
+  font-size: 40px;
+}
+@media (min-width: 1280px) {
+  .font-heading-hero {
+    font-size: 60px;
+  }
+}
+@media (min-width: 1536px) {
+  .font-heading-hero {
+    font-size: 70px;
+  }
+}
+
+/* 7. Heading - Section */
+.font-heading-section {
+  font-weight: 700;
+  font-size: 20px;
+}
+@media (min-width: 768px) {
+  .font-heading-section {
+    font-size: 26px;
+  }
+}
+@media (min-width: 1536px) {
+  .font-heading-section {
+    font-size: 30px;
+  }
+}
+
+/* 8. Paragraph - Large */
+.font-paragraph-lg {
+  font-weight: 500;
+  font-size: 18px;
+}
+@media (min-width: 1024px) {
+  .font-paragraph-lg {
+    font-size: 24px;
+  }
+}
+@media (min-width: 1536px) {
+  .font-paragraph-lg {
+    font-size: 30px;
+  }
+}
+
+/* 9. Button - Large Alt */
+.font-button-lg-alt {
+  font-weight: 500;
+  font-size: 18px;
+}
+@media (min-width: 1280px) {
+  .font-button-lg-alt {
+    font-size: 22px;
+  }
+}
+@media (min-width: 1536px) {
+  .font-button-lg-alt {
+    font-size: 25px;
+  }
+}
+
+/* 10. Paragraph - Medium */
+.font-paragraph-md {
+  font-weight: 500;
+  font-size: 20px;
+}
+@media (min-width: 1280px) {
+  .font-paragraph-md {
+    font-size: 26px;
+  }
+}
+@media (min-width: 1536px) {
+  .font-paragraph-md {
+    font-size: 30px;
+  }
+}
+
+/* 11. Heading - XL */
+.font-heading-xl {
+  font-weight: 700;
+  font-size: 30px;
+}
+@media (min-width: 1280px) {
+  .font-heading-xl {
+    font-size: 40px;
+  }
+}
+@media (min-width: 1536px) {
+  .font-heading-xl {
+    font-size: 50px;
+  }
+}
+
+/* 12. Paragraph - XLarge */
+.font-paragraph-xl {
+  font-weight: 500;
+  font-size: 20px;
+}
+@media (min-width: 1280px) {
+  .font-paragraph-xl {
+    font-size: 26px;
+  }
+}
+@media (min-width: 1536px) {
+  .font-paragraph-xl {
+    font-size: 30px;
+  }
+}
+
+/* 13. Button - XL Alt */
+.font-button-xl-alt {
+  font-weight: 500;
+  font-size: 18px;
+}
+@media (min-width: 1280px) {
+  .font-button-xl-alt {
+    font-size: 26px;
+  }
+}
+@media (min-width: 1536px) {
+  .font-button-xl-alt {
+    font-size: 30px;
+  }
+}
+
+/* 14. Heading - Display */
+.font-heading-display {
+  font-weight: 700;
+  font-size: 36px;
+}
+@media (min-width: 1280px) {
+  .font-heading-display {
+    font-size: 48px;
+  }
+}
+@media (min-width: 1536px) {
+  .font-heading-display {
+    font-size: 60px;
+  }
+}
+
+/* 15. Button - Bold */
+.font-button-bold {
+  font-weight: 700;
+  font-size: 22px;
+}
+@media (min-width: 1536px) {
+  .font-button-bold {
+    font-size: 30px;
+  }
+}
+
+/* 16. Footer Navlinks */
+.font-footer-link {
+  font-weight: 500;
+  font-size: 14px;
+}
+@media (min-width: 1536px) {
+  .font-footer-link {
+    font-size: 20px;
+  }
+}
+/* 17. Button - Light (15px, weight 400) */
+.font-button-light {
+  font-weight: 500;
+  font-size: 12px;
+}
+@media (min-width: 768px) {
+  .font-button-light {
+    font-size: 13px;
+  }
+}
+@media (min-width: 1280px) {
+  .font-button-light {
+    font-size: 14px;
+  }
+}
+@media (min-width: 1536px) {
+  .font-button-light {
+    font-size: 15px;
+  }
+}

@@ -116,12 +116,12 @@ const Navbar = () => {
           </Link>
 
           {/* Desktop Nav */}
-          <div className="hidden lg:flex text-white xl:text-p3 text-p4 font-medium xl:space-x-6 space-x-3 items-center">
+          <div className="hidden lg:flex  font-navlink xl:space-x-6 space-x-3 items-center">
             {navLinks.map((link) => (
               <span
                 key={link.name}
                 onClick={() => handleNavClick(link)}
-                className={`cursor-pointer text-p4 transition ${
+                className={`cursor-pointer transition ${
                   link.isRoute
                     ? activeRoute === link.path
                       ? "text-primary"
@@ -137,7 +137,7 @@ const Navbar = () => {
 
             <button
               onClick={openLoginModal}
-              className="relative cursor-pointer inline-block text-p5 font-medium text-white group overflow-hidden px-5 py-2"
+              className="relative cursor-pointer inline-block font-button-light  text-white group overflow-hidden px-5 py-2"
             >
               <span className="absolute inset-0 w-full h-full bg-primary transition-transform duration-300 ease-out transform -translate-x-full group-hover:translate-x-0"></span>
               <span className="absolute inset-0 border border-primary rounded"></span>
@@ -145,7 +145,7 @@ const Navbar = () => {
             </button>
             <button
               onClick={openSignupModal}
-              className="relative cursor-pointer inline-block text-p5 font-medium text-black bg-primary px-5 py-2 rounded hover:opacity-90 transition-all duration-300 shadow-md hover:shadow-xl"
+              className="relative cursor-pointer inline-block font-button-light  text-black bg-primary px-5 py-2 rounded hover:opacity-90 transition-all duration-300 shadow-md hover:shadow-xl"
             >
               <span className="relative z-10">Sign Up</span>
             </button>
@@ -173,7 +173,7 @@ const Navbar = () => {
               <span
                 key={link.name}
                 onClick={() => handleNavClick(link)}
-                className={`block text-p5 cursor-pointer transition ${
+                className={`block font-navlink cursor-pointer transition ${
                   link.isRoute
                     ? activeRoute === link.path
                       ? "text-primary"
@@ -189,13 +189,13 @@ const Navbar = () => {
 
             <button
               onClick={openLoginModal}
-              className="block text-p5 font-medium cursor-pointer text-white border border-primary px-4 py-2 rounded hover:bg-primary hover:text-black transition"
+              className="block font-button-light cursor-pointer text-white border border-primary px-4 py-2 rounded hover:bg-primary hover:text-black transition"
             >
               Log In
             </button>
             <button
               onClick={openSignupModal}
-              className="block text-p5 font-medium cursor-pointer bg-primary text-black px-4 py-2 rounded hover:bg-primary transition"
+              className="block font-button-light cursor-pointer bg-primary text-black px-4 py-2 rounded hover:bg-primary transition"
             >
               Sign Up
             </button>
