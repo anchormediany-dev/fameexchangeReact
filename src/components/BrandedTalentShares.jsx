@@ -107,9 +107,8 @@ const BrandedTalentShares = () => {
       <div className="absolute w-40 h-40 bg-white/10 rounded-full bottom-[-40px] right-[-40px] z-0" />
       <div className="absolute w-32 h-32 bg-white/5 rounded-full bottom-[100px] right-[50px] z-0" />
       <div className="container">
-        <h2 className=" py-5 font-heading-hero text-center text-primary">
-          20
-          <span className="text-white"> Top Branded Talent Shares (BTS)</span>
+        <h2 className=" py-5 font-heading-hero text-center text-white">
+          Top Branded Talent Shares (BTS)
         </h2>
 
         <div className="space-y-6">
@@ -159,7 +158,7 @@ const BrandedTalentShares = () => {
 
               {/* Trade Button */}
               <div className="w-full md:w-[120px] flex justify-center md:justify-end">
-                <button className="bg-gray font-button-lg-alt text-yellow-400 px-6 py-2 rounded-xl transition-colors duration-300 shadow-[4px_4px_4px_#000000EB,_-4px_-4px_12px_#FFFFFF08]">
+                <button className="bg-primary font-button-lg-alt text-white px-6 py-2 rounded-xl transition-colors duration-300 shadow-[4px_4px_4px_#000000EB,_-4px_-4px_12px_#FFFFFF08]">
                   Trade
                 </button>
               </div>
@@ -172,7 +171,7 @@ const BrandedTalentShares = () => {
             to="/talent-tokens"
             className="bg-lightYellow font-button-xl-alt hover:scale-105 cursor-pointer text-black px-6 py-3 rounded-md transition-all duration-300 relative group "
           >
-            Discover More
+            Learn More
           </Link>
         </div>
       </div>
