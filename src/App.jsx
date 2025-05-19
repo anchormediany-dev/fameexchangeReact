@@ -17,6 +17,7 @@ import AboutCrypto from "./pages/about_crypto/AboutCrypto";
 import HowToBuySell from "./pages/how_to_buy_sell/HowToBuySell";
 import TermsConditions from "./pages/terms_conditions/TermsConditions";
 import PrivacyPolicy from "./pages/privacy_policy/PrivacyPolicy";
+import Home2 from "./pages/home/Home2";
 
 const Page = ({ title }) => (
   <MotionPageWrapper>
@@ -38,7 +39,8 @@ export default function App() {
               path="/"
               element={
                 <MotionPageWrapper>
-                  <Home />
+                  {/* <Home /> */}
+                  <Home2 />
                 </MotionPageWrapper>
               }
             />

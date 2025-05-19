@@ -37,7 +37,7 @@ body {
 }
 /* Content Width Setting */
 .container {
-  max-width: 1280px; /* Equivalent to max-w-7xl */
+  max-width: 1440px; /* Equivalent to max-w-7xl */
   margin-left: auto;
   margin-right: auto;
   padding-left: 1rem; /* px-4 = 16px */
@@ -65,7 +65,7 @@ body {
 }
 /* Hero Section */
 .hero-bg {
-  background-image: url("/src/assets/images/hero-bg.png");
+  background-image: url("/src/assets/images/hero-bg2.png");
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
