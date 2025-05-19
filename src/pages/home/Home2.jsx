@@ -9,6 +9,7 @@ import Navbar2 from "../../components/Navbar2";
 import HeroSection from "../../components/HeroSection";
 import BrandedTalentShares from "../../components/BrandedTalentShares";
 import TalentTradingSection from "../../components/TalentTradingSection";
+import Footer2 from "../../components/Footer2";
 
 const Home2 = () => {
   const location = useLocation();
@@ -39,7 +40,7 @@ const Home2 = () => {
       <HeroSection />
       <TalentTradingSection />
       <BrandedTalentShares />
-
+      <Footer2 />
       {isCalculatingNetworthOpen && <CalculatingNetworthPopup />}
       {showCongratulationsPopup && <CongratulationsPopup />}
     </div>
