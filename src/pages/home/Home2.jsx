@@ -1,8 +1,6 @@
 import { useLocation } from "react-router-dom";
 import { useState, useEffect } from "react";
 import Footer from "../../components/Footer";
-import VideoBanner from "../../components/VideoBanner";
-import NetworkStatistics from "../../components/NetworkStatistics";
 import FameCoin from "../../components/FameCoin";
 import Process from "../../components/Process";
 import CalculatingNetworthPopup from "../../components/CalculatingNetworthPopup";
@@ -10,6 +8,7 @@ import CongratulationsPopup from "../../components/CongratulationsPopup";
 import Navbar2 from "../../components/Navbar2";
 import HeroSection from "../../components/HeroSection";
 import BrandedTalentShares from "../../components/BrandedTalentShares";
+import TalentTradingSection from "../../components/TalentTradingSection";
 
 const Home2 = () => {
   const location = useLocation();
@@ -38,6 +37,7 @@ const Home2 = () => {
     <div>
       <Navbar2 />
       <HeroSection />
+      <TalentTradingSection />
       <BrandedTalentShares />
       <FameCoin />
       <Process />
