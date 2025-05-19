@@ -39,9 +39,6 @@ const Home2 = () => {
       <HeroSection />
       <TalentTradingSection />
       <BrandedTalentShares />
-      <FameCoin />
-      <Process />
-      <Footer />
 
       {isCalculatingNetworthOpen && <CalculatingNetworthPopup />}
       {showCongratulationsPopup && <CongratulationsPopup />}
