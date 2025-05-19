@@ -3,7 +3,7 @@ const HeroSection = () => {
     <section className="w-full hero-bg flex flex-col justify-center min-h-[90vh] sm:min-h-screen px-4 sm:px-6 lg:px-8 py-20 sm:py-0">
       <div className="container mx-auto">
         {/* Main Heading */}
-        <h2 className="font-bold text-white mb-4 sm:mb-6 leading-tight">
+        <h2 className="font-bold text-white mb-4 sm:mb-6 leading-16">
           <span className="block text-xl sm:text-2xl md:text-3xl">
             The Fame Exchange
           </span>
@@ -27,7 +27,7 @@ const HeroSection = () => {
 
         {/* CTA Button */}
         <div className="flex flex-col sm:flex-row gap-4">
-          <button className="bg-primary text-white font-bold py-3 px-6 sm:py-4 sm:px-8 rounded-md text-base sm:text-lg transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl">
+          <button className="bg-primary cursor-pointer text-white font-bold py-3 px-6 sm:py-4 sm:px-8 rounded-md text-base sm:text-lg transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl">
             Start Investment
           </button>
         </div>
