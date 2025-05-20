@@ -10,6 +10,7 @@ import HeroSection from "../../components/HeroSection";
 import BrandedTalentShares from "../../components/BrandedTalentShares";
 import TalentTradingSection from "../../components/TalentTradingSection";
 import Footer2 from "../../components/Footer2";
+import DownloadApp from "../../components/DownloadApp";
 
 const Home2 = () => {
   const location = useLocation();
@@ -40,6 +41,7 @@ const Home2 = () => {
       <HeroSection />
       <TalentTradingSection />
       <BrandedTalentShares />
+      <DownloadApp />
       <Footer2 />
       {isCalculatingNetworthOpen && <CalculatingNetworthPopup />}
       {showCongratulationsPopup && <CongratulationsPopup />}

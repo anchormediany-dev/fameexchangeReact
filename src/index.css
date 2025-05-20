@@ -70,6 +70,11 @@ body {
   background-position: center;
   background-repeat: no-repeat;
 }
+.bg-app-section {
+  background-image: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)),
+    url("./assets/images/mobile mockup image.jpg");
+  background-size: cover;
+}
 .play-video-button {
   background-color: #e7c64c;
   clip-path: polygon(0 0, 100% 0, 95% 100%, 0% 100%);
