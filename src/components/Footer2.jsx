@@ -5,8 +5,8 @@ import appStore from "../assets/images/app-store.png";
 import { Link } from "react-router-dom";
 const Footer = () => {
   return (
-    <footer className="bg-black   text-white w-full">
-      <div className=" z-10 space-y-8 container  py-12">
+    <footer className="bg-black   text-white w-full py-12 2xl:py-16">
+      <div className=" z-10 space-y-8 container">
         <div className="grid grid-cols-1 md:grid-cols-3 xl:grid-cols-5  gap-8">
           {/* Left Block */}
           <div className="space-y-4">
@@ -26,7 +26,7 @@ const Footer = () => {
               offering tangible g benefits that go beyond the virtual realm.
             </p>
             <div className="flex justify-center">
-              <button className="bg-[#a38b41] hover:bg-[#a38a41d0] font-medium text-black py-3 px-6 mt-2">
+              <button className="bg-[#a38b41] hover:brightness-110 cursor-pointer font-medium text-black py-3 px-6 mt-2 bg-gradient-to-r from-[#a18a3f] to-[#e6ca7c]">
                 GET STARTED
               </button>
             </div>
@@ -119,10 +119,10 @@ const Footer = () => {
               className="w-full p-2 bg-transparent border-b border-white outline-none"
             />
             <div className="flex space-x-4 mt-8 justify-center md:justify-start">
-              <FaFacebookF size={20} />
-              <FaTwitter size={20} />
-              <FaInstagram size={20} />
-              <FaYoutube size={20} />
+              <FaFacebookF className="cursor-pointer" size={20} />
+              <FaTwitter className="cursor-pointer" size={20} />
+              <FaInstagram className="cursor-pointer" size={20} />
+              <FaYoutube className="cursor-pointer" size={20} />
             </div>
           </div>
           {/* </div> */}

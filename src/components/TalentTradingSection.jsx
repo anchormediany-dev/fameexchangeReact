@@ -3,15 +3,15 @@ import talentTradingImage from "../assets/images/talent-trading-image.png";
 import imageText from "../assets/images/fame-exchange-image-text.png";
 const TalentTradingSection = () => {
   return (
-    <section className="bg-[#171717] text-white py-16 px-6 md:px-16 relative overflow-hidden">
-      <div className="mb-10">
-        <img src={imageText} alt="" />
+    <section className="bg-[#171717] text-white py-12 2xl:py-16 px-6 md:px-16 relative overflow-hidden">
+      <div className="container">
+        <img src={imageText} alt="talent-trading-image" />
       </div>
 
-      <div className="relative z-10 max-w-7xl mx-auto grid md:grid-cols-2 items-center gap-10">
+      <div className="relative z-10 container grid md:grid-cols-2 items-center gap-10">
         {/* Image */}
         <div className="rounded-2xl overflow-hidden">
-          <p className="text-center mb-1 heading-500-35">TALENT TRADING</p>
+          <p className="text-center mb-1 custom-heading-four">TALENT TRADING</p>
           <img
             src={talentTradingImage}
             alt="Talent Trading"
@@ -21,14 +21,10 @@ const TalentTradingSection = () => {
 
         {/* Text Content */}
         <div className="space-y-6">
-          <h2 className="heading-700-50 leading-tight">
-            TRANSFORMING FAN
-            <br />
-            INTERACTION & TALENT
-            <br />
-            MONETIZATION
-          </h2>
-          <p className="text-[#878787] heading-400-20  max-w-lg">
+          <h3 className="custom-heading-one">
+            TRANSFORMING FAN INTERACTION & TALENT MONETIZATION
+          </h3>
+          <p className="text-[#878787] ">
             Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
             eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim
             ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut

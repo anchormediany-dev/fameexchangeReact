@@ -523,6 +523,26 @@ select {
   font-weight: 700;
   font-size: clamp(28px, 5vw, 50px);
 }
+.heading-700-48 {
+  font-weight: 700;
+  font-size: clamp(28px, 5vw, 48px);
+}
+.heading-700-36 {
+  font-weight: 700;
+  font-size: clamp(28px, 5vw, 36px);
+}
+.heading-700-28 {
+  font-weight: 700;
+  font-size: clamp(28px, 5vw, 28px);
+}
+.heading-700-24 {
+  font-weight: 700;
+  font-size: clamp(28px, 5vw, 24px);
+}
+.heading-700-18 {
+  font-weight: 700;
+  font-size: clamp(28px, 5vw, 18px);
+}
 .heading-500-35 {
   font-weight: 500;
   font-size: clamp(18px, 5vw, 35px);
@@ -588,4 +608,160 @@ select {
   font-weight: 500;
   font-size: clamp(12px, 5vw, 14px);
   color: #bfbfbf;
+}
+/* For All headings */
+.custom-heading-one {
+  font-size: 1.75rem; /* Default for small screens (28px) */
+  font-weight: 700;
+  line-height: 1.2;
+  margin-bottom: 1rem;
+}
+
+.custom-heading-two {
+  font-size: 1.5rem; /* Default for small screens (24px) */
+  font-weight: 700;
+  line-height: 1.2;
+  margin-bottom: 1rem;
+}
+
+.custom-heading-three {
+  font-size: 1.25rem; /* Default for small screens (20px) */
+  font-weight: 700;
+  line-height: 1.2;
+  margin-bottom: 1rem;
+}
+
+.custom-heading-four {
+  font-size: 1.125rem; /* Default for small screens (18px) */
+  font-weight: 600;
+  line-height: 1.2;
+  margin-bottom: 1rem;
+}
+
+.custom-heading-five {
+  font-size: 1rem; /* Default for small screens (16px) */
+  font-weight: 600;
+  line-height: 1.2;
+  margin-bottom: 1rem;
+}
+
+.custom-heading-six {
+  font-size: 0.875rem; /* Default for small screens (14px) */
+  font-weight: 600;
+  line-height: 1.2;
+  margin-bottom: 1rem;
+}
+
+@media (min-width: 768px) {
+  .custom-heading-one {
+    font-size: 2.25rem; /* Medium screens (36px) */
+  }
+  .custom-heading-two {
+    font-size: 2rem; /* Medium screens (32px) */
+  }
+  .custom-heading-three {
+    font-size: 1.75rem; /* Medium screens (28px) */
+  }
+  .custom-heading-four {
+    font-size: 1.3rem; /* Medium screens  */
+  }
+  .custom-heading-five {
+    font-size: 1.15rem; /* Medium screens  */
+  }
+  .custom-heading-six {
+    font-size: 1rem; /* Medium screens  */
+  }
+}
+
+@media (min-width: 1024px) {
+  .custom-heading-one {
+    font-size: 3rem; /* Large screens (48px) */
+  }
+  .custom-heading-two {
+    font-size: 2.5rem; /* Large screens (40px) */
+  }
+  .custom-heading-three {
+    font-size: 2rem; /* Large screens (32px) */
+  }
+  .custom-heading-four {
+    font-size: 1.5rem; /* Large screens  */
+  }
+  .custom-heading-five {
+    font-size: 1.25rem; /* Large screens  */
+  }
+  .custom-heading-six {
+    font-size: 1.125rem; /* Large screens  */
+  }
+}
+
+@media (min-width: 1280px) {
+  .custom-heading-one {
+    font-size: 3.25rem;
+  }
+  .custom-heading-two {
+    font-size: 2.75rem;
+  }
+  .custom-heading-three {
+    font-size: 2.25rem;
+  }
+  .custom-heading-four {
+    font-size: 1.6rem;
+  }
+  .custom-heading-five {
+    font-size: 1.3rem;
+  }
+  .custom-heading-six {
+    font-size: 1.15rem;
+  }
+}
+
+@media (min-width: 1536px) {
+  .custom-heading-one {
+    font-size: 3.5rem; /* Extra-Large screens (56px) */
+  }
+  .custom-heading-two {
+    font-size: 3rem; /* Extra-Large screens (56px) */
+  }
+  .custom-heading-three {
+    font-size: 2.5rem; /* Extra-Large screens (56px) */
+  }
+  .custom-heading-four {
+    font-size: 1.75rem;
+  }
+  .custom-heading-five {
+    font-size: 1.5rem;
+  }
+  .custom-heading-six {
+    font-size: 1.25rem;
+  }
+}
+/* Custom Pargraph */
+p {
+  font-size: 0.75rem; /* Default for small screens (12px) */
+  line-height: 1.5;
+  margin-bottom: 1rem;
+}
+
+@media (min-width: 768px) {
+  p {
+    font-size: 0.8rem; /* Medium screens (16px) */
+  }
+}
+
+@media (min-width: 1024px) {
+  p {
+    font-size: 0.9rem; /* Large screens (16px) */
+  }
+}
+
+@media (min-width: 1280px) {
+  p {
+    font-size: 1.125rem;
+  }
+}
+
+@media (min-width: 1536px) {
+  p {
+    font-size: 1.125rem; /* Extra-large screens (18px) */
+  }
 }

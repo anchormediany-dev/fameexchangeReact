@@ -80,12 +80,12 @@ const BrandedTalentShares = () => {
   ];
 
   return (
-    <div className=" bg-[#171717] text-white p-6 md:p-12">
-      <div className="mb-10">
+    <div className=" bg-[#171717] text-white py-12 2xl:py-16">
+      <div className="mb-10 container">
         <img src={imageText} alt="" />
       </div>
-      <div className="max-w-7xl mx-auto">
-        <h1 className="heading-700-50 mb-8 text-center">
+      <div className="container">
+        <h1 className="custom-heading-two mb-8 text-center">
           Top Branded Talent Shares (BTS)
         </h1>
 
@@ -100,18 +100,24 @@ const BrandedTalentShares = () => {
                   className="border-b border-gray-800 hover:bg-gray-900/50 transition-colors"
                 >
                   {/* Artist Name */}
-                  <td className="py-4 px-4 font-medium">{talent.name}</td>
+                  <td className="py-4 custom-heading-six px-4 font-medium">
+                    {talent.name}
+                  </td>
 
                   {/* Price */}
-                  <td className="py-4 px-4 text-right">{talent.price}</td>
+                  <td className="py-4 custom-heading-six  px-4 text-right">
+                    {talent.price}
+                  </td>
 
                   {/* Change */}
-                  <td className="py-4 px-4 text-right text-[#15ab9c]">
+                  <td className="py-4 custom-heading-six  px-4 text-right text-[#15ab9c]">
                     {talent.change}
                   </td>
 
                   {/* Volume */}
-                  <td className="py-4 px-4 text-right">{talent.volume}</td>
+                  <td className="py-4 px-4 custom-heading-six text-right">
+                    {talent.volume}
+                  </td>
 
                   {/* Trade Now Button with Chart */}
                   <td className="py-4 px-4">
@@ -142,7 +148,7 @@ const BrandedTalentShares = () => {
 
         {/* Learn More Button */}
         <div className="mt-10 text-center">
-          <button className="bg-[#e0aa0d] hover:brightness-110 transition-all text-white py-3 px-6 rounded-md">
+          <button className="bg-[#e0aa0d] hover:brightness-110 transition-all cursor-pointer text-white py-3 px-6 rounded-md">
             Learn more
           </button>
         </div>
