@@ -656,6 +656,12 @@ select {
   line-height: 1.2;
   margin-bottom: 1rem;
 }
+.custom-heading-seven {
+  font-size: 1.125rem;
+  font-weight: 500;
+  line-height: 1.2;
+  margin-bottom: 1rem;
+}
 
 @media (min-width: 768px) {
   .custom-heading-one {
@@ -675,6 +681,9 @@ select {
   }
   .custom-heading-six {
     font-size: 1rem; /* Medium screens  */
+  }
+  .custom-heading-seven {
+    font-size: 1.3rem; /* Medium screens  */
   }
 }
 
@@ -697,6 +706,9 @@ select {
   .custom-heading-six {
     font-size: 1.125rem; /* Large screens  */
   }
+  .custom-heading-seven {
+    font-size: 1.5rem;
+  }
 }
 
 @media (min-width: 1280px) {
@@ -718,6 +730,9 @@ select {
   .custom-heading-six {
     font-size: 1.15rem;
   }
+  .custom-heading-seven {
+    font-size: 1.6rem;
+  }
 }
 
 @media (min-width: 1536px) {
@@ -738,6 +753,9 @@ select {
   }
   .custom-heading-six {
     font-size: 1.25rem;
+  }
+  .custom-heading-seven {
+    font-size: 1.75rem;
   }
 }
 /* Custom Pargraph */
