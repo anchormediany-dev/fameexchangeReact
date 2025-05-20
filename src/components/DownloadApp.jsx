@@ -46,7 +46,7 @@ const AppShowcase = () => {
             making investing in your favorite talents simple and enjoyable.
           </p>
 
-          <button className="bg-[#a38b41] hover:brightness-110 hover:scale-105 cursor-pointer font-medium text-black py-3 px-6 mt-2 bg-gradient-to-r from-[#a18a3f] to-[#e6ca7c]">
+          <button className="bg-[#a38b41] hover:brightness-110 hover:scale-105 cursor-pointer font-medium text-black transition-all duration-300 py-3 px-6 mt-2 bg-gradient-to-r from-[#a18a3f] to-[#e6ca7c]">
             Download App
           </button>
         </div>
