@@ -4,8 +4,14 @@ import imageText from "../assets/images/fame-exchange-image-text.png";
 const TalentTradingSection = () => {
   return (
     <section className="bg-[#171717] text-white py-12 2xl:py-16 px-6 md:px-16 relative overflow-hidden">
-      <div className="container">
-        <img src={imageText} alt="talent-trading-image" />
+      <div className="mt-2 container">
+        <img
+          style={{
+            width: "-webkit-fill-available",
+          }}
+          src={imageText}
+          alt="Graphic Text"
+        />
       </div>
 
       <div className="relative z-10 container grid md:grid-cols-2 items-center gap-10">
