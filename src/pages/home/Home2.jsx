@@ -15,6 +15,7 @@ import VideoBanner2 from "../../components/VideoBanner2";
 import GigsEvents from "../../components/GigsEvents";
 import MeetAndGreet from "../../components/MeetGreetSection";
 import TheFuturesSection from "../../components/TheFuturesSection";
+import OurTeam from "../../components/our_team/OurTeam";
 
 const Home2 = () => {
   const location = useLocation();
@@ -50,6 +51,7 @@ const Home2 = () => {
       <TheFuturesSection />
       <GigsEvents />
       <VideoBanner2 />
+      <OurTeam />
       <Footer2 />
       {isCalculatingNetworthOpen && <CalculatingNetworthPopup />}
       {showCongratulationsPopup && <CongratulationsPopup />}
