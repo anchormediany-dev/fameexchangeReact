@@ -46,7 +46,7 @@ const MeetAndGreet = () => {
 
       <div className={`${styles.container} container`}>
         <div className={styles.header}>
-          <p className={styles.subtitle}>THE INVERSE</p>
+          <p className="custom-heading-six text-[#a38b41]">THE INVERSE</p>
           <h2 className="custom-heading-one">
             MEET & GREET WITH YOUR FAVOURITE TALENT
           </h2>
