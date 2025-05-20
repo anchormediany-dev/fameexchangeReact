@@ -567,4 +567,25 @@ select {
   font-weight: 400;
   font-size: clamp(12px, 5vw, 25px);
 }
-
+.section__padding {
+  padding-top: clamp(20px, 5vw, 80px);
+  padding-bottom: clamp(20px, 5vw, 80px);
+}
+.footer_nav_title {
+  font-weight: 600;
+  font-size: clamp(12px, 5vw, 24px);
+}
+.footer_nav_link {
+  font-weight: 400;
+  font-size: clamp(12px, 5vw, 18px);
+  color: #bfbfbf;
+}
+.footer_paragraph {
+  font-weight: 400;
+  font-size: clamp(12px, 5vw, 14px);
+}
+.footer_copyright {
+  font-weight: 500;
+  font-size: clamp(12px, 5vw, 14px);
+  color: #bfbfbf;
+}
