@@ -81,8 +81,14 @@ const BrandedTalentShares = () => {
 
   return (
     <div className=" bg-[#171717] text-white py-12 2xl:py-16">
-      <div className="mb-10 container">
-        <img src={imageText} alt="" />
+      <div className="mt-2 container">
+        <img
+          style={{
+            width: "-webkit-fill-available",
+          }}
+          src={imageText}
+          alt="Graphic Text"
+        />
       </div>
       <div className="container">
         <h1 className="custom-heading-two mb-8 text-center">
