@@ -12,6 +12,7 @@ import TalentTradingSection from "../../components/TalentTradingSection";
 import Footer2 from "../../components/Footer2";
 import DownloadApp from "../../components/DownloadApp";
 import VideoBanner2 from "../../components/VideoBanner2";
+import GigsEvents from "../../components/GigsEvents";
 
 const Home2 = () => {
   const location = useLocation();
@@ -43,6 +44,7 @@ const Home2 = () => {
       <TalentTradingSection />
       <BrandedTalentShares />
       <DownloadApp />
+      <GigsEvents />
       <VideoBanner2 />
       <Footer2 />
       {isCalculatingNetworthOpen && <CalculatingNetworthPopup />}
