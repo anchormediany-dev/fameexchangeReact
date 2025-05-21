@@ -16,6 +16,7 @@ import OurTeam from "../../components/our_team/OurTeam";
 import ContactUs from "../../components/contact/ContactUs";
 import Podcast from "../../components/podcast/Podcast";
 import Faq from "../../components/faq/Faq";
+import CustomerReview from "../../components/customer_review/CustomerReview";
 const Home2 = () => {
   const location = useLocation();
   const [isCalculatingNetworthOpen, setIsCalculatingNetworthOpen] =
@@ -48,6 +49,7 @@ const Home2 = () => {
       <DownloadApp />
       <MeetAndGreet />
       <Podcast />
+      <CustomerReview />
       <TheFuturesSection />
       <GigsEvents />
       <VideoBanner2 />

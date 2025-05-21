@@ -1,0 +1,102 @@
+/* CustomerReview.css */
+
+/* Reviews section */
+.reviews-section {
+  position: relative;
+  width: 100%;
+  padding-bottom: 40px;
+}
+
+/* Swiper container adjustments */
+.reviews-swiper {
+  padding: 10px 0 30px;
+}
+
+/* Review card styling */
+.review-card {
+  background: linear-gradient(to bottom, #d6be6b, #9d8334);
+  padding: 24px 20px;
+  height: 100%;
+  min-height: 220px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  text-align: center;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.review-name {
+  color: #000;
+  text-transform: uppercase;
+}
+
+.review-text {
+  color: #000;
+  flex-grow: 1;
+}
+
+.review-stars {
+  color: #000;
+  font-size: 1.25rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 4px;
+}
+
+/* Make sure icons display inline correctly */
+.review-stars svg {
+  display: inline-block;
+  width: 1.25rem;
+  height: 1.25rem;
+}
+
+/* View All button */
+.view-all-button {
+  background: linear-gradient(to bottom, #d6be6b, #9d8334);
+  color: #000;
+  font-weight: 600;
+  padding: 10px 30px;
+  border: none;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-size: 0.9rem;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.view-all-button:hover {
+  box-shadow: 0 4px 12px rgba(214, 190, 107, 0.4);
+  transform: translateY(-2px);
+}
+
+/* Hide any swiper navigation and pagination that might be auto-generated */
+.swiper-pagination,
+.swiper-button-next,
+.swiper-button-prev {
+  display: none !important;
+}
+
+/* Make sure the swiper slides have equal height */
+.swiper-slide {
+  height: auto;
+}
+
+/* Media queries for responsiveness */
+@media (max-width: 768px) {
+  .review-card {
+    min-height: 200px;
+  }
+
+  .review-name {
+    font-size: 1.1rem;
+  }
+
+  .review-text {
+    font-size: 0.9rem;
+  }
+
+  .review-stars {
+    font-size: 1.1rem;
+  }
+}
