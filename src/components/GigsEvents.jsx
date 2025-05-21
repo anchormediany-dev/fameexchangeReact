@@ -271,7 +271,11 @@ const GigsEvents = () => {
           ))}
         </StyledSwiper>
 
-        <AllEventsButton href="#">VIEW ALL</AllEventsButton>
+        <div className="flex justify-center">
+          <button className="custom-button-two" href="#">
+            VIEW ALL
+          </button>
+        </div>
       </div>
     </EventsSectionWrapper>
   );

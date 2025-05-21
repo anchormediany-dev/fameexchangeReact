@@ -40,7 +40,7 @@ const OurTeam = () => {
     <section className="py-12 2xl:py-16 bg-[#171717]">
       <div className="container">
         <div className="text-center mb-12">
-          <h3 className="text-sm md:text-base uppercase tracking-wider text-[#a38b41] mb-2">
+          <h3 className="custom-heading-six text-[#a38b41] uppercase  mb-2">
             OUR TEAM
           </h3>
           <h2 className="text-3xl md:text-4xl font-bold text-white">
@@ -113,6 +113,11 @@ const OurTeam = () => {
 
         {/* Custom pagination container */}
         <div className="team-pagination flex justify-center mt-4 gap-2"></div>
+      </div>{" "}
+      <div className="flex justify-center">
+        <button className="custom-button-two" href="#">
+          VIEW ALL
+        </button>
       </div>
     </section>
   );
