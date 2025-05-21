@@ -8,7 +8,9 @@ const Podcast = () => {
       }}
     >
       <div className="absolute z-50 top-10 left-[50%] md:left-[60%] -translate-x-1/2">
-        <h1 className="custom-heading-one mb-4 sm:mb-6">World-Class App</h1>
+        <h1 className="custom-heading-one mb-4 sm:mb-6">
+          FAMEX <span className="text-[#a38b41]">PODCAST</span>
+        </h1>
         <p>
           The experience that will be sure to give you exposure to spot light
           your career
