@@ -15,6 +15,7 @@ import TheFuturesSection from "../../components/TheFuturesSection";
 import OurTeam from "../../components/our_team/OurTeam";
 import ContactUs from "../../components/contact/ContactUs";
 import Podcast from "../../components/podcast/Podcast";
+import Faq from "../../components/faq/Faq";
 const Home2 = () => {
   const location = useLocation();
   const [isCalculatingNetworthOpen, setIsCalculatingNetworthOpen] =
@@ -51,6 +52,7 @@ const Home2 = () => {
       <GigsEvents />
       <VideoBanner2 />
       <OurTeam />
+      <Faq />
       <ContactUs />
       <Footer2 />
       {isCalculatingNetworthOpen && <CalculatingNetworthPopup />}
