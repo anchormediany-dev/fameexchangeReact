@@ -1,6 +1,60 @@
 import { LineChart, Line, ResponsiveContainer } from "recharts";
+import { motion, useInView, useAnimation } from "framer-motion";
+import { useEffect, useRef } from "react";
 import imageText from "../assets/images/fame-exchange-image-text.png";
+
 const BrandedTalentShares = () => {
+  const sectionRef = useRef(null);
+  const isInView = useInView(sectionRef, { once: true, amount: 0.1 });
+  const controls = useAnimation();
+
+  useEffect(() => {
+    if (isInView) {
+      controls.start("visible");
+    }
+  }, [isInView, controls]);
+
+  // Animation variants
+  const fadeInUpVariant = {
+    hidden: { opacity: 0, y: 20 },
+    visible: { opacity: 1, y: 0, transition: { duration: 0.6 } },
+  };
+
+  const tableRowVariant = {
+    hidden: { opacity: 0, y: 20 },
+    visible: (i) => ({
+      opacity: 1,
+      y: 0,
+      transition: {
+        duration: 0.5,
+        delay: 0.4 + i * 0.1,
+        ease: "easeOut",
+      },
+    }),
+  };
+
+  const chartVariant = {
+    hidden: { opacity: 0, scaleY: 0 },
+    visible: (i) => ({
+      opacity: 1,
+      scaleY: 1,
+      transition: {
+        duration: 0.6,
+        delay: 0.6 + i * 0.1,
+        ease: "easeOut",
+      },
+    }),
+  };
+
+  const buttonVariant = {
+    hidden: { opacity: 0, scale: 0.9 },
+    visible: {
+      opacity: 1,
+      scale: 1,
+      transition: { duration: 0.4, delay: 0.9 },
+    },
+  };
+
   const talentData = [
     {
       name: "Pink",
@@ -79,9 +133,48 @@ const BrandedTalentShares = () => {
     },
   ];
 
+  // Chart animation setup - draw the line progressively
+  const chartLineRef = useRef([]);
+
+  useEffect(() => {
+    if (isInView && chartLineRef.current.length > 0) {
+      chartLineRef.current.forEach((chart, index) => {
+        if (chart) {
+          setTimeout(() => {
+            // Find the SVG path element within the chart
+            const path = chart.querySelector(".recharts-line-curve");
+            if (path) {
+              // Get the total length of the path
+              const length = path.getTotalLength();
+
+              // Set up the animation
+              path.style.strokeDasharray = length;
+              path.style.strokeDashoffset = length;
+              path.style.transition = "stroke-dashoffset 1.5s ease-in-out";
+
+              // Trigger the animation
+              setTimeout(() => {
+                path.style.strokeDashoffset = 0;
+              }, 100);
+            }
+          }, 800 + index * 150); // Staggered delay for each chart
+        }
+      });
+    }
+  }, [isInView]);
+
   return (
-    <div id="brands" className=" bg-[#171717] text-white py-12 2xl:py-16">
-      <div className="mt-2 container">
+    <div
+      ref={sectionRef}
+      id="brands"
+      className="bg-[#171717] text-white py-12 2xl:py-16"
+    >
+      <motion.div
+        variants={fadeInUpVariant}
+        initial="hidden"
+        animate={controls}
+        className="mt-2 container"
+      >
         <img
           style={{
             width: "-webkit-fill-available",
@@ -89,20 +182,41 @@ const BrandedTalentShares = () => {
           src={imageText}
           alt="Graphic Text"
         />
-      </div>
+      </motion.div>
+
       <div className="container">
-        <h1 className="custom-heading-two mb-8 text-center">
+        <motion.h1
+          variants={fadeInUpVariant}
+          initial="hidden"
+          animate={controls}
+          transition={{ delay: 0.2 }}
+          className="custom-heading-two mb-8 text-center"
+        >
           Top Branded Talent Shares (BTS)
-        </h1>
+        </motion.h1>
 
         {/* Table */}
-        <div className="overflow-x-auto">
+        <motion.div
+          variants={fadeInUpVariant}
+          initial="hidden"
+          animate={controls}
+          transition={{ delay: 0.3 }}
+          className="overflow-x-auto"
+        >
           <table className="w-full border-collapse">
             {/* Table Body */}
             <tbody>
               {talentData.map((talent, index) => (
-                <tr
+                <motion.tr
                   key={index}
+                  custom={index}
+                  variants={tableRowVariant}
+                  initial="hidden"
+                  animate={controls}
+                  whileHover={{
+                    backgroundColor: "rgba(255,255,255,0.05)",
+                    transition: { duration: 0.2 },
+                  }}
                   className="border-b border-gray-800 hover:bg-gray-900/50 transition-colors"
                 >
                   {/* Artist Name */}
@@ -111,12 +225,12 @@ const BrandedTalentShares = () => {
                   </td>
 
                   {/* Price */}
-                  <td className="py-4 custom-heading-six  px-4 text-right">
+                  <td className="py-4 custom-heading-six px-4 text-right">
                     {talent.price}
                   </td>
 
                   {/* Change */}
-                  <td className="py-4 custom-heading-six  px-4 text-right text-[#15ab9c]">
+                  <td className="py-4 custom-heading-six px-4 text-right text-[#15ab9c]">
                     {talent.change}
                   </td>
 
@@ -128,7 +242,14 @@ const BrandedTalentShares = () => {
                   {/* Trade Now Button with Chart */}
                   <td className="py-4 px-4">
                     <div className="flex items-center justify-end gap-4">
-                      <div className="w-24 h-10">
+                      <motion.div
+                        custom={index}
+                        variants={chartVariant}
+                        initial="hidden"
+                        animate={controls}
+                        className="w-24 h-10"
+                        ref={(el) => (chartLineRef.current[index] = el)}
+                      >
                         <ResponsiveContainer width="100%" height="100%">
                           <LineChart data={talent.graphData}>
                             <Line
@@ -140,24 +261,37 @@ const BrandedTalentShares = () => {
                             />
                           </LineChart>
                         </ResponsiveContainer>
-                      </div>
-                      <button className="bg-[#e0aa0d] cursor-pointer hover:brightness-110 transition-all text-white px-4 py-2 rounded-md whitespace-nowrap">
+                      </motion.div>
+                      <motion.button
+                        whileHover={{ scale: 1.05 }}
+                        whileTap={{ scale: 0.95 }}
+                        className="bg-[#e0aa0d] cursor-pointer hover:brightness-110 transition-all text-white px-4 py-2 rounded-md whitespace-nowrap"
+                      >
                         Trade Now
-                      </button>
+                      </motion.button>
                     </div>
                   </td>
-                </tr>
+                </motion.tr>
               ))}
             </tbody>
           </table>
-        </div>
+        </motion.div>
 
         {/* Learn More Button */}
-        <div className="mt-10 text-center">
-          <button className="bg-[#e0aa0d] hover:brightness-110 transition-all cursor-pointer text-white py-3 px-6 rounded-md">
+        <motion.div
+          variants={buttonVariant}
+          initial="hidden"
+          animate={controls}
+          className="mt-10 text-center"
+        >
+          <motion.button
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
+            className="bg-[#e0aa0d] hover:brightness-110 transition-all cursor-pointer text-white py-3 px-6 rounded-md"
+          >
             Learn more
-          </button>
-        </div>
+          </motion.button>
+        </motion.div>
       </div>
     </div>
   );
