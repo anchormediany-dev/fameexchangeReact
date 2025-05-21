@@ -41,7 +41,7 @@ const MeetAndGreet = () => {
   ];
 
   return (
-    <section className={`${styles.section} py-12 2xl:py-16`}>
+    <section id="meet_greet" className={`${styles.section} py-12 2xl:py-16`}>
       <div className={styles.backgroundPattern}></div>
 
       <div className={`${styles.container} container`}>

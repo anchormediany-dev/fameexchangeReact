@@ -231,7 +231,7 @@ const eventsData = [
 
 const GigsEvents = () => {
   return (
-    <EventsSectionWrapper className="py-12 2xl:py-16">
+    <EventsSectionWrapper id="events" className="py-12 2xl:py-16">
       <div className="container">
         <SectionTitle>GIGS EVENTS</SectionTitle>
         <SubTitle>POST YOUR GIG/ EVENTS "HERE FOR FREE"</SubTitle>

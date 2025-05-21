@@ -80,7 +80,7 @@ const BrandedTalentShares = () => {
   ];
 
   return (
-    <div className=" bg-[#171717] text-white py-12 2xl:py-16">
+    <div id="brands" className=" bg-[#171717] text-white py-12 2xl:py-16">
       <div className="mt-2 container">
         <img
           style={{

@@ -8,14 +8,14 @@ import SignupModal from "./SignupModal";
 import { MdOutlinePerson } from "react-icons/md";
 
 const navLinks = [
-  { name: "Home", path: "/", isRoute: true },
-  { name: "Stocks", path: "/stocks", isRoute: true },
-  { name: "Brands", path: "/brands", isRoute: true },
-  { name: "Meet & Greet", path: "/meet-greet", isRoute: true },
-  { name: "Advertising", path: "/advertising", isRoute: true },
-  { name: "Events", path: "/events", isRoute: true },
-  { name: "About Us", path: "/about", isRoute: true },
-  { name: "Contact us", path: "/contact", isRoute: true },
+  { name: "Home", scrollTo: "home" },
+  { name: "Stocks", scrollTo: "stocks" },
+  { name: "Brands", scrollTo: "brands" },
+  { name: "Meet & Greet", scrollTo: "meet_greet" },
+  { name: "Advertising", scrollTo: "advertising" },
+  { name: "Events", scrollTo: "events" },
+  { name: "About Us", scrollTo: "about_us" },
+  { name: "Contact us", scrollTo: "contact_us" },
 ];
 
 const history = {
@@ -115,7 +115,10 @@ const Navbar2 = () => {
   return (
     <>
       {/* Desktop Navbar */}
-      <nav className="absolute w-full z-50 bg-transparent transition-all duration-300">
+      <nav
+        id="home"
+        className="absolute w-full z-50 bg-transparent transition-all duration-300"
+      >
         <div className="container mx-auto px-4">
           <div className="flex justify-between items-center h-[80px]">
             <Link

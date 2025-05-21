@@ -46,7 +46,10 @@ const ContactForm = () => {
   };
 
   return (
-    <div className={`contact-container  ${isLoaded ? "loaded" : ""}`}>
+    <div
+      id="contact_us"
+      className={`contact-container  ${isLoaded ? "loaded" : ""}`}
+    >
       <div className="contact-inner 2xl:py-16 py-12 container ">
         <div className="contact-form-section">
           <div className="contact-header">
