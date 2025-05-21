@@ -1,0 +1,118 @@
+/* PodcastStyles.css */
+
+/* Variables */
+:root {
+  --gold-color: #d5b468;
+  --gold-gradient: linear-gradient(135deg, #f5d485 10%, #a58638 90%);
+}
+
+/* Gold text color (used by Tailwind class 'text-gold') */
+.text-gold {
+  color: var(--gold-color);
+}
+
+/* Container background */
+.podcast-container {
+  background-color: #000000;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Golden curve background */
+.golden-curve-bg {
+  background-image: url("/api/placeholder/1200/1200");
+  background-size: cover;
+  background-position: center;
+  opacity: 0.7;
+  background-repeat: no-repeat;
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 50%;
+  height: 100%;
+  z-index: 0;
+  clip-path: path("M300,0 Q600,300 300,700 L1000,700 L1000,0 Z");
+}
+
+/* Microphone image */
+.microphone-image {
+  width: 500px;
+  height: 350px;
+  background-image: url("/api/placeholder/600/400");
+  background-size: contain;
+  background-position: center;
+  background-repeat: no-repeat;
+  position: relative;
+}
+
+/* Interview button styling */
+.interview-button {
+  background: var(--gold-gradient);
+  color: #000000;
+  font-weight: 600;
+  text-transform: uppercase;
+  font-size: 14px;
+  padding: 10px 20px;
+  letter-spacing: 1px;
+  position: relative;
+  overflow: hidden;
+  transition: all 0.3s ease;
+}
+
+.interview-button::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    to right,
+    transparent 0%,
+    rgba(255, 255, 255, 0.3) 50%,
+    transparent 100%
+  );
+  transition: 0.5s ease;
+}
+
+.interview-button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 10px rgba(213, 180, 104, 0.3);
+}
+
+.interview-button:hover::after {
+  left: 100%;
+}
+
+/* Media queries for responsiveness */
+@media (max-width: 768px) {
+  .microphone-image {
+    width: 300px;
+    height: 210px;
+  }
+
+  .golden-curve-bg {
+    width: 100%;
+    opacity: 0.4;
+    clip-path: none;
+  }
+
+  .exclusively-on,
+  .fame-exchange {
+    transform: rotate(-90deg) scale(0.8);
+  }
+}
+
+@media (max-width: 640px) {
+  .microphone-image {
+    width: 250px;
+    height: 175px;
+  }
+}
+
+/* Required for proper font rendering */
+body {
+  font-family: "Arial", sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}

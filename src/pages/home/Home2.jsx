@@ -1,8 +1,5 @@
 import { useLocation } from "react-router-dom";
 import { useState, useEffect } from "react";
-import Footer from "../../components/Footer";
-import FameCoin from "../../components/FameCoin";
-import Process from "../../components/Process";
 import CalculatingNetworthPopup from "../../components/CalculatingNetworthPopup";
 import CongratulationsPopup from "../../components/CongratulationsPopup";
 import Navbar2 from "../../components/Navbar2";
@@ -17,7 +14,7 @@ import MeetAndGreet from "../../components/MeetGreetSection";
 import TheFuturesSection from "../../components/TheFuturesSection";
 import OurTeam from "../../components/our_team/OurTeam";
 import ContactUs from "../../components/contact/ContactUs";
-
+import Podcast from "../../components/podcast/Podcast";
 const Home2 = () => {
   const location = useLocation();
   const [isCalculatingNetworthOpen, setIsCalculatingNetworthOpen] =
@@ -49,6 +46,7 @@ const Home2 = () => {
       <BrandedTalentShares />
       <DownloadApp />
       <MeetAndGreet />
+      <Podcast />
       <TheFuturesSection />
       <GigsEvents />
       <VideoBanner2 />
