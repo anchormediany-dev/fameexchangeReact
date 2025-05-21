@@ -24,7 +24,9 @@ const Podcast = () => {
             BE INTERVIEWED
           </button>
         </div>
-        <a href="mailto:info@FAMEXPODCAST.com">info@FAMEXPODCAST.com</a>
+        <a className="text-gray-400" href="mailto:info@FAMEXPODCAST.com">
+          info@FAMEXPODCAST.com
+        </a>
       </div>
     </div>
   );
