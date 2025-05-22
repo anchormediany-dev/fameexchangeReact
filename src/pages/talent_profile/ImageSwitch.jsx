@@ -250,12 +250,12 @@ When I'm not working:
         </div>
 
         {/* Action Cards - Third Column */}
-        <div className="flex flex-col gap-5">
+        <div className="flex flex-col justify-center gap-5">
           {actions.map(({ label, icon: Icon, description }) => (
             <div
               style={{ height: "-webkit-fill-available" }}
               key={label}
-              className="bg-white/5 backdrop-blur-xl border border-white/10 rounded-2xl shadow-xl p-4 md:p-6 hover:shadow-[#a38b41]/20 hover:border-[#a38b41]/50 transition-all"
+              className="bg-white/5 flex justify-center items-center backdrop-blur-xl border border-white/10 rounded-2xl shadow-xl p-4 md:p-6 hover:shadow-[#a38b41]/20 hover:border-[#a38b41]/50 transition-all"
             >
               <div className="flex flex-col items-center text-center">
                 <div className="w-10 h-10 md:w-12 md:h-12 rounded-full bg-[#a38b41]/20 flex items-center justify-center mb-3">
@@ -269,7 +269,7 @@ When I'm not working:
                 </p>
                 <button
                   onClick={() => handleActionClick(label)}
-                  className="w-full cursor-pointer bg-[#a38b41] hover:bg-[#8a7637] text-white font-medium py-2 px-4 rounded-lg transition-colors text-sm md:text-base"
+                  className="w-full cursor-pointer bg-[#a38b41] hover:bg-[#8a7637] text-white font-medium py-2 rounded-lg transition-colors text-sm md:text-base"
                 >
                   {label}
                 </button>
