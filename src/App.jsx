@@ -18,6 +18,7 @@ import HowToBuySell from "./pages/how_to_buy_sell/HowToBuySell";
 import TermsConditions from "./pages/terms_conditions/TermsConditions";
 import PrivacyPolicy from "./pages/privacy_policy/PrivacyPolicy";
 import Home2 from "./pages/home/Home2";
+import TalentProfile from "./pages/talent_profile/TalentProfile";
 
 const Page = ({ title }) => (
   <MotionPageWrapper>
@@ -97,6 +98,14 @@ export default function App() {
               element={
                 <MotionPageWrapper>
                   <HelpSupport />
+                </MotionPageWrapper>
+              }
+            />
+            <Route
+              path="/talent-profile"
+              element={
+                <MotionPageWrapper>
+                  <TalentProfile />
                 </MotionPageWrapper>
               }
             />

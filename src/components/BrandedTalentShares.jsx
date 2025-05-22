@@ -2,6 +2,7 @@ import { LineChart, Line, ResponsiveContainer } from "recharts";
 import { motion, useInView, useAnimation } from "framer-motion";
 import { useEffect, useRef } from "react";
 import imageText from "../assets/images/fame-exchange-image-text.png";
+import { Link } from "react-router-dom";
 
 const BrandedTalentShares = () => {
   const sectionRef = useRef(null);
@@ -221,7 +222,7 @@ const BrandedTalentShares = () => {
                 >
                   {/* Artist Name */}
                   <td className="py-4 custom-heading-six px-4 font-medium">
-                    {talent.name}
+                    <Link to="/talent-profile"> {talent.name}</Link>
                   </td>
 
                   {/* Price */}
