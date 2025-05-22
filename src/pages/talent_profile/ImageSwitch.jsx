@@ -31,7 +31,7 @@ const actions = [
   },
 ];
 
-const TalentProfileEditor = () => {
+const ImageSwitch = () => {
   const [selectedImage, setSelectedImage] = useState(0);
   const [editingBio, setEditingBio] = useState(false);
   const [bioText, setBioText] = useState(
@@ -117,7 +117,7 @@ When I'm not working:
   };
 
   return (
-    <div className="min-h-screen py-8 md:py-12">
+    <div className=" py-12 2xl:py-16">
       <div className="container  grid grid-cols-1 lg:grid-cols-3 gap-6 px-4">
         {/* Modern Smart Gallery - First Column */}
         <div className="bg-white/5 backdrop-blur-xl border border-white/10 rounded-2xl shadow-xl p-4 md:p-6">
@@ -281,4 +281,4 @@ When I'm not working:
   );
 };
 
-export default TalentProfileEditor;
+export default ImageSwitch;
