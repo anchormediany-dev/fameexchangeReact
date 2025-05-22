@@ -7,6 +7,7 @@ import {
   FaTimes,
 } from "react-icons/fa";
 import ImageSwitch from "./ImageSwitch";
+import NotificationTalentLayout from "./NotificationRequests";
 
 const TalentProfile = () => {
   const [searchValue, setSearchValue] = useState("");
@@ -237,6 +238,7 @@ const TalentProfile = () => {
         </div>
       </div>
       <ImageSwitch />
+      <NotificationTalentLayout />
     </section>
   );
 };
