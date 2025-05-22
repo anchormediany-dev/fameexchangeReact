@@ -1,3 +1,4 @@
+import { motion } from "framer-motion";
 import imageText from "../../assets/images/fame-exchange-image-text.png";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Autoplay } from "swiper/modules";
@@ -40,18 +41,159 @@ const CustomerReviews = () => {
     },
   ];
 
+  // Animation variants
+  const containerVariants = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: {
+        duration: 0.6,
+        staggerChildren: 0.2,
+      },
+    },
+  };
+
+  const fadeInUp = {
+    hidden: {
+      opacity: 0,
+      y: 30,
+    },
+    visible: {
+      opacity: 1,
+      y: 0,
+      transition: {
+        duration: 0.6,
+        ease: "easeOut",
+      },
+    },
+  };
+
+  const headingVariants = {
+    hidden: {
+      opacity: 0,
+      y: -20,
+    },
+    visible: {
+      opacity: 1,
+      y: 0,
+      transition: {
+        duration: 0.7,
+        ease: "easeOut",
+      },
+    },
+  };
+
+  const swiperVariants = {
+    hidden: {
+      opacity: 0,
+      scale: 0.95,
+    },
+    visible: {
+      opacity: 1,
+      scale: 1,
+      transition: {
+        duration: 0.8,
+        ease: "easeOut",
+        delay: 0.3,
+      },
+    },
+  };
+
+  const buttonVariants = {
+    hidden: {
+      opacity: 0,
+      y: 20,
+    },
+    visible: {
+      opacity: 1,
+      y: 0,
+      transition: {
+        duration: 0.5,
+        ease: "easeOut",
+      },
+    },
+    hover: {
+      scale: 1.05,
+      transition: {
+        duration: 0.2,
+        ease: "easeInOut",
+      },
+    },
+    tap: {
+      scale: 0.95,
+      transition: {
+        duration: 0.1,
+      },
+    },
+  };
+
+  const imageVariants = {
+    hidden: {
+      opacity: 0,
+      y: 40,
+    },
+    visible: {
+      opacity: 1,
+      y: 0,
+      transition: {
+        duration: 0.8,
+        ease: "easeOut",
+        delay: 0.5,
+      },
+    },
+  };
+
+  const starVariants = {
+    hidden: {
+      opacity: 0,
+      scale: 0,
+    },
+    visible: (i) => ({
+      opacity: 1,
+      scale: 1,
+      transition: {
+        duration: 0.3,
+        delay: i * 0.1,
+        ease: "backOut",
+      },
+    }),
+    hover: {
+      scale: 1.2,
+      color: "#ffd700",
+      transition: {
+        duration: 0.2,
+      },
+    },
+  };
+
   // Always show 3 specific reviews (can be first 3 or any 3 you choose)
   const displayedReviews = reviews.slice(0, 3);
 
   return (
-    <div className="bg-[#171717] py-12 2xl:py-16 px-4">
+    <motion.div
+      className="bg-[#171717] py-12 2xl:py-16 px-4"
+      initial="hidden"
+      whileInView="visible"
+      viewport={{ once: true, amount: 0.1 }}
+      variants={containerVariants}
+    >
       <div className="container">
         {/* Heading */}
-        <div className="text-center mb-12">
-          <h2 className="text-white custom-heading-one mb-4">
+        <motion.div className="text-center mb-12" variants={containerVariants}>
+          <motion.h2
+            className="text-white custom-heading-one mb-4"
+            variants={headingVariants}
+            whileHover={{
+              scale: 1.02,
+              transition: { duration: 0.2 },
+            }}
+          >
             Customer Reviews
-          </h2>
-          <p className="text-gray-400 text-center max-w-3xl mx-auto leading-relaxed">
+          </motion.h2>
+          <motion.p
+            className="text-gray-400 text-center max-w-3xl mx-auto leading-relaxed"
+            variants={fadeInUp}
+          >
             See what customers are saying about this product.
             <br />
             Read their reviews and ratings to help with your decision.
@@ -59,11 +201,14 @@ const CustomerReviews = () => {
             Our customers appreciate the quality fit and style of our products.
             <br />
             If you purchased this item please leave a review to help others.
-          </p>
-        </div>
+          </motion.p>
+        </motion.div>
 
-        {/* Reviews carousel - auto-rotating but always showing 3 cards */}
-        <div className="reviews-section relative">
+        {/* Reviews carousel */}
+        <motion.div
+          className="reviews-section relative"
+          variants={swiperVariants}
+        >
           <Swiper
             modules={[Autoplay]}
             spaceBetween={80}
@@ -75,58 +220,117 @@ const CustomerReviews = () => {
             loop={true}
             className="reviews-swiper"
             breakpoints={{
-              // When screen width is less than 768px
               0: {
                 slidesPerView: 1,
                 spaceBetween: 10,
               },
-              // When screen width is >= 768px
               768: {
                 slidesPerView: 2,
                 spaceBetween: 15,
               },
-              // When screen width is >= 1024px
               1024: {
                 slidesPerView: 3,
                 spaceBetween: 20,
               },
             }}
           >
-            {reviews.map((review) => (
+            {reviews.map((review, index) => (
               <SwiperSlide key={review.id}>
-                <div className="review-card">
-                  <h3 className="review-name custom-heading-seven">
+                <motion.div
+                  className="review-card"
+                  initial={{ opacity: 0, y: 30 }}
+                  whileInView={{
+                    opacity: 1,
+                    y: 0,
+                    transition: {
+                      duration: 0.5,
+                      delay: index * 0.1,
+                      ease: "easeOut",
+                    },
+                  }}
+                  viewport={{ once: true }}
+                  whileHover={{
+                    y: -5,
+                    scale: 1.02,
+                    boxShadow: "0 10px 30px rgba(163, 139, 65, 0.1)",
+                    transition: { duration: 0.3 },
+                  }}
+                >
+                  <motion.h3
+                    className="review-name custom-heading-seven"
+                    whileHover={{
+                      color: "#a38b41",
+                      transition: { duration: 0.2 },
+                    }}
+                  >
                     {review.name}
-                  </h3>
-                  <p className="review-text">{review.text}</p>
-                  <div className="review-stars">
+                  </motion.h3>
+
+                  <motion.p
+                    className="review-text"
+                    initial={{ opacity: 0 }}
+                    whileInView={{
+                      opacity: 1,
+                      transition: { duration: 0.5, delay: 0.2 },
+                    }}
+                    viewport={{ once: true }}
+                  >
+                    {review.text}
+                  </motion.p>
+
+                  <motion.div
+                    className="review-stars"
+                    initial="hidden"
+                    whileInView="visible"
+                    viewport={{ once: true }}
+                  >
                     {Array(review.rating)
                       .fill()
                       .map((_, i) => (
-                        <FaStar key={i} />
+                        <motion.div
+                          key={i}
+                          variants={starVariants}
+                          custom={i}
+                          whileHover="hover"
+                          style={{ display: "inline-block" }}
+                        >
+                          <FaStar />
+                        </motion.div>
                       ))}
-                  </div>
-                </div>
+                  </motion.div>
+                </motion.div>
               </SwiperSlide>
             ))}
           </Swiper>
 
           {/* View All button */}
-          <div className="text-center mt-10">
-            <button className="view-all-button">VIEW ALL</button>
-          </div>
-        </div>
+          <motion.div className="text-center mt-10" variants={buttonVariants}>
+            <motion.button
+              className="view-all-button"
+              variants={buttonVariants}
+              whileHover="hover"
+              whileTap="tap"
+            >
+              VIEW ALL
+            </motion.button>
+          </motion.div>
+        </motion.div>
       </div>
-      <div className="mt-2 container">
-        <img
+
+      <motion.div className="mt-2 container" variants={imageVariants}>
+        <motion.img
           style={{
             width: "-webkit-fill-available",
           }}
           src={imageText}
           alt="Graphic Text"
+          whileHover={{
+            scale: 1.02,
+            transition: { duration: 0.3, ease: "easeOut" },
+          }}
         />
-      </div>
-    </div>
+      </motion.div>
+    </motion.div>
   );
 };
 
