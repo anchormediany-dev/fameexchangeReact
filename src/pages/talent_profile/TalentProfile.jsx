@@ -7,7 +7,7 @@ import {
   FaTimes,
 } from "react-icons/fa";
 
-const ModernSearchSection = () => {
+const TalentProfile = () => {
   const [searchValue, setSearchValue] = useState("");
   const [isFocused, setIsFocused] = useState(false);
 
@@ -19,8 +19,25 @@ const ModernSearchSection = () => {
     }
   };
 
-  const clearSearch = () => {
+  const clearSearch = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
     setSearchValue("");
+    // Keep focus on input after clearing
+    const input = e.target.closest("form").querySelector("input");
+    if (input) {
+      input.focus();
+    }
+  };
+
+  const handleInputBlur = (e) => {
+    // Only blur if the click is outside the form
+    const form = e.currentTarget.closest("form");
+    setTimeout(() => {
+      if (!form.contains(document.activeElement)) {
+        setIsFocused(false);
+      }
+    }, 100);
   };
 
   const handleRecalculate = () => {
@@ -39,8 +56,8 @@ const ModernSearchSection = () => {
   };
 
   return (
-    <section className="w-full bg-gradient-to-br from-gray-950 via-slate-900 to-gray-950 py-6 sm:py-8 lg:py-12 px-4 sm:px-6 lg:px-8">
-      <div className="max-w-8xl mx-auto">
+    <section className="w-full bg-gradient-to-br py-12 2xl:py-16 px-4 sm:px-6 lg:px-8">
+      <div className="container mt-10 z-50">
         {/* Ultra Modern Single Row Layout */}
         <div className="flex flex-col xl:flex-row gap-4 xl:gap-6 items-stretch">
           {/* Modern Compact Search Bar */}
@@ -60,7 +77,7 @@ const ModernSearchSection = () => {
                 <div
                   className={`
                   absolute inset-0 bg-gradient-to-r from-[#a38b41]/10 via-transparent to-[#a38b41]/10 
-                  transition-opacity duration-500 ${
+                  transition-opacity duration-500 pointer-events-none z-5 ${
                     isFocused ? "opacity-100" : "opacity-0"
                   }
                 `}
@@ -72,19 +89,20 @@ const ModernSearchSection = () => {
                   value={searchValue}
                   onChange={(e) => setSearchValue(e.target.value)}
                   onFocus={() => setIsFocused(true)}
-                  onBlur={() => setIsFocused(false)}
+                  onBlur={handleInputBlur}
                   placeholder="Search talent, stage, crypto..."
                   className="relative z-10 w-full h-14 sm:h-16 bg-transparent pl-5 pr-24 text-white placeholder-gray-400 focus:outline-none text-sm sm:text-base font-medium placeholder:font-normal"
                 />
 
                 {/* Search Actions */}
-                <div className="absolute right-3 top-1/2 -translate-y-1/2 flex items-center gap-2">
+                <div className="absolute right-3 top-1/2 -translate-y-1/2 flex items-center gap-2 z-20">
                   {/* Clear Button */}
                   {searchValue && (
                     <button
                       type="button"
+                      onMouseDown={(e) => e.preventDefault()} // Prevent input blur
                       onClick={clearSearch}
-                      className="p-2 text-gray-400 hover:text-white transition-all duration-200 rounded-xl hover:bg-white/10 active:scale-95"
+                      className="p-2 text-gray-400 hover:text-white transition-all duration-200 rounded-xl hover:bg-white/10 active:scale-95 z-30"
                     >
                       <FaTimes size={12} />
                     </button>
@@ -94,8 +112,9 @@ const ModernSearchSection = () => {
                   <button
                     type="submit"
                     disabled={!searchValue.trim()}
+                    onMouseDown={(e) => e.preventDefault()} // Prevent input blur
                     className={`
-                      group/search relative overflow-hidden px-4 py-2 rounded-xl font-bold text-xs transition-all duration-300 flex items-center gap-2
+                      group/search relative overflow-hidden px-4 py-2 rounded-xl font-bold text-xs transition-all duration-300 flex items-center gap-2 z-30
                       ${
                         searchValue.trim()
                           ? "bg-gradient-to-r from-[#a38b41] via-[#c2ab67] to-[#e6ca7c] text-black shadow-lg hover:shadow-xl hover:shadow-[#a38b41]/30 hover:scale-110 active:scale-95"
@@ -119,7 +138,7 @@ const ModernSearchSection = () => {
                 <div
                   className={`
                   absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent via-white/5 to-transparent 
-                  transition-transform duration-1000 ${
+                  transition-transform duration-1000 pointer-events-none z-5 ${
                     isFocused ? "translate-x-full" : ""
                   }
                 `}
@@ -220,4 +239,4 @@ const ModernSearchSection = () => {
   );
 };
 
-export default ModernSearchSection;
+export default TalentProfile;
