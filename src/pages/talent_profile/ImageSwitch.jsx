@@ -261,7 +261,7 @@ When I'm not working:
                 <div className="w-10 h-10 md:w-12 md:h-12 rounded-full bg-[#a38b41]/20 flex items-center justify-center mb-3">
                   <Icon className="text-[#a38b41] text-lg md:text-xl" />
                 </div>
-                <h3 className="text-base md:text-lg font-bold text-white mb-1">
+                <h3 className="text-lg font-semiboldd text-white mb-1">
                   {label}
                 </h3>
                 <p className="text-gray-300 text-xs md:text-sm mb-3">

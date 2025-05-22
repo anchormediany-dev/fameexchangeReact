@@ -8,6 +8,7 @@ import {
 } from "react-icons/fa";
 import ImageSwitch from "./ImageSwitch";
 import NotificationTalentLayout from "./NotificationRequests";
+import FriendsEventsSection from "./FriendsAndEvents";
 
 const TalentProfile = () => {
   const [searchValue, setSearchValue] = useState("");
@@ -119,7 +120,7 @@ const TalentProfile = () => {
                       group/search relative overflow-hidden px-4 py-2 rounded-xl font-bold text-xs transition-all duration-300 flex items-center gap-2 z-30
                       ${
                         searchValue.trim()
-                          ? "bg-gradient-to-r from-[#a38b41] via-[#c2ab67] to-[#e6ca7c] text-black shadow-lg hover:shadow-xl hover:shadow-[#a38b41]/30 hover:scale-110 active:scale-95"
+                          ? "bg-gradient-to-r from-[#a38b41] cursor-pointer via-[#c2ab67] to-[#e6ca7c] text-black shadow-lg hover:shadow-xl hover:shadow-[#a38b41]/30 hover:scale-110 active:scale-95"
                           : "bg-gray-600/30 text-gray-500 cursor-not-allowed"
                       }
                     `}
@@ -159,7 +160,7 @@ const TalentProfile = () => {
               {/* Animated background */}
               <div className="absolute inset-0 bg-gradient-to-br from-[#a38b41]/5 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
 
-              <div className="relative z-10 flex items-center justify-center gap-3 h-full px-3 sm:px-6">
+              <div className="relative  cursor-pointer z-10 flex items-center justify-center gap-3 h-full px-3 sm:px-6">
                 {/* Icon Container */}
                 <div className="relative">
                   <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-xl bg-gradient-to-br from-[#a38b41]/20 to-[#a38b41]/5 border border-[#a38b41]/20 flex items-center justify-center group-hover:scale-110 group-hover:rotate-3 transition-all duration-500">
@@ -170,7 +171,7 @@ const TalentProfile = () => {
                 </div>
 
                 {/* Title */}
-                <h3 className="text-white font-bold text-xs sm:text-sm lg:text-base group-hover:text-[#a38b41] transition-colors duration-300 leading-tight">
+                <h3 className="text-white text-sm md:text-base font-medium   group-hover:text-[#a38b41] transition-colors duration-300 leading-tight">
                   Recalculate Value
                 </h3>
               </div>
@@ -187,7 +188,7 @@ const TalentProfile = () => {
               {/* Animated background */}
               <div className="absolute inset-0 bg-gradient-to-br from-[#a38b41]/5 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
 
-              <div className="relative z-10 flex items-center justify-center gap-3 h-full px-3 sm:px-6">
+              <div className="relative cursor-pointer z-10 flex items-center justify-center gap-3 h-full px-3 sm:px-6">
                 {/* Icon Container */}
                 <div className="relative">
                   <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-xl bg-gradient-to-br from-[#a38b41]/20 to-[#a38b41]/5 border border-[#a38b41]/20 flex items-center justify-center group-hover:scale-110 group-hover:rotate-3 transition-all duration-500">
@@ -198,7 +199,7 @@ const TalentProfile = () => {
                 </div>
 
                 {/* Title */}
-                <h3 className="text-white font-bold text-xs sm:text-sm lg:text-base group-hover:text-[#a38b41] transition-colors duration-300 leading-tight">
+                <h3 className="text-white text-sm md:text-base font-medium  group-hover:text-[#a38b41] transition-colors duration-300 leading-tight">
                   Trading Chart
                 </h3>
               </div>
@@ -215,7 +216,7 @@ const TalentProfile = () => {
               {/* Animated background */}
               <div className="absolute inset-0 bg-gradient-to-br from-[#a38b41]/5 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
 
-              <div className="relative z-10 flex items-center justify-center gap-3 h-full px-3 sm:px-6">
+              <div className="relative cursor-pointer z-10 flex items-center justify-center gap-3 h-full px-3 sm:px-6">
                 {/* Icon Container */}
                 <div className="relative">
                   <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-xl bg-gradient-to-br from-[#a38b41]/20 to-[#a38b41]/5 border border-[#a38b41]/20 flex items-center justify-center group-hover:scale-110 group-hover:rotate-3 transition-all duration-500">
@@ -226,7 +227,7 @@ const TalentProfile = () => {
                 </div>
 
                 {/* Title */}
-                <h3 className="text-white font-bold text-xs sm:text-sm lg:text-base group-hover:text-[#a38b41] transition-colors duration-300 leading-tight">
+                <h3 className="text-white text-sm md:text-base font-medium   group-hover:text-[#a38b41] transition-colors duration-300 leading-tight">
                   Import Funds
                 </h3>
               </div>
@@ -239,6 +240,7 @@ const TalentProfile = () => {
       </div>
       <ImageSwitch />
       <NotificationTalentLayout />
+      <FriendsEventsSection />
     </section>
   );
 };

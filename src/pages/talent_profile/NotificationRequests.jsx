@@ -39,7 +39,7 @@ export default function NotificationTalentLayout() {
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         {/* Notifications Column */}
         <div className="bg-[#1f1f1f] border border-gray-700 rounded-xl p-6 shadow-xl">
-          <div className="flex items-center justify-center mb-6">
+          <div className="flex items-center  mb-6">
             <FaBell className="text-yellow-400 text-2xl mr-2" />
             <h2 className="text-lg font-semibold text-white uppercase">
               Notification Requests
@@ -61,7 +61,7 @@ export default function NotificationTalentLayout() {
 
         {/* Talent Links Column */}
         <div className="bg-[#1f1f1f] border border-gray-700 rounded-xl p-6 shadow-xl">
-          <div className="flex items-center justify-center mb-6">
+          <div className="flex items-center mb-6">
             <FaExternalLinkAlt className="text-yellow-400 text-2xl mr-2" />
             <h2 className="text-lg font-semibold text-white uppercase">
               Talent Links
