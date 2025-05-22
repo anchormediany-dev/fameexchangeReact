@@ -6,6 +6,7 @@ import {
   FaWallet,
   FaTimes,
 } from "react-icons/fa";
+import ImageSwitch from "./ImageSwitch";
 
 const TalentProfile = () => {
   const [searchValue, setSearchValue] = useState("");
@@ -235,6 +236,7 @@ const TalentProfile = () => {
           </div>
         </div>
       </div>
+      <ImageSwitch />
     </section>
   );
 };
