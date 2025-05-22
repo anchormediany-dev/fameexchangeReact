@@ -1,4 +1,5 @@
 import styled from "styled-components";
+import { motion } from "framer-motion";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation, Pagination, Autoplay } from "swiper/modules";
 import "swiper/css";
@@ -8,6 +9,7 @@ import comedyNightImage from "../assets/images/comedy-night.png";
 import summerBeatsMusicImage from "../assets/images/summer-beats-music.png";
 import sportsFantasticsImage from "../assets/images/sports-fantastics.png";
 import hollywoodImage from "../assets/images/hollywood-sign-night_Fotor.jpg";
+
 const EventsSectionWrapper = styled.section`
   width: 100%;
   background-image: linear-gradient(rgba(0, 0, 0, 0.85), rgba(0, 0, 0, 0.85)),
@@ -126,29 +128,6 @@ const ViewAllButton = styled.a`
   }
 `;
 
-const AllEventsButton = styled.a`
-  display: block;
-  background: linear-gradient(to right, #a18a3f, #c2ab67, #e6ca7c);
-  color: #000;
-  padding: 12px 30px;
-  text-align: center;
-  text-decoration: none;
-  text-transform: uppercase;
-  font-weight: 700;
-  font-size: 1rem;
-  letter-spacing: 1px;
-  border-radius: 4px;
-  margin: 40px auto 0;
-  max-width: 200px;
-  transition: all 0.3s ease;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
-
-  &:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.4);
-  }
-`;
-
 // Custom Swiper Styles
 const StyledSwiper = styled(Swiper)`
   padding: 20px 10px 50px;
@@ -231,53 +210,91 @@ const eventsData = [
 
 const GigsEvents = () => {
   return (
-    <EventsSectionWrapper id="events" className="py-12 2xl:py-16">
-      <div className="container">
-        <SectionTitle>GIGS EVENTS</SectionTitle>
-        <SubTitle>POST YOUR GIG/ EVENTS "HERE FOR FREE"</SubTitle>
+    <motion.div
+      initial={{ opacity: 0 }}
+      whileInView={{ opacity: 1 }}
+      viewport={{ once: true }}
+      transition={{ duration: 0.8 }}
+    >
+      <EventsSectionWrapper id="events" className="py-12 2xl:py-16">
+        <div className="container">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6 }}
+          >
+            <SectionTitle>GIGS EVENTS</SectionTitle>
+          </motion.div>
 
-        <StyledSwiper
-          modules={[Navigation, Pagination, Autoplay]}
-          spaceBetween={80}
-          slidesPerView={1}
-          //   navigation={true}
-          //   pagination={{ clickable: true }}
-          autoplay={{
-            delay: 5000,
-            disableOnInteraction: false,
-          }}
-          breakpoints={{
-            640: {
-              slidesPerView: 2,
-            },
-            1024: {
-              slidesPerView: 3,
-            },
-          }}
-        >
-          {eventsData.map((event) => (
-            <SwiperSlide key={event.id}>
-              <EventCard>
-                <EventImageContainer>
-                  <EventImage src={event.image} alt={event.title} />
-                </EventImageContainer>
-                <EventContent>
-                  <EventTitle>{event.title}</EventTitle>
-                  <EventDescription>{event.description}</EventDescription>
-                  <ViewAllButton href={event.link}>View All</ViewAllButton>
-                </EventContent>
-              </EventCard>
-            </SwiperSlide>
-          ))}
-        </StyledSwiper>
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6, delay: 0.2 }}
+          >
+            <SubTitle>POST YOUR GIG/ EVENTS "HERE FOR FREE"</SubTitle>
+          </motion.div>
 
-        <div className="flex justify-center">
-          <button className="custom-button-two" href="#">
-            VIEW ALL
-          </button>
+          <motion.div
+            initial={{ opacity: 0 }}
+            whileInView={{ opacity: 1 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6, delay: 0.4 }}
+          >
+            <StyledSwiper
+              modules={[Navigation, Pagination, Autoplay]}
+              spaceBetween={80}
+              slidesPerView={1}
+              autoplay={{
+                delay: 5000,
+                disableOnInteraction: false,
+              }}
+              breakpoints={{
+                640: {
+                  slidesPerView: 2,
+                },
+                1024: {
+                  slidesPerView: 3,
+                },
+              }}
+            >
+              {eventsData.map((event) => (
+                <SwiperSlide key={event.id}>
+                  <EventCard>
+                    <EventImageContainer>
+                      <EventImage src={event.image} alt={event.title} />
+                    </EventImageContainer>
+                    <EventContent>
+                      <EventTitle>{event.title}</EventTitle>
+                      <EventDescription>{event.description}</EventDescription>
+                      <ViewAllButton href={event.link}>View All</ViewAllButton>
+                    </EventContent>
+                  </EventCard>
+                </SwiperSlide>
+              ))}
+            </StyledSwiper>
+          </motion.div>
+
+          <motion.div
+            initial={{ opacity: 0 }}
+            whileInView={{ opacity: 1 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6, delay: 0.6 }}
+          >
+            <div className="flex justify-center">
+              <motion.button
+                className="custom-button-two"
+                whileHover={{ scale: 1.02 }}
+                transition={{ duration: 0.2 }}
+              >
+                VIEW ALL
+              </motion.button>
+            </div>
+          </motion.div>
         </div>
-      </div>
-    </EventsSectionWrapper>
+      </EventsSectionWrapper>
+    </motion.div>
   );
 };
 
