@@ -172,7 +172,7 @@ Current Projects:
         </div>
 
         {/* Responsive Grid: 2 columns on mobile, 4 on larger screens */}
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-1.5 md:gap-2">
+        <div className="grid grid-cols-4 lg:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-2 md:gap-3">
           {Array.from({ length: 8 }).map((_, idx) => (
             <div
               key={idx}
