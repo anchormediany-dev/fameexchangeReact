@@ -35,10 +35,10 @@ const socialLinks = [
 
 export default function NotificationTalentLayout() {
   return (
-    <div className="bg-[#171717] 2xl:py-16 py-12 px-4 md:px-8 container text-white">
+    <div className="bg-[#171717] px-4 md:px-8 container text-white">
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         {/* Notifications Column */}
-        <div className="bg-[#1f1f1f] border border-gray-700 rounded-xl p-6 shadow-xl">
+        <div className="bg-[#1f1f1f] rounded-xl p-6 shadow-xl">
           <div className="flex items-center  mb-6">
             <FaBell className="text-yellow-400 text-2xl mr-2" />
             <h2 className="text-lg font-semibold text-white uppercase">
@@ -60,7 +60,7 @@ export default function NotificationTalentLayout() {
         </div>
 
         {/* Talent Links Column */}
-        <div className="bg-[#1f1f1f] border border-gray-700 rounded-xl p-6 shadow-xl">
+        <div className="bg-[#1f1f1f]  rounded-xl p-6 shadow-xl">
           <div className="flex items-center mb-6">
             <FaExternalLinkAlt className="text-yellow-400 text-2xl mr-2" />
             <h2 className="text-lg font-semibold text-white uppercase">

@@ -143,197 +143,193 @@ Current Projects:
   };
 
   return (
-    <div className="py-12 2xl:py-16">
-      <div className="container grid grid-cols-1 lg:grid-cols-3 gap-6 px-4">
-        {/* Compact Image Upload Gallery - First Column */}
-        <div className="bg-white/5 backdrop-blur-xl border border-white/10 rounded-2xl shadow-xl p-3 md:p-4">
-          {/* Compact Main Image Display */}
-          <div className="relative group mb-3">
-            <div className="aspect-square md:aspect-[4/3] rounded-lg md:rounded-xl overflow-hidden bg-gradient-to-br from-gray-800 to-gray-900 shadow-md relative">
-              {images[selectedImage] ? (
-                <img
-                  src={images[selectedImage]}
-                  alt="Selected"
-                  className="w-full h-full object-cover transition-all duration-300 group-hover:scale-105"
-                />
+    <div className="container grid grid-cols-1 lg:grid-cols-3 gap-6 px-4">
+      {/* Compact Image Upload Gallery - First Column */}
+      <div className="bg-white/5 backdrop-blur-xl border border-white/10 rounded-2xl shadow-xl p-3 md:p-4">
+        {/* Compact Main Image Display */}
+        <div className="relative group mb-3">
+          <div className="aspect-square md:aspect-[4/3] rounded-lg md:rounded-xl overflow-hidden bg-gradient-to-br from-gray-800 to-gray-900 shadow-md relative">
+            {images[selectedImage] ? (
+              <img
+                src={images[selectedImage]}
+                alt="Selected"
+                className="w-full h-full object-cover transition-all duration-300 group-hover:scale-105"
+              />
+            ) : (
+              <div className="w-full h-full flex items-center justify-center text-gray-400">
+                <div className="text-center">
+                  <FaUpload className="mx-auto mb-1 text-lg md:text-xl" />
+                  <p className="text-xs">Select Image</p>
+                </div>
+              </div>
+            )}
+
+            {/* Compact Image Counter */}
+            {/* <div className="absolute bottom-1 left-1 bg-black/60 text-white px-1.5 py-0.5 rounded text-xs">
+                {selectedImage + 1}/8
+              </div> */}
+          </div>
+        </div>
+
+        {/* Responsive Grid: 2 columns on mobile, 4 on larger screens */}
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-1.5 md:gap-2">
+          {Array.from({ length: 8 }).map((_, idx) => (
+            <div
+              key={idx}
+              className={`relative group aspect-square rounded-md overflow-hidden transition-all duration-200 ${
+                selectedImage === idx
+                  ? "ring-1 md:ring-2 ring-[#a38b41] scale-105"
+                  : "hover:scale-105"
+              }`}
+            >
+              {images[idx] ? (
+                // Image exists
+                <>
+                  <button
+                    onClick={() => setSelectedImage(idx)}
+                    className="w-full h-full"
+                  >
+                    <img
+                      src={images[idx]}
+                      alt={`Slot ${idx + 1}`}
+                      className="w-full h-full object-cover"
+                    />
+                  </button>
+
+                  {/* Compact remove button */}
+                  <button
+                    onClick={() => removeImage(idx)}
+                    className="absolute top-0.5 right-0.5 bg-red-600 hover:bg-red-700 text-white p-0.5 md:p-1 rounded-full opacity-0 group-hover:opacity-100 transition-opacity text-xs"
+                  >
+                    <FaTimes size={6} className="md:hidden" />
+                    <FaTimes size={8} className="hidden md:block" />
+                  </button>
+                </>
               ) : (
-                <div className="w-full h-full flex items-center justify-center text-gray-400">
-                  <div className="text-center">
-                    <FaUpload className="mx-auto mb-1 text-lg md:text-xl" />
-                    <p className="text-xs">Select Image</p>
+                // Empty slot - compact upload area
+                <div
+                  className={`w-full h-full bg-white/5 border border-dashed border-white/20 hover:border-[#a38b41]/50 flex items-center justify-center cursor-pointer transition-all ${
+                    dragOver === idx ? "border-[#a38b41] bg-[#a38b41]/10" : ""
+                  } ${uploadingSlot === idx ? "animate-pulse" : ""}`}
+                  onClick={() => triggerFileInput(idx)}
+                  onDragOver={(e) => handleDragOver(e, idx)}
+                  onDragLeave={handleDragLeave}
+                  onDrop={(e) => handleDrop(e, idx)}
+                >
+                  <div className="text-center text-gray-400">
+                    {uploadingSlot === idx ? (
+                      <div className="animate-spin text-[#a38b41]">
+                        <FaUpload size={8} className="md:hidden" />
+                        <FaUpload size={10} className="hidden md:block" />
+                      </div>
+                    ) : (
+                      <>
+                        <FaPlus size={8} className="md:hidden" />
+                        <FaPlus size={10} className="hidden md:block" />
+                      </>
+                    )}
                   </div>
                 </div>
               )}
-
-              {/* Compact Image Counter */}
-              {/* <div className="absolute bottom-1 left-1 bg-black/60 text-white px-1.5 py-0.5 rounded text-xs">
-                {selectedImage + 1}/8
-              </div> */}
-            </div>
-          </div>
-
-          {/* Responsive Grid: 2 columns on mobile, 4 on larger screens */}
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-1.5 md:gap-2">
-            {Array.from({ length: 8 }).map((_, idx) => (
-              <div
-                key={idx}
-                className={`relative group aspect-square rounded-md overflow-hidden transition-all duration-200 ${
-                  selectedImage === idx
-                    ? "ring-1 md:ring-2 ring-[#a38b41] scale-105"
-                    : "hover:scale-105"
-                }`}
-              >
-                {images[idx] ? (
-                  // Image exists
-                  <>
-                    <button
-                      onClick={() => setSelectedImage(idx)}
-                      className="w-full h-full"
-                    >
-                      <img
-                        src={images[idx]}
-                        alt={`Slot ${idx + 1}`}
-                        className="w-full h-full object-cover"
-                      />
-                    </button>
-
-                    {/* Compact remove button */}
-                    <button
-                      onClick={() => removeImage(idx)}
-                      className="absolute top-0.5 right-0.5 bg-red-600 hover:bg-red-700 text-white p-0.5 md:p-1 rounded-full opacity-0 group-hover:opacity-100 transition-opacity text-xs"
-                    >
-                      <FaTimes size={6} className="md:hidden" />
-                      <FaTimes size={8} className="hidden md:block" />
-                    </button>
-                  </>
-                ) : (
-                  // Empty slot - compact upload area
-                  <div
-                    className={`w-full h-full bg-white/5 border border-dashed border-white/20 hover:border-[#a38b41]/50 flex items-center justify-center cursor-pointer transition-all ${
-                      dragOver === idx ? "border-[#a38b41] bg-[#a38b41]/10" : ""
-                    } ${uploadingSlot === idx ? "animate-pulse" : ""}`}
-                    onClick={() => triggerFileInput(idx)}
-                    onDragOver={(e) => handleDragOver(e, idx)}
-                    onDragLeave={handleDragLeave}
-                    onDrop={(e) => handleDrop(e, idx)}
-                  >
-                    <div className="text-center text-gray-400">
-                      {uploadingSlot === idx ? (
-                        <div className="animate-spin text-[#a38b41]">
-                          <FaUpload size={8} className="md:hidden" />
-                          <FaUpload size={10} className="hidden md:block" />
-                        </div>
-                      ) : (
-                        <>
-                          <FaPlus size={8} className="md:hidden" />
-                          <FaPlus size={10} className="hidden md:block" />
-                        </>
-                      )}
-                    </div>
-                  </div>
-                )}
-              </div>
-            ))}
-          </div>
-
-          {/* Hidden file input */}
-          <input
-            ref={fileInputRef}
-            type="file"
-            accept="image/*"
-            className="hidden"
-            onChange={(e) => {
-              if (e.target.files[0] && uploadingSlot !== null) {
-                handleFileUpload(e.target.files[0], uploadingSlot);
-              }
-            }}
-          />
-        </div>
-
-        {/* Enhanced Bio Section - Second Column */}
-        <div className="bg-white/5 backdrop-blur-xl border border-white/10 rounded-2xl shadow-xl p-4 md:p-6 flex flex-col">
-          <div className="flex-1 flex flex-col">
-            <div className="space-y-4 flex-1">
-              <div className="group relative flex-1 flex flex-col h-full">
-                <div className="flex justify-between items-center mb-2">
-                  <label className="text-xs uppercase text-gray-400 font-semibold">
-                    Biography
-                  </label>
-                  {!editingBio && (
-                    <button
-                      onClick={() => setEditingBio(true)}
-                      className="text-[#a38b41] text-xs flex items-center gap-1 hover:underline"
-                    >
-                      <FaEdit size={10} /> Edit
-                    </button>
-                  )}
-                </div>
-
-                {editingBio ? (
-                  <div className="flex-1 flex flex-col h-full">
-                    <textarea
-                      value={bioText}
-                      onChange={(e) => setBioText(e.target.value)}
-                      rows={12}
-                      className="flex-1 w-full text-sm px-3 py-2 bg-white/10 text-white border border-white/20 rounded-lg resize-none focus:outline-none focus:ring-2 focus:ring-[#a38b41] mb-3 font-mono"
-                      placeholder="Enter your biography here..."
-                    />
-                    <div className="flex gap-2 justify-end">
-                      <button
-                        onClick={cancelEdit}
-                        className="px-3 py-1.5 bg-red-600/80 hover:bg-red-700 text-white rounded-lg text-xs flex items-center gap-1"
-                      >
-                        <FaTimes size={10} />
-                        Cancel
-                      </button>
-                      <button
-                        onClick={saveBio}
-                        className="px-3 py-1.5 bg-[#a38b41] hover:bg-[#8a7637] text-white rounded-lg text-xs flex items-center gap-1"
-                      >
-                        <FaSave size={10} />
-                        Save Changes
-                      </button>
-                    </div>
-                  </div>
-                ) : (
-                  <div className="flex-1 px-3 py-2 bg-white/5 text-white border border-white/10 rounded-lg overflow-hidden">
-                    <pre className="text-sm whitespace-pre-wrap font-sans h-full">
-                      {bioText}
-                    </pre>
-                  </div>
-                )}
-              </div>
-            </div>
-          </div>
-        </div>
-
-        {/* Action Cards - Third Column */}
-        <div className="flex flex-col justify-center gap-5">
-          {actions.map(({ label, icon: Icon, description }) => (
-            <div
-              key={label}
-              className="bg-white/5 flex justify-center items-center backdrop-blur-xl border border-white/10 rounded-2xl shadow-xl p-4 md:p-6 hover:shadow-[#a38b41]/20 hover:border-[#a38b41]/50 transition-all h-full"
-            >
-              <div className="flex flex-col items-center text-center">
-                <div className="w-10 h-10 md:w-12 md:h-12 rounded-full bg-[#a38b41]/20 flex items-center justify-center mb-3">
-                  <Icon className="text-[#a38b41] text-lg md:text-xl" />
-                </div>
-                <h3 className="text-lg font-semibold text-white mb-1">
-                  {label}
-                </h3>
-                <p className="text-gray-300 text-xs md:text-sm mb-3">
-                  {description}
-                </p>
-                <button
-                  onClick={() => handleActionClick(label)}
-                  className="w-full cursor-pointer bg-[#a38b41] hover:bg-[#8a7637] text-white font-medium py-2 rounded-lg transition-colors text-sm md:text-base"
-                >
-                  {label}
-                </button>
-              </div>
             </div>
           ))}
         </div>
+
+        {/* Hidden file input */}
+        <input
+          ref={fileInputRef}
+          type="file"
+          accept="image/*"
+          className="hidden"
+          onChange={(e) => {
+            if (e.target.files[0] && uploadingSlot !== null) {
+              handleFileUpload(e.target.files[0], uploadingSlot);
+            }
+          }}
+        />
+      </div>
+
+      {/* Enhanced Bio Section - Second Column */}
+      <div className="bg-white/5 backdrop-blur-xl border border-white/10 rounded-2xl shadow-xl p-4 md:p-6 flex flex-col">
+        <div className="flex-1 flex flex-col">
+          <div className="space-y-4 flex-1">
+            <div className="group relative flex-1 flex flex-col h-full">
+              <div className="flex justify-between items-center mb-2">
+                <label className="text-xs uppercase text-gray-400 font-semibold">
+                  Biography
+                </label>
+                {!editingBio && (
+                  <button
+                    onClick={() => setEditingBio(true)}
+                    className="text-[#a38b41] text-xs flex items-center gap-1 hover:underline"
+                  >
+                    <FaEdit size={10} /> Edit
+                  </button>
+                )}
+              </div>
+
+              {editingBio ? (
+                <div className="flex-1 flex flex-col h-full">
+                  <textarea
+                    value={bioText}
+                    onChange={(e) => setBioText(e.target.value)}
+                    rows={12}
+                    className="flex-1 w-full text-sm px-3 py-2 bg-white/10 text-white border border-white/20 rounded-lg resize-none focus:outline-none focus:ring-2 focus:ring-[#a38b41] mb-3 font-mono"
+                    placeholder="Enter your biography here..."
+                  />
+                  <div className="flex gap-2 justify-end">
+                    <button
+                      onClick={cancelEdit}
+                      className="px-3 py-1.5 bg-red-600/80 hover:bg-red-700 text-white rounded-lg text-xs flex items-center gap-1"
+                    >
+                      <FaTimes size={10} />
+                      Cancel
+                    </button>
+                    <button
+                      onClick={saveBio}
+                      className="px-3 py-1.5 bg-[#a38b41] hover:bg-[#8a7637] text-white rounded-lg text-xs flex items-center gap-1"
+                    >
+                      <FaSave size={10} />
+                      Save Changes
+                    </button>
+                  </div>
+                </div>
+              ) : (
+                <div className="flex-1 px-3 py-2 bg-white/5 text-white border border-white/10 rounded-lg overflow-hidden">
+                  <pre className="text-sm whitespace-pre-wrap font-sans h-full">
+                    {bioText}
+                  </pre>
+                </div>
+              )}
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Action Cards - Third Column */}
+      <div className="flex flex-col justify-center gap-5">
+        {actions.map(({ label, icon: Icon, description }) => (
+          <div
+            key={label}
+            className="bg-white/5 flex justify-center items-center backdrop-blur-xl border border-white/10 rounded-2xl shadow-xl p-4 md:p-6 hover:shadow-[#a38b41]/20 hover:border-[#a38b41]/50 transition-all h-full"
+          >
+            <div className="flex flex-col items-center text-center">
+              <div className="w-10 h-10 md:w-12 md:h-12 rounded-full bg-[#a38b41]/20 flex items-center justify-center mb-3">
+                <Icon className="text-[#a38b41] text-lg md:text-xl" />
+              </div>
+              <h3 className="text-lg font-semibold text-white mb-1">{label}</h3>
+              <p className="text-gray-300 text-xs md:text-sm mb-3">
+                {description}
+              </p>
+              <button
+                onClick={() => handleActionClick(label)}
+                className="w-full cursor-pointer bg-[#a38b41] hover:bg-[#8a7637] text-white font-medium py-2 rounded-lg transition-colors text-sm md:text-base"
+              >
+                {label}
+              </button>
+            </div>
+          </div>
+        ))}
       </div>
     </div>
   );
