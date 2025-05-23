@@ -145,17 +145,17 @@ const Signup = () => {
     <>
       {!isOtpOpen ? (
         <MotionPageWrapper>
-          <div className="flex items-center justify-center min-h-screen px-4 py-12 relative bg-[#171717] overflow-hidden">
+          <div className="flex mt-10 py-12 2xl:py-16  relative bg-[#171717] overflow-hidden">
             {/* Overlay circles */}
             <div className="absolute top-[-100px] left-[-100px] w-[300px] h-[300px] rounded-full bg-white opacity-[0.03]" />
             <div className="absolute top-[120px] right-[180px] w-[120px] h-[120px] rounded-full bg-white opacity-[0.06]" />
             <div className="absolute bottom-[100px] left-[80px] w-[50px] h-[50px] rounded-full bg-white opacity-[0.06]" />
             <div className="absolute bottom-[40px] right-[40px] w-[80px] h-[80px] rounded-full bg-white opacity-[0.04]" />
 
-            <div className="w-full max-w-7xl mx-auto flex flex-col lg:flex-row gap-8 z-10">
+            <div className="w-full container flex flex-col lg:flex-row gap-8 z-10">
               {/* Left: Signup Form (3/4 width on large screens) */}
               <div className="lg:w-[60%] bg-[#222222] p-8 rounded-xl border border-[#333333]">
-                <h2 className="text-white text-3xl font-bold mb-8">
+                <h2 className="text-white custom-heading-two mb-8">
                   Join Fame Exchange
                 </h2>
 

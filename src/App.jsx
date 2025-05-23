@@ -147,6 +147,15 @@ export default function App() {
               </MotionPageWrapper>
             }
           />
+          {/* Signup page Page */}
+          <Route
+            path="signup"
+            element={
+              <MotionPageWrapper>
+                <SignupTwo />
+              </MotionPageWrapper>
+            }
+          />
         </Route>
 
         {/* Routes with Simple Black Header Only */}
