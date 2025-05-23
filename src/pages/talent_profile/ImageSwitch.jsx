@@ -166,9 +166,9 @@ Current Projects:
               )}
 
               {/* Compact Image Counter */}
-              <div className="absolute bottom-1 left-1 bg-black/60 text-white px-1.5 py-0.5 rounded text-xs">
+              {/* <div className="absolute bottom-1 left-1 bg-black/60 text-white px-1.5 py-0.5 rounded text-xs">
                 {selectedImage + 1}/8
-              </div>
+              </div> */}
             </div>
           </div>
 
@@ -257,14 +257,14 @@ Current Projects:
               <div className="group relative flex-1 flex flex-col h-full">
                 <div className="flex justify-between items-center mb-2">
                   <label className="text-xs uppercase text-gray-400 font-semibold">
-                    Detailed Biography
+                    Biography
                   </label>
                   {!editingBio && (
                     <button
                       onClick={() => setEditingBio(true)}
                       className="text-[#a38b41] text-xs flex items-center gap-1 hover:underline"
                     >
-                      <FaEdit size={10} /> Edit Bio
+                      <FaEdit size={10} /> Edit
                     </button>
                   )}
                 </div>

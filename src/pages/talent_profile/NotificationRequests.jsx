@@ -42,7 +42,7 @@ export default function NotificationTalentLayout() {
           <div className="flex items-center  mb-6">
             <FaBell className="text-yellow-400 text-2xl mr-2" />
             <h2 className="text-lg font-semibold text-white uppercase">
-              Notification Requests
+              Notification
             </h2>
           </div>
 

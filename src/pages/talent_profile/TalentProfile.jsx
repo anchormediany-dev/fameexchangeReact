@@ -93,7 +93,7 @@ const TalentProfile = () => {
                   onChange={(e) => setSearchValue(e.target.value)}
                   onFocus={() => setIsFocused(true)}
                   onBlur={handleInputBlur}
-                  placeholder="Search talent, stage, crypto..."
+                  placeholder="Search talent"
                   className="relative z-10 w-full h-14 sm:h-16 bg-transparent pl-5 pr-24 text-white placeholder-gray-400 focus:outline-none text-sm sm:text-base font-medium placeholder:font-normal"
                 />
 
@@ -239,8 +239,8 @@ const TalentProfile = () => {
         </div>
       </div>
       <ImageSwitch />
-      <NotificationTalentLayout />
       <FriendsEventsSection />
+      <NotificationTalentLayout />
     </section>
   );
 };
