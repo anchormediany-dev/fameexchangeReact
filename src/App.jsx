@@ -25,6 +25,7 @@ import Footer2 from "./components/Footer2"; // Footer component
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import siteLogo from "./assets/images/site-logo.png"; // Adjust path as needed
+import SignupTwo from "./pages/signup/SignupTwo";
 
 // Simple Black Header Component
 const SimpleHeader = () => {
@@ -282,7 +283,8 @@ export default function App() {
             path="signup"
             element={
               <MotionPageWrapper>
-                <Signup />
+                {/* <Signup /> */}
+                <SignupTwo />
               </MotionPageWrapper>
             }
           />
