@@ -38,7 +38,7 @@ export default function NotificationTalentLayout() {
     <div className="bg-[#171717] px-4 md:px-8 container text-white">
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         {/* Notifications Column */}
-        <div className="bg-[#1f1f1f] rounded-xl p-6 shadow-xl">
+        <div className="bg-[#1f1f1f] rounded-xl p-6">
           <div className="flex items-center  mb-6">
             <FaBell className="text-yellow-400 text-2xl mr-2" />
             <h2 className="text-lg font-semibold text-white uppercase">
@@ -50,7 +50,7 @@ export default function NotificationTalentLayout() {
             {notifications.map((note, index) => (
               <li
                 key={index}
-                className="flex items-start space-x-3 bg-[#2a2a2a] text-sm text-gray-300 p-4 rounded-md border border-gray-600 hover:bg-[#333] transition duration-200 shadow-sm"
+                className="flex items-start space-x-3 bg-[#2a2a2a] text-sm text-gray-300 p-4 rounded-md border border-gray-600 hover:bg-[#333] transition duration-200"
               >
                 <FaBell className="text-yellow-400 mt-1" />
                 <span>{note}</span>
@@ -60,7 +60,7 @@ export default function NotificationTalentLayout() {
         </div>
 
         {/* Talent Links Column */}
-        <div className="bg-[#1f1f1f]  rounded-xl p-6 shadow-xl">
+        <div className="bg-[#1f1f1f]  rounded-xl p-6">
           <div className="flex items-center mb-6">
             <FaExternalLinkAlt className="text-yellow-400 text-2xl mr-2" />
             <h2 className="text-lg font-semibold text-white uppercase">
@@ -71,17 +71,15 @@ export default function NotificationTalentLayout() {
             {socialLinks.map((link, index) => (
               <div
                 key={index}
-                className="flex items-center justify-between p-4 bg-[#2a2a2a] rounded-md border border-gray-600 hover:bg-[#333] transition duration-200 shadow-sm"
+                className="flex justify-between items-start space-x-3 bg-[#2a2a2a] text-sm text-gray-300 p-4 rounded-md border border-gray-600 hover:bg-[#333] transition duration-200"
               >
                 <div className="flex items-center space-x-4">
-                  <span className="text-2xl text-yellow-400">{link.icon}</span>
-                  <span className="text-sm font-medium text-gray-200">
-                    {link.name}
-                  </span>
+                  <span className=" text-yellow-400 mt-1">{link.icon}</span>
+                  <span>{link.name}</span>
                 </div>
                 <a
                   href={link.url}
-                  className="text-sm text-blue-400 hover:text-blue-300 transition duration-200"
+                  className=" text-blue-400 hover:text-blue-300 transition duration-200"
                 >
                   Visit
                 </a>
