@@ -180,6 +180,15 @@ const MeetAndGreet = () => {
           transform: scale(1.2) !important;
         }
       `}</style>
+      <div className="flex mt-10 justify-center">
+        <motion.button
+          className="custom-button-two"
+          whileHover={{ scale: 1.02 }}
+          transition={{ duration: 0.2 }}
+        >
+          VIEW ALL
+        </motion.button>
+      </div>
     </section>
   );
 };
