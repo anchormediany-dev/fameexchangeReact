@@ -168,7 +168,7 @@ const Signup = () => {
                         htmlFor="talentName"
                         className="block text-white text-sm font-medium mb-2"
                       >
-                        Talent Name*
+                        User Name*
                       </label>
                       <div
                         className={`flex items-center border rounded-lg px-4 py-3 bg-[#2d2d2d] ${
@@ -182,7 +182,7 @@ const Signup = () => {
                           type="text"
                           id="talentName"
                           name="talentName"
-                          placeholder="Talent Name"
+                          placeholder="User Name"
                           value={formData.talentName}
                           onChange={handleChange}
                           onBlur={() =>
@@ -394,75 +394,74 @@ const Signup = () => {
                       I'm over 18 years old*
                     </label>
                   </div>
-                  <div className="flex sm:flex-row flex-col sm:items-center gap-3">
-                    <h3 className="text-white font-medium">You Are:</h3>
-                    <div className="flex flex-col sm:flex-row gap-3">
-                      {options.map((option) => (
-                        <label
-                          key={option}
-                          className="flex items-center space-x-3 cursor-pointer"
-                        >
-                          <input
-                            type="checkbox"
-                            checked={selectedOptions.includes(option)}
-                            onChange={() => handleCheckboxChange(option)}
-                            className="h-5 w-5 rounded border-2 border-[#F3BA18] bg-transparent text-[#F3BA18] focus:ring-[#F3BA18] focus:ring-offset-[#171717]"
-                          />
-                          <span className="text-white">{option}</span>
-                        </label>
-                      ))}
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div className="flex sm:flex-row flex-col sm:items-center gap-3 pr-3">
+                      <h3 className="text-white font-medium">You Are:</h3>
+                      <div className="flex flex-col sm:flex-row gap-3">
+                        {options.map((option) => (
+                          <label
+                            key={option}
+                            className="flex items-center space-x-3 cursor-pointer"
+                          >
+                            <input
+                              type="checkbox"
+                              checked={selectedOptions.includes(option)}
+                              onChange={() => handleCheckboxChange(option)}
+                              className="h-5 w-5 rounded border-2 border-[#F3BA18] bg-transparent text-[#F3BA18] focus:ring-[#F3BA18] focus:ring-offset-[#171717]"
+                            />
+                            <span className="text-white">{option}</span>
+                          </label>
+                        ))}
+                      </div>
                     </div>
-                  </div>
-                  {/* Talent Dropdown */}
-                  <div>
-                    {/* <label className="block text-white text-sm font-medium mb-2">
-                      What is your talent? (Select all that apply)*
-                    </label> */}
-                    <div className="relative" ref={talentDropdownRef}>
-                      <button
-                        type="button"
-                        onClick={() =>
-                          setShowTalentDropdown(!showTalentDropdown)
-                        }
-                        className="w-full flex items-center justify-between border border-[#F3BA18] rounded-lg px-4 py-3 bg-[#2d2d2d] text-white text-left"
-                      >
-                        <span>
-                          {selectedTalents.length > 0
-                            ? selectedTalents.join(", ")
-                            : "What's Your Talent(s)"}
-                        </span>
-                        <FaChevronDown
-                          className={`transition-transform ${
-                            showTalentDropdown ? "transform rotate-180" : ""
-                          }`}
-                        />
-                      </button>
-                      {showTalentDropdown && (
-                        <div className="absolute z-10 mt-1 w-full bg-[#2d2d2d] border border-[#F3BA18] rounded-lg shadow-lg max-h-60 overflow-auto">
-                          {talentOptions.map((talent) => (
-                            <div
-                              key={talent}
-                              className="p-3 hover:bg-[#3d3d3d]"
-                            >
-                              <label className="flex items-center space-x-3 cursor-pointer">
-                                <input
-                                  type="checkbox"
-                                  checked={selectedTalents.includes(talent)}
-                                  onChange={() =>
-                                    toggleSelection(
-                                      talent,
-                                      selectedTalents,
-                                      setSelectedTalents
-                                    )
-                                  }
-                                  className="rounded bg-transparent border-[#F3BA18] text-[#F3BA18] focus:ring-[#F3BA18] h-5 w-5"
-                                />
-                                <span className="text-white">{talent}</span>
-                              </label>
-                            </div>
-                          ))}
-                        </div>
-                      )}
+                    {/* Talent Dropdown */}
+                    <div className="w-full">
+                      <div className="relative" ref={talentDropdownRef}>
+                        <button
+                          type="button"
+                          onClick={() =>
+                            setShowTalentDropdown(!showTalentDropdown)
+                          }
+                          className="w-full flex items-center justify-between border border-[#F3BA18] rounded-lg px-3  py-3 bg-[#2d2d2d] text-white text-left"
+                        >
+                          <span>
+                            {selectedTalents.length > 0
+                              ? selectedTalents.join(", ")
+                              : "What's Your Talent(s)"}
+                          </span>
+                          <FaChevronDown
+                            className={`transition-transform ${
+                              showTalentDropdown ? "transform rotate-180" : ""
+                            }`}
+                          />
+                        </button>
+                        {showTalentDropdown && (
+                          <div className="absolute z-10 mt-1 w-full bg-[#2d2d2d] border border-[#F3BA18] rounded-lg shadow-lg max-h-60 overflow-auto">
+                            {talentOptions.map((talent) => (
+                              <div
+                                key={talent}
+                                className="p-3 hover:bg-[#3d3d3d]"
+                              >
+                                <label className="flex items-center space-x-3 cursor-pointer">
+                                  <input
+                                    type="checkbox"
+                                    checked={selectedTalents.includes(talent)}
+                                    onChange={() =>
+                                      toggleSelection(
+                                        talent,
+                                        selectedTalents,
+                                        setSelectedTalents
+                                      )
+                                    }
+                                    className="rounded bg-transparent border-[#F3BA18] text-[#F3BA18] focus:ring-[#F3BA18] h-5 w-5"
+                                  />
+                                  <span className="text-white">{talent}</span>
+                                </label>
+                              </div>
+                            ))}
+                          </div>
+                        )}
+                      </div>
                     </div>
                   </div>
 
@@ -473,7 +472,7 @@ const Signup = () => {
                   )}
 
                   {/* Representation Checkbox and Dropdown */}
-                  <div className="flex flex-col gap-3">
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div className="flex items-center space-x-3">
                       <input
                         type="checkbox"
@@ -500,9 +499,6 @@ const Signup = () => {
 
                     {hasRepresentation && (
                       <div>
-                        {/* <label className="block text-white text-sm font-medium mb-2">
-                          Representation Type (Select all that apply)
-                        </label> */}
                         <div
                           className="relative"
                           ref={representationDropdownRef}
