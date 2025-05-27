@@ -1,9 +1,9 @@
 import { motion, useInView, useAnimation } from "framer-motion";
 import { useEffect, useRef } from "react";
 import * as d3 from "d3";
-import imageText from "../assets/images/fame-exchange-image-text.png";
+import imageText from "../../assets/images/fame-exchange-image-text.png";
 import { Link } from "react-router-dom";
-const TalentTokenTicker = () => {
+const BrandedTalentShares = () => {
   const sectionRef = useRef(null);
   const isInView = useInView(sectionRef, { once: true, amount: 0.1 });
   const controls = useAnimation();
@@ -316,7 +316,7 @@ const TalentTokenTicker = () => {
     <div
       ref={sectionRef}
       id="brands"
-      className="bg-[#171717] text-white py-12 2xl:py-16"
+      className="bg-[#171717] px-4 sm:px-6 lg:px-8 text-white mt-10 py-12 2xl:py-16"
     >
       <motion.div
         variants={fadeInUpVariant}
@@ -482,10 +482,7 @@ const TalentTokenTicker = () => {
           viewport={{ once: true }}
           transition={{ duration: 0.6, delay: 0.6 }}
         >
-          <Link
-            to="/branded-tokens-shares"
-            className="flex justify-center mt-10"
-          >
+          <Link to="/talent-profile" className="flex justify-center mt-10">
             <motion.button
               className="custom-button-two"
               whileHover={{ scale: 1.02 }}
@@ -516,4 +513,4 @@ const TalentTokenTicker = () => {
   );
 };
 
-export default TalentTokenTicker;
+export default BrandedTalentShares;

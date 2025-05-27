@@ -26,6 +26,7 @@ import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import siteLogo from "./assets/images/site-logo.png"; // Adjust path as needed
 import SignupTwo from "./pages/signup/SignupTwo";
+import BrandedTalentShares from "./pages/branded_talent_shares/BrandedTalentShares";
 
 // Simple Black Header Component
 const SimpleHeader = () => {
@@ -153,6 +154,15 @@ export default function App() {
             element={
               <MotionPageWrapper>
                 <SignupTwo />
+              </MotionPageWrapper>
+            }
+          />
+          {/* Branded Tokens Shares Page */}
+          <Route
+            path="branded-tokens-shares"
+            element={
+              <MotionPageWrapper>
+                <BrandedTalentShares/>
               </MotionPageWrapper>
             }
           />
