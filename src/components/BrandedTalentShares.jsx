@@ -1,10 +1,9 @@
-import { LineChart, Line, ResponsiveContainer } from "recharts";
 import { motion, useInView, useAnimation } from "framer-motion";
 import { useEffect, useRef } from "react";
+import * as d3 from "d3";
 import imageText from "../assets/images/fame-exchange-image-text.png";
 import { Link } from "react-router-dom";
-
-const BrandedTalentShares = () => {
+const TalentTokenTicker = () => {
   const sectionRef = useRef(null);
   const isInView = useInView(sectionRef, { once: true, amount: 0.1 });
   const controls = useAnimation();
@@ -15,6 +14,77 @@ const BrandedTalentShares = () => {
     }
   }, [isInView, controls]);
 
+  // Custom D3 Chart Component
+  const D3Chart = ({ data, color, width = 112, height = 56, index }) => {
+    const svgRef = useRef(null);
+
+    useEffect(() => {
+      if (!data || data.length === 0) return;
+
+      const svg = d3.select(svgRef.current);
+      svg.selectAll("*").remove(); // Clear previous content
+
+      const margin = { top: 4, right: 4, bottom: 4, left: 4 };
+      const innerWidth = width - margin.left - margin.right;
+      const innerHeight = height - margin.top - margin.bottom;
+
+      // Create scales
+      const xScale = d3
+        .scaleLinear()
+        .domain([0, data.length - 1])
+        .range([0, innerWidth]);
+
+      const yScale = d3
+        .scaleLinear()
+        .domain(d3.extent(data, (d) => d.pv))
+        .range([innerHeight, 0]);
+
+      // Create line generator with curve
+      const line = d3
+        .line()
+        .x((d, i) => xScale(i))
+        .y((d) => yScale(d.pv))
+        .curve(d3.curveCatmullRom.alpha(0.5)); // Smooth curve
+
+      // Create container group
+      const g = svg
+        .append("g")
+        .attr("transform", `translate(${margin.left}, ${margin.top})`);
+
+      // Add the line path
+      const path = g
+        .append("path")
+        .datum(data)
+        .attr("fill", "none")
+        .attr("stroke", color)
+        .attr("stroke-width", 2.5)
+        .attr("stroke-linecap", "round")
+        .attr("stroke-linejoin", "round")
+        .attr("d", line);
+
+      // Animate the line drawing
+      const totalLength = path.node().getTotalLength();
+
+      path
+        .attr("stroke-dasharray", totalLength + " " + totalLength)
+        .attr("stroke-dashoffset", totalLength)
+        .transition()
+        .duration(2000)
+        .delay(1000 + index * 200)
+        .ease(d3.easeQuadInOut)
+        .attr("stroke-dashoffset", 0);
+    }, [data, color, width, height, index, isInView]);
+
+    return (
+      <svg
+        ref={svgRef}
+        width={width}
+        height={height}
+        className="overflow-visible"
+      />
+    );
+  };
+
   // Animation variants
   const fadeInUpVariant = {
     hidden: { opacity: 0, y: 20 },
@@ -22,147 +92,225 @@ const BrandedTalentShares = () => {
   };
 
   const tableRowVariant = {
-    hidden: { opacity: 0, y: 20 },
+    hidden: { opacity: 0, x: -20 },
     visible: (i) => ({
       opacity: 1,
-      y: 0,
+      x: 0,
       transition: {
-        duration: 0.5,
-        delay: 0.4 + i * 0.1,
+        duration: 0.6,
+        delay: 0.2 + i * 0.1,
         ease: "easeOut",
       },
     }),
   };
 
   const chartVariant = {
-    hidden: { opacity: 0, scaleY: 0 },
+    hidden: { opacity: 0, scale: 0.8 },
     visible: (i) => ({
       opacity: 1,
-      scaleY: 1,
+      scale: 1,
       transition: {
-        duration: 0.6,
-        delay: 0.6 + i * 0.1,
+        duration: 0.8,
+        delay: 0.4 + i * 0.1,
         ease: "easeOut",
       },
     }),
   };
 
-  const buttonVariant = {
-    hidden: { opacity: 0, scale: 0.9 },
-    visible: {
-      opacity: 1,
-      scale: 1,
-      transition: { duration: 0.4, delay: 0.9 },
-    },
-  };
-
-  const talentData = [
+  const talentTokenData = [
     {
-      name: "Pink",
-      price: "$30,446.36",
-      change: "+4.39%",
-      volume: "$575,133,39,800.07",
+      name: "APEX",
+      fullName: "Digital Artist",
+      image:
+        "https://images.unsplash.com/photo-1494790108755-2616c22d9acb?w=100&h=100&fit=crop&crop=face",
+      comprisedValue: "100,000,000",
+      availableTokens: "1,000,000",
+      costPerToken: "$100",
+      change: "+0.46%",
+      volume: "$5,100,671,139",
+      isPositive: true,
       graphData: [
-        { pv: 400 },
-        { pv: 420 },
-        { pv: 390 },
-        { pv: 430 },
-        { pv: 460 },
-        { pv: 450 },
-        { pv: 470 },
+        { pv: 120 },
+        { pv: 125 },
+        { pv: 118 },
+        { pv: 135 },
+        { pv: 128 },
+        { pv: 142 },
+        { pv: 138 },
+        { pv: 155 },
+        { pv: 148 },
+        { pv: 162 },
+        { pv: 158 },
+        { pv: 145 },
+        { pv: 152 },
+        { pv: 168 },
+        { pv: 165 },
+        { pv: 172 },
+        { pv: 169 },
+        { pv: 175 },
       ],
     },
     {
-      name: "Lady Gaga",
-      price: "$30,446.36",
-      change: "+4.39%",
-      volume: "$575,133,39,800.07",
+      name: "NOVA",
+      fullName: "Pop Sensation",
+      image:
+        "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=100&h=100&fit=crop&crop=face",
+      comprisedValue: "1,234,472,196",
+      availableTokens: "1,000,000",
+      costPerToken: "$1,234.50",
+      change: "+0.60%",
+      volume: "$270,472,963,871.67",
+      isPositive: true,
       graphData: [
-        { pv: 310 },
-        { pv: 340 },
-        { pv: 320 },
-        { pv: 350 },
-        { pv: 360 },
-        { pv: 370 },
-        { pv: 390 },
+        { pv: 80 },
+        { pv: 88 },
+        { pv: 82 },
+        { pv: 95 },
+        { pv: 90 },
+        { pv: 105 },
+        { pv: 98 },
+        { pv: 112 },
+        { pv: 108 },
+        { pv: 125 },
+        { pv: 118 },
+        { pv: 132 },
+        { pv: 128 },
+        { pv: 140 },
+        { pv: 135 },
+        { pv: 148 },
+        { pv: 142 },
+        { pv: 155 },
       ],
     },
     {
-      name: "Aerosmith",
-      price: "$30,446.36",
-      change: "+4.39%",
-      volume: "$575,133,39,800.07",
+      name: "ECHO",
+      fullName: "Indie Musician",
+      image:
+        "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=100&h=100&fit=crop&crop=face",
+      comprisedValue: "0,000,000,000",
+      availableTokens: "1,000,000",
+      costPerToken: "$0,000.00",
+      change: "0.00%",
+      volume: "$0,000,000.00",
+      isPositive: false,
       graphData: [
-        { pv: 10 },
-        { pv: 15 },
-        { pv: 12 },
-        { pv: 18 },
-        { pv: 20 },
+        { pv: 140 },
+        { pv: 135 },
+        { pv: 142 },
+        { pv: 128 },
+        { pv: 134 },
+        { pv: 122 },
+        { pv: 118 },
+        { pv: 125 },
+        { pv: 115 },
+        { pv: 108 },
+        { pv: 112 },
+        { pv: 98 },
+        { pv: 105 },
+        { pv: 92 },
+        { pv: 88 },
+        { pv: 95 },
+        { pv: 85 },
+        { pv: 82 },
+      ],
+    },
+    {
+      name: "FLUX",
+      fullName: "Electronic Producer",
+      image:
+        "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=100&h=100&fit=crop&crop=face",
+      comprisedValue: "0,000,000,000",
+      availableTokens: "1,000,000",
+      costPerToken: "$0,000.00",
+      change: "+0.00%",
+      volume: "$0,000,000.00",
+      isPositive: true,
+      graphData: [
         { pv: 25 },
-        { pv: 23 },
-      ],
-    },
-    {
-      name: "Luke Bryan",
-      price: "$30,446.36",
-      change: "+4.39%",
-      volume: "$575,133,39,800.07",
-      graphData: [
-        { pv: 5 },
-        { pv: 7 },
-        { pv: 6 },
-        { pv: 8 },
-        { pv: 7.5 },
-        { pv: 9 },
-        { pv: 10 },
-      ],
-    },
-    {
-      name: "Guns-N-Roses",
-      price: "$30,446.36",
-      change: "+4.39%",
-      volume: "$575,133,39,800.07",
-      graphData: [
-        { pv: 60 },
+        { pv: 32 },
+        { pv: 28 },
+        { pv: 38 },
+        { pv: 35 },
+        { pv: 45 },
+        { pv: 42 },
+        { pv: 38 },
+        { pv: 48 },
+        { pv: 52 },
+        { pv: 48 },
+        { pv: 58 },
+        { pv: 55 },
         { pv: 62 },
-        { pv: 61 },
-        { pv: 65 },
         { pv: 68 },
-        { pv: 67 },
-        { pv: 70 },
+        { pv: 65 },
+        { pv: 72 },
+        { pv: 78 },
+      ],
+    },
+    {
+      name: "VIBE",
+      fullName: "R&B Artist",
+      image:
+        "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=100&h=100&fit=crop&crop=face",
+      comprisedValue: "0,000,000,000",
+      availableTokens: "1,000,000",
+      costPerToken: "$0,000.00",
+      change: "-0.12%",
+      volume: "$0,000,000.00",
+      isPositive: false,
+      graphData: [
+        { pv: 95 },
+        { pv: 92 },
+        { pv: 98 },
+        { pv: 88 },
+        { pv: 85 },
+        { pv: 92 },
+        { pv: 82 },
+        { pv: 78 },
+        { pv: 85 },
+        { pv: 75 },
+        { pv: 72 },
+        { pv: 78 },
+        { pv: 68 },
+        { pv: 65 },
+        { pv: 72 },
+        { pv: 62 },
+        { pv: 58 },
+        { pv: 55 },
+      ],
+    },
+    {
+      name: "SYNTH",
+      fullName: "Synthwave Producer",
+      image:
+        "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=100&h=100&fit=crop&crop=face",
+      comprisedValue: "0,000,000,000",
+      availableTokens: "1,000,000",
+      costPerToken: "$0,000.00",
+      change: "+0.25%",
+      volume: "$0,000,000.00",
+      isPositive: true,
+      graphData: [
+        { pv: 15 },
+        { pv: 18 },
+        { pv: 22 },
+        { pv: 19 },
+        { pv: 28 },
+        { pv: 32 },
+        { pv: 28 },
+        { pv: 35 },
+        { pv: 38 },
+        { pv: 42 },
+        { pv: 38 },
+        { pv: 48 },
+        { pv: 45 },
+        { pv: 52 },
+        { pv: 58 },
+        { pv: 55 },
+        { pv: 62 },
+        { pv: 68 },
       ],
     },
   ];
-
-  // Chart animation setup - draw the line progressively
-  const chartLineRef = useRef([]);
-
-  useEffect(() => {
-    if (isInView && chartLineRef.current.length > 0) {
-      chartLineRef.current.forEach((chart, index) => {
-        if (chart) {
-          setTimeout(() => {
-            // Find the SVG path element within the chart
-            const path = chart.querySelector(".recharts-line-curve");
-            if (path) {
-              // Get the total length of the path
-              const length = path.getTotalLength();
-
-              // Set up the animation
-              path.style.strokeDasharray = length;
-              path.style.strokeDashoffset = length;
-              path.style.transition = "stroke-dashoffset 1.5s ease-in-out";
-
-              // Trigger the animation
-              setTimeout(() => {
-                path.style.strokeDashoffset = 0;
-              }, 100);
-            }
-          }, 800 + index * 150); // Staggered delay for each chart
-        }
-      });
-    }
-  }, [isInView]);
 
   return (
     <div
@@ -185,7 +333,7 @@ const BrandedTalentShares = () => {
         />
       </motion.div>
 
-      <div className="container">
+      <div className="container mx-auto px-4 max-w-7xl relative z-10">
         <motion.h1
           variants={fadeInUpVariant}
           initial="hidden"
@@ -196,7 +344,7 @@ const BrandedTalentShares = () => {
           Top Branded Talent Shares (BTS)
         </motion.h1>
 
-        {/* Table */}
+        {/* Table Container */}
         <motion.div
           variants={fadeInUpVariant}
           initial="hidden"
@@ -204,98 +352,150 @@ const BrandedTalentShares = () => {
           transition={{ delay: 0.3 }}
           className="overflow-x-auto"
         >
-          <table className="w-full border-collapse">
+          <div className="min-w-[1000px] bg-gradient-to-br from-[#1a1a1a]/90 to-[#252525]/90 backdrop-blur-xl rounded-3xl border border-gray-600/30 overflow-hidden shadow-2xl">
+            {/* Table Header */}
+            <div className="grid grid-cols-9 gap-2 md:gap-4 py-5 px-6 bg-gradient-to-r from-[#2d2d2d] via-[#353535] to-[#2d2d2d] text-sm text-gray-200 font-bold border-b border-gray-500/40 backdrop-blur-sm">
+              <div className="col-span-2 text-left">TALENT TOKEN</div>
+              <div className="text-center">COMPRISED VALUE</div>
+              <div className="text-center">AVAILABLE TOKENS</div>
+              <div className="text-center">COST PER TOKEN</div>
+              <div className="text-center">CHANGE</div>
+              <div className="text-center">VOLUME</div>
+              <div className="text-center">PERFORMANCE</div>
+              <div className="text-center">ACTION</div>
+            </div>
+
             {/* Table Body */}
-            <tbody>
-              {talentData.map((talent, index) => (
-                <motion.tr
+            <div className="divide-y divide-gray-700/30">
+              {talentTokenData.map((token, index) => (
+                <motion.div
                   key={index}
                   custom={index}
                   variants={tableRowVariant}
                   initial="hidden"
                   animate={controls}
                   whileHover={{
-                    backgroundColor: "rgba(255,255,255,0.05)",
-                    transition: { duration: 0.2 },
+                    backgroundColor: "rgba(255,255,255,0.08)",
+                    scale: 1.01,
+                    transition: { duration: 0.3 },
                   }}
-                  className="border-b border-gray-800 hover:bg-gray-900/50 transition-colors"
+                  className="grid grid-cols-9 gap-2 md:gap-4 items-center py-5 px-6 hover:shadow-lg transition-all duration-300 cursor-pointer group"
                 >
-                  {/* Artist Name */}
-                  <td className="py-4 custom-heading-six px-4 font-medium">
-                    <Link to="/talent-profile"> {talent.name}</Link>
-                  </td>
+                  {/* Talent Token Image + Name */}
+                  <div className="col-span-2 flex items-center gap-3 md:gap-4">
+                    <motion.div
+                      whileHover={{ scale: 1.1, rotate: 3 }}
+                      transition={{ duration: 0.3 }}
+                      className="relative"
+                    >
+                      <img
+                        src={token.image}
+                        alt={token.fullName}
+                        className="w-12 h-12 md:w-16 md:h-16 rounded-full object-cover border-2 border-gray-600 group-hover:border-gray-400 transition-all duration-300 shadow-lg"
+                      />
+                      <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent rounded-full"></div>
+                    </motion.div>
+                    <div className="min-w-0">
+                      <div className="text-sm md:text-base font-bold text-white group-hover:text-gray-200 transition-colors duration-300 truncate">
+                        {token.name}
+                      </div>
+                      {/* <div className="text-xs text-gray-400 group-hover:text-gray-300 transition-colors duration-300 truncate">
+                        {token.name}
+                      </div> */}
+                    </div>
+                  </div>
 
-                  {/* Price */}
-                  <td className="py-4 custom-heading-six px-4 text-right">
-                    {talent.price}
-                  </td>
+                  {/* Comprised Value */}
+                  <div className="text-center text-xs md:text-sm font-medium text-gray-200 group-hover:text-white transition-colors duration-300">
+                    {token.comprisedValue}
+                  </div>
+
+                  {/* Available Talent Tokens */}
+                  <div className="text-center text-xs md:text-sm text-gray-200 group-hover:text-white transition-colors duration-300">
+                    {token.availableTokens}
+                  </div>
+
+                  {/* Cost per Talent Token */}
+                  <div className="text-center text-xs md:text-sm font-semibold text-gray-100 group-hover:text-white transition-colors duration-300">
+                    {token.costPerToken}
+                  </div>
 
                   {/* Change */}
-                  <td className="py-4 custom-heading-six px-4 text-right text-[#15ab9c]">
-                    {talent.change}
-                  </td>
+                  <div
+                    className={`text-center text-xs md:text-sm font-bold transition-all duration-300 ${
+                      token.isPositive
+                        ? "text-emerald-400 group-hover:text-emerald-300"
+                        : "text-red-400 group-hover:text-red-300"
+                    }`}
+                  >
+                    {token.change}
+                  </div>
 
                   {/* Volume */}
-                  <td className="py-4 px-4 custom-heading-six text-right">
-                    {talent.volume}
-                  </td>
+                  <div className="text-center text-xs md:text-sm text-gray-200 group-hover:text-white transition-colors duration-300">
+                    {token.volume}
+                  </div>
 
-                  {/* Trade Now Button with Chart */}
-                  <td className="py-4 px-4">
-                    <div className="flex items-center justify-end gap-4">
-                      <motion.div
-                        custom={index}
-                        variants={chartVariant}
-                        initial="hidden"
-                        animate={controls}
-                        className="w-24 h-10"
-                        ref={(el) => (chartLineRef.current[index] = el)}
-                      >
-                        <ResponsiveContainer width="100%" height="100%">
-                          <LineChart data={talent.graphData}>
-                            <Line
-                              type="monotone"
-                              dataKey="pv"
-                              stroke="#15ab9c"
-                              strokeWidth={2}
-                              dot={false}
-                            />
-                          </LineChart>
-                        </ResponsiveContainer>
-                      </motion.div>
+                  {/* Chart Column */}
+                  <div className="flex justify-center">
+                    <motion.div
+                      custom={index}
+                      variants={chartVariant}
+                      initial="hidden"
+                      animate={controls}
+                      whileHover={{ scale: 1.08 }}
+                      className="w-24 h-12 md:w-28 md:h-14 bg-gradient-to-br from-gray-900/80 to-gray-800/60 rounded-xl p-2 shadow-lg border border-gray-700/30 flex items-center justify-center"
+                    >
+                      <D3Chart
+                        data={token.graphData}
+                        color={token.isPositive ? "#10b981" : "#f87171"}
+                        width={112}
+                        height={56}
+                        index={index}
+                      />
+                    </motion.div>
+                  </div>
+                  <motion.div
+                    initial={{ opacity: 0 }}
+                    whileInView={{ opacity: 1 }}
+                    viewport={{ once: true }}
+                    transition={{ duration: 0.6, delay: 0.6 }}
+                  >
+                    <Link to="/talent-profile" className="flex justify-center">
                       <motion.button
-                        whileHover={{ scale: 1.05 }}
-                        whileTap={{ scale: 0.95 }}
-                        className="bg-[#e0aa0d] cursor-pointer hover:brightness-110 transition-all text-white px-4 py-2 rounded-md whitespace-nowrap"
+                        className="custom-button-two"
+                        whileHover={{ scale: 1.02 }}
+                        transition={{ duration: 0.2 }}
                       >
-                        Trade Now
+                        TRADE
                       </motion.button>
-                    </div>
-                  </td>
-                </motion.tr>
+                    </Link>
+                  </motion.div>
+                </motion.div>
               ))}
-            </tbody>
-          </table>
+            </div>
+          </div>
         </motion.div>
 
-        {/* Learn More Button */}
-        <motion.div
-          variants={buttonVariant}
-          initial="hidden"
-          animate={controls}
-          className="mt-10 text-center"
-        >
-          <motion.button
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
-            className="bg-[#e0aa0d] hover:brightness-110 transition-all cursor-pointer text-white py-3 px-6 rounded-md"
-          >
-            Learn more
-          </motion.button>
-        </motion.div>
+        {/* Modern Floating Background Elements */}
+        <div className="fixed inset-0 pointer-events-none overflow-hidden -z-0">
+          <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-emerald-500/3 rounded-full blur-3xl animate-pulse"></div>
+          <div
+            className="absolute bottom-1/4 right-1/4 w-80 h-80 bg-blue-500/4 rounded-full blur-3xl animate-pulse"
+            style={{ animationDelay: "1s" }}
+          ></div>
+          <div
+            className="absolute top-1/2 left-1/2 w-72 h-72 bg-purple-500/3 rounded-full blur-3xl animate-pulse"
+            style={{ animationDelay: "2s" }}
+          ></div>
+          <div
+            className="absolute top-3/4 left-1/4 w-64 h-64 bg-orange-500/3 rounded-full blur-3xl animate-pulse"
+            style={{ animationDelay: "3s" }}
+          ></div>
+        </div>
       </div>
     </div>
   );
 };
 
-export default BrandedTalentShares;
+export default TalentTokenTicker;
