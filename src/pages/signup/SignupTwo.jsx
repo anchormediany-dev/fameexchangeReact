@@ -146,15 +146,9 @@ const Signup = () => {
       {!isOtpOpen ? (
         <MotionPageWrapper>
           <div className="flex mt-10 lg:mt-16 2xl:mt-20 py-12 2xl:py-16  relative bg-[#171717] overflow-hidden">
-            {/* Overlay circles */}
-            <div className="absolute top-[-100px] left-[-100px] w-[300px] h-[300px] rounded-full bg-white opacity-[0.03]" />
-            <div className="absolute top-[120px] right-[180px] w-[120px] h-[120px] rounded-full bg-white opacity-[0.06]" />
-            <div className="absolute bottom-[100px] left-[80px] w-[50px] h-[50px] rounded-full bg-white opacity-[0.06]" />
-            <div className="absolute bottom-[40px] right-[40px] w-[80px] h-[80px] rounded-full bg-white opacity-[0.04]" />
-
-            <div className="w-full container flex flex-col lg:flex-row gap-8 z-10">
+            <div className="w-full container flex flex-col-reverse lg:flex-row gap-8 z-10">
               {/* Left: Signup Form (3/4 width on large screens) */}
-              <div className="lg:w-[60%] bg-[#222222] p-8 rounded-xl border border-[#333333]">
+              <div className="lg:w-[80%] bg-[#222222] p-8 rounded-xl border border-[#333333]">
                 <h2 className="text-white custom-heading-two mb-8">
                   Join Fame Exchange
                 </h2>
@@ -608,18 +602,20 @@ const Signup = () => {
               </div>
 
               {/* Right Side Welcome (1/4 width on large screens) */}
-              <div className="lg:w-[40%] flex flex-col items-start text-white space-y-6 pt-6">
-                <Link to="/">
+              <div className="lg:w-[20%] flex lg:flex-col flex-row items-center lg:items-start text-white space-y-6 pt-6">
+                <Link className="w-[100%] lg:block hidden" to="/">
                   <img src={siteLogo} alt="Logo" />
                 </Link>
-                <h1 className="custom-heading-two mt-5">
-                  WELCOME TO <br />{" "}
-                  <span className="custom-heading-seven">THE FAME ECHANGE</span>
-                </h1>
-                <p className="text-white">
-                  Secure, fast, and fair — your trusted partner in global
-                  currency exchange.
-                </p>
+                <div className="flex flex-col">
+                  <h1 className=" mt-5">
+                    <span className="custom-heading-seven"> WELCOME TO </span>
+                    <span className="text-xl">THE FAME ECHANGE</span>
+                  </h1>
+                  <p className="text-white font-normal text-xs">
+                    Secure, fast, and fair — your trusted partner in global
+                    currency exchange.
+                  </p>
+                </div>
               </div>
             </div>
           </div>
