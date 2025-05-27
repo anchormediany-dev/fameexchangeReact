@@ -148,6 +148,9 @@ Current Projects:
       <div className="bg-white/5 backdrop-blur-xl border border-white/10 rounded-2xl shadow-xl p-3 md:p-4">
         {/* Compact Main Image Display */}
         <div className="relative group mb-3">
+          <label className="text-xs uppercase text-primary font-semibold">
+            John Doe
+          </label>
           <div className="aspect-square md:aspect-[4/3] rounded-lg md:rounded-xl overflow-hidden bg-gradient-to-br from-gray-800 to-gray-900 shadow-md relative">
             {images[selectedImage] ? (
               <img
