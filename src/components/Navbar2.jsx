@@ -99,12 +99,12 @@ const Navbar2 = () => {
     transparent: {
       backgroundColor: "rgba(0, 0, 0, 0)",
       boxShadow: "none",
-      height: "80px",
+      height: "100px",
     },
     solid: {
       backgroundColor: "rgba(0, 0, 0, 0.9)",
       boxShadow: "0 2px 10px rgba(0, 0, 0, 0.3)",
-      height: "70px",
+      height: "90px",
     },
   };
 
@@ -224,13 +224,13 @@ const Navbar2 = () => {
       {/* Desktop Navbar */}
       <motion.nav
         id="home"
-        className="fixed w-full z-50 transition-all"
+        className="fixed w-full flex z-50 transition-all"
         initial="transparent"
         animate={scrolled ? "solid" : "transparent"}
         variants={navbarVariants}
         transition={{ duration: 0.3 }}
       >
-        <div className="container mx-auto px-4">
+        <div className="container  px-4">
           <div className="flex justify-between items-center h-full">
             {/* Logo with animation */}
             <motion.div

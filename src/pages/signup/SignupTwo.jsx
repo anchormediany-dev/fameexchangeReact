@@ -145,7 +145,7 @@ const Signup = () => {
     <>
       {!isOtpOpen ? (
         <MotionPageWrapper>
-          <div className="flex mt-10 py-12 2xl:py-16  relative bg-[#171717] overflow-hidden">
+          <div className="flex mt-10 lg:mt-16 2xl:mt-20 py-12 2xl:py-16  relative bg-[#171717] overflow-hidden">
             {/* Overlay circles */}
             <div className="absolute top-[-100px] left-[-100px] w-[300px] h-[300px] rounded-full bg-white opacity-[0.03]" />
             <div className="absolute top-[120px] right-[180px] w-[120px] h-[120px] rounded-full bg-white opacity-[0.06]" />

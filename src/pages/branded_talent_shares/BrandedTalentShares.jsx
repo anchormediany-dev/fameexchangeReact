@@ -317,7 +317,7 @@ const BrandedTalentShares = () => {
     <div
       ref={sectionRef}
       id="brands"
-      className="bg-[#171717] px-4 sm:px-6 lg:px-8 text-white mt-10 py-12 2xl:py-16"
+      className="bg-[#171717] px-4 sm:px-6 lg:px-8 text-white mt-10 lg:mt-16 2xl:mt-20 py-12 2xl:py-16"
     >
       <motion.div
         variants={fadeInUpVariant}
@@ -334,7 +334,7 @@ const BrandedTalentShares = () => {
         />
       </motion.div>
 
-      <div className="container mx-auto px-4 max-w-7xl relative z-10">
+      <div className="container  px-4  relative z-10">
         <motion.h1
           variants={fadeInUpVariant}
           initial="hidden"
