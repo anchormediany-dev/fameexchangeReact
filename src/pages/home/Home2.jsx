@@ -42,7 +42,6 @@ const Home2 = () => {
 
   return (
     <div>
-      <Navbar2 />
       <HeroSection />
       <TalentTradingSection />
       <BrandedTalentShares />
@@ -56,7 +55,6 @@ const Home2 = () => {
       <OurTeam />
       <Faq />
       <ContactUs />
-      <Footer2 />
       {isCalculatingNetworthOpen && <CalculatingNetworthPopup />}
       {showCongratulationsPopup && <CongratulationsPopup />}
     </div>

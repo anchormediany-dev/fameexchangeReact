@@ -390,7 +390,7 @@ const Footer = () => {
             variants={containerVariants}
           >
             <motion.p className="footer_copyright" variants={itemVariants}>
-              COPYRIGHT 2024 ALL RIGHTS RESERVED PRIVACY
+              COPYRIGHT 2025 ALL RIGHTS RESERVED PRIVACY
             </motion.p>
             <motion.p className="footer_copyright" variants={itemVariants}>
               <Link

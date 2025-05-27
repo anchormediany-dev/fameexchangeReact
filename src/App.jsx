@@ -162,130 +162,129 @@ export default function App() {
             path="branded-tokens-shares"
             element={
               <MotionPageWrapper>
-                <BrandedTalentShares/>
+                <BrandedTalentShares />
               </MotionPageWrapper>
             }
           />
         </Route>
+        {/* Dashboard Pages */}
+        <Route
+          path="dashboard"
+          element={
+            <MotionPageWrapper>
+              <Dashboard />
+            </MotionPageWrapper>
+          }
+        />
+
+        {/* Token Pages */}
+        <Route
+          path="branded-tokens"
+          element={
+            <MotionPageWrapper>
+              <BrandedTokens />
+            </MotionPageWrapper>
+          }
+        />
+        <Route
+          path="talent-tokens"
+          element={
+            <MotionPageWrapper>
+              <TalentTokens />
+            </MotionPageWrapper>
+          }
+        />
+
+        {/* Support and Help Pages */}
+        <Route
+          path="help-support"
+          element={
+            <MotionPageWrapper>
+              <HelpSupport />
+            </MotionPageWrapper>
+          }
+        />
+        <Route
+          path="faqs"
+          element={
+            <MotionPageWrapper>
+              <FAQ />
+            </MotionPageWrapper>
+          }
+        />
+        <Route
+          path="faq"
+          element={
+            <MotionPageWrapper>
+              <Faq />
+            </MotionPageWrapper>
+          }
+        />
+
+        {/* Information Pages */}
+        <Route
+          path="about-us"
+          element={
+            <MotionPageWrapper>
+              <AboutUs />
+            </MotionPageWrapper>
+          }
+        />
+        <Route
+          path="about-crypto"
+          element={
+            <MotionPageWrapper>
+              <AboutCrypto />
+            </MotionPageWrapper>
+          }
+        />
+        <Route
+          path="how-to-buy-sell"
+          element={
+            <MotionPageWrapper>
+              <HowToBuySell />
+            </MotionPageWrapper>
+          }
+        />
+
+        {/* Legal Pages */}
+        <Route
+          path="privacy-policy"
+          element={
+            <MotionPageWrapper>
+              <PrivacyPolicy />
+            </MotionPageWrapper>
+          }
+        />
+        <Route
+          path="terms-conditions"
+          element={
+            <MotionPageWrapper>
+              <TermsConditions />
+            </MotionPageWrapper>
+          }
+        />
+        <Route
+          path="anti-money-laundering"
+          element={
+            <MotionPageWrapper>
+              <AntiMoneyLaundering />
+            </MotionPageWrapper>
+          }
+        />
+
+        {/* Regional Pages */}
+        <Route
+          path="us-international-english"
+          element={
+            <MotionPageWrapper>
+              <Regions />
+            </MotionPageWrapper>
+          }
+        />
 
         {/* Routes with Simple Black Header Only */}
-        <Route path="/" element={<SimpleLayout />}>
-          {/* Dashboard Pages */}
-          <Route
-            path="dashboard"
-            element={
-              <MotionPageWrapper>
-                <Dashboard />
-              </MotionPageWrapper>
-            }
-          />
-
-          {/* Token Pages */}
-          <Route
-            path="branded-tokens"
-            element={
-              <MotionPageWrapper>
-                <BrandedTokens />
-              </MotionPageWrapper>
-            }
-          />
-          <Route
-            path="talent-tokens"
-            element={
-              <MotionPageWrapper>
-                <TalentTokens />
-              </MotionPageWrapper>
-            }
-          />
-
-          {/* Support and Help Pages */}
-          <Route
-            path="help-support"
-            element={
-              <MotionPageWrapper>
-                <HelpSupport />
-              </MotionPageWrapper>
-            }
-          />
-          <Route
-            path="faqs"
-            element={
-              <MotionPageWrapper>
-                <FAQ />
-              </MotionPageWrapper>
-            }
-          />
-          <Route
-            path="faq"
-            element={
-              <MotionPageWrapper>
-                <Faq />
-              </MotionPageWrapper>
-            }
-          />
-
-          {/* Information Pages */}
-          <Route
-            path="about-us"
-            element={
-              <MotionPageWrapper>
-                <AboutUs />
-              </MotionPageWrapper>
-            }
-          />
-          <Route
-            path="about-crypto"
-            element={
-              <MotionPageWrapper>
-                <AboutCrypto />
-              </MotionPageWrapper>
-            }
-          />
-          <Route
-            path="how-to-buy-sell"
-            element={
-              <MotionPageWrapper>
-                <HowToBuySell />
-              </MotionPageWrapper>
-            }
-          />
-
-          {/* Legal Pages */}
-          <Route
-            path="privacy-policy"
-            element={
-              <MotionPageWrapper>
-                <PrivacyPolicy />
-              </MotionPageWrapper>
-            }
-          />
-          <Route
-            path="terms-conditions"
-            element={
-              <MotionPageWrapper>
-                <TermsConditions />
-              </MotionPageWrapper>
-            }
-          />
-          <Route
-            path="anti-money-laundering"
-            element={
-              <MotionPageWrapper>
-                <AntiMoneyLaundering />
-              </MotionPageWrapper>
-            }
-          />
-
-          {/* Regional Pages */}
-          <Route
-            path="us-international-english"
-            element={
-              <MotionPageWrapper>
-                <Regions />
-              </MotionPageWrapper>
-            }
-          />
-        </Route>
+        <Route path="/" element={<SimpleLayout />}></Route>
 
         {/* Routes without Any Header or Footer (Clean Auth Pages) */}
         <Route path="/" element={<CleanLayout />}>
