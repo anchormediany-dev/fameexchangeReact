@@ -477,22 +477,7 @@ const BrandedTalentShares = () => {
             </div>
           </div>
         </motion.div>
-        <motion.div
-          initial={{ opacity: 0 }}
-          whileInView={{ opacity: 1 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.6, delay: 0.6 }}
-        >
-          <Link to="/talent-profile" className="flex justify-center mt-10">
-            <motion.button
-              className="custom-button-two"
-              whileHover={{ scale: 1.02 }}
-              transition={{ duration: 0.2 }}
-            >
-              LOAD MORE
-            </motion.button>
-          </Link>
-        </motion.div>
+
         {/* Modern Floating Background Elements */}
         <div className="fixed inset-0 pointer-events-none overflow-hidden -z-0">
           <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-emerald-500/3 rounded-full blur-3xl animate-pulse"></div>
