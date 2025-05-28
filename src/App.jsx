@@ -27,6 +27,7 @@ import { motion } from "framer-motion";
 import siteLogo from "./assets/images/site-logo.png"; // Adjust path as needed
 import SignupTwo from "./pages/signup/SignupTwo";
 import BrandedTalentShares from "./pages/branded_talent_shares/BrandedTalentShares";
+import MeetGreetPage from "./pages/meet_greet/MeetGreetPage";
 
 // Simple Black Header Component
 const SimpleHeader = () => {
@@ -154,6 +155,14 @@ export default function App() {
             element={
               <MotionPageWrapper>
                 <SignupTwo />
+              </MotionPageWrapper>
+            }
+          />
+          <Route
+            path="meet-greet"
+            element={
+              <MotionPageWrapper>
+                <MeetGreetPage />
               </MotionPageWrapper>
             }
           />
