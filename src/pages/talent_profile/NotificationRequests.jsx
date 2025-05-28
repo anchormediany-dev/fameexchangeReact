@@ -42,17 +42,17 @@ const notifications = [
   },
   {
     message:
-      "New comment on your latest reel: 'Amazing content! Love your style and energy. Keep it up!'",
-    time: "1 hr ago",
-    date: "2025-05-28",
-    fullTime: "13:30",
-  },
-  {
-    message:
       "Congratulations! You've reached 1M followers! This is a huge milestone. Keep creating amazing content.",
     time: "1 day ago",
     date: "2025-05-27",
     fullTime: "14:30",
+  },
+  {
+    message:
+      "New comment on your latest reel: 'Amazing content! Love your style and energy. Keep it up!'",
+    time: "1 week ago",
+    date: "2025-05-28",
+    fullTime: "13:30",
   },
 ];
 
