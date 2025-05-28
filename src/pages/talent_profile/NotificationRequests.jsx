@@ -16,40 +16,43 @@ const notifications = [
     message:
       "John Doe sent you a collaboration request for an upcoming brand campaign. Please review the details and respond by tomorrow.",
     time: "2 min ago",
-  },
-  {
-    message: "You have a new follower: @beauty_by_ana",
-    time: "5 min ago",
-  },
-  {
-    message:
-      "Brand XYZ mentioned you in their story and tagged you in a promotional post. Check it out to engage with your audience.",
-    time: "15 min ago",
-  },
-  {
-    message:
-      "Reminder: Zoom meeting with GlowUp Agency at 3 PM today to discuss partnership opportunities and campaign strategies.",
-    time: "30 min ago",
-  },
-  {
-    message:
-      "New comment on your latest reel: 'Amazing content! Love your style and energy. Keep it up!'",
-    time: "1 hr ago",
+    date: "2025-05-28",
+    fullTime: "14:28",
   },
   {
     message:
       "Your performance report for May is ready. Download it from your dashboard to see detailed analytics and insights.",
     time: "2 hrs ago",
+    date: "2025-05-28",
+    fullTime: "12:30",
   },
   {
     message:
-      "New message from Talent Scout Agency regarding potential opportunities in the fashion and lifestyle sector.",
-    time: "3 hrs ago",
+      "Brand XYZ mentioned you in their story and tagged you in a promotional post. Check it out to engage with your audience.",
+    time: "15 min ago",
+    date: "2025-05-28",
+    fullTime: "14:15",
+  },
+  {
+    message:
+      "Reminder: Zoom meeting with GlowUp Agency at 3 PM today to discuss partnership opportunities and campaign strategies.",
+    time: "30 min ago",
+    date: "2025-05-28",
+    fullTime: "14:00",
+  },
+  {
+    message:
+      "New comment on your latest reel: 'Amazing content! Love your style and energy. Keep it up!'",
+    time: "1 hr ago",
+    date: "2025-05-28",
+    fullTime: "13:30",
   },
   {
     message:
       "Congratulations! You've reached 1M followers! This is a huge milestone. Keep creating amazing content.",
     time: "1 day ago",
+    date: "2025-05-27",
+    fullTime: "14:30",
   },
 ];
 
@@ -92,11 +95,18 @@ export default function NotificationTalentLayout() {
                     </span>
                   </div>
 
-                  {/* Right side: Time */}
-                  <div className="flex-shrink-0">
-                    <span className="text-xs text-gray-500 whitespace-nowrap">
-                      {notification.time}
-                    </span>
+                  <div>
+                    {" "}
+                    <div className="flex-shrink-0">
+                      <span className="text-xs text-gray-500 whitespace-nowrap">
+                        {notification.time}
+                      </span>
+                    </div>
+                    <div className="flex-shrink-0">
+                      <span className="text-xs text-gray-500 whitespace-nowrap">
+                        {notification.date}
+                      </span>
+                    </div>
                   </div>
                 </div>
               </li>
