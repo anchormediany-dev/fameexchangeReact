@@ -462,15 +462,30 @@ const BrandedTalentShares = () => {
                     viewport={{ once: true }}
                     transition={{ duration: 0.6, delay: 0.6 }}
                   >
-                    <Link to="/talent-profile" className="flex justify-center">
-                      <motion.button
-                        className="custom-button-two"
-                        whileHover={{ scale: 1.02 }}
-                        transition={{ duration: 0.2 }}
+                    <div className="flex flex-col gap-3">
+                      <Link to="/" className="flex justify-center">
+                        <motion.button
+                          className="custom-button-two"
+                          whileHover={{ scale: 1.02 }}
+                          transition={{ duration: 0.2 }}
+                        >
+                          TRADE
+                        </motion.button>
+                      </Link>
+
+                      <Link
+                        to="/talent-profile"
+                        className="flex justify-center"
                       >
-                        TRADE
-                      </motion.button>
-                    </Link>
+                        <motion.button
+                          className="underline cursor-pointer"
+                          whileHover={{ scale: 1.02 }}
+                          transition={{ duration: 0.2 }}
+                        >
+                          View Profile
+                        </motion.button>
+                      </Link>
+                    </div>
                   </motion.div>
                 </motion.div>
               ))}
