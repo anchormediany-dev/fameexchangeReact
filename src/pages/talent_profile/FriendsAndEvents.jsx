@@ -85,6 +85,14 @@ const FriendsEventsSection = () => {
       description:
         "Annual charity event supporting children education. Featuring designs from local artists.",
     },
+     {
+      id: 5,
+      title: "Music Festival Performance",
+      date: "2023-11-20",
+      type: "latest",
+      description:
+        "Headlining the main stage at the International Music Festival with special guests.",
+    },
   ]);
 
   const [editingFriends, setEditingFriends] = useState(false);
@@ -133,16 +141,16 @@ const FriendsEventsSection = () => {
                 {friends.slice(0, 8).map((friend) => (
                   <div
                     key={friend.id}
-                    className="relative group bg-[#2a2a2a] rounded-lg p-2 hover:bg-[#333333] transition"
+                    className="relative group rounded-lg p-2 hover:bg-[#333333] transition"
                   >
-                    <img
-                      src={friend.avatar}
-                      alt={friend.name}
-                      className="w-12 h-12 rounded-full object-cover mx-auto mb-1"
-                    />
-                    <p className="text-xs text-center truncate">
-                      {friend.name}
-                    </p>
+                    <div className="max-w-full">
+                      <img
+                        src={friend.avatar}
+                        alt={friend.name}
+                        className="rounded-full w-16 h-16 object-cover mx-auto mb-1"
+                      />
+                      <p className=" text-center">{friend.name}</p>
+                    </div>
 
                     {editingFriends ? (
                       <div className="absolute top-1 left-1">
@@ -240,12 +248,14 @@ const FriendsEventsSection = () => {
                     <h4 className="text-white font-semibold text-base">
                       {event.title}
                     </h4>
-                    <p className="text-sm text-gray-400 line-clamp-2">
-                      {event.description}
-                    </p>
-                    <button className="text-yellow-400 text-xs self-end cursor-pointer hover:underline">
-                      View details →
-                    </button>
+                    <div className="flex justify-between">
+                      <p className="text-sm text-gray-400 line-clamp-2">
+                        {event.description}
+                      </p>
+                      <button className="text-yellow-400 text-xs  cursor-pointer hover:underline">
+                        View details →
+                      </button>
+                    </div>
                   </div>
                 </div>
               ))}

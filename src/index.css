@@ -762,7 +762,6 @@ select {
 p {
   font-size: 0.75rem; /* Default for small screens (12px) */
   line-height: 1.5;
-  margin-bottom: 1rem;
 }
 
 @media (min-width: 768px) {
