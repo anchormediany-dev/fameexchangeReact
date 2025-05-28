@@ -382,7 +382,11 @@ const TalentTokenTicker = () => {
                   className="grid grid-cols-9 gap-2 md:gap-4 items-center py-5 px-6 hover:shadow-lg transition-all duration-300 cursor-pointer group"
                 >
                   {/* Talent Token Image + Name */}
-                  <div className="col-span-2 flex items-center gap-3 md:gap-4">
+                  <Link
+                    className="col-span-2 flex items-center gap-3 md:gap-4"
+                    to="talent-profile"
+                  >
+                    {/* <div > */}
                     <motion.div
                       whileHover={{ scale: 1.1, rotate: 3 }}
                       transition={{ duration: 0.3 }}
@@ -403,8 +407,8 @@ const TalentTokenTicker = () => {
                         {token.name}
                       </div> */}
                     </div>
-                  </div>
-
+                    {/* </div> */}
+                  </Link>
                   {/* Comprised Value */}
                   <div className="text-center text-xs md:text-sm font-medium text-gray-200 group-hover:text-white transition-colors duration-300">
                     {token.comprisedValue}
@@ -461,15 +465,30 @@ const TalentTokenTicker = () => {
                     viewport={{ once: true }}
                     transition={{ duration: 0.6, delay: 0.6 }}
                   >
-                    <Link to="/talent-profile" className="flex justify-center">
-                      <motion.button
-                        className="custom-button-two"
-                        whileHover={{ scale: 1.02 }}
-                        transition={{ duration: 0.2 }}
+                    <div className="flex flex-col gap-3">
+                      <Link to="/trade" className="flex justify-center">
+                        <motion.button
+                          className="custom-button-two"
+                          whileHover={{ scale: 1.02 }}
+                          transition={{ duration: 0.2 }}
+                        >
+                          TRADE
+                        </motion.button>
+                      </Link>
+
+                      <Link
+                        to="/talent-profile"
+                        className="flex justify-center"
                       >
-                        TRADE
-                      </motion.button>
-                    </Link>
+                        <motion.button
+                          className="underline cursor-pointer"
+                          whileHover={{ scale: 1.02 }}
+                          transition={{ duration: 0.2 }}
+                        >
+                          View Profile
+                        </motion.button>
+                      </Link>
+                    </div>
                   </motion.div>
                 </motion.div>
               ))}
