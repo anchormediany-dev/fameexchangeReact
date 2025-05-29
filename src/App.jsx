@@ -2,7 +2,6 @@ import { Routes, Route, useLocation, Outlet } from "react-router-dom";
 import { AnimatePresence } from "framer-motion";
 import Login from "./pages/login/Login";
 import MotionPageWrapper from "./components/MotionPageWrapper";
-import Signup from "./pages/signup/Signup";
 import FAQ from "./pages/FAQ";
 import Dashboard from "./pages/dashboard/Dashboard";
 import BrandedTokens from "./pages/branded_tokens/BrandedTokens";
@@ -28,6 +27,7 @@ import siteLogo from "./assets/images/site-logo.png"; // Adjust path as needed
 import SignupTwo from "./pages/signup/SignupTwo";
 import BrandedTalentShares from "./pages/branded_talent_shares/BrandedTalentShares";
 import MeetGreetPage from "./pages/meet_greet/MeetGreetPage";
+import InversePage from "./pages/inverse/InversePage";
 
 // Simple Black Header Component
 const SimpleHeader = () => {
@@ -155,6 +155,15 @@ export default function App() {
             element={
               <MotionPageWrapper>
                 <SignupTwo />
+              </MotionPageWrapper>
+            }
+          />
+          {/* Inverse Page */}
+          <Route
+            path="inverse"
+            element={
+              <MotionPageWrapper>
+                <InversePage />
               </MotionPageWrapper>
             }
           />
