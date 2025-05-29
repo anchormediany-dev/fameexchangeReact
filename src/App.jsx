@@ -28,6 +28,7 @@ import SignupTwo from "./pages/signup/SignupTwo";
 import BrandedTalentShares from "./pages/branded_talent_shares/BrandedTalentShares";
 import MeetGreetPage from "./pages/meet_greet/MeetGreetPage";
 import InversePage from "./pages/inverse/InversePage";
+import EventsPage from "./pages/events/EventsPage";
 
 // Simple Black Header Component
 const SimpleHeader = () => {
@@ -164,6 +165,15 @@ export default function App() {
             element={
               <MotionPageWrapper>
                 <InversePage />
+              </MotionPageWrapper>
+            }
+          />
+          {/* Events Page */}
+          <Route
+            path="events"
+            element={
+              <MotionPageWrapper>
+                <EventsPage />
               </MotionPageWrapper>
             }
           />
