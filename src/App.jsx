@@ -30,6 +30,7 @@ import MeetGreetPage from "./pages/meet_greet/MeetGreetPage";
 import InversePage from "./pages/inverse/InversePage";
 import EventsPage from "./pages/events/EventsPage";
 import FutureMusicians from "./pages/future_musicians/FutureMusicians";
+import TradingAccountPage from "./pages/trading_account/TradingAccountPage";
 
 // Simple Black Header Component
 const SimpleHeader = () => {
@@ -157,6 +158,15 @@ export default function App() {
             element={
               <MotionPageWrapper>
                 <FutureMusicians />
+              </MotionPageWrapper>
+            }
+          />
+          {/* trading_account Page */}
+          <Route
+            path="trading-account"
+            element={
+              <MotionPageWrapper>
+                <TradingAccountPage />
               </MotionPageWrapper>
             }
           />
