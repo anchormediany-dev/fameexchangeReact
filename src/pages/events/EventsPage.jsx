@@ -653,7 +653,7 @@ const UltraModernEventsPllatform = () => {
           <div className="lg:col-span-1 flex flex-col space-y-3 h-full">
             {/* Ultra Compact Preferences - Flexible Height */}
             <div className="bg-white/5 backdrop-blur-xl border border-white/10 rounded-2xl shadow-xl p-3 md:p-4 flex-1">
-               <h3 className="text-sm font-bold mb-2 text-center">
+              <h3 className="text-sm font-bold mb-2 text-center">
                 <span
                   style={{
                     background: "linear-gradient(to right, #a38b41, #d4c374)",
@@ -662,47 +662,57 @@ const UltraModernEventsPllatform = () => {
                     backgroundClip: "text",
                   }}
                 >
-                Preferences
+                  Preferences
                 </span>
               </h3>
 
               {/* Compact Attendance */}
-              <div className="mb-4">
-                <h4 className="text-xs font-semibold mb-2 text-gray-300 uppercase tracking-wider">
+              <div className="mb-5">
+                <h4 className="text-sm font-semibold mb-3 text-white/90 uppercase tracking-wide flex items-center">
+                  <span className="w-1.5 h-1.5 bg-gradient-to-r from-yellow-400 to-amber-500 rounded-full mr-2"></span>
                   Attendance
                 </h4>
-                <div className="space-y-1">
+                <div className="space-y-1.5">
                   {[
                     {
                       key: "notInterested",
                       label: "Not Interested",
                       color: "text-red-400",
+                      bgColor: "hover:bg-red-500/10",
                     },
                     {
                       key: "interested",
                       label: "Interested",
                       color: "text-yellow-400",
+                      bgColor: "hover:bg-yellow-500/10",
                     },
                     {
                       key: "attending",
                       label: "Attending",
                       color: "text-green-400",
+                      bgColor: "hover:bg-green-500/10",
                     },
-                  ].map(({ key, label, color }) => (
+                  ].map(({ key, label, color, bgColor }) => (
                     <label
                       key={key}
-                      className="flex items-center space-x-2 cursor-pointer group p-1 rounded-lg hover:bg-white/5 transition-colors"
+                      className={`flex items-center space-x-3 cursor-pointer group py-2 px-3 rounded-xl transition-all duration-300 border border-transparent hover:border-white/15 ${bgColor} hover:shadow-sm`}
                     >
-                      <input
-                        type="radio"
-                        name="attendance"
-                        checked={attendanceOption === key}
-                        onChange={() => setAttendanceOption(key)}
-                        className="scale-75"
-                        style={{ accentColor: "#a38b41" }}
-                      />
+                      <div className="relative">
+                        <input
+                          type="radio"
+                          name="attendance"
+                          checked={attendanceOption === key}
+                          onChange={() => setAttendanceOption(key)}
+                          className="w-4 h-4 appearance-none border-2 border-gray-500 rounded-full checked:border-amber-500 checked:bg-amber-500 transition-all duration-200 relative"
+                        />
+                        {attendanceOption === key && (
+                          <div className="absolute inset-0 w-4 h-4 rounded-full border-2 border-amber-500 bg-amber-500 flex items-center justify-center">
+                            <div className="w-1.5 h-1.5 bg-white rounded-full"></div>
+                          </div>
+                        )}
+                      </div>
                       <span
-                        className={`text-xs ${color} group-hover:text-white transition-colors`}
+                        className={`text-sm font-medium ${color} group-hover:text-white transition-colors leading-tight`}
                       >
                         {label}
                       </span>
@@ -713,38 +723,49 @@ const UltraModernEventsPllatform = () => {
 
               {/* Compact Event Type */}
               <div className="mb-4">
-                <h4 className="text-xs font-semibold mb-2 text-gray-300 uppercase tracking-wider">
+                <h4 className="text-sm font-semibold mb-3 text-white/90 uppercase tracking-wide flex items-center">
+                  <span className="w-1.5 h-1.5 bg-gradient-to-r from-purple-400 to-blue-500 rounded-full mr-2"></span>
                   Event Type
                 </h4>
-                <div className="space-y-1">
+                <div className="space-y-1.5">
                   {[
                     {
                       key: "liveInPerson",
                       label: "Live In Person",
                       icon: FiUsers,
                       color: "text-blue-400",
+                      bgColor: "hover:bg-blue-500/10",
                     },
                     {
                       key: "virtualByInverse",
                       label: "Virtual",
                       icon: FiVideo,
                       color: "text-purple-400",
+                      bgColor: "hover:bg-purple-500/10",
                     },
-                  ].map(({ key, label, icon: Icon, color }) => (
+                  ].map(({ key, label, icon: Icon, color, bgColor }) => (
                     <label
                       key={key}
-                      className="flex items-center space-x-2 cursor-pointer group p-1 rounded-lg hover:bg-white/5 transition-colors"
+                      className={`flex items-center space-x-3 cursor-pointer group py-2 px-3 rounded-xl transition-all duration-300 border border-transparent hover:border-white/15 ${bgColor} hover:shadow-sm`}
                     >
-                      <input
-                        type="radio"
-                        name="eventType"
-                        checked={eventType === key}
-                        onChange={() => setEventType(key)}
-                        className="scale-75"
-                        style={{ accentColor: "#a38b41" }}
+                      <div className="relative">
+                        <input
+                          type="radio"
+                          name="eventType"
+                          checked={eventType === key}
+                          onChange={() => setEventType(key)}
+                          className="w-4 h-4 appearance-none border-2 border-gray-500 rounded-full checked:border-amber-500 checked:bg-amber-500 transition-all duration-200"
+                        />
+                        {eventType === key && (
+                          <div className="absolute inset-0 w-4 h-4 rounded-full border-2 border-amber-500 bg-amber-500 flex items-center justify-center">
+                            <div className="w-1.5 h-1.5 bg-white rounded-full"></div>
+                          </div>
+                        )}
+                      </div>
+                      <Icon
+                        className={`w-4 h-4 ${color} group-hover:text-white transition-colors flex-shrink-0`}
                       />
-                      <Icon className={`w-3 h-3 ${color}`} />
-                      <span className="text-xs group-hover:text-white transition-colors">
+                      <span className="text-sm font-medium text-gray-300 group-hover:text-white transition-colors leading-tight">
                         {label}
                       </span>
                     </label>
@@ -832,7 +853,6 @@ const UltraModernEventsPllatform = () => {
               )}
             </div>
           </div>
-          
         </div>
 
         {/* Second Row - Responsive Events Table */}
