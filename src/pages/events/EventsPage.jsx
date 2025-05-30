@@ -1,9 +1,7 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import {
-  FiCalendar,
   FiChevronLeft,
   FiChevronRight,
-  FiMapPin,
   FiPlus,
   FiUpload,
   FiGlobe,
@@ -11,30 +9,20 @@ import {
   FiVideo,
   FiUsers,
   FiHeart,
-  FiCheck,
   FiX,
-  FiSearch,
   FiExternalLink,
-  FiMusic,
-  FiMonitor,
-  FiCoffee,
   FiZoomIn,
   FiZoomOut,
   FiNavigation,
   FiPlay,
   FiPause,
 } from "react-icons/fi";
+import { FaSearch, FaTimes } from "react-icons/fa";
 import { IoLocationOutline, IoTicketOutline } from "react-icons/io5";
-import {
-  BsBuilding,
-  BsPeople,
-  BsCalendarEvent,
-  BsGoogle,
-} from "react-icons/bs";
+import { BsBuilding, BsPeople, BsGoogle } from "react-icons/bs";
 
 const UltraModernEventsPllatform = () => {
   const [currentDate, setCurrentDate] = useState(new Date(2024, 7)); // August 2024
-  const [searchQuery, setSearchQuery] = useState("");
   const [attendanceOption, setAttendanceOption] = useState("interested");
   const [eventType, setEventType] = useState("liveInPerson");
   const [currentSlide, setCurrentSlide] = useState(0);
@@ -97,7 +85,7 @@ const UltraModernEventsPllatform = () => {
       address: "166 W 46th St, NY 10036",
       phone: "844-206-6006",
       website: "hardrockhotelenwyork.com",
-      logo: "/api/placeholder/50/50",
+      logo: "https://images.unsplash.com/photo-1531058020387-3be344556be6?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8M3x8ZXZlbnR8ZW58MHx8MHx8fDA%3D",
       category: "networking",
     },
     {
@@ -107,7 +95,7 @@ const UltraModernEventsPllatform = () => {
       address: "123 Festival Ave, Brooklyn NY",
       phone: "555-123-4567",
       website: "summerfest.com",
-      logo: "/api/placeholder/50/50",
+      logo: "https://images.unsplash.com/photo-1561489396-888724a1543d?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTZ8fGV2ZW50fGVufDB8fDB8fHww",
       category: "music",
     },
     {
@@ -117,7 +105,7 @@ const UltraModernEventsPllatform = () => {
       address: "789 Tech St, Manhattan NY",
       phone: "555-987-6543",
       website: "techmeetup.com",
-      logo: "/api/placeholder/50/50",
+      logo: "https://images.unsplash.com/photo-1560439514-4e9645039924?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MjV8fGV2ZW50fGVufDB8fDB8fHww",
       category: "tech",
     },
     {
@@ -127,7 +115,7 @@ const UltraModernEventsPllatform = () => {
       address: "456 Art Street, SoHo NY",
       phone: "555-456-7890",
       website: "artgallery.com",
-      logo: "/api/placeholder/50/50",
+      logo: "https://images.unsplash.com/photo-1472653816316-3ad6f10a6592?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MzN8fGV2ZW50fGVufDB8fDB8fHww",
       category: "art",
     },
   ]);
@@ -138,7 +126,8 @@ const UltraModernEventsPllatform = () => {
       title: "Electronic Music Festival",
       date: "Aug 15, 2024",
       location: "Central Park",
-      image: "/api/placeholder/400/250",
+      image:
+        "https://images.pexels.com/photos/1190297/pexels-photo-1190297.jpeg?auto=compress&cs=tinysrgb&w=600",
       price: "$45",
       attendees: "2.5K",
       rating: "4.8",
@@ -148,7 +137,8 @@ const UltraModernEventsPllatform = () => {
       title: "Tech Conference 2024",
       date: "Aug 18, 2024",
       location: "Convention Center",
-      image: "/api/placeholder/400/250",
+      image:
+        "https://images.pexels.com/photos/787961/pexels-photo-787961.jpeg?auto=compress&cs=tinysrgb&w=600",
       price: "$120",
       attendees: "1.2K",
       rating: "4.9",
@@ -158,7 +148,8 @@ const UltraModernEventsPllatform = () => {
       title: "Food & Wine Tasting",
       date: "Aug 22, 2024",
       location: "Rooftop Venue",
-      image: "/api/placeholder/400/250",
+      image:
+        "https://images.pexels.com/photos/433452/pexels-photo-433452.jpeg?auto=compress&cs=tinysrgb&w=600",
       price: "$65",
       attendees: "850",
       rating: "4.7",
@@ -168,7 +159,8 @@ const UltraModernEventsPllatform = () => {
       title: "Art Exhibition Opening",
       date: "Aug 25, 2024",
       location: "Modern Gallery",
-      image: "/api/placeholder/400/250",
+      image:
+        "https://images.pexels.com/photos/625644/pexels-photo-625644.jpeg?auto=compress&cs=tinysrgb&w=600",
       price: "$25",
       attendees: "650",
       rating: "4.6",
@@ -178,7 +170,8 @@ const UltraModernEventsPllatform = () => {
       title: "Jazz Night Live",
       date: "Aug 29, 2024",
       location: "Blue Note Club",
-      image: "/api/placeholder/400/250",
+      image:
+        "https://images.pexels.com/photos/1387174/pexels-photo-1387174.jpeg?auto=compress&cs=tinysrgb&w=600",
       price: "$35",
       attendees: "300",
       rating: "4.8",
@@ -188,7 +181,8 @@ const UltraModernEventsPllatform = () => {
       title: "Comedy Show",
       date: "Aug 30, 2024",
       location: "Comedy Club",
-      image: "/api/placeholder/400/250",
+      image:
+        "https://images.pexels.com/photos/1627935/pexels-photo-1627935.jpeg?auto=compress&cs=tinysrgb&w=600",
       price: "$30",
       attendees: "200",
       rating: "4.5",
@@ -305,45 +299,125 @@ const UltraModernEventsPllatform = () => {
     }, 3500);
     return () => clearInterval(interval);
   }, [isAutoPlay, slidesPerView]);
+  const [searchValue, setSearchValue] = useState("");
+  const [isFocused, setIsFocused] = useState(false);
 
+  const handleSearch = (e) => {
+    e.preventDefault();
+    if (searchValue.trim()) {
+      console.log("Searching for:", searchValue);
+      // Add your search logic here
+    }
+  };
+
+  const clearSearch = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setSearchValue("");
+    // Keep focus on input after clearing
+    const input = e.target.closest("form").querySelector("input");
+    if (input) {
+      input.focus();
+    }
+  };
+
+  const handleInputBlur = (e) => {
+    // Only blur if the click is outside the form
+    const form = e.currentTarget.closest("form");
+    setTimeout(() => {
+      if (!form.contains(document.activeElement)) {
+        setIsFocused(false);
+      }
+    }, 100);
+  };
   return (
-    <div className="min-h-screen bg-[#171717] mt-20 py-5 text-white">
-      {/* Compact Modern Header */}
-      <header className="relative">
-        <div className="relative container">
-          <div className="flex justify-between items-center">
-            {/* Left: Welcome Message */}
-            <div className="flex items-center space-x-3">
-              <div className="w-10 h-10 bg-[#a38b41] rounded-xl flex items-center justify-center">
-                <BsCalendarEvent className="text-white text-lg" />
-              </div>
-              <div>
-                <h1 className="text-xl font-bold" style={{ color: "#a38b41" }}>
-                  Welcome to Fame Exchange
-                </h1>
-                <p className="text-xs text-gray-400">
-                  Discover exclusive events and connect with amazing talent
-                  worldwide.
-                </p>
-              </div>
-            </div>
+    <section className="w-full z-50 bg-gradient-to-br py-12 2xl:py-16 flex flex-col 2xl:gap-16 gap-12 px-4 sm:px-6 lg:px-8">
+      <div className="container flex flex-col 2xl:gap-16 gap-12 px-4 sm:px-6 lg:px-8 mt-10 lg:mt-16 2xl:mt-20 z-50">
+        {/* Modern Compact Search Bar */}
+        <div className="w-full xl:w-80 2xl:w-96">
+          <form onSubmit={handleSearch} className="relative group">
+            <div
+              className={`
+                        relative overflow-hidden rounded-2xl transition-all duration-500 ease-out
+                        ${
+                          isFocused
+                            ? "bg-white/10 border border-[#a38b41]/40 shadow-2xl shadow-[#a38b41]/20 scale-[1.02]"
+                            : "bg-white/5 border border-white/10 hover:border-white/20 hover:bg-white/8"
+                        }
+                      `}
+            >
+              {/* Animated background gradient */}
+              <div
+                className={`
+                          absolute inset-0 bg-gradient-to-r from-[#a38b41]/10 via-transparent to-[#a38b41]/10 
+                          transition-opacity duration-500 pointer-events-none z-5 ${
+                            isFocused ? "opacity-100" : "opacity-0"
+                          }
+                        `}
+              />
 
-            {/* Right: Search Bar */}
-            <div className="relative">
-              <FiSearch className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
+              {/* Search Input */}
               <input
                 type="text"
-                placeholder="Search events..."
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                className="pl-10 pr-4 py-2 w-64 bg-white/10 backdrop-blur-md border border-white/20 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#a38b41] focus:border-transparent placeholder-gray-400 text-white text-sm"
+                value={searchValue}
+                onChange={(e) => setSearchValue(e.target.value)}
+                onFocus={() => setIsFocused(true)}
+                onBlur={handleInputBlur}
+                placeholder="Search"
+                className="relative z-10 w-full h-14 sm:h-16 bg-transparent pl-5 pr-24 text-white placeholder-gray-400 focus:outline-none text-sm sm:text-base font-medium placeholder:font-normal"
+              />
+
+              {/* Search Actions */}
+              <div className="absolute right-3 top-1/2 -translate-y-1/2 flex items-center gap-2 z-20">
+                {/* Clear Button */}
+                {searchValue && (
+                  <button
+                    type="button"
+                    onMouseDown={(e) => e.preventDefault()} // Prevent input blur
+                    onClick={clearSearch}
+                    className="p-2 text-gray-400 hover:text-white transition-all duration-200 rounded-xl hover:bg-white/10 active:scale-95 z-30"
+                  >
+                    <FaTimes size={12} />
+                  </button>
+                )}
+
+                {/* Ultra Modern Search Button */}
+                <button
+                  type="submit"
+                  disabled={!searchValue.trim()}
+                  onMouseDown={(e) => e.preventDefault()} // Prevent input blur
+                  className={`
+                              group/search relative overflow-hidden px-4 py-2 rounded-xl font-bold text-xs transition-all duration-300 flex items-center gap-2 z-30
+                              ${
+                                searchValue.trim()
+                                  ? "bg-gradient-to-r from-[#a38b41] cursor-pointer via-[#c2ab67] to-[#e6ca7c] text-black shadow-lg hover:shadow-xl hover:shadow-[#a38b41]/30 hover:scale-110 active:scale-95"
+                                  : "bg-gray-600/30 text-gray-500 cursor-not-allowed"
+                              }
+                            `}
+                >
+                  <FaSearch size={11} className="relative z-10" />
+                  <span className="relative z-10 hidden sm:inline">Enter</span>
+
+                  {/* Button shine effect */}
+                  {searchValue.trim() && (
+                    <div className="absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent via-white/30 to-transparent group-hover/search:translate-x-full transition-transform duration-700" />
+                  )}
+                </button>
+              </div>
+
+              {/* Search bar shine effect */}
+              <div
+                className={`
+                          absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent via-white/5 to-transparent 
+                          transition-transform duration-1000 pointer-events-none z-5 ${
+                            isFocused ? "translate-x-full" : ""
+                          }
+                        `}
               />
             </div>
-          </div>
+          </form>
         </div>
-      </header>
 
-      <div className="container mt-10 p-4 space-y-6">
         {/* First Row - Stretched Three Columns */}
         <div className="grid grid-cols-1 lg:grid-cols-4 gap-4 items-stretch">
           {/* Left Column - 25% */}
@@ -363,7 +437,7 @@ const UltraModernEventsPllatform = () => {
             </button>
 
             {/* Real Google Maps Integration - Flexible Height */}
-            <div className="bg-gradient-to-br from-gray-800/50 to-gray-900/50 backdrop-blur-xl rounded-2xl p-4 border border-white/10 flex-1 flex flex-col">
+            <div className="bg-white/5 backdrop-blur-xl border border-white/10 rounded-2xl shadow-xl p-3 md:p-4 flex-1 flex flex-col">
               <div className="flex items-center justify-between mb-3">
                 <h3
                   className="text-sm font-bold flex items-center"
@@ -478,7 +552,7 @@ const UltraModernEventsPllatform = () => {
 
           {/* Middle Column - 50% - Stretched Calendar */}
           <div className="lg:col-span-2 h-full">
-            <div className="bg-gradient-to-br from-gray-800/50 to-gray-900/50 backdrop-blur-xl rounded-2xl p-3 sm:p-6 border border-white/10 h-full flex flex-col">
+            <div className="bg-white/5 backdrop-blur-xl border border-white/10 rounded-2xl shadow-xl p-3 md:p-4 h-full flex flex-col">
               {/* Compact Calendar Header */}
               <div className="flex items-center justify-center space-x-2 sm:space-x-4 mb-4 sm:mb-6">
                 <button
@@ -578,12 +652,18 @@ const UltraModernEventsPllatform = () => {
           {/* Right Column - 25% - Stretched */}
           <div className="lg:col-span-1 flex flex-col space-y-3 h-full">
             {/* Ultra Compact Preferences - Flexible Height */}
-            <div className="bg-gradient-to-br from-gray-800/50 to-gray-900/50 backdrop-blur-xl rounded-2xl p-4 border border-white/10 flex-1">
-              <h3
-                className="text-sm font-bold mb-3 text-center"
-                style={{ color: "#a38b41" }}
-              >
+            <div className="bg-white/5 backdrop-blur-xl border border-white/10 rounded-2xl shadow-xl p-3 md:p-4 flex-1">
+               <h3 className="text-sm font-bold mb-2 text-center">
+                <span
+                  style={{
+                    background: "linear-gradient(to right, #a38b41, #d4c374)",
+                    WebkitBackgroundClip: "text",
+                    WebkitTextFillColor: "transparent",
+                    backgroundClip: "text",
+                  }}
+                >
                 Preferences
+                </span>
               </h3>
 
               {/* Compact Attendance */}
@@ -674,7 +754,7 @@ const UltraModernEventsPllatform = () => {
             </div>
 
             {/* Compact Buy Tickets */}
-            <div className="bg-gradient-to-br from-gray-800/50 to-gray-900/50 backdrop-blur-xl rounded-2xl p-4 border border-white/10">
+            <div className="bg-white/5 backdrop-blur-xl border border-white/10 rounded-2xl shadow-xl p-3 md:p-4">
               <h3 className="text-sm font-bold mb-2 text-center">
                 <span
                   style={{
@@ -699,7 +779,7 @@ const UltraModernEventsPllatform = () => {
             </div>
 
             {/* Compact Upload */}
-            <div className="bg-gradient-to-br from-gray-800/50 to-gray-900/50 backdrop-blur-xl rounded-2xl p-4 border border-white/10">
+            <div className="bg-white/5 backdrop-blur-xl border border-white/10 rounded-2xl shadow-xl p-3 md:p-4">
               <h3
                 className="text-sm font-bold mb-3 text-center"
                 style={{ color: "#a38b41" }}
@@ -752,10 +832,11 @@ const UltraModernEventsPllatform = () => {
               )}
             </div>
           </div>
+          
         </div>
 
         {/* Second Row - Responsive Events Table */}
-        <div className="bg-gradient-to-br from-gray-800/50 to-gray-900/50 backdrop-blur-xl rounded-2xl p-4 sm:p-6 border border-white/10">
+        <div className="bg-white/5 backdrop-blur-xl border border-white/10 rounded-2xl shadow-xl p-3 md:p-4">
           <h2
             className="text-xl font-bold mb-4"
             style={{
@@ -926,7 +1007,7 @@ const UltraModernEventsPllatform = () => {
         </div>
 
         {/* Third Row - Fully Responsive Carousel */}
-        <div className="bg-gradient-to-br from-gray-800/50 to-gray-900/50 backdrop-blur-xl rounded-2xl p-4 sm:p-6 border border-white/10">
+        <div className="bg-white/5 backdrop-blur-xl border border-white/10 rounded-2xl shadow-xl p-3 md:p-4">
           <div className="flex flex-col sm:flex-row sm:items-center justify-between mb-6 space-y-4 sm:space-y-0">
             <h2
               className="text-xl font-bold"
@@ -971,7 +1052,6 @@ const UltraModernEventsPllatform = () => {
             </div>
           </div>
 
-          {/* Ultra Modern Responsive Carousel Container */}
           <div className="relative overflow-hidden rounded-xl">
             <div
               className="flex transition-transform duration-700 ease-out"
@@ -1088,7 +1168,7 @@ const UltraModernEventsPllatform = () => {
           </div>
         </div>
       </div>
-    </div>
+    </section>
   );
 };
 
