@@ -29,6 +29,7 @@ import BrandedTalentShares from "./pages/branded_talent_shares/BrandedTalentShar
 import MeetGreetPage from "./pages/meet_greet/MeetGreetPage";
 import InversePage from "./pages/inverse/InversePage";
 import EventsPage from "./pages/events/EventsPage";
+import FutureMusicians from "./pages/future_musicians/FutureMusicians";
 
 // Simple Black Header Component
 const SimpleHeader = () => {
@@ -147,6 +148,15 @@ export default function App() {
             element={
               <MotionPageWrapper>
                 <TalentProfile />
+              </MotionPageWrapper>
+            }
+          />
+          {/* future_musicians Page */}
+          <Route
+            path="future-musicians"
+            element={
+              <MotionPageWrapper>
+                <FutureMusicians />
               </MotionPageWrapper>
             }
           />
