@@ -334,10 +334,11 @@ const UltraModernEventsPllatform = () => {
     <section className="w-full z-50 bg-gradient-to-br py-12 2xl:py-16 flex flex-col 2xl:gap-16 gap-12 px-4 sm:px-6 lg:px-8">
       <div className="2xl:gap-16 gap-12 px-4 container sm:px-6 lg:px-8 mt-10 lg:mt-16 2xl:mt-20 z-50">
         {/* Modern Compact Search Bar */}
-        <div className="w-full flex justify-self-end xl:w-80 2xl:w-96">
-          <form onSubmit={handleSearch} className="relative group">
-            <div
-              className={`
+        <section className="flex justify-end items-center">
+          <div className="lg:w-[25%] mb-3">
+            <form onSubmit={handleSearch} className="relative group">
+              <div
+                className={`
                         relative overflow-hidden rounded-2xl transition-all duration-500 ease-out
                         ${
                           isFocused
@@ -345,48 +346,48 @@ const UltraModernEventsPllatform = () => {
                             : "bg-white/5 border border-white/10 hover:border-white/20 hover:bg-white/8"
                         }
                       `}
-            >
-              {/* Animated background gradient */}
-              <div
-                className={`
+              >
+                {/* Animated background gradient */}
+                <div
+                  className={`
                           absolute inset-0 bg-gradient-to-r from-[#a38b41]/10 via-transparent to-[#a38b41]/10 
                           transition-opacity duration-500 pointer-events-none z-5 ${
                             isFocused ? "opacity-100" : "opacity-0"
                           }
                         `}
-              />
+                />
 
-              {/* Search Input */}
-              <input
-                type="text"
-                value={searchValue}
-                onChange={(e) => setSearchValue(e.target.value)}
-                onFocus={() => setIsFocused(true)}
-                onBlur={handleInputBlur}
-                placeholder="Search"
-                className="relative z-10 w-full h-14 sm:h-16 bg-transparent pl-5 pr-24 text-white placeholder-gray-400 focus:outline-none text-sm sm:text-base font-medium placeholder:font-normal"
-              />
+                {/* Search Input */}
+                <input
+                  type="text"
+                  value={searchValue}
+                  onChange={(e) => setSearchValue(e.target.value)}
+                  onFocus={() => setIsFocused(true)}
+                  onBlur={handleInputBlur}
+                  placeholder="Search"
+                  className="relative z-10 w-full h-14 sm:h-16 bg-transparent pl-5 pr-24 text-white placeholder-gray-400 focus:outline-none text-sm sm:text-base font-medium placeholder:font-normal"
+                />
 
-              {/* Search Actions */}
-              <div className="absolute right-3 top-1/2 -translate-y-1/2 flex items-center gap-2 z-20">
-                {/* Clear Button */}
-                {searchValue && (
+                {/* Search Actions */}
+                <div className="absolute right-3 top-1/2 -translate-y-1/2 flex items-center gap-2 z-20">
+                  {/* Clear Button */}
+                  {searchValue && (
+                    <button
+                      type="button"
+                      onMouseDown={(e) => e.preventDefault()} // Prevent input blur
+                      onClick={clearSearch}
+                      className="p-2 text-gray-400 hover:text-white transition-all duration-200 rounded-xl hover:bg-white/10 active:scale-95 z-30"
+                    >
+                      <FaTimes size={12} />
+                    </button>
+                  )}
+
+                  {/* Ultra Modern Search Button */}
                   <button
-                    type="button"
+                    type="submit"
+                    disabled={!searchValue.trim()}
                     onMouseDown={(e) => e.preventDefault()} // Prevent input blur
-                    onClick={clearSearch}
-                    className="p-2 text-gray-400 hover:text-white transition-all duration-200 rounded-xl hover:bg-white/10 active:scale-95 z-30"
-                  >
-                    <FaTimes size={12} />
-                  </button>
-                )}
-
-                {/* Ultra Modern Search Button */}
-                <button
-                  type="submit"
-                  disabled={!searchValue.trim()}
-                  onMouseDown={(e) => e.preventDefault()} // Prevent input blur
-                  className={`
+                    className={`
                               group/search relative overflow-hidden px-4 py-2 rounded-xl font-bold text-xs transition-all duration-300 flex items-center gap-2 z-30
                               ${
                                 searchValue.trim()
@@ -394,30 +395,33 @@ const UltraModernEventsPllatform = () => {
                                   : "bg-gray-600/30 text-gray-500 cursor-not-allowed"
                               }
                             `}
-                >
-                  <FaSearch size={11} className="relative z-10" />
-                  <span className="relative z-10 hidden sm:inline">Enter</span>
+                  >
+                    <FaSearch size={11} className="relative z-10" />
+                    <span className="relative z-10 hidden sm:inline">
+                      Enter
+                    </span>
 
-                  {/* Button shine effect */}
-                  {searchValue.trim() && (
-                    <div className="absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent via-white/30 to-transparent group-hover/search:translate-x-full transition-transform duration-700" />
-                  )}
-                </button>
-              </div>
+                    {/* Button shine effect */}
+                    {searchValue.trim() && (
+                      <div className="absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent via-white/30 to-transparent group-hover/search:translate-x-full transition-transform duration-700" />
+                    )}
+                  </button>
+                </div>
 
-              {/* Search bar shine effect */}
-              <div
-                className={`
+                {/* Search bar shine effect */}
+                <div
+                  className={`
                           absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent via-white/5 to-transparent 
                           transition-transform duration-1000 pointer-events-none z-5 ${
                             isFocused ? "translate-x-full" : ""
                           }
                         `}
-              />
-            </div>
-          </form>
-        </div>
-        <div className="flex flex-col 2xl:gap-16 gap-12 px-4 sm:px-6 lg:px-8 mt-10 lg:mt-16 2xl:mt-20 z-50">
+                />
+              </div>
+            </form>
+          </div>
+        </section>
+        <div className="flex flex-col 2xl:gap-16 gap-12">
           {/* First Row - Stretched Three Columns */}
           <div className="grid grid-cols-1 lg:grid-cols-4 gap-4 items-stretch">
             {/* Left Column - 25% */}

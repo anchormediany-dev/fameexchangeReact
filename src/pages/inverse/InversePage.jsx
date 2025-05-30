@@ -1,71 +1,286 @@
 import { useState, useEffect } from "react";
 import {
-  FiSearch,
-  FiMapPin,
-  FiUpload,
-  FiCalendar,
-  FiClock,
-  FiUser,
-  FiMail,
-  FiPhone,
-  FiStar,
   FiChevronLeft,
   FiChevronRight,
+  FiPlus,
+  FiUpload,
+  FiGlobe,
+  FiPhone,
+  FiVideo,
+  FiUsers,
+  FiHeart,
+  FiX,
+  FiExternalLink,
+  FiZoomIn,
+  FiZoomOut,
+  FiNavigation,
+  FiPlay,
+  FiPause,
 } from "react-icons/fi";
-import { IoTicketSharp } from "react-icons/io5";
-import { BsSpotify, BsInstagram, BsTwitter } from "react-icons/bs";
-import { IoIosFlash } from "react-icons/io";
-import { HiOutlineLocationMarker } from "react-icons/hi";
+import { FaSearch, FaTimes } from "react-icons/fa";
+import { IoLocationOutline, IoTicketOutline } from "react-icons/io5";
+import { BsBuilding, BsPeople, BsGoogle } from "react-icons/bs";
 
 const InversePage = () => {
-  const [currentDate, setCurrentDate] = useState(new Date());
-  const [selectedDates, setSelectedDates] = useState([
-    18, 19, 22, 23, 29, 30, 31,
-  ]);
-  const [searchQuery, setSearchQuery] = useState("");
-  const [formData, setFormData] = useState({
-    eventName: "",
+  const [currentDate, setCurrentDate] = useState(new Date(2024, 7)); // August 2024
+  const [attendanceOption, setAttendanceOption] = useState("interested");
+  const [eventType, setEventType] = useState("liveInPerson");
+  const [currentSlide, setCurrentSlide] = useState(0);
+  const [uploadedLogo, setUploadedLogo] = useState(null);
+  const [mapZoom, setMapZoom] = useState(12);
+  const [isAutoPlay, setIsAutoPlay] = useState(true);
+  const [slidesPerView, setSlidesPerView] = useState(3);
+  const [fanRequest, setFanRequest] = useState({
+    talentName: "",
     date: "",
-    time: "20:00",
-    location: "",
-    name: "",
-    email: "",
-    phone: "",
-    ticketType: [],
+    time: "",
+    desiredLocation: "",
   });
-  const [events, setEvents] = useState([
+
+  // State for Response Form
+  const [responseForm, setResponseForm] = useState({
+    availableDates: "",
+    time: "",
+    place: "",
+    fansName: "",
+  });
+
+  // Handler for Fan Request Form
+  const handleFanRequestChange = (field, value) => {
+    setFanRequest((prev) => ({
+      ...prev,
+      [field]: value,
+    }));
+  };
+
+  // Handler for Response Form
+  const handleResponseChange = (field, value) => {
+    setResponseForm((prev) => ({
+      ...prev,
+      [field]: value,
+    }));
+  };
+
+  // Button handlers
+  const handleClear = () => {
+    setFanRequest({
+      talentName: "",
+      date: "",
+      time: "",
+      desiredLocation: "",
+    });
+  };
+
+  const handleSendRequest = () => {
+    console.log("Sending request:", fanRequest);
+    // Add your send request logic here
+  };
+
+  const handleCancel = () => {
+    handleClear();
+  };
+
+  const handleAccepted = () => {
+    console.log("Request accepted:", responseForm);
+    // Add your acceptance logic here
+  };
+
+  const handleRejected = () => {
+    console.log("Request rejected:", responseForm);
+    // Add your rejection logic here
+  };
+  // Predefined events that show on calendar
+  const [calendarEvents] = useState([
+    {
+      date: 15,
+      name: "Jake's Exchange",
+      category: "networking",
+      color: "bg-blue-500",
+      lat: 40.7589,
+      lng: -73.9851,
+    },
+    {
+      date: 18,
+      name: "Summer Festival",
+      category: "music",
+      color: "bg-purple-500",
+      lat: 40.7831,
+      lng: -73.9712,
+    },
+    {
+      date: 22,
+      name: "Tech Meetup",
+      category: "tech",
+      color: "bg-green-500",
+      lat: 40.7505,
+      lng: -73.9934,
+    },
+    {
+      date: 25,
+      name: "Art Gallery",
+      category: "art",
+      color: "bg-pink-500",
+      lat: 40.7614,
+      lng: -73.9776,
+    },
+    {
+      date: 29,
+      name: "Food Festival",
+      category: "food",
+      color: "bg-orange-500",
+      lat: 40.7282,
+      lng: -74.0776,
+    },
+  ]);
+
+  const [selectedEvent, setSelectedEvent] = useState(calendarEvents[0]);
+
+  const [eventsList] = useState([
     {
       id: 1,
-      title: "Electronic Vibes",
-      artist: "DJ Nexus",
-      image:
-        "https://images.pexels.com/photos/787961/pexels-photo-787961.jpeg?auto=compress&cs=tinysrgb&w=600",
-      date: "2024-08-18",
-      likes: 1247,
+      name: "JAKE'S EXCHANGE LAUNCH PARTY",
+      location: "New York",
+      address: "166 W 46th St, NY 10036",
+      phone: "844-206-6006",
+      website: "hardrockhotelenwyork.com",
+      logo: "https://images.unsplash.com/photo-1531058020387-3be344556be6?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8M3x8ZXZlbnR8ZW58MHx8MHx8fDA%3D",
+      category: "networking",
     },
     {
       id: 2,
-      title: "Indie Night",
-      artist: "The Waves",
-      image:
-        "https://images.pexels.com/photos/1190297/pexels-photo-1190297.jpeg?auto=compress&cs=tinysrgb&w=600",
-      date: "2024-08-22",
-      likes: 892,
+      name: "SUMMER MUSIC FESTIVAL",
+      location: "Brooklyn",
+      address: "123 Festival Ave, Brooklyn NY",
+      phone: "555-123-4567",
+      website: "summerfest.com",
+      logo: "https://images.unsplash.com/photo-1561489396-888724a1543d?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTZ8fGV2ZW50fGVufDB8fDB8fHww",
+      category: "music",
     },
     {
       id: 3,
-      title: "Hip Hop Legends",
-      artist: "MC Flow",
-      image:
-        "https://images.pexels.com/photos/433452/pexels-photo-433452.jpeg?auto=compress&cs=tinysrgb&w=600",
-      date: "2024-08-29",
-      likes: 2156,
+      name: "TECH INNOVATION MEETUP",
+      location: "Manhattan",
+      address: "789 Tech St, Manhattan NY",
+      phone: "555-987-6543",
+      website: "techmeetup.com",
+      logo: "https://images.unsplash.com/photo-1560439514-4e9645039924?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MjV8fGV2ZW50fGVufDB8fDB8fHww",
+      category: "tech",
+    },
+    {
+      id: 4,
+      name: "ART GALLERY OPENING",
+      location: "SoHo",
+      address: "456 Art Street, SoHo NY",
+      phone: "555-456-7890",
+      website: "artgallery.com",
+      logo: "https://images.unsplash.com/photo-1472653816316-3ad6f10a6592?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MzN8fGV2ZW50fGVufDB8fDB8fHww",
+      category: "art",
     },
   ]);
-  const [currentEventIndex, setCurrentEventIndex] = useState(0);
-  const [isLiked, setIsLiked] = useState(false);
 
-  // Calendar functions
+  const [carouselEvents] = useState([
+    {
+      id: 1,
+      title: "Electronic Music Festival",
+      date: "Aug 15, 2024",
+      location: "Central Park",
+      image:
+        "https://images.pexels.com/photos/1190297/pexels-photo-1190297.jpeg?auto=compress&cs=tinysrgb&w=600",
+      price: "$45",
+      attendees: "2.5K",
+      rating: "4.8",
+    },
+    {
+      id: 2,
+      title: "Tech Conference 2024",
+      date: "Aug 18, 2024",
+      location: "Convention Center",
+      image:
+        "https://images.pexels.com/photos/787961/pexels-photo-787961.jpeg?auto=compress&cs=tinysrgb&w=600",
+      price: "$120",
+      attendees: "1.2K",
+      rating: "4.9",
+    },
+    {
+      id: 3,
+      title: "Food & Wine Tasting",
+      date: "Aug 22, 2024",
+      location: "Rooftop Venue",
+      image:
+        "https://images.pexels.com/photos/433452/pexels-photo-433452.jpeg?auto=compress&cs=tinysrgb&w=600",
+      price: "$65",
+      attendees: "850",
+      rating: "4.7",
+    },
+    {
+      id: 4,
+      title: "Art Exhibition Opening",
+      date: "Aug 25, 2024",
+      location: "Modern Gallery",
+      image:
+        "https://images.pexels.com/photos/625644/pexels-photo-625644.jpeg?auto=compress&cs=tinysrgb&w=600",
+      price: "$25",
+      attendees: "650",
+      rating: "4.6",
+    },
+    {
+      id: 5,
+      title: "Jazz Night Live",
+      date: "Aug 29, 2024",
+      location: "Blue Note Club",
+      image:
+        "https://images.pexels.com/photos/1387174/pexels-photo-1387174.jpeg?auto=compress&cs=tinysrgb&w=600",
+      price: "$35",
+      attendees: "300",
+      rating: "4.8",
+    },
+    {
+      id: 6,
+      title: "Comedy Show",
+      date: "Aug 30, 2024",
+      location: "Comedy Club",
+      image:
+        "https://images.pexels.com/photos/1627935/pexels-photo-1627935.jpeg?auto=compress&cs=tinysrgb&w=600",
+      price: "$30",
+      attendees: "200",
+      rating: "4.5",
+    },
+  ]);
+
+  const monthNames = [
+    "JANUARY",
+    "FEBRUARY",
+    "MARCH",
+    "APRIL",
+    "MAY",
+    "JUNE",
+    "JULY",
+    "AUGUST",
+    "SEPTEMBER",
+    "OCTOBER",
+    "NOVEMBER",
+    "DECEMBER",
+  ];
+
+  const dayNames = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+
+  // Responsive carousel logic
+  useEffect(() => {
+    const updateSlidesPerView = () => {
+      if (window.innerWidth < 640) {
+        setSlidesPerView(1); // Mobile: 1 slide
+      } else if (window.innerWidth < 1024) {
+        setSlidesPerView(2); // Tablet: 2 slides
+      } else {
+        setSlidesPerView(3); // Desktop: 3 slides
+      }
+    };
+
+    updateSlidesPerView();
+    window.addEventListener("resize", updateSlidesPerView);
+    return () => window.removeEventListener("resize", updateSlidesPerView);
+  }, []);
+
   const getDaysInMonth = (date) => {
     return new Date(date.getFullYear(), date.getMonth() + 1, 0).getDate();
   };
@@ -90,468 +305,542 @@ const InversePage = () => {
     return days;
   };
 
-  const isDateSelected = (day) => {
-    return selectedDates.includes(day);
-  };
-
-  const toggleDateSelection = (day) => {
-    if (isDateSelected(day)) {
-      setSelectedDates(selectedDates.filter((d) => d !== day));
-    } else {
-      setSelectedDates([...selectedDates, day]);
-    }
-  };
-
   const navigateMonth = (direction) => {
     const newDate = new Date(currentDate);
     newDate.setMonth(currentDate.getMonth() + direction);
     setCurrentDate(newDate);
   };
 
-  const nextEvent = () => {
-    setCurrentEventIndex((prev) => (prev + 1) % events.length);
+  const getEventForDate = (day) => {
+    return calendarEvents.find((event) => event.date === day);
   };
 
-  const prevEvent = () => {
-    setCurrentEventIndex((prev) => (prev - 1 + events.length) % events.length);
+  const handleEventClick = (event) => {
+    setSelectedEvent(event);
   };
 
-  const handleInputChange = (field, value) => {
-    setFormData((prev) => ({
-      ...prev,
-      [field]: value,
-    }));
+  const nextSlide = () => {
+    setCurrentSlide(
+      (prev) =>
+        (prev + 1) %
+        Math.max(1, Math.ceil(carouselEvents.length / slidesPerView))
+    );
   };
 
-  const handleTicketTypeChange = (type) => {
-    const newTypes = formData.ticketType.includes(type)
-      ? formData.ticketType.filter((i) => i !== type)
-      : [...formData.ticketType, type];
-    handleInputChange("ticketType", newTypes);
+  const prevSlide = () => {
+    setCurrentSlide(
+      (prev) =>
+        (prev - 1 + Math.ceil(carouselEvents.length / slidesPerView)) %
+        Math.max(1, Math.ceil(carouselEvents.length / slidesPerView))
+    );
   };
 
-  const monthNames = [
-    "January",
-    "February",
-    "March",
-    "April",
-    "May",
-    "June",
-    "July",
-    "August",
-    "September",
-    "October",
-    "November",
-    "December",
-  ];
+  const handleLogoUpload = (event) => {
+    const file = event.target.files[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        setUploadedLogo({
+          url: e.target.result,
+          name: file.name,
+        });
+      };
+      reader.readAsDataURL(file);
+    }
+  };
 
-  const dayNames = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
-  const currentEvent = events[currentEventIndex];
-
+  // Auto-play carousel
   useEffect(() => {
+    if (!isAutoPlay) return;
     const interval = setInterval(() => {
-      nextEvent();
-    }, 4000);
+      nextSlide();
+    }, 3500);
     return () => clearInterval(interval);
-  }, []);
+  }, [isAutoPlay, slidesPerView]);
+  const [searchValue, setSearchValue] = useState("");
+  const [isFocused, setIsFocused] = useState(false);
 
+  const handleSearch = (e) => {
+    e.preventDefault();
+    if (searchValue.trim()) {
+      console.log("Searching for:", searchValue);
+      // Add your search logic here
+    }
+  };
+
+  const clearSearch = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setSearchValue("");
+    // Keep focus on input after clearing
+    const input = e.target.closest("form").querySelector("input");
+    if (input) {
+      input.focus();
+    }
+  };
+
+  const handleInputBlur = (e) => {
+    // Only blur if the click is outside the form
+    const form = e.currentTarget.closest("form");
+    setTimeout(() => {
+      if (!form.contains(document.activeElement)) {
+        setIsFocused(false);
+      }
+    }, 100);
+  };
   return (
-    <div className="min-h-screen bg-[#171717] text-white mt-20">
-      {/* Modern Header */}
-      <header className="relative ">
-        <div className="relative max-w-7xl mx-auto p-6">
-          <div className="flex flex-col lg:flex-row justify-between items-center space-y-4 lg:space-y-0">
-            <div className="flex items-center space-x-3">
-              <div className="w-10 h-10 bg-gradient-to-r from-purple-500 to-pink-500 rounded-xl flex items-center justify-center">
-                <IoIosFlash className="text-white text-xl" />
-              </div>
-              <div>
-                <h1 className="text-2xl font-bold bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent">
-                  EventFlow
-                </h1>
-                <p className="text-gray-400 text-sm">
-                  Live • Music • Experience
-                </p>
-              </div>
-            </div>
+    <section className="w-full z-50 bg-gradient-to-br py-12 2xl:py-16 flex flex-col 2xl:gap-16 gap-12 px-4 sm:px-6 lg:px-8">
+      <div className="2xl:gap-16 gap-12 px-4 container sm:px-6 lg:px-8 mt-10 lg:mt-16 2xl:mt-20 z-50">
+        {/* Modern Compact Search Bar */}
+        <section className="flex justify-end items-center">
+          <div className="lg:w-[25%] mb-3">
+            <form onSubmit={handleSearch} className="relative group">
+              <div
+                className={`
+                        relative overflow-hidden rounded-2xl transition-all duration-500 ease-out
+                        ${
+                          isFocused
+                            ? "bg-white/10 border border-[#a38b41]/40 shadow-2xl shadow-[#a38b41]/20 scale-[1.02]"
+                            : "bg-white/5 border border-white/10 hover:border-white/20 hover:bg-white/8"
+                        }
+                      `}
+              >
+                {/* Animated background gradient */}
+                <div
+                  className={`
+                          absolute inset-0 bg-gradient-to-r from-[#a38b41]/10 via-transparent to-[#a38b41]/10 
+                          transition-opacity duration-500 pointer-events-none z-5 ${
+                            isFocused ? "opacity-100" : "opacity-0"
+                          }
+                        `}
+                />
 
-            <div className="flex items-center space-x-4">
-              <div className="relative">
-                <FiSearch className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
+                {/* Search Input */}
                 <input
                   type="text"
-                  placeholder="Search events..."
-                  value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
-                  className="pl-12 pr-6 py-3 w-80 bg-white/10 backdrop-blur-md border border-white/20 rounded-2xl focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent placeholder-gray-400 text-white"
+                  value={searchValue}
+                  onChange={(e) => setSearchValue(e.target.value)}
+                  onFocus={() => setIsFocused(true)}
+                  onBlur={handleInputBlur}
+                  placeholder="Search"
+                  className="relative z-10 w-full h-14 sm:h-16 bg-transparent pl-5 pr-24 text-white placeholder-gray-400 focus:outline-none text-sm sm:text-base font-medium placeholder:font-normal"
                 />
-              </div>
-              <button className="px-6 py-3 bg-gradient-to-r from-purple-500 to-pink-500 rounded-2xl hover:from-purple-600 hover:to-pink-600 transition-all duration-300 font-semibold  ">
-                Search
-              </button>
-            </div>
-          </div>
-        </div>
-      </header>
 
-      <div className="max-w-7xl mx-auto p-6 grid grid-cols-1 xl:grid-cols-3 gap-8">
-        {/* Left Column - Featured Events */}
-        <div className="xl:col-span-1 space-y-6">
-          {/* Featured Event Carousel */}
-          <div className="bg-gradient-to-br from-gray-800/50 to-gray-900/50 backdrop-blur-xl rounded-3xl p-6 border border-white/10 ">
-            <div className="flex items-center justify-between mb-6">
-              <h2 className="text-2xl font-bold">Featured Events</h2>
-              <div className="flex items-center space-x-2">
-                <button
-                  onClick={prevEvent}
-                  className="w-10 h-10 bg-white/10 hover:bg-white/20 rounded-full flex items-center justify-center transition-all duration-300"
-                >
-                  <FiChevronLeft className="w-5 h-5" />
-                </button>
-                <button
-                  onClick={nextEvent}
-                  className="w-10 h-10 bg-white/10 hover:bg-white/20 rounded-full flex items-center justify-center transition-all duration-300"
-                >
-                  <FiChevronRight className="w-5 h-5" />
-                </button>
-              </div>
-            </div>
-
-            <div className="relative overflow-hidden rounded-2xl">
-              <img
-                src={currentEvent.image}
-                alt={currentEvent.title}
-                className="w-full h-64 object-cover transition-transform duration-700 hover:scale-105"
-              />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent"></div>
-              <div className="absolute bottom-4 left-4 right-4">
-                <h3 className="text-xl font-bold mb-1">{currentEvent.title}</h3>
-                <p className="text-gray-300 mb-2">{currentEvent.artist}</p>
-                <div className="flex items-center justify-between">
-                  <span className="text-sm text-gray-400">
-                    {currentEvent.date}
-                  </span>
-                </div>
-              </div>
-            </div>
-
-            <div className="flex justify-center mt-4 space-x-2">
-              {events.map((_, index) => (
-                <button
-                  key={index}
-                  onClick={() => setCurrentEventIndex(index)}
-                  className={`w-2 h-2 rounded-full transition-all duration-300 ${
-                    index === currentEventIndex
-                      ? "bg-purple-500 w-6"
-                      : "bg-gray-600"
-                  }`}
-                />
-              ))}
-            </div>
-          </div>
-
-          {/* Social Media Integration */}
-          {/* <div className="bg-gradient-to-br from-gray-800/50 to-gray-900/50 backdrop-blur-xl rounded-3xl p-6 border border-white/10">
-            <h3 className="text-xl font-bold mb-4">Connect & Share</h3>
-            <div className="grid grid-cols-3 gap-4">
-              <button className="flex flex-col items-center p-4 bg-white/5 hover:bg-white/10 rounded-2xl transition-all duration-300 group">
-                <BsSpotify className="w-8 h-8 text-green-500 mb-2 group-hover:scale-110 transition-transform" />
-                <span className="text-sm">Spotify</span>
-              </button>
-              <button className="flex flex-col items-center p-4 bg-white/5 hover:bg-white/10 rounded-2xl transition-all duration-300 group">
-                <BsInstagram className="w-8 h-8 text-pink-500 mb-2 group-hover:scale-110 transition-transform" />
-                <span className="text-sm">Instagram</span>
-              </button>
-              <button className="flex flex-col items-center p-4 bg-white/5 hover:bg-white/10 rounded-2xl transition-all duration-300 group">
-                <BsTwitter className="w-8 h-8 text-blue-500 mb-2 group-hover:scale-110 transition-transform" />
-                <span className="text-sm">Twitter</span>
-              </button>
-            </div>
-          </div> */}
-
-          {/* Upload Section */}
-          <div className="bg-gradient-to-br from-gray-800/50 to-gray-900/50 backdrop-blur-xl rounded-3xl p-6 border border-white/10">
-            <h3 className="text-xl font-bold mb-4">Sponsor Image</h3>
-            <label className="flex flex-col items-center justify-center w-full h-32 border-2 border-dashed border-gray-600 rounded-2xl cursor-pointer hover:border-purple-500 transition-all duration-300 group">
-              <FiUpload className="w-8 h-8 text-gray-400 group-hover:text-purple-500 mb-2 transition-colors" />
-              <span className="text-gray-400 group-hover:text-purple-500 transition-colors">
-                Upload Sponsor Images
-              </span>
-              <input type="file" accept="image/*" className="hidden" multiple />
-            </label>
-          </div>
-        </div>
-
-        {/* Middle Column - Calendar */}
-        <div className="xl:col-span-1 space-y-6">
-          <div className="bg-gradient-to-br from-gray-800/50 to-gray-900/50 backdrop-blur-xl rounded-3xl p-6 border border-white/10 ">
-            <div className="text-center mb-6">
-              <div className="inline-flex items-center px-4 py-2 bg-gradient-to-r from-green-500/20 to-emerald-500/20 rounded-full border border-green-500/30 mb-4">
-                <FiCalendar className="w-4 h-4 mr-2 text-green-400" />
-                <span className="text-green-400 font-semibold">
-                  Available Event Dates
-                </span>
-              </div>
-
-              <div className="flex items-center justify-center space-x-6 mb-6">
-                <button
-                  onClick={() => navigateMonth(-1)}
-                  className="w-12 h-12 bg-white/10 hover:bg-white/20 rounded-2xl flex items-center justify-center transition-all duration-300 hover:scale-105"
-                >
-                  <FiChevronLeft className="w-6 h-6" />
-                </button>
-                <h4 className="text-2xl font-bold bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent">
-                  {monthNames[currentDate.getMonth()]}{" "}
-                  {currentDate.getFullYear()}
-                </h4>
-                <button
-                  onClick={() => navigateMonth(1)}
-                  className="w-12 h-12 bg-white/10 hover:bg-white/20 rounded-2xl flex items-center justify-center transition-all duration-300 hover:scale-105"
-                >
-                  <FiChevronRight className="w-6 h-6" />
-                </button>
-              </div>
-            </div>
-
-            <div className="grid grid-cols-7 gap-2 mb-4">
-              {dayNames.map((day) => (
-                <div
-                  key={day}
-                  className="text-center font-semibold p-3 text-gray-400 text-sm"
-                >
-                  {day}
-                </div>
-              ))}
-            </div>
-
-            <div className="grid grid-cols-7 gap-2">
-              {generateCalendarDays().map((day, index) => (
-                <div key={index} className="aspect-square">
-                  {day && (
+                {/* Search Actions */}
+                <div className="absolute right-3 top-1/2 -translate-y-1/2 flex items-center gap-2 z-20">
+                  {/* Clear Button */}
+                  {searchValue && (
                     <button
-                      onClick={() => toggleDateSelection(day)}
-                      className={`w-full h-full flex items-center justify-center text-sm font-medium rounded-xl transition-all duration-300 hover:scale-105 ${
-                        isDateSelected(day)
-                          ? "bg-gradient-to-r from-purple-500 to-pink-500 text-white  "
-                          : "hover:bg-white/10 text-gray-300"
-                      }`}
+                      type="button"
+                      onMouseDown={(e) => e.preventDefault()} // Prevent input blur
+                      onClick={clearSearch}
+                      className="p-2 text-gray-400 hover:text-white transition-all duration-200 rounded-xl hover:bg-white/10 active:scale-95 z-30"
                     >
-                      {day}
+                      <FaTimes size={12} />
                     </button>
                   )}
-                </div>
-              ))}
-            </div>
-          </div>
 
-          {/* Interactive Map */}
-          <div className="bg-gradient-to-br from-gray-800/50 to-gray-900/50 backdrop-blur-xl rounded-3xl p-6 border border-white/10">
-            <div className="flex items-center mb-4">
-              <HiOutlineLocationMarker className="w-6 h-6 mr-3 text-red-500" />
-              <h3 className="text-xl font-bold">Event Locations</h3>
+                  {/* Ultra Modern Search Button */}
+                  <button
+                    type="submit"
+                    disabled={!searchValue.trim()}
+                    onMouseDown={(e) => e.preventDefault()} // Prevent input blur
+                    className={`
+                              group/search relative overflow-hidden px-4 py-2 rounded-xl font-bold text-xs transition-all duration-300 flex items-center gap-2 z-30
+                              ${
+                                searchValue.trim()
+                                  ? "bg-gradient-to-r from-[#a38b41] cursor-pointer via-[#c2ab67] to-[#e6ca7c] text-black shadow-lg hover:shadow-xl hover:shadow-[#a38b41]/30 hover:scale-110 active:scale-95"
+                                  : "bg-gray-600/30 text-gray-500 cursor-not-allowed"
+                              }
+                            `}
+                  >
+                    <FaSearch size={11} className="relative z-10" />
+                    <span className="relative z-10 hidden sm:inline">
+                      Enter
+                    </span>
+
+                    {/* Button shine effect */}
+                    {searchValue.trim() && (
+                      <div className="absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent via-white/30 to-transparent group-hover/search:translate-x-full transition-transform duration-700" />
+                    )}
+                  </button>
+                </div>
+
+                {/* Search bar shine effect */}
+                <div
+                  className={`
+                          absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent via-white/5 to-transparent 
+                          transition-transform duration-1000 pointer-events-none z-5 ${
+                            isFocused ? "translate-x-full" : ""
+                          }
+                        `}
+                />
+              </div>
+            </form>
+          </div>
+        </section>
+        <div className="flex flex-col 2xl:gap-16 gap-12 ">
+          {/* First Row - Stretched Three Columns */}
+          <div className="grid grid-cols-1 lg:grid-cols-4 gap-4 items-stretch">
+            {/* Right Column - 50% - Stretched */}
+            <div className="lg:col-span-2 flex flex-col space-y-3 h-full">
+              {/* Welcome section */}
+              <div className="bg-white/5 backdrop-blur-xl border border-white/10 rounded-2xl  p-3 md:p-4 flex-1">
+                <div className="text-center mb-6">
+                  <h1 className="custom-heading-seven mb-2 uppercase">
+                    <span className="font-semibold">Welcome to our </span>
+                    <br />
+                    <span className="font-bold text-primary2">Inverse</span>
+                  </h1>
+                </div>
+                <p className="text-gray-400 leading-relaxed text-center">
+                  Experience the revolutionary platform that connects fans
+                  directly with their favorite talents. Our Inverse system
+                  allows you to request personalized interactions, schedule
+                  meetings, and create unforgettable moments with the
+                  personalities you admire most.
+                </p>
+              </div>
+
+              {/* Image section */}
+              <div className="bg-white/5 backdrop-blur-xl border border-white/10 rounded-2xl  p-3 md:p-4 flex-1">
+                <div className="flex flex-col gap-2 justify-center ">
+                  <h2 className="text-2xl font-bold text-primary2 mb-6 text-center">
+                    Talent Token Brand
+                  </h2>
+                  <img
+                    className="rounded-md"
+                    src="https://images.pexels.com/photos/2263436/pexels-photo-2263436.jpeg?auto=compress&cs=tinysrgb&w=600"
+                    alt=""
+                  />
+                </div>
+              </div>
             </div>
-            <div className="h-48 bg-gradient-to-br from-blue-900/20 to-purple-900/20 rounded-2xl flex items-center justify-center border border-white/10">
-              <div className="text-center">
-                <FiMapPin className="w-12 h-12 text-blue-400 mx-auto mb-2" />
-                <p className="text-gray-400">Interactive Map</p>
-                <p className="text-sm text-gray-500">Coming Soon</p>
+            {/* Middle Column - 50% - Stretched Calendar */}
+            <div className="lg:col-span-2 flex flex-col space-y-3 h-full">
+              {/* Compact Buy Tickets */}
+              <div className="bg-white/5 backdrop-blur-xl border border-white/10 rounded-2xl  p-3 md:p-4">
+                <div>
+                  <h2 className="text-2xl font-bold uppercase text-white mb-6 text-center">
+                    Request your{" "}
+                    <span className="font-bold text-primary2">
+                      "Inverse Experience"
+                    </span>
+                  </h2>
+                  <a
+                    href="#tickets"
+                    className="max-w-[80%] mx-auto flex items-center justify-center space-x-2 p-3 rounded-xl transition-all duration-300 font-semibold hover:scale-105  text-white"
+                    style={{ backgroundColor: "#a38b41" }}
+                  >
+                    <span className="text-sm">Inverse Request</span>
+                    <FiExternalLink className="w-3 h-3" />
+                  </a>
+                </div>
+              </div>
+              {/* Celender section */}
+              <div className="bg-white/5 backdrop-blur-xl border border-white/10 rounded-2xl  p-3 md:p-4 h-full flex flex-col">
+                {/* Compact Calendar Header */}
+                <h2 className="text-2xl  font-bold text-primary2 mb-6 text-center">
+                  Talent Dates Available
+                </h2>
+                <div className="flex items-center justify-center space-x-2 sm:space-x-4 mb-4 sm:mb-6">
+                  <button
+                    onClick={() => navigateMonth(-1)}
+                    className="w-6 h-6 sm:w-8 sm:h-8 bg-white/10 hover:bg-white/20 rounded-lg flex items-center justify-center transition-all duration-300 hover:scale-110"
+                  >
+                    <FiChevronLeft className="w-3 h-3 sm:w-4 sm:h-4" />
+                  </button>
+
+                  <div className="text-center">
+                    <h2
+                      className="text-lg sm:text-2xl font-bold"
+                      style={{
+                        background:
+                          "linear-gradient(to right, #a38b41, #d4c374)",
+                        WebkitBackgroundClip: "text",
+                        WebkitTextFillColor: "transparent",
+                        backgroundClip: "text",
+                      }}
+                    >
+                      {monthNames[currentDate.getMonth()]}{" "}
+                      {currentDate.getFullYear()}
+                    </h2>
+                    {selectedEvent && (
+                      <p className="text-xs sm:text-sm text-gray-400 mt-1">
+                        <span
+                          className={`inline-block w-2 h-2 rounded-full mr-2 ${selectedEvent.color}`}
+                        ></span>
+                        {selectedEvent.name}
+                      </p>
+                    )}
+                  </div>
+
+                  <button
+                    onClick={() => navigateMonth(1)}
+                    className="w-6 h-6 sm:w-8 sm:h-8 bg-white/10 hover:bg-white/20 rounded-lg flex items-center justify-center transition-all duration-300 hover:scale-110"
+                  >
+                    <FiChevronRight className="w-3 h-3 sm:w-4 sm:h-4" />
+                  </button>
+                </div>
+
+                {/* Compact Calendar Grid */}
+                <div className="flex-1 flex flex-col">
+                  <div className="grid grid-cols-7 gap-1 mb-2 sm:mb-3">
+                    {dayNames.map((day) => (
+                      <div
+                        key={day}
+                        className="text-center font-semibold p-1 sm:p-2 text-gray-300 text-xs"
+                      >
+                        {day.slice(0, 3)}
+                      </div>
+                    ))}
+                  </div>
+
+                  <div className="grid grid-cols-7 gap-1 flex-1">
+                    {generateCalendarDays().map((day, index) => {
+                      const event = day ? getEventForDate(day) : null;
+                      const isSelected =
+                        selectedEvent &&
+                        event &&
+                        selectedEvent.date === event.date;
+                      return (
+                        <div key={index} className="aspect-square">
+                          {day && (
+                            <button
+                              onClick={() => event && handleEventClick(event)}
+                              className={`w-full h-full flex flex-col items-center justify-center text-xs font-medium rounded-lg transition-all duration-300 hover:scale-105 relative ${
+                                event
+                                  ? `${event.color} text-white  ${
+                                      isSelected
+                                        ? "ring-2 ring-white/70 ring-offset-2 ring-offset-gray-800 scale-110"
+                                        : "hover:ring-2 hover:ring-white/50"
+                                    }`
+                                  : "hover:bg-white/10 text-gray-300 border border-white/5 hover:border-[#a38b41]/30"
+                              }`}
+                            >
+                              <span className="font-bold text-xs sm:text-sm">
+                                {day}
+                              </span>
+                              {event && (
+                                <span className="text-xs mt-1 truncate w-full px-1 hidden sm:block">
+                                  {event.name.split(" ")[0]}
+                                </span>
+                              )}
+                              {isSelected && (
+                                <div className="absolute -top-1 -right-1 w-2 h-2 sm:w-3 sm:h-3 bg-yellow-400 rounded-full border-2 border-gray-800 animate-pulse"></div>
+                              )}
+                            </button>
+                          )}
+                        </div>
+                      );
+                    })}
+                  </div>
+                </div>
               </div>
             </div>
           </div>
         </div>
+        {/* Request form and talent confirmation */}
+        <div className="flex flex-col 2xl:gap-16 gap-12 px-4 sm:px-6 lg:px-8 mt-10 lg:mt-16 2xl:mt-20 z-50">
+          {/* First Row - Stretched Three Columns */}
+          <div className="grid grid-cols-1 lg:grid-cols-4 gap-4 items-stretch">
+            {/* Right Column - 50% - Stretched */}
+            <div className="lg:col-span-2 flex flex-col space-y-3 h-full">
+              {/* Fan Request Form section */}
+              <div className="bg-white/5 backdrop-blur-xl border border-white/10 rounded-2xl  p-3 md:p-4 flex-1">
+                <h2 className="text-2xl font-bold text-primary2 mb-6 text-center">
+                  Fan Inverse Request Form
+                </h2>
 
-        {/* Right Column - Event Booking */}
-        <div className="xl:col-span-1 space-y-6">
-          {/* Event Booking Form */}
-          <div className="bg-gradient-to-br from-gray-800/50 to-gray-900/50 backdrop-blur-xl rounded-3xl p-6 border border-white/10 ">
-            <h3 className="text-2xl font-bold mb-6 bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent">
-              Book Your Experience
-            </h3>
-
-            <div className="space-y-5">
-              <div>
-                <label className="block text-sm font-semibold mb-2 text-gray-300">
-                  Event Name
-                </label>
-                <input
-                  type="text"
-                  value={formData.eventName}
-                  onChange={(e) =>
-                    handleInputChange("eventName", e.target.value)
-                  }
-                  className="w-full p-4 bg-white/10 backdrop-blur-md border border-white/20 rounded-2xl focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent text-white placeholder-gray-400"
-                  placeholder="Select or type event name"
-                />
-              </div>
-
-              <div className="grid grid-cols-2 gap-4">
-                <div>
-                  <label className="block text-sm font-semibold mb-2 text-gray-300">
-                    <FiCalendar className="inline w-4 h-4 mr-1" />
-                    Date
-                  </label>
-                  <input
-                    type="date"
-                    value={formData.date}
-                    onChange={(e) => handleInputChange("date", e.target.value)}
-                    className="w-full p-4 bg-white/10 backdrop-blur-md border border-white/20 rounded-2xl focus:outline-none focus:ring-2 focus:ring-purple-500 text-white"
-                  />
-                </div>
-                <div>
-                  <label className="block text-sm font-semibold mb-2 text-gray-300">
-                    <FiClock className="inline w-4 h-4 mr-1" />
-                    Time
-                  </label>
-                  <input
-                    type="time"
-                    value={formData.time}
-                    onChange={(e) => handleInputChange("time", e.target.value)}
-                    className="w-full p-4 bg-white/10 backdrop-blur-md border border-white/20 rounded-2xl focus:outline-none focus:ring-2 focus:ring-purple-500 text-white"
-                  />
-                </div>
-              </div>
-
-              <div>
-                <label className="block text-sm font-semibold mb-2 text-gray-300">
-                  <FiMapPin className="inline w-4 h-4 mr-1" />
-                  Venue Location
-                </label>
-                <input
-                  type="text"
-                  value={formData.location}
-                  onChange={(e) =>
-                    handleInputChange("location", e.target.value)
-                  }
-                  className="w-full p-4 bg-white/10 backdrop-blur-md border border-white/20 rounded-2xl focus:outline-none focus:ring-2 focus:ring-purple-500 text-white placeholder-gray-400"
-                  placeholder="Enter venue or location"
-                />
-              </div>
-
-              <div>
-                <label className="block text-sm font-semibold mb-2 text-gray-300">
-                  <FiUser className="inline w-4 h-4 mr-1" />
-                  Full Name
-                </label>
-                <input
-                  type="text"
-                  value={formData.name}
-                  onChange={(e) => handleInputChange("name", e.target.value)}
-                  className="w-full p-4 bg-white/10 backdrop-blur-md border border-white/20 rounded-2xl focus:outline-none focus:ring-2 focus:ring-purple-500 text-white placeholder-gray-400"
-                  placeholder="Your full name"
-                />
-              </div>
-
-              <div>
-                <label className="block text-sm font-semibold mb-2 text-gray-300">
-                  <FiMail className="inline w-4 h-4 mr-1" />
-                  Email Address
-                </label>
-                <input
-                  type="email"
-                  value={formData.email}
-                  onChange={(e) => handleInputChange("email", e.target.value)}
-                  className="w-full p-4 bg-white/10 backdrop-blur-md border border-white/20 rounded-2xl focus:outline-none focus:ring-2 focus:ring-purple-500 text-white placeholder-gray-400"
-                  placeholder="your@email.com"
-                />
-              </div>
-
-              <div>
-                <label className="block text-sm font-semibold mb-2 text-gray-300">
-                  <FiPhone className="inline w-4 h-4 mr-1" />
-                  Phone Number
-                </label>
-                <input
-                  type="tel"
-                  value={formData.phone}
-                  onChange={(e) => handleInputChange("phone", e.target.value)}
-                  className="w-full p-4 bg-white/10 backdrop-blur-md border border-white/20 rounded-2xl focus:outline-none focus:ring-2 focus:ring-purple-500 text-white placeholder-gray-400"
-                  placeholder="+1 (555) 123-4567"
-                />
-              </div>
-
-              {/* Ticket Types */}
-              <div>
-                <label className="block text-sm font-semibold mb-3 text-gray-300">
-                  <IoTicketSharp className="inline w-4 h-4 mr-1" />
-                  Ticket Types
-                </label>
-                <div className="grid grid-cols-2 gap-3">
-                  {["General", "VIP", "Premium", "Backstage"].map((type) => (
-                    <label
-                      key={type}
-                      className="flex items-center p-3 bg-white/5 hover:bg-white/10 rounded-xl cursor-pointer transition-all duration-300 group"
-                    >
-                      <input
-                        type="checkbox"
-                        checked={formData.ticketType.includes(type)}
-                        onChange={() => handleTicketTypeChange(type)}
-                        className="mr-3 rounded text-purple-500 focus:ring-purple-500 focus:ring-2"
-                      />
-                      <span className="text-sm group-hover:text-white transition-colors">
-                        {type}
-                      </span>
-                      {type === "VIP" && (
-                        <FiStar className="w-4 h-4 ml-auto text-yellow-500" />
-                      )}
+                <div className="space-y-4">
+                  <div>
+                    <label className="block text-sm font-medium text-gray-400 mb-2">
+                      Talent Selected
                     </label>
-                  ))}
-                </div>
-              </div>
+                    <input
+                      type="text"
+                      value={fanRequest.talentName}
+                      onChange={(e) =>
+                        handleFanRequestChange("talentName", e.target.value)
+                      }
+                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition-all"
+                      placeholder="Enter talent name"
+                    />
+                  </div>
 
-              <div className="grid grid-cols-2 gap-4 pt-4">
-                <button className="py-4 bg-white/10 hover:bg-white/20 text-gray-300 hover:text-white rounded-2xl transition-all duration-300 font-semibold">
-                  Clear Form
-                </button>
-                <button className="py-4 bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 text-white rounded-2xl transition-all duration-300 font-semibold  ">
-                  Submit Request
-                </button>
+                  <div>
+                    <label className="block text-sm font-medium text-gray-400 mb-2">
+                      Date
+                    </label>
+                    <input
+                      type="date"
+                      value={fanRequest.date}
+                      onChange={(e) =>
+                        handleFanRequestChange("date", e.target.value)
+                      }
+                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition-all"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-sm font-medium text-gray-400 mb-2">
+                      Time
+                    </label>
+                    <input
+                      type="time"
+                      value={fanRequest.time}
+                      onChange={(e) =>
+                        handleFanRequestChange("time", e.target.value)
+                      }
+                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition-all"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-sm font-medium text-gray-400 mb-2">
+                      Desired Location
+                    </label>
+                    <input
+                      type="text"
+                      value={fanRequest.desiredLocation}
+                      onChange={(e) =>
+                        handleFanRequestChange(
+                          "desiredLocation",
+                          e.target.value
+                        )
+                      }
+                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition-all"
+                      placeholder="Enter desired location"
+                    />
+                  </div>
+                </div>
+
+                <div className="flex flex-wrap gap-3 mt-8 justify-center">
+                  <button
+                    onClick={handleClear}
+                    className="px-6 py-3 bg-gray-500 text-white rounded-lg hover:bg-gray-600 transition-colors font-medium"
+                  >
+                    Clear
+                  </button>
+                  <button
+                    onClick={handleSendRequest}
+                    className="px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors font-medium"
+                  >
+                    Send Request
+                  </button>
+                  <button
+                    onClick={handleCancel}
+                    className="px-6 py-3 bg-red-500 text-white rounded-lg hover:bg-red-600 transition-colors font-medium"
+                  >
+                    Cancel
+                  </button>
+                </div>
               </div>
             </div>
-          </div>
+            {/* Middle Column - 50% - Stretched Calendar */}
+            <div className="lg:col-span-2 flex flex-col space-y-3 h-full">
+              {/* Talent Confirmation section */}
+              <div className="bg-white/5 backdrop-blur-xl border border-white/10 rounded-2xl  p-3 md:p-4 h-full flex flex-col">
+                {/* Response Form */}
 
-          {/* Event Confirmation & Tickets */}
-          <div className="bg-gradient-to-br from-gray-800/50 to-gray-900/50 backdrop-blur-xl rounded-3xl p-6 border border-white/10">
-            <h3 className="text-2xl font-bold mb-6 bg-gradient-to-r from-green-400 to-blue-400 bg-clip-text text-transparent">
-              Event Confirmation
-            </h3>
+                <h2 className="text-2xl font-bold text-primary2 mb-6 text-center">
+                  Talent Confirmation
+                </h2>
 
-            <div className="space-y-4">
-              <div className="flex justify-between items-center p-4 bg-white/5 rounded-2xl">
-                <span className="font-semibold text-gray-300">Status:</span>
-                <span className="px-3 py-1 bg-green-500/20 text-green-400 rounded-full text-sm border border-green-500/30">
-                  Confirmed
-                </span>
-              </div>
+                <div className="space-y-4">
+                  <div>
+                    <label className="block text-sm font-medium text-gray-400 mb-2">
+                      Available Dates
+                    </label>
+                    <select
+                      value={responseForm.availableDates}
+                      onChange={(e) =>
+                        handleResponseChange("availableDates", e.target.value)
+                      }
+                      className="w-full px-4 py-3 border-2 border-gray-300 outline outline-1 outline-gray-300 text-primary2 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all"
+                    >
+                      <option value="">Select available date</option>
+                      <option value="2025-06-01">June 1, 2025</option>
+                      <option value="2025-06-02">June 2, 2025</option>
+                      <option value="2025-06-03">June 3, 2025</option>
+                      <option value="2025-06-04">June 4, 2025</option>
+                      <option value="2025-06-05">June 5, 2025</option>
+                    </select>
+                  </div>
 
-              <div className="flex justify-between items-center p-4 bg-white/5 rounded-2xl">
-                <span className="font-semibold text-gray-300">Event Time:</span>
-                <span className="text-white">8:00 PM</span>
-              </div>
+                  <div>
+                    <label className="block text-sm font-medium text-gray-400 mb-2">
+                      Time
+                    </label>
+                    <input
+                      type="time"
+                      value={responseForm.time}
+                      onChange={(e) =>
+                        handleResponseChange("time", e.target.value)
+                      }
+                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition-all"
+                    />
+                  </div>
 
-              <div className="flex justify-between items-center p-4 bg-white/5 rounded-2xl">
-                <span className="font-semibold text-gray-300">Venue:</span>
-                <span className="text-white">Madison Square Garden</span>
-              </div>
+                  <div>
+                    <label className="block text-sm font-medium text-gray-400 mb-2">
+                      Place
+                    </label>
+                    <select
+                      value={responseForm.place}
+                      onChange={(e) =>
+                        handleResponseChange("place", e.target.value)
+                      }
+                      className="w-full px-4 py-3 border border-gray-400 outline outline-1 outline-gray-300 text-primary2 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all"
+                    >
+                      <option value="">Select place</option>
+                      <option value="new-york">New York</option>
+                      <option value="los-angeles">Los Angeles</option>
+                      <option value="chicago">Chicago</option>
+                      <option value="houston">Houston</option>
+                      <option value="phoenix">Phoenix</option>
+                      <option value="philadelphia">Philadelphia</option>
+                      <option value="san-antonio">San Antonio</option>
+                      <option value="san-diego">San Diego</option>
+                    </select>
+                  </div>
 
-              <div className="pt-4 space-y-3">
-                <button className="w-full py-4 bg-gradient-to-r from-green-500 to-emerald-500 hover:from-green-600 hover:to-emerald-600 text-white rounded-2xl transition-all duration-300 font-semibold ">
-                  Confirm Booking
-                </button>
+                  <div>
+                    <label className="block text-sm font-medium text-gray-400 mb-2">
+                      Fan's Name
+                    </label>
+                    <input
+                      type="text"
+                      value={responseForm.fansName}
+                      onChange={(e) =>
+                        handleResponseChange("fansName", e.target.value)
+                      }
+                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition-all"
+                      placeholder="Enter fan's name"
+                    />
+                  </div>
+                </div>
 
-                <button className="w-full py-4 bg-gradient-to-r from-yellow-500 to-orange-500 hover:from-yellow-600 hover:to-orange-600 text-white rounded-2xl transition-all duration-300 font-semibold ">
-                  Reschedule Event
-                </button>
-
-                <button className="w-full py-4 bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500 hover:from-blue-600 hover:via-purple-600 hover:to-pink-600 text-white rounded-2xl transition-all duration-300 font-bold text-lg flex items-center justify-center">
-                  <IoTicketSharp className="w-6 h-6 mr-2" />
-                  Get Tickets Now
-                </button>
+                <div className="flex gap-4 mt-8 justify-center">
+                  <button
+                    onClick={handleAccepted}
+                    className="px-8 py-3 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors font-medium"
+                  >
+                    Accepted
+                  </button>
+                  <button
+                    onClick={handleRejected}
+                    className="px-8 py-3 bg-primary2 text-white rounded-lg hover:bg-primary2 transition-colors font-medium"
+                  >
+                    Reschedule
+                  </button>
+                </div>
               </div>
             </div>
           </div>
         </div>
       </div>
-    </div>
+    </section>
   );
 };
 
