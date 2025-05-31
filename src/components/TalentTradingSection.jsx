@@ -45,7 +45,7 @@ const TalentTradingSection = () => {
               isInView ? { opacity: 1, scale: 1 } : { opacity: 0, scale: 1.05 }
             }
             transition={{ duration: 0.7, delay: 0.3 }}
-            src={talentTradingImage}
+            src="https://cdn.pixabay.com/photo/2021/08/08/15/01/trading-6531134_640.jpg"
             alt="Talent Trading"
             className="w-full h-full object-cover rounded-2xl"
           />
