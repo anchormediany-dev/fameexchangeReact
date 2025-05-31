@@ -151,7 +151,7 @@ const AppShowcase = () => {
             transition={{ duration: 0.6, delay: 0.3 }}
           >
             Our app and website are designed to be intuitive and easy to use,
-            making investing in your favorite talents simple and enjoyable.
+            making investing in your favourite talents simple and enjoyable.
           </motion.p>
 
           <motion.button

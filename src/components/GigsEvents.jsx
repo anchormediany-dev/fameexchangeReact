@@ -178,7 +178,7 @@ const eventsData = [
     id: 3,
     title: "Sports Fanatic Championship",
     description:
-      "A day with champions on the LBS Arena and come meet your favorite athletes. First 500 fans receive a free jersey",
+      "A day with champions on the LBS Arena and come meet your favourite athletes. First 500 fans receive a free jersey",
     image: sportsFantasticsImage,
     link: "#",
   },

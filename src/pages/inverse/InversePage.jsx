@@ -495,7 +495,7 @@ const InversePage = () => {
                 </div>
                 <p className="text-gray-400 leading-relaxed text-center">
                   Experience the revolutionary platform that connects fans
-                  directly with their favorite talents. Our Inverse system
+                  directly with their favourite talents. Our Inverse system
                   allows you to request personalized interactions, schedule
                   meetings, and create unforgettable moments with the
                   personalities you admire most.
