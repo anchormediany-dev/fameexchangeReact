@@ -15,24 +15,28 @@ const OurTeam = () => {
       name: "DAVE ROMANO",
       role: "FOUNDER/CEO",
       image: teamOneImage,
+      bio: "Visionary entrepreneur leading the Fame Exchange with a mission to redefine celebrity value.",
     },
     {
       id: 2,
       name: "VICTOR RAMOS",
       role: "Finance Manager",
       image: teamTwoImage,
+      bio: "Experienced finance strategist ensuring sustainable growth and financial transparency.",
     },
     {
       id: 3,
       name: "CHRISTOPHER SHERILLO",
       role: "Lead Entertainment Counsel",
       image: teamThreeImage,
+      bio: "Legal expert in the entertainment industry, guiding partnerships and IP strategy.",
     },
     {
       id: 4,
       name: "EDWARD GRAUER",
       role: "Operations Director",
       image: teamFourImage,
+      bio: "Operations mastermind focused on efficiency, scalability, and seamless platform delivery.",
     },
   ];
 
@@ -99,12 +103,11 @@ const OurTeam = () => {
                   />
                 </div>
                 <div className="p-6 text-center">
-                  <h4 className="text-white custom-heading-five">
+                  <h4 className="text-white custom-heading-seven">
                     {member.name}
                   </h4>
-                  <p className="text-white custom-heading-seven">
-                    {member.role}
-                  </p>
+                  <p className="text-white">{member.role}</p>
+                  <p className="text-gray-400 text-sm mt-2">{member.bio}</p>
                 </div>
               </div>
             </SwiperSlide>
@@ -112,7 +115,7 @@ const OurTeam = () => {
         </Swiper>
 
         {/* Custom pagination container */}
-        <div className="team-pagination flex justify-center mt-4 gap-2"></div>
+        {/* <div className="team-pagination flex justify-center mt-4 gap-2"></div> */}
       </div>{" "}
       <div className="flex justify-center">
         <button className="custom-button-two" href="#">
