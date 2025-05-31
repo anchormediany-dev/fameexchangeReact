@@ -9,7 +9,8 @@ import comedyNightImage from "../assets/images/comedy-night.png";
 import summerBeatsMusicImage from "../assets/images/summer-beats-music.png";
 import sportsFantasticsImage from "../assets/images/sports-fantastics.png";
 import hollywoodImage from "../assets/images/hollywood-sign-night_Fotor.jpg";
-
+import pop1 from "../assets/images/pop1.jpg";
+import pop2 from "../assets/images/pop2.jpg";
 const EventsSectionWrapper = styled.section`
   width: 100%;
   background-image: linear-gradient(rgba(0, 0, 0, 0.85), rgba(0, 0, 0, 0.85)),
@@ -17,6 +18,43 @@ const EventsSectionWrapper = styled.section`
   background-size: cover;
   background-position: center;
   background-attachment: fixed;
+  position: relative;
+  overflow: hidden;
+
+  &::before,
+  &::after {
+    content: "";
+    position: absolute;
+    z-index: 1;
+    width: 500px;
+    height: 500px;
+    background: no-repeat;
+    background-size: contain;
+    background-position: center;
+    opacity: 0.5;
+  }
+
+  &::before {
+    top: 0;
+    left: 0;
+    background-image: url(${pop2});
+    background-position: left center;
+  }
+
+  &::after {
+    top: 0;
+    right: 0;
+    background-image: url(${pop1});
+    background-position: right center;
+  }
+
+  @media (max-width: 768px) {
+    &::before,
+    &::after {
+      width: 120px;
+      opacity: 0.15;
+    }
+  }
 `;
 
 const SectionTitle = styled.h2`
@@ -217,7 +255,7 @@ const GigsEvents = () => {
       transition={{ duration: 0.8 }}
     >
       <EventsSectionWrapper id="events" className="py-12 2xl:py-16">
-        <div className="container">
+        <div className="container" style={{ position: "relative", zIndex: 2 }}>
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
