@@ -248,7 +248,7 @@ const Navbar2 = () => {
                 <img
                   src={siteLogo}
                   alt="Logo"
-                  className="h-12 transition-transform duration-300 hover:scale-105"
+                  className="h-16 transition-transform duration-300 hover:scale-105"
                 />
               </Link>
             </motion.div>
