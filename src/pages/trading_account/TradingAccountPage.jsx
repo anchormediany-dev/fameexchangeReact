@@ -1,5 +1,15 @@
-import { useState, useRef, useEffect } from "react";
-import * as d3 from "d3";
+import { useState, useEffect } from "react";
+import { motion, useInView, useAnimation } from "framer-motion";
+import {
+  LineChart,
+  Line,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Tooltip,
+  ResponsiveContainer,
+  ReferenceLine,
+} from "recharts";
 
 const TalentTokenDashboard = () => {
   const [selectedTalent, setSelectedTalent] = useState("Taylor Swift");
@@ -12,6 +22,24 @@ const TalentTokenDashboard = () => {
     highestLowest: false,
     recoveringInvestment: false,
   });
+  // Animation variants
+  const fadeInUpVariant = {
+    hidden: { opacity: 0, y: 20 },
+    visible: { opacity: 1, y: 0, transition: { duration: 0.6 } },
+  };
+
+  const tableRowVariant = {
+    hidden: { opacity: 0, x: -20 },
+    visible: (i) => ({
+      opacity: 1,
+      x: 0,
+      transition: {
+        duration: 0.6,
+        delay: 0.2 + i * 0.1,
+        ease: "easeOut",
+      },
+    }),
+  };
 
   const [paymentForm, setPaymentForm] = useState({
     nameOnCard: "",
@@ -23,170 +51,252 @@ const TalentTokenDashboard = () => {
     email: "",
   });
 
-  const chartRef = useRef(null);
-
-  // Sample data for different artists
+  // Expanded dynamic data for different artists and timeframes
   const talentData = {
     "Taylor Swift": {
       token: "SWIFTY",
       price: 125.5,
       change: 15.2,
       changePercent: 13.8,
-      data: [
-        { date: "2024-01-01", price: 110 },
-        { date: "2024-01-15", price: 105 },
-        { date: "2024-02-01", price: 95 },
-        { date: "2024-02-15", price: 98 },
-        { date: "2024-03-01", price: 102 },
-        { date: "2024-03-15", price: 108 },
-        { date: "2024-04-01", price: 115 },
-        { date: "2024-04-15", price: 112 },
-        { date: "2024-05-01", price: 120 },
-        { date: "2024-05-15", price: 118 },
-        { date: "2024-05-30", price: 125.5 },
-      ],
+      data: {
+        "1 Day": [
+          { date: "00:00", price: 124.2, timestamp: "2024-05-30T00:00:00Z" },
+          { date: "04:00", price: 123.8, timestamp: "2024-05-30T04:00:00Z" },
+          { date: "08:00", price: 124.5, timestamp: "2024-05-30T08:00:00Z" },
+          { date: "12:00", price: 125.1, timestamp: "2024-05-30T12:00:00Z" },
+          { date: "16:00", price: 125.8, timestamp: "2024-05-30T16:00:00Z" },
+          { date: "20:00", price: 125.5, timestamp: "2024-05-30T20:00:00Z" },
+        ],
+        "1 Week": [
+          { date: "Mon", price: 121.2, timestamp: "2024-05-24" },
+          { date: "Tue", price: 122.5, timestamp: "2024-05-25" },
+          { date: "Wed", price: 123.8, timestamp: "2024-05-26" },
+          { date: "Thu", price: 124.1, timestamp: "2024-05-27" },
+          { date: "Fri", price: 125.5, timestamp: "2024-05-28" },
+          { date: "Sat", price: 124.9, timestamp: "2024-05-29" },
+          { date: "Sun", price: 125.5, timestamp: "2024-05-30" },
+        ],
+        "1 Month": [
+          { date: "Jan 1", price: 110, timestamp: "2024-01-01" },
+          { date: "Jan 15", price: 105, timestamp: "2024-01-15" },
+          { date: "Feb 1", price: 95, timestamp: "2024-02-01" },
+          { date: "Feb 15", price: 98, timestamp: "2024-02-15" },
+          { date: "Mar 1", price: 102, timestamp: "2024-03-01" },
+          { date: "Mar 15", price: 108, timestamp: "2024-03-15" },
+          { date: "Apr 1", price: 115, timestamp: "2024-04-01" },
+          { date: "Apr 15", price: 112, timestamp: "2024-04-15" },
+          { date: "May 1", price: 120, timestamp: "2024-05-01" },
+          { date: "May 15", price: 118, timestamp: "2024-05-15" },
+          { date: "May 30", price: 125.5, timestamp: "2024-05-30" },
+        ],
+        "3 Months": [
+          { date: "Mar", price: 105, timestamp: "2024-03-01" },
+          { date: "Mar", price: 108, timestamp: "2024-03-15" },
+          { date: "Apr", price: 115, timestamp: "2024-04-01" },
+          { date: "Apr", price: 112, timestamp: "2024-04-15" },
+          { date: "May", price: 120, timestamp: "2024-05-01" },
+          { date: "May", price: 118, timestamp: "2024-05-15" },
+          { date: "May", price: 125.5, timestamp: "2024-05-30" },
+        ],
+        "1Y": [
+          { date: "Q1 '24", price: 85, timestamp: "2024-01-01" },
+          { date: "Q2 '24", price: 95, timestamp: "2024-04-01" },
+          { date: "Q3 '24", price: 110, timestamp: "2024-07-01" },
+          { date: "Q4 '24", price: 125.5, timestamp: "2024-10-01" },
+        ],
+        "5Y": [
+          { date: "'20", price: 45, timestamp: "2020-01-01" },
+          { date: "'21", price: 62, timestamp: "2021-01-01" },
+          { date: "'22", price: 78, timestamp: "2022-01-01" },
+          { date: "'23", price: 89, timestamp: "2023-01-01" },
+          { date: "'24", price: 125.5, timestamp: "2024-01-01" },
+        ],
+      },
     },
     BTS: {
       token: "BTS",
       price: 89.75,
       change: -2.15,
       changePercent: -2.3,
-      data: [
-        { date: "2024-01-01", price: 95 },
-        { date: "2024-01-15", price: 92 },
-        { date: "2024-02-01", price: 88 },
-        { date: "2024-02-15", price: 90 },
-        { date: "2024-03-01", price: 94 },
-        { date: "2024-03-15", price: 96 },
-        { date: "2024-04-01", price: 93 },
-        { date: "2024-04-15", price: 91 },
-        { date: "2024-05-01", price: 87 },
-        { date: "2024-05-15", price: 89 },
-        { date: "2024-05-30", price: 89.75 },
-      ],
+      data: {
+        "1 Day": [
+          { date: "00:00", price: 90.2, timestamp: "2024-05-30T00:00:00Z" },
+          { date: "04:00", price: 89.8, timestamp: "2024-05-30T04:00:00Z" },
+          { date: "08:00", price: 89.5, timestamp: "2024-05-30T08:00:00Z" },
+          { date: "12:00", price: 89.1, timestamp: "2024-05-30T12:00:00Z" },
+          { date: "16:00", price: 89.9, timestamp: "2024-05-30T16:00:00Z" },
+          { date: "20:00", price: 89.75, timestamp: "2024-05-30T20:00:00Z" },
+        ],
+        "1 Week": [
+          { date: "Mon", price: 91.2, timestamp: "2024-05-24" },
+          { date: "Tue", price: 90.5, timestamp: "2024-05-25" },
+          { date: "Wed", price: 89.8, timestamp: "2024-05-26" },
+          { date: "Thu", price: 89.1, timestamp: "2024-05-27" },
+          { date: "Fri", price: 89.5, timestamp: "2024-05-28" },
+          { date: "Sat", price: 89.9, timestamp: "2024-05-29" },
+          { date: "Sun", price: 89.75, timestamp: "2024-05-30" },
+        ],
+        "1 Month": [
+          { date: "Jan 1", price: 95, timestamp: "2024-01-01" },
+          { date: "Jan 15", price: 92, timestamp: "2024-01-15" },
+          { date: "Feb 1", price: 88, timestamp: "2024-02-01" },
+          { date: "Feb 15", price: 90, timestamp: "2024-02-15" },
+          { date: "Mar 1", price: 94, timestamp: "2024-03-01" },
+          { date: "Mar 15", price: 96, timestamp: "2024-03-15" },
+          { date: "Apr 1", price: 93, timestamp: "2024-04-01" },
+          { date: "Apr 15", price: 91, timestamp: "2024-04-15" },
+          { date: "May 1", price: 87, timestamp: "2024-05-01" },
+          { date: "May 15", price: 89, timestamp: "2024-05-15" },
+          { date: "May 30", price: 89.75, timestamp: "2024-05-30" },
+        ],
+        "3 Months": [
+          { date: "Mar", price: 94, timestamp: "2024-03-01" },
+          { date: "Mar", price: 96, timestamp: "2024-03-15" },
+          { date: "Apr", price: 93, timestamp: "2024-04-01" },
+          { date: "Apr", price: 91, timestamp: "2024-04-15" },
+          { date: "May", price: 87, timestamp: "2024-05-01" },
+          { date: "May", price: 89, timestamp: "2024-05-15" },
+          { date: "May", price: 89.75, timestamp: "2024-05-30" },
+        ],
+        "1Y": [
+          { date: "Q1 '24", price: 95, timestamp: "2024-01-01" },
+          { date: "Q2 '24", price: 88, timestamp: "2024-04-01" },
+          { date: "Q3 '24", price: 92, timestamp: "2024-07-01" },
+          { date: "Q4 '24", price: 89.75, timestamp: "2024-10-01" },
+        ],
+        "5Y": [
+          { date: "'20", price: 105, timestamp: "2020-01-01" },
+          { date: "'21", price: 98, timestamp: "2021-01-01" },
+          { date: "'22", price: 92, timestamp: "2022-01-01" },
+          { date: "'23", price: 94, timestamp: "2023-01-01" },
+          { date: "'24", price: 89.75, timestamp: "2024-01-01" },
+        ],
+      },
+    },
+
+    "Ariana Grande": {
+      token: "ARII",
+      price: 142.25,
+      change: 8.7,
+      changePercent: 6.5,
+      data: {
+        "1 Day": [
+          { date: "00:00", price: 140.2, timestamp: "2024-05-30T00:00:00Z" },
+          { date: "04:00", price: 141.1, timestamp: "2024-05-30T04:00:00Z" },
+          { date: "08:00", price: 141.8, timestamp: "2024-05-30T08:00:00Z" },
+          { date: "12:00", price: 142.5, timestamp: "2024-05-30T12:00:00Z" },
+          { date: "16:00", price: 142.1, timestamp: "2024-05-30T16:00:00Z" },
+          { date: "20:00", price: 142.25, timestamp: "2024-05-30T20:00:00Z" },
+        ],
+        "1 Week": [
+          { date: "Mon", price: 135.2, timestamp: "2024-05-24" },
+          { date: "Tue", price: 137.5, timestamp: "2024-05-25" },
+          { date: "Wed", price: 139.8, timestamp: "2024-05-26" },
+          { date: "Thu", price: 141.1, timestamp: "2024-05-27" },
+          { date: "Fri", price: 142.5, timestamp: "2024-05-28" },
+          { date: "Sat", price: 141.9, timestamp: "2024-05-29" },
+          { date: "Sun", price: 142.25, timestamp: "2024-05-30" },
+        ],
+        "1 Month": [
+          { date: "Jan 1", price: 125, timestamp: "2024-01-01" },
+          { date: "Jan 15", price: 128, timestamp: "2024-01-15" },
+          { date: "Feb 1", price: 132, timestamp: "2024-02-01" },
+          { date: "Feb 15", price: 130, timestamp: "2024-02-15" },
+          { date: "Mar 1", price: 135, timestamp: "2024-03-01" },
+          { date: "Mar 15", price: 138, timestamp: "2024-03-15" },
+          { date: "Apr 1", price: 140, timestamp: "2024-04-01" },
+          { date: "Apr 15", price: 139, timestamp: "2024-04-15" },
+          { date: "May 1", price: 141, timestamp: "2024-05-01" },
+          { date: "May 15", price: 140.5, timestamp: "2024-05-15" },
+          { date: "May 30", price: 142.25, timestamp: "2024-05-30" },
+        ],
+        "3 Months": [
+          { date: "Mar", price: 135, timestamp: "2024-03-01" },
+          { date: "Mar", price: 138, timestamp: "2024-03-15" },
+          { date: "Apr", price: 140, timestamp: "2024-04-01" },
+          { date: "Apr", price: 139, timestamp: "2024-04-15" },
+          { date: "May", price: 141, timestamp: "2024-05-01" },
+          { date: "May", price: 140.5, timestamp: "2024-05-15" },
+          { date: "May", price: 142.25, timestamp: "2024-05-30" },
+        ],
+        "1Y": [
+          { date: "Q1 '24", price: 115, timestamp: "2024-01-01" },
+          { date: "Q2 '24", price: 125, timestamp: "2024-04-01" },
+          { date: "Q3 '24", price: 135, timestamp: "2024-07-01" },
+          { date: "Q4 '24", price: 142.25, timestamp: "2024-10-01" },
+        ],
+        "5Y": [
+          { date: "'20", price: 68, timestamp: "2020-01-01" },
+          { date: "'21", price: 85, timestamp: "2021-01-01" },
+          { date: "'22", price: 98, timestamp: "2022-01-01" },
+          { date: "'23", price: 112, timestamp: "2023-01-01" },
+          { date: "'24", price: 142.25, timestamp: "2024-01-01" },
+        ],
+      },
     },
   };
 
   const currentData = talentData[selectedTalent] || talentData["Taylor Swift"];
+  const chartData = currentData.data[timeframe] || currentData.data["1 Month"];
 
-  const holdingsData = [
-    { talentName: "Taylor Swift", tokenName: "Swifty", amount: 1 },
+  // Dynamic holdings data that updates based on selections
+  const [holdingsData, setHoldingsData] = useState([
+    { talentName: "Taylor Swift", tokenName: "SWIFTY", amount: 1 },
     { talentName: "BTS", tokenName: "BTS", amount: 5 },
+    { talentName: "Ariana Grande", tokenName: "ARII", amount: 3 },
     { talentName: "Elvis", tokenName: "EL", amount: 10 },
     { talentName: "Rolling Stones", tokenName: "RS", amount: 2 },
     { talentName: "Il Volo", tokenName: "Volo", amount: 5 },
     { talentName: "Kim Kardashian", tokenName: "K", amount: 1 },
-  ];
+  ]);
 
   const timeframes = ["1 Day", "1 Week", "1 Month", "3 Months", "1Y", "5Y"];
 
-  // D3 Chart
+  // Dynamic update of selected token when talent changes
   useEffect(() => {
-    if (!chartRef.current || !currentData.data) return;
+    setSelectedToken(currentData.token);
+  }, [selectedTalent, currentData.token]);
 
-    const svg = d3.select(chartRef.current);
-    svg.selectAll("*").remove();
+  // Real-time update of financial metrics when amount or talent changes
+  useEffect(() => {
+    // This will trigger re-calculation of financialMetrics whenever dependencies change
+    // The calculations are already happening in the render cycle
+  }, [amount, selectedTalent, holdingsData]);
 
-    const margin = { top: 20, right: 30, bottom: 40, left: 50 };
-    const width = 500 - margin.left - margin.right;
-    const height = 200 - margin.top - margin.bottom;
-
-    const g = svg
-      .attr("width", width + margin.left + margin.right)
-      .attr("height", height + margin.top + margin.bottom)
-      .append("g")
-      .attr("transform", `translate(${margin.left},${margin.top})`);
-
-    // Parse dates and create scales
-    const parseDate = d3.timeParse("%Y-%m-%d");
-    const data = currentData.data.map((d) => ({
-      date: parseDate(d.date),
-      price: d.price,
-    }));
-
-    const xScale = d3
-      .scaleTime()
-      .domain(d3.extent(data, (d) => d.date))
-      .range([0, width]);
-
-    const yScale = d3
-      .scaleLinear()
-      .domain(d3.extent(data, (d) => d.price))
-      .nice()
-      .range([height, 0]);
-
-    // Create line generator
-    const line = d3
-      .line()
-      .x((d) => xScale(d.date))
-      .y((d) => yScale(d.price))
-      .curve(d3.curveMonotoneX);
-
-    // Add grid lines
-    g.append("g")
-      .attr("class", "grid")
-      .attr("transform", `translate(0,${height})`)
-      .call(d3.axisBottom(xScale).tickSize(-height).tickFormat(""))
-      .style("stroke-dasharray", "3,3")
-      .style("stroke", "#4b5563")
-      .style("stroke-width", 0.5);
-
-    g.append("g")
-      .attr("class", "grid")
-      .call(d3.axisLeft(yScale).tickSize(-width).tickFormat(""))
-      .style("stroke-dasharray", "3,3")
-      .style("stroke", "#4b5563")
-      .style("stroke-width", 0.5);
-
-    // Add axes
-    g.append("g")
-      .attr("transform", `translate(0,${height})`)
-      .call(d3.axisBottom(xScale).tickFormat(d3.timeFormat("%b")))
-      .style("color", "#9ca3af");
-
-    g.append("g").call(d3.axisLeft(yScale)).style("color", "#9ca3af");
-
-    // Add line
-    const path = g
-      .append("path")
-      .datum(data)
-      .attr("fill", "none")
-      .attr("stroke", currentData.change >= 0 ? "#34d399" : "#f87171")
-      .attr("stroke-width", 2)
-      .attr("d", line);
-
-    // Animate line drawing
-    const totalLength = path.node().getTotalLength();
-    path
-      .attr("stroke-dasharray", totalLength + " " + totalLength)
-      .attr("stroke-dashoffset", totalLength)
-      .transition()
-      .duration(1500)
-      .ease(d3.easeLinear)
-      .attr("stroke-dashoffset", 0);
-
-    // Add dots
-    g.selectAll(".dot")
-      .data(data)
-      .enter()
-      .append("circle")
-      .attr("class", "dot")
-      .attr("cx", (d) => xScale(d.date))
-      .attr("cy", (d) => yScale(d.price))
-      .attr("r", 3)
-      .attr("fill", currentData.change >= 0 ? "#34d399" : "#f87171")
-      .style("opacity", 0)
-      .transition()
-      .delay(1500)
-      .duration(500)
-      .style("opacity", 1);
-  }, [selectedTalent, timeframe, currentData]);
+  // Custom tooltip for the chart
+  const CustomTooltip = ({ active, payload, label }) => {
+    if (active && payload && payload.length) {
+      const data = payload[0];
+      return (
+        <div className="bg-[#1a1a1a] border border-gray-600 rounded-lg p-3 ">
+          <p className="text-gray-300 text-sm">{`Date: ${label}`}</p>
+          <p className="text-white font-bold">
+            {`Price: $${data.value.toFixed(2)}`}
+          </p>
+          <p
+            className={`text-sm ${
+              currentData.change >= 0 ? "text-green-400" : "text-red-400"
+            }`}
+          >
+            {currentData.change >= 0 ? "↗" : "↘"}{" "}
+            {Math.abs(currentData.changePercent).toFixed(2)}%
+          </p>
+        </div>
+      );
+    }
+    return null;
+  };
 
   const handleOrderOptionChange = (option) => {
     setOrderOptions((prev) => ({
       ...prev,
       [option]: !prev[option],
     }));
+  };
+
+  const handleAmountChange = (e) => {
+    const value = e.target.value.replace(/[^0-9.]/g, ""); // Only allow numbers and decimal
+    setAmount(value);
   };
 
   const handlePaymentFormChange = (field, value) => {
@@ -196,22 +306,34 @@ const TalentTokenDashboard = () => {
     }));
   };
 
+  // Calculate dynamic stats based on current data
+  const calculateStats = () => {
+    const prices = chartData.map((d) => d.price);
+    const minPrice = Math.min(...prices);
+    const maxPrice = Math.max(...prices);
+    const avgPrice = prices.reduce((a, b) => a + b, 0) / prices.length;
+
+    return { minPrice, maxPrice, avgPrice };
+  };
+
+  const stats = calculateStats();
+
   return (
     <div className="w-full z-10 bg-[#171717] py-12 2xl:py-16 flex flex-col 2xl:gap-16 gap-12 px-4 sm:px-6 lg:px-8 min-h-screen pt-20 md:pt-24">
-      <div className="2xl:gap-16 gap-12 px-4 container  sm:px-6 lg:px-8 mt-10 lg:mt-16 2xl:mt-20 z-10">
+      <div className="2xl:gap-16 gap-12 px-4 container sm:px-6 lg:px-8 mt-10 lg:mt-16 2xl:mt-20 z-10">
         {/* Main Grid Layout */}
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-10 lg:gap-12 xl:gap-16 2xl:gap-20 items-stretch">
           {/* Left Column - Trading Panel */}
-          <div className="lg:col-span-1 space-y-6">
+          <div className="lg:col-span-1 h-full space-y-6">
             {/* Buy/Sell & Trading Form */}
-            <div className="bg-[#2a2a2a] rounded-lg shadow-xl border border-gray-600/30 p-6">
+            <div className="bg-white/5 backdrop-blur-xl border border-white/10 rounded-2xl  p-3 md:p-4 flex-1  h-full">
               {/* Buy/Sell Buttons */}
               <div className="flex gap-5 mb-6">
                 <button
                   onClick={() => setTradeType("BUY")}
-                  className={`flex-1 py-2 px-4 rounded font-bold text-white transition-all ${
+                  className={`flex-1 px-8 py-3 bg-green-600 cursor-pointer text-white rounded-lg hover:bg-green-700 transition-colors font-medium ${
                     tradeType === "BUY"
-                      ? "bg-green-600 shadow-lg scale-105"
+                      ? "bg-green-600  scale-105"
                       : "bg-green-500 hover:bg-green-600"
                   }`}
                 >
@@ -219,9 +341,9 @@ const TalentTokenDashboard = () => {
                 </button>
                 <button
                   onClick={() => setTradeType("SELL")}
-                  className={`flex-1 py-2 px-4 rounded font-bold text-white transition-all ${
+                  className={`flex-1 px-8 py-3 bg-green-600 cursor-pointer text-white rounded-lg hover:bg-green-700 transition-colors font-medium ${
                     tradeType === "SELL"
-                      ? "bg-red-600 shadow-lg scale-105"
+                      ? "bg-red-600  scale-105"
                       : "bg-red-500 hover:bg-red-600"
                   }`}
                 >
@@ -232,7 +354,7 @@ const TalentTokenDashboard = () => {
               {/* Talent Selection */}
               <div className="space-y-4 mb-6">
                 <div>
-                  <label className="block text-sm font-medium text-gray-300 mb-1">
+                  <label className="block text-sm font-medium text-gray-400 mb-2">
                     Talent Name
                   </label>
                   <select
@@ -240,13 +362,16 @@ const TalentTokenDashboard = () => {
                     onChange={(e) => setSelectedTalent(e.target.value)}
                     className="w-full p-2 border border-gray-600 bg-[#1a1a1a] text-white rounded focus:ring-2 focus:ring-[#a38b41] focus:border-[#a38b41]"
                   >
-                    <option value="Taylor Swift">Taylor Swift</option>
-                    <option value="BTS">BTS</option>
+                    {Object.keys(talentData).map((talent) => (
+                      <option key={talent} value={talent}>
+                        {talent}
+                      </option>
+                    ))}
                   </select>
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-gray-300 mb-1">
+                  <label className="block text-sm font-medium text-gray-400 mb-2">
                     Talent Token Brand
                   </label>
                   <input
@@ -285,7 +410,7 @@ const TalentTokenDashboard = () => {
               {/* Currency and Amount */}
               <div className="grid grid-cols-2 gap-4 mb-6">
                 <div>
-                  <label className="block text-sm font-medium text-gray-300 mb-1">
+                  <label className="block text-sm font-medium text-gray-400 mb-2">
                     Currency Type
                   </label>
                   <select className="w-full p-2 border border-gray-600 bg-[#1a1a1a] text-white rounded focus:ring-2 focus:ring-[#a38b41]">
@@ -295,7 +420,7 @@ const TalentTokenDashboard = () => {
                   </select>
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-300 mb-1">
+                  <label className="block text-sm font-medium text-gray-400 mb-2">
                     Amount
                   </label>
                   <div className="relative">
@@ -305,8 +430,9 @@ const TalentTokenDashboard = () => {
                     <input
                       type="text"
                       value={amount}
-                      onChange={(e) => setAmount(e.target.value)}
+                      onChange={handleAmountChange}
                       className="w-full pl-8 pr-3 py-2 border border-gray-600 bg-[#1a1a1a] text-white rounded focus:ring-2 focus:ring-[#a38b41]"
+                      placeholder="0.00"
                     />
                   </div>
                 </div>
@@ -320,145 +446,63 @@ const TalentTokenDashboard = () => {
                     ${currentData.price.toFixed(2)}
                   </span>
                 </div>
+                {/* <div className="flex justify-between items-center text-xs mt-1">
+                  <span className="text-gray-400">Estimated Shares</span>
+                  <span className="text-gray-400">
+                    {(
+                      parseFloat(amount.replace(/,/g, "")) / currentData.price
+                    ).toFixed(4)}
+                  </span>
+                </div> */}
               </div>
 
               {/* Action Buttons */}
               <div className="space-y-3">
-                <button className="w-full bg-[#a38b41] text-black py-3 rounded font-medium hover:bg-[#c2ab67] transition-colors">
+                <button className="w-full bg-primary2 px-8 py-3  text-white rounded-lg font-medium cursor-pointer hover:bg-[#c2ab67] transition-colors">
                   REVIEW ORDER
                 </button>
-                <button className="w-full border-2 border-[#a38b41] text-[#a38b41] py-3 rounded font-medium hover:bg-[#a38b41] hover:text-black transition-colors">
+                <button className="w-full border-2 border-[#a38b41] text-[#a38b41] px-8 py-3 cursor-pointer  rounded-lg font-medium hover:bg-[#a38b41] hover:text-white transition-colors">
                   IMPORT MORE FUNDS
                 </button>
-              </div>
-            </div>
-
-            {/* Payment Form */}
-            <div className="bg-[#2a2a2a] rounded-lg shadow-xl border border-gray-600/30 p-6">
-              <h3 className="text-lg font-bold mb-4 text-white">
-                Payment Information
-              </h3>
-              <div className="space-y-4">
-                <div>
-                  <label className="block text-sm font-medium text-gray-300 mb-1">
-                    Name on Card
-                  </label>
-                  <input
-                    type="text"
-                    value={paymentForm.nameOnCard}
-                    onChange={(e) =>
-                      handlePaymentFormChange("nameOnCard", e.target.value)
-                    }
-                    className="w-full p-2 border border-gray-600 bg-[#1a1a1a] text-white rounded focus:ring-2 focus:ring-[#a38b41]"
-                  />
-                </div>
-
-                <div>
-                  <label className="block text-sm font-medium text-gray-300 mb-1">
-                    Credit Card/ Debit #
-                  </label>
-                  <input
-                    type="text"
-                    value={paymentForm.cardNumber}
-                    onChange={(e) =>
-                      handlePaymentFormChange("cardNumber", e.target.value)
-                    }
-                    className="w-full p-2 border border-gray-600 bg-[#1a1a1a] text-white rounded focus:ring-2 focus:ring-[#a38b41] placeholder-gray-500"
-                    placeholder="1234 5678 9012 3456"
-                  />
-                </div>
-
-                <div className="grid grid-cols-2 gap-4">
-                  <div>
-                    <label className="block text-sm font-medium text-gray-300 mb-1">
-                      Exp Date
-                    </label>
-                    <input
-                      type="text"
-                      value={paymentForm.expDate}
-                      onChange={(e) =>
-                        handlePaymentFormChange("expDate", e.target.value)
-                      }
-                      className="w-full p-2 border border-gray-600 bg-[#1a1a1a] text-white rounded focus:ring-2 focus:ring-[#a38b41] placeholder-gray-500"
-                      placeholder="MM/YY"
-                    />
-                  </div>
-                  <div>
-                    <label className="block text-sm font-medium text-gray-300 mb-1">
-                      CVS #
-                    </label>
-                    <input
-                      type="text"
-                      value={paymentForm.cvs}
-                      onChange={(e) =>
-                        handlePaymentFormChange("cvs", e.target.value)
-                      }
-                      className="w-full p-2 border border-gray-600 bg-[#1a1a1a] text-white rounded focus:ring-2 focus:ring-[#a38b41] placeholder-gray-500"
-                      placeholder="123"
-                    />
-                  </div>
-                </div>
-
-                <div>
-                  <label className="block text-sm font-medium text-gray-300 mb-1">
-                    Mailing Address
-                  </label>
-                  <textarea
-                    value={paymentForm.mailingAddress}
-                    onChange={(e) =>
-                      handlePaymentFormChange("mailingAddress", e.target.value)
-                    }
-                    className="w-full p-2 border border-gray-600 bg-[#1a1a1a] text-white rounded focus:ring-2 focus:ring-[#a38b41]"
-                    rows="3"
-                  />
-                  <label className="flex items-center mt-2">
-                    <input
-                      type="checkbox"
-                      checked={paymentForm.checkSame}
-                      onChange={(e) =>
-                        handlePaymentFormChange("checkSame", e.target.checked)
-                      }
-                      className="w-4 h-4 text-[#a38b41] bg-[#1a1a1a] border-gray-600 rounded focus:ring-[#a38b41] focus:ring-2"
-                    />
-                    <span className="ml-2 text-sm text-gray-300">
-                      Check if Same
-                    </span>
-                  </label>
-                </div>
-
-                <div>
-                  <label className="block text-sm font-medium text-gray-300 mb-1">
-                    E-Mail
-                  </label>
-                  <input
-                    type="email"
-                    value={paymentForm.email}
-                    onChange={(e) =>
-                      handlePaymentFormChange("email", e.target.value)
-                    }
-                    className="w-full p-2 border border-gray-600 bg-[#1a1a1a] text-white rounded focus:ring-2 focus:ring-[#a38b41]"
-                  />
-                </div>
               </div>
             </div>
           </div>
 
           {/* Right Column - Chart & Holdings */}
-          <div className="lg:col-span-2 space-y-6">
+          <div className="lg:col-span-2 h-full space-y-6">
             {/* Chart Section */}
-            <div className="bg-[#2a2a2a] rounded-lg shadow-xl border border-gray-600/30 p-6">
+            <div className="bg-white/5 backdrop-blur-xl border border-white/10 rounded-2xl  p-3 md:p-4 flex-1  ">
               <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-4">
-                <h2 className="text-xl font-bold mb-2 sm:mb-0 text-white">
-                  {selectedTalent}
-                </h2>
-                <div className="flex flex-wrap gap-2">
+                <div>
+                  <h2 className="text-xl font-bold mb-1 text-white">
+                    {selectedTalent}
+                  </h2>
+                  <div className="flex items-center gap-2">
+                    <span className="text-sm text-gray-400">
+                      ${currentData.price.toFixed(2)}
+                    </span>
+                    <span
+                      className={`text-sm font-medium ${
+                        currentData.change >= 0
+                          ? "text-green-400"
+                          : "text-red-400"
+                      }`}
+                    >
+                      {currentData.change >= 0 ? "+" : ""}$
+                      {currentData.change.toFixed(2)}(
+                      {currentData.change >= 0 ? "+" : ""}
+                      {currentData.changePercent.toFixed(2)}%)
+                    </span>
+                  </div>
+                </div>
+                <div className="flex flex-wrap gap-2 mt-2 sm:mt-0">
                   {timeframes.map((tf) => (
                     <button
                       key={tf}
                       onClick={() => setTimeframe(tf)}
                       className={`px-3 py-1 text-xs rounded transition-colors ${
                         timeframe === tf
-                          ? "bg-[#a38b41] text-black"
+                          ? "bg-primary text-black"
                           : "bg-gray-700 text-gray-300 hover:bg-gray-600"
                       }`}
                     >
@@ -468,113 +512,300 @@ const TalentTokenDashboard = () => {
                 </div>
               </div>
 
-              <div className="text-sm text-gray-400 mb-4">
-                Current Price: ${currentData.token}
+              {/* Dynamic Chart with Recharts */}
+              <div className="w-full h-80 mb-6">
+                <ResponsiveContainer width="100%" height="100%">
+                  <LineChart data={chartData}>
+                    <CartesianGrid
+                      strokeDasharray="3 3"
+                      stroke="#4b5563"
+                      strokeOpacity={0.3}
+                    />
+                    <XAxis
+                      dataKey="date"
+                      stroke="#9ca3af"
+                      tick={{ fontSize: 12 }}
+                    />
+                    <YAxis
+                      stroke="#9ca3af"
+                      tick={{ fontSize: 12 }}
+                      domain={["dataMin - 2", "dataMax + 2"]}
+                    />
+                    <Tooltip content={<CustomTooltip />} />
+                    <Line
+                      type="monotone"
+                      dataKey="price"
+                      stroke={currentData.change >= 0 ? "#34d399" : "#f87171"}
+                      strokeWidth={3}
+                      dot={{
+                        fill: currentData.change >= 0 ? "#34d399" : "#f87171",
+                        strokeWidth: 2,
+                        r: 4,
+                      }}
+                      activeDot={{
+                        r: 6,
+                        stroke: currentData.change >= 0 ? "#34d399" : "#f87171",
+                        strokeWidth: 2,
+                        fill: "#fff",
+                      }}
+                      animationDuration={1500}
+                    />
+                    <ReferenceLine
+                      y={stats.avgPrice}
+                      stroke="#a38b41"
+                      strokeDasharray="5 5"
+                      strokeOpacity={0.6}
+                    />
+                  </LineChart>
+                </ResponsiveContainer>
               </div>
 
-              <div className="w-full overflow-x-auto">
-                <svg
-                  ref={chartRef}
-                  className="w-full"
-                ></svg>
-              </div>
-
-              {/* Stats Grid */}
-              <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mt-6 pt-6 border-t border-gray-600">
-                <div>
-                  <div className="text-sm text-gray-400">Available Balance</div>
-                  <div className="font-bold text-white">$9000.00</div>
-                </div>
-                <div>
-                  <div className="text-sm text-gray-400">
-                    Current Invested Amount
+              {/* Available balance and current invested amount */}
+              <section className="flex flex-col gap-2 mt-6 pt-6">
+                <div className="flex justify-between gap-4 ">
+                  <div className="flex flex-col lg:flex-row gap-3 ">
+                    <div className="text-sm text-gray-400">
+                      Available Balance
+                    </div>
+                    <div className="font-bold text-white">$9,000.00</div>
                   </div>
-                  <div className="font-bold text-white">$800.00</div>
-                </div>
-                <div>
-                  <div className="text-sm text-gray-400">Daily Average</div>
-                  <div className="font-bold text-white">$0.00000</div>
-                </div>
-                <div>
-                  <div className="text-sm text-gray-400">Today's</div>
-                  <div
-                    className={`font-bold ${
-                      currentData.change >= 0
-                        ? "text-green-400"
-                        : "text-red-400"
-                    }`}
-                  >
-                    ${currentData.change >= 0 ? "+" : ""}
-                    {currentData.change.toFixed(2)} (
-                    {currentData.changePercent >= 0 ? "+" : ""}
-                    {currentData.changePercent.toFixed(2)}%)
+                  <div className="flex flex-col lg:flex-row gap-3 ">
+                    <div className="text-sm text-gray-400">
+                      Current Invested Amount
+                    </div>
+                    <div className="font-bold text-white">$000.00</div>
                   </div>
                 </div>
-              </div>
+                <div className="flex justify-between gap-4">
+                  <div className="flex flex-col lg:flex-row gap-3 ">
+                    <div className="text-sm text-gray-400">Daily Average</div>
+                    <div className="font-bold text-white">$0.00000</div>
+                  </div>
+                  <div className="flex flex-col lg:flex-row gap-3 ">
+                    <div className="text-sm text-gray-400">Todays</div>
+                    <div className="font-bold text-red-400">
+                      -$000.00 (-000.00%)
+                    </div>
+                  </div>
+                </div>
+              </section>
 
-              <div className="grid grid-cols-2 gap-4 mt-4">
-                <div>
+              <div className="flex justify-between gap-4 mt-3 pt-3 border-t border-gray-600">
+                <div className="flex flex-col lg:flex-row gap-3 ">
                   <div className="text-sm text-gray-400">
                     Quantity Purchased Amount
                   </div>
                   <div className="font-bold text-white">$0.00</div>
                 </div>
-                <div>
+                <div className="flex flex-col lg:flex-row gap-3 ">
                   <div className="text-sm text-gray-400">Returns</div>
                   <div className="font-bold text-green-400">
-                    +$0000.00 (+000.00%)
+                    +$000.00 (+000.00%)
                   </div>
                 </div>
               </div>
+              {/* <div>
+                  <div className="text-sm text-gray-400">Period High</div>
+                  <div className="font-bold text-green-400">
+                    ${stats.maxPrice.toFixed(2)}
+                  </div>
+                </div> */}
+              {/* <div>
+                  <div className="text-sm text-gray-400">Period Low</div>
+                  <div className="font-bold text-red-400">
+                    ${stats.minPrice.toFixed(2)}
+                  </div>
+                </div> */}
+              {/* <div>
+                  <div className="text-sm text-gray-400">Period Average</div>
+                  <div className="font-bold text-[#a38b41]">
+                    ${stats.avgPrice.toFixed(2)}
+                  </div>
+                </div> */}
 
-              <button className="mt-4 bg-[#a38b41] text-black px-6 py-2 rounded hover:bg-[#c2ab67] transition-colors">
+              {/* <div className="grid grid-cols-2 gap-4 mt-4">
+                <div>
+                  <div className="text-sm text-gray-400">Estimated Shares</div>
+                  <div className="font-bold text-white">
+                    {(
+                      parseFloat(amount.replace(/,/g, "")) / currentData.price
+                    ).toFixed(4)}{" "}
+                    {currentData.token}
+                  </div>
+                </div>
+                <div>
+                  <div className="text-sm text-gray-400">Market Cap Rank</div>
+                  <div className="font-bold text-gray-300">#3</div>
+                </div>
+              </div> */}
+
+              <button className="mt-4 bg-primary2 px-8 py-3  text-white rounded-lg font-medium hover:bg-[#c2ab67] transition-colors">
                 Advance to Talent Profile
               </button>
             </div>
-
-            {/* Holdings Table */}
-            <div className="bg-[#2a2a2a] rounded-lg shadow-xl border border-gray-600/30 p-6">
-              <h3 className="text-lg font-bold mb-4 text-white">
-                Talent Tokens Total Held (22)
-              </h3>
-              <div className="overflow-x-auto">
-                <table className="w-full min-w-[400px]">
-                  <thead>
-                    <tr className="border-b border-gray-600">
-                      <th className="text-left py-2 text-sm font-medium text-gray-300">
-                        Talent Name
-                      </th>
-                      <th className="text-left py-2 text-sm font-medium text-gray-300">
-                        Token Name
-                      </th>
-                      <th className="text-left py-2 text-sm font-medium text-gray-300">
-                        Holding Amount
-                      </th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {holdingsData.map((holding, index) => (
-                      <tr
-                        key={index}
-                        className="border-b border-gray-700 hover:bg-[#333333]"
-                      >
-                        <td className="py-2 text-sm text-gray-300">
-                          {holding.talentName}
-                        </td>
-                        <td className="py-2 text-sm font-medium text-gray-200">
-                          "{holding.tokenName}"
-                        </td>
-                        <td className="py-2 text-sm text-gray-300">
-                          {holding.amount}
-                        </td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-              </div>
-            </div>
           </div>
         </div>
+        {/* section two start */}
+        <div className="flex flex-col 2xl:gap-16 gap-12 mt-10 lg:mt-16 2xl:mt-20 z-50">
+          <section className="grid grid-cols-1 lg:grid-cols-4 gap-10 lg:gap-12 xl:gap-16 2xl:gap-20 items-stretch">
+            {/* Payment Form */}
+            <div className="lg:col-span-2 flex flex-col space-y-3 h-full">
+              <div className="bg-white/5 backdrop-blur-xl border border-white/10 rounded-2xl  p-3 md:p-4 flex-1 h-full">
+                <h3 className="text-2xl font-bold text-primary2 mb-6 text-center">
+                  Payment Information
+                </h3>
+                <div className="space-y-4">
+                  <div>
+                    <label className="block text-sm font-medium text-gray-400 mb-2">
+                      Name on Card
+                    </label>
+                    <input
+                      type="text"
+                      value={paymentForm.nameOnCard}
+                      onChange={(e) =>
+                        handlePaymentFormChange("nameOnCard", e.target.value)
+                      }
+                      className="w-full p-2 border border-gray-600 bg-[#1a1a1a] text-white rounded focus:ring-2 focus:ring-[#a38b41]"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-sm font-medium text-gray-400 mb-2">
+                      Credit Card/ Debit #
+                    </label>
+                    <input
+                      type="text"
+                      value={paymentForm.cardNumber}
+                      onChange={(e) =>
+                        handlePaymentFormChange("cardNumber", e.target.value)
+                      }
+                      className="w-full p-2 border border-gray-600 bg-[#1a1a1a] text-white rounded focus:ring-2 focus:ring-[#a38b41] placeholder-gray-500"
+                      placeholder="1234 5678 9012 3456"
+                    />
+                  </div>
+
+                  <div className="grid grid-cols-2 gap-4">
+                    <div>
+                      <label className="block text-sm font-medium text-gray-400 mb-2">
+                        Exp Date
+                      </label>
+                      <input
+                        type="text"
+                        value={paymentForm.expDate}
+                        onChange={(e) =>
+                          handlePaymentFormChange("expDate", e.target.value)
+                        }
+                        className="w-full p-2 border border-gray-600 bg-[#1a1a1a] text-white rounded focus:ring-2 focus:ring-[#a38b41] placeholder-gray-500"
+                        placeholder="MM/YY"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium text-gray-400 mb-2">
+                        CVS #
+                      </label>
+                      <input
+                        type="text"
+                        value={paymentForm.cvs}
+                        onChange={(e) =>
+                          handlePaymentFormChange("cvs", e.target.value)
+                        }
+                        className="w-full p-2 border border-gray-600 bg-[#1a1a1a] text-white rounded focus:ring-2 focus:ring-[#a38b41] placeholder-gray-500"
+                        placeholder="123"
+                      />
+                    </div>
+                  </div>
+
+                  <div>
+                    <label className="block text-sm font-medium text-gray-400 mb-2">
+                      Mailing Address
+                    </label>
+                    <textarea
+                      value={paymentForm.mailingAddress}
+                      onChange={(e) =>
+                        handlePaymentFormChange(
+                          "mailingAddress",
+                          e.target.value
+                        )
+                      }
+                      className="w-full p-2 border border-gray-600 bg-[#1a1a1a] text-white rounded focus:ring-2 focus:ring-[#a38b41]"
+                      rows="3"
+                    />
+                    <label className="flex items-center mt-2">
+                      <input
+                        type="checkbox"
+                        checked={paymentForm.checkSame}
+                        onChange={(e) =>
+                          handlePaymentFormChange("checkSame", e.target.checked)
+                        }
+                        className="w-4 h-4 text-[#a38b41] bg-[#1a1a1a] border-gray-600 rounded focus:ring-[#a38b41] focus:ring-2"
+                      />
+                      <span className="ml-2 text-sm text-gray-300">
+                        Check if Same
+                      </span>
+                    </label>
+                  </div>
+
+                  <div>
+                    <label className="block text-sm font-medium text-gray-400 mb-2">
+                      E-Mail
+                    </label>
+                    <input
+                      type="email"
+                      value={paymentForm.email}
+                      onChange={(e) =>
+                        handlePaymentFormChange("email", e.target.value)
+                      }
+                      className="w-full p-2 border border-gray-600 bg-[#1a1a1a] text-white rounded focus:ring-2 focus:ring-[#a38b41]"
+                    />
+                  </div>
+                </div>
+              </div>
+            </div>
+            {/* Dynamic Holdings Table */}
+            {/* Talent Holdings Styled Table */}
+            <div className="lg:col-span-2 flex flex-col space-y-3 h-full">
+              <div className="bg-gradient-to-br from-[#1a1a1a]/90 to-[#252525]/90 backdrop-blur-xl border border-gray-600/30 rounded-3xl p-4 flex-1 h-full">
+                <h3 className="text-2xl font-bold text-primary2 mb-6 text-center">
+                  Talent Tokens Total Held (
+                  {holdingsData.reduce((sum, h) => sum + h.amount, 0)})
+                </h3>
+
+                {/* Table Header */}
+                <div className="grid grid-cols-3 gap-4 py-4 px-4 bg-gradient-to-r from-[#2d2d2d] via-[#353535] to-[#2d2d2d] text-sm text-gray-200 font-bold border-b border-gray-500/40 backdrop-blur-sm rounded-t-2xl">
+                  <div className="text-left">Talent Name</div>
+                  <div className="text-left">Token Name</div>
+                  <div className="text-left">Holding Amount</div>
+                </div>
+
+                {/* Table Rows */}
+                <div className="divide-y divide-gray-700/30">
+                  {holdingsData.map((holding, index) => (
+                    <div
+                      key={index}
+                      className={`grid grid-cols-3 gap-4 py-4 px-4 items-center transition-all duration-300 cursor-pointer ${
+                        holding.talentName === selectedTalent
+                          ? ""
+                          : "hover:bg-[#2a2a2a]"
+                      }`}
+                      onClick={() => setSelectedTalent(holding.talentName)}
+                    >
+                      <div className="text-sm text-gray-200 truncate">
+                        {holding.talentName}
+                      </div>
+                      <div className="text-sm text-gray-300 truncate font-medium">
+                        "{holding.tokenName}"
+                      </div>
+                      <div className="text-sm text-gray-200">
+                        {holding.amount}
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+          </section>
+        </div>
+        {/* section two end */}
       </div>
     </div>
   );

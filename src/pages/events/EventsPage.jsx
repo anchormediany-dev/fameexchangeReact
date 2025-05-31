@@ -423,7 +423,7 @@ const UltraModernEventsPllatform = () => {
         </section>
         <div className="flex flex-col 2xl:gap-16 gap-12">
           {/* First Row - Stretched Three Columns */}
-          <div className="grid grid-cols-1 lg:grid-cols-4 gap-4 items-stretch">
+          <div className="grid grid-cols-1 lg:grid-cols-4 gap-10 items-stretch">
             {/* Left Column - 25% */}
             <div className="lg:col-span-1 flex flex-col space-y-3 h-full">
               {/* Small List & Post Event Button */}

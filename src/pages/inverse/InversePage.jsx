@@ -481,7 +481,7 @@ const InversePage = () => {
         </section>
         <div className="flex flex-col 2xl:gap-16 gap-12 ">
           {/* First Row - Stretched Three Columns */}
-          <div className="grid grid-cols-1 lg:grid-cols-4 gap-4 items-stretch">
+          <div className="grid grid-cols-1 lg:grid-cols-4 gap-10 lg:gap-12 xl:gap-16 2xl:gap-20 items-stretch">
             {/* Right Column - 50% - Stretched */}
             <div className="lg:col-span-2 flex flex-col space-y-3 h-full">
               {/* Welcome section */}
@@ -643,7 +643,7 @@ const InversePage = () => {
         {/* Request form and talent confirmation */}
         <div className="flex flex-col 2xl:gap-16 gap-12 px-4 sm:px-6 lg:px-8 mt-10 lg:mt-16 2xl:mt-20 z-50">
           {/* First Row - Stretched Three Columns */}
-          <div className="grid grid-cols-1 lg:grid-cols-4 gap-4 items-stretch">
+          <div className="grid grid-cols-1 lg:grid-cols-4 gap-10 lg:gap-12 xl:gap-16 2xl:gap-20 items-stretch">
             {/* Right Column - 50% - Stretched */}
             <div className="lg:col-span-2 flex flex-col space-y-3 h-full">
               {/* Fan Request Form section */}
