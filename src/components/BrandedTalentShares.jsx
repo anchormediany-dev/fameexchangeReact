@@ -428,8 +428,8 @@ const TalentTokenTicker = () => {
                   <div
                     className={`text-center text-xs md:text-sm font-bold transition-all duration-300 ${
                       token.isPositive
-                        ? "text-emerald-400 group-hover:text-emerald-300"
-                        : "text-red-400 group-hover:text-red-300"
+                        ? "text-[#1fbaa1] group-hover:text-emerald-300"
+                        : "text-[#e3495d] group-hover:text-red-300"
                     }`}
                   >
                     {token.change}
@@ -448,11 +448,11 @@ const TalentTokenTicker = () => {
                       initial="hidden"
                       animate={controls}
                       whileHover={{ scale: 1.08 }}
-                      className="w-24 h-12 md:w-28 md:h-14 bg-gradient-to-br from-gray-900/80 to-gray-800/60 rounded-xl p-2 shadow-lg border border-gray-700/30 flex items-center justify-center"
+                      className="w-24 h-12 md:w-28 md:h-14  rounded-xl p-2  flex items-center justify-center"
                     >
                       <D3Chart
                         data={token.graphData}
-                        color={token.isPositive ? "#10b981" : "#f87171"}
+                        color={token.isPositive ? "#1fbaa1" : "#e3495d"}
                         width={112}
                         height={56}
                         index={index}
