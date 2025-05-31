@@ -31,6 +31,9 @@ import InversePage from "./pages/inverse/InversePage";
 import EventsPage from "./pages/events/EventsPage";
 import FutureMusicians from "./pages/future_musicians/FutureMusicians";
 import TradingAccountPage from "./pages/trading_account/TradingAccountPage";
+import Home3 from "./pages/home/Home3";
+import Navbar from "./components/Navbar";
+import Navbar3 from "./components/Navbar3";
 
 // Simple Black Header Component
 const SimpleHeader = () => {
@@ -78,7 +81,7 @@ const MainLayout = () => {
   return (
     <div className="flex bg-[#171717] flex-col min-h-screen">
       {/* Full Animated Sticky Header */}
-      <Navbar2 />
+      <Navbar3 />
 
       {/* Main Content Area */}
       <main className="flex-grow">
@@ -138,7 +141,7 @@ export default function App() {
             index
             element={
               <MotionPageWrapper>
-                <Home2 />
+                <Home3 />
               </MotionPageWrapper>
             }
           />
