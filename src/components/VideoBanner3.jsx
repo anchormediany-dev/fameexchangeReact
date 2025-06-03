@@ -30,14 +30,6 @@ const VideoBanner = () => {
     }
   }, []);
 
-  const handleCtaClick = () => {
-    alert("Get Started button clicked!");
-  };
-
-  const handleLearnMore = () => {
-    alert("Learn More button clicked!");
-  };
-
   return (
     <section
       className="relative w-full h-[80vh] min-h-[500px] mt-10 lg:mt-16 2xl:mt-20  max-h-[700px] overflow-hidden"
@@ -119,10 +111,7 @@ const VideoBanner = () => {
           {/* Modern Action Buttons */}
           <div className="flex flex-col sm:flex-row gap-4 sm:gap-6 justify-center items-center animate-slide-up-stagger">
             {/* Primary CTA Button */}
-            <button
-              onClick={handleCtaClick}
-              className="custom-button-two rounded-full"
-            >
+            <button className="custom-button-two rounded-full">
               <span className="relative z-10 flex items-center justify-center">
                 Start Trading Now
                 <svg
@@ -144,10 +133,7 @@ const VideoBanner = () => {
             </button>
 
             {/* Secondary Button */}
-            <button
-              onClick={handleLearnMore}
-              className="group px-8 py-4 border-2 border-gray-600/50 hover:border-cyan-400/60 text-gray-200 hover:text-white font-medium rounded-full transform transition-all duration-500 hover:scale-105 hover:bg-gray-800/30 focus:outline-none focus:ring-4 focus:ring-gray-500/30 w-full sm:w-auto text-base min-w-[200px] backdrop-blur-sm"
-            >
+            <button className="group px-8 py-4 border-2 border-gray-600/50 hover:border-cyan-400/60 text-gray-200 hover:text-white font-medium rounded-full transform transition-all duration-500 hover:scale-105 hover:bg-gray-800/30 focus:outline-none focus:ring-4 focus:ring-gray-500/30 w-full sm:w-auto text-base min-w-[200px] backdrop-blur-sm">
               <span className="flex items-center justify-center">
                 Watch Demo
                 <svg
