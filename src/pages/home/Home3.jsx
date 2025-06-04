@@ -18,6 +18,7 @@ import Podcast from "../../components/podcast/Podcast";
 import Faq from "../../components/faq/Faq";
 import CustomerReview from "../../components/customer_review/CustomerReview";
 import VideoBanner3 from "../../components/VideoBanner3";
+import CelebMerchandiseHero from "../../components/CelebMerchandiseHero";
 const Home3 = () => {
   const location = useLocation();
   const [isCalculatingNetworthOpen, setIsCalculatingNetworthOpen] =
@@ -52,7 +53,7 @@ const Home3 = () => {
       <CustomerReview />
       <TheFuturesSection />
       <GigsEvents />
-
+      <CelebMerchandiseHero />
       <OurTeam />
       <Faq />
       <ContactUs />
