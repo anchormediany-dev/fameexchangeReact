@@ -463,7 +463,10 @@ const BrandedTalentShares = () => {
                     transition={{ duration: 0.6, delay: 0.6 }}
                   >
                     <div className="flex flex-col gap-3">
-                      <Link to="/" className="flex justify-center">
+                      <Link
+                        to="/trading-account"
+                        className="flex justify-center"
+                      >
                         <motion.button
                           className="custom-button-two"
                           whileHover={{ scale: 1.02 }}
