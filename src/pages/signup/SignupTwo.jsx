@@ -8,6 +8,7 @@ import { Link } from "react-router-dom";
 import SignupOtpVerification from "../../components/SignupOtpVerification";
 import siteLogo from "../../assets/images/site-logo.png";
 import TalentDropdown from "../../components/TalentDropdown";
+import RepresentationSection from "../../components/RepresentationSection";
 
 const talentOptions = ["Actor", "Model", "Athlete", "Entertainer"];
 const representationOptions = [
@@ -499,7 +500,7 @@ const Signup = () => {
                   )}
 
                   {/* Representation Checkbox and Dropdown */}
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  {/* <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div className="flex items-center space-x-3">
                       <input
                         type="checkbox"
@@ -583,8 +584,8 @@ const Signup = () => {
                         </div>
                       </div>
                     )}
-                  </div>
-
+                  </div> */}
+                  <RepresentationSection />
                   {/* Submit Button */}
                   <button
                     type="submit"
