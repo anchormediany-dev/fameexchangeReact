@@ -7,6 +7,7 @@ import MotionPageWrapper from "../../components/MotionPageWrapper";
 import { Link } from "react-router-dom";
 import SignupOtpVerification from "../../components/SignupOtpVerification";
 import siteLogo from "../../assets/images/site-logo.png";
+import TalentDropdown from "../../components/TalentDropdown";
 
 const talentOptions = ["Actor", "Model", "Athlete", "Entertainer"];
 const representationOptions = [
@@ -72,24 +73,24 @@ const Signup = () => {
     }));
   };
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    if (
-      !isEmailValid ||
-      !isPasswordValid ||
-      !passwordsMatch ||
-      !isTalentNameValid ||
-      !isOver18
-    )
-      return;
-    console.log("Submit", {
-      ...formData,
-      talents: selectedTalents,
-      representationTypes: selectedRepresentationTypes,
-      habits: selectedHabits,
-    });
-    setIsOtpOpen(true);
-  };
+  // const handleSubmit = (e) => {
+  //   e.preventDefault();
+  //   if (
+  //     !isEmailValid ||
+  //     !isPasswordValid ||
+  //     !passwordsMatch ||
+  //     !isTalentNameValid ||
+  //     !isOver18
+  //   )
+  //     return;
+  //   console.log("Submit", {
+  //     ...formData,
+  //     talents: selectedTalents,
+  //     representationTypes: selectedRepresentationTypes,
+  //     habits: selectedHabits,
+  //   });
+  //   setIsOtpOpen(true);
+  // };
   // Your are checkbox
   const [selectedOptions, setSelectedOptions] = useState([]);
 
@@ -140,6 +141,36 @@ const Signup = () => {
       document.removeEventListener("mousedown", handleClickOutside);
     };
   }, []);
+  const [talentFormData, setTalentFormData] = useState({
+    talents: [],
+    subTalents: [],
+  });
+
+  const handleTalentChange = (data) => {
+    setTalentFormData(data);
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    if (
+      !isEmailValid ||
+      !isPasswordValid ||
+      !passwordsMatch ||
+      !isTalentNameValid ||
+      !isOver18
+    )
+      return;
+
+    console.log("Submit", {
+      ...formData,
+      talents: selectedTalents,
+      subTalents: selectedSubTalents,
+      representationTypes: selectedRepresentationTypes,
+      habits: selectedHabits,
+    });
+
+    setIsOtpOpen(true);
+  };
 
   return (
     <>
@@ -370,6 +401,7 @@ const Signup = () => {
                       )}
                     </div>
                   </div>
+                  <TalentDropdown onFormChange={handleTalentChange} />
                   {/* Age Checkbox */}
                   <div className="flex items-center space-x-3">
                     <input
@@ -408,8 +440,9 @@ const Signup = () => {
                         ))}
                       </div>
                     </div>
+
                     {/* Talent Dropdown */}
-                    <div className="w-full">
+                    {/* <div className="w-full">
                       <div className="relative" ref={talentDropdownRef}>
                         <button
                           type="button"
@@ -456,7 +489,7 @@ const Signup = () => {
                           </div>
                         )}
                       </div>
-                    </div>
+                    </div> */}
                   </div>
 
                   {touched.talentName && !isOver18 && (
