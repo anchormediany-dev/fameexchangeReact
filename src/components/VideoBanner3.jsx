@@ -32,13 +32,13 @@ const VideoBanner = () => {
 
   return (
     <section
-      className="relative w-full h-[80vh] min-h-[500px] mt-10 lg:mt-16 2xl:mt-20  max-h-[700px] overflow-hidden"
+      className="relative w-full h-[80vh] min-h-[500px] mt-10 lg:mt-16  max-h-[700px] overflow-hidden"
       style={{ backgroundColor: "#171717" }}
     >
       {/* Video Background */}
       <video
         ref={videoRef}
-        className="absolute inset-0 w-full h-full object-cover opacity-30"
+        className="absolute inset-0 w-full h-full  object-cover opacity-30"
         autoPlay
         muted
         loop
@@ -77,7 +77,7 @@ const VideoBanner = () => {
       </div>
 
       {/* Main Content */}
-      <div className="relative z-10 flex items-center justify-center h-full px-4 sm:px-6 lg:px-8 py-12">
+      <div className="relative z-10 flex  items-center justify-center h-full px-4 sm:px-6 lg:px-8 py-12">
         <div className="text-center text-white max-w-5xl mx-auto">
           {/* Modern Badge */}
           <div className="inline-flex items-center px-4 py-2 mb-6 bg-gray-800/40 backdrop-blur-md rounded-full border border-gray-600/30 animate-fade-in-up shadow-xl">
@@ -157,12 +157,14 @@ const VideoBanner = () => {
 
       {/* Enhanced Video Status Indicator */}
       {isVideoPlaying && (
-        <div className="absolute top-4 right-4 flex items-center px-4 py-2 bg-gray-800/60 backdrop-blur-md rounded-full border border-cyan-400/30 shadow-lg">
-          <div className="w-2 h-2 bg-cyan-400 rounded-full mr-3 animate-pulse-glow" />
-          <span className="text-sm text-cyan-300 font-medium tracking-wide">
-            LIVE
-          </span>
-        </div>
+        <section className="container mx-auto ">
+          <div className="absolute  top-8 right-4 flex items-center px-4 py-2 bg-gray-800/60 backdrop-blur-md rounded-full border border-cyan-400/30 shadow-lg">
+            <div className="w-2 h-2 bg-cyan-400 rounded-full mr-3 animate-pulse-glow" />
+            <span className="text-sm text-cyan-300 font-medium tracking-wide">
+              LIVE
+            </span>
+          </div>
+        </section>
       )}
 
       <style jsx>{`

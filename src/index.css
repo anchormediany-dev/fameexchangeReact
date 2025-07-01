@@ -913,3 +913,62 @@ p {
     inset 0 -1px 1px rgba(0, 0, 0, 0.3);
   border: 1px solid rgba(59, 46, 16, 0.2);
 }
+/* custom outline button */
+.custom-button-outline {
+  display: inline-block;
+  padding: 12px 24px;
+  font-size: 14px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: #e2cb68;
+  border: 2px solid #e2cb68;
+  background-color: transparent;
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+  transition: all 0.3s ease;
+  border-radius: 9999px; /* Fully rounded */
+  background-clip: padding-box;
+}
+
+/* Hover state */
+.custom-button-outline:hover {
+  background: linear-gradient(to bottom, #e2cb68, #b8962d);
+  color: #000;
+  box-shadow: 0 3px 6px rgba(255, 255, 255, 0.15),
+    inset 0 1px 1px rgba(255, 255, 255, 0.3),
+    inset 0 -1px 1px rgba(0, 0, 0, 0.3);
+  transform: translateY(-1px);
+}
+
+/* Active state */
+.custom-button-outline:active {
+  background: linear-gradient(to top, #cdae38 0%, #9e7e24 100%);
+  color: #000;
+  transform: translateY(1px);
+  box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.4);
+}
+
+/* Shine effect */
+.custom-button-outline::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    to right,
+    transparent 0%,
+    rgba(255, 255, 255, 0.3) 50%,
+    transparent 100%
+  );
+  transform: skewX(-25deg);
+  transition: all 0.75s ease;
+  border-radius: inherit;
+}
+
+.custom-button-outline:hover::after {
+  left: 100%;
+}

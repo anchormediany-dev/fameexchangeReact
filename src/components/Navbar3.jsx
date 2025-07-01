@@ -20,21 +20,19 @@ const navLinks = [
 
 const history = { scrollTarget: null };
 
+// ...imports remain unchanged
+
 const Navbar3 = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
   const [isSignupModalOpen, setIsSignupModalOpen] = useState(false);
   const [activeSection, setActiveSection] = useState(null);
-  const [activeRoute, setActiveRoute] = useState(null);
   const [searchQuery, setSearchQuery] = useState("");
-  const [loaded, setLoaded] = useState(false);
-
   const location = useLocation();
   const navigate = useNavigate();
 
   const handleSearch = (e) => {
     e.preventDefault();
-    console.log("Search query:", searchQuery);
     setIsOpen(false);
   };
 
@@ -78,7 +76,6 @@ const Navbar3 = () => {
       setTimeout(() => handleScroll(history.scrollTarget), 200);
       history.scrollTarget = null;
     }
-    setActiveRoute(location.pathname);
   }, [location]);
 
   useEffect(() => {
@@ -101,29 +98,23 @@ const Navbar3 = () => {
     return () => window.removeEventListener("scroll", handleScrollSpy);
   }, []);
 
-  useEffect(() => {
-    setLoaded(true);
-  }, []);
-
   return (
     <>
-      <nav className="fixed top-0 w-full z-50 bg-black shadow-lg">
+      <nav className="fixed top-0 w-full z-50 bg-black shadow-lg font-medium text-sm">
         <div className="container mx-auto flex items-center justify-between px-4 py-3">
-          {/* Logo */}
           <Link
             to="/"
             onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
           >
-            <img src={siteLogo} alt="Logo" className="h-14" />
+            <img src={siteLogo} alt="Logo" className="h-12" />
           </Link>
 
-          {/* Desktop Nav */}
-          <div className="hidden xl:flex items-center gap-6">
+          <div className="hidden xl:flex items-center gap-4 ml-4">
             {navLinks.map((link) => (
               <span
                 key={link.name}
                 onClick={() => handleNavClick(link)}
-                className={`cursor-pointer text-white hover:text-yellow-400 ${
+                className={`cursor-pointer text-white text-sm hover:text-yellow-400 ${
                   activeSection === link.scrollTo ? "text-yellow-400" : ""
                 }`}
               >
@@ -131,82 +122,84 @@ const Navbar3 = () => {
               </span>
             ))}
 
-            {/* Improved Search */}
-            <form onSubmit={handleSearch} className="relative w-64">
+            <form onSubmit={handleSearch} className="relative w-44 ml-2">
               <input
                 type="text"
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 placeholder="Search..."
-                className="w-full px-10 py-2 rounded-md text-sm text-black bg-white shadow-sm focus:outline-none focus:ring-2 focus:ring-yellow-400"
+                className="w-full px-8 py-1.5 rounded-full text-xs text-black bg-white focus:outline-none focus:ring-2 focus:ring-yellow-400"
               />
-              <FaSearch className="absolute left-3 top-2.5 text-gray-400" />
+              <FaSearch className="absolute left-2.5 top-2 text-gray-400 text-sm" />
               {searchQuery && (
                 <button
                   type="button"
                   onClick={() => setSearchQuery("")}
-                  className="absolute right-3 top-2.5 text-gray-400 hover:text-gray-600"
+                  className="absolute right-2.5 top-2 text-gray-400 hover:text-gray-600 text-sm"
                 >
                   &#x2715;
                 </button>
               )}
             </form>
 
-            {/* Profile */}
-            <MdOutlinePerson
-              className="text-white text-2xl cursor-pointer"
+            <button
               onClick={openLoginModal}
-            />
+              className="custom-button-outline !py-1"
+            >
+              Login
+            </button>
+            <button
+              onClick={openSignupModal}
+              className="custom-button-two rounded-full !py-1"
+            >
+              Sign Up
+            </button>
           </div>
 
-          {/* Mobile Toggle */}
-          <div className="xl:hidden flex gap-3 items-center">
+          <div className="xl:hidden flex gap-2 items-center">
             <MdOutlinePerson
-              className="text-white text-2xl"
+              className="text-white text-xl"
               onClick={openLoginModal}
             />
             <button onClick={() => setIsOpen(!isOpen)} className="text-white">
-              {isOpen ? <FaTimes size={22} /> : <FaBars size={22} />}
+              {isOpen ? <FaTimes size={20} /> : <FaBars size={20} />}
             </button>
           </div>
         </div>
 
-        {/* Mobile Menu */}
         <AnimatePresence>
           {isOpen && (
             <motion.div
               initial={{ height: 0, opacity: 0 }}
               animate={{ height: "auto", opacity: 1 }}
               exit={{ height: 0, opacity: 0 }}
-              className="xl:hidden bg-black px-6 pt-3 pb-6 space-y-3"
+              className="xl:hidden bg-black px-4 pt-2 pb-4 space-y-2"
             >
-              {/* Mobile Search */}
               <form onSubmit={handleSearch} className="relative w-full">
                 <input
                   type="text"
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
                   placeholder="Search..."
-                  className="w-full px-10 py-2 rounded-md text-sm text-black bg-white shadow-md focus:outline-none focus:ring-2 focus:ring-yellow-400"
+                  className="w-full px-8 py-2 rounded text-sm text-black bg-white focus:outline-none focus:ring-2 focus:ring-yellow-400"
                 />
-                <FaSearch className="absolute left-3 top-2.5 text-gray-400" />
+                <FaSearch className="absolute left-2.5 top-2.5 text-gray-400 text-sm" />
                 {searchQuery && (
                   <button
                     type="button"
                     onClick={() => setSearchQuery("")}
-                    className="absolute right-3 top-2.5 text-gray-400 hover:text-gray-600"
+                    className="absolute right-2.5 top-2.5 text-gray-400 hover:text-gray-600 text-sm"
                   >
                     &#x2715;
                   </button>
                 )}
               </form>
 
-              {/* Nav Links */}
               {navLinks.map((link) => (
                 <div
                   key={link.name}
                   onClick={() => handleNavClick(link)}
-                  className={`cursor-pointer text-white hover:text-yellow-400 ${
+                  className={`cursor-pointer text-white text-sm hover:text-yellow-400 ${
                     activeSection === link.scrollTo ? "text-yellow-400" : ""
                   }`}
                 >
@@ -214,17 +207,16 @@ const Navbar3 = () => {
                 </div>
               ))}
 
-              {/* Auth Actions */}
-              <div className="pt-3 border-t border-gray-700">
+              <div className="pt-2 border-t border-gray-700 space-y-1">
                 <button
                   onClick={openLoginModal}
-                  className="text-white hover:text-yellow-400 w-full text-left"
+                  className="text-white text-sm hover:text-yellow-400 w-full text-left"
                 >
                   Login
                 </button>
                 <button
                   onClick={openSignupModal}
-                  className="text-white hover:text-yellow-400 w-full text-left"
+                  className="text-white text-sm hover:text-yellow-400 w-full text-left"
                 >
                   Sign Up
                 </button>
@@ -233,7 +225,7 @@ const Navbar3 = () => {
                     setIsOpen(false);
                     navigate("/forgot-password");
                   }}
-                  className="text-sm text-gray-300 underline w-full text-left mt-1"
+                  className="text-xs text-gray-300 underline w-full text-left mt-1"
                 >
                   Forgot username/password?
                 </button>
@@ -243,7 +235,6 @@ const Navbar3 = () => {
         </AnimatePresence>
       </nav>
 
-      {/* Modals */}
       <LoginModal isOpen={isLoginModalOpen} onClose={closeLoginModal} />
       <SignupModal isOpen={isSignupModalOpen} onClose={closeSignupModal} />
     </>
