@@ -1,16 +1,22 @@
 import { useLocation } from "react-router-dom";
 import { useState, useEffect } from "react";
-import Navbar from "../../components/Navbar";
-import Footer from "../../components/Footer";
-import VideoBanner from "../../components/VideoBanner";
-import NetworkStatistics from "../../components/NetworkStatistics";
-import TokenLeaderboard from "../../components/TokenLeaderboard";
-import FameCoin from "../../components/FameCoin";
-import Process from "../../components/Process";
 import CalculatingNetworthPopup from "../../components/CalculatingNetworthPopup";
 import CongratulationsPopup from "../../components/CongratulationsPopup";
-import FAQ from "../FAQ";
-
+import HeroSection from "../../components/HeroSection";
+import BrandedTalentShares from "../../components/BrandedTalentShares";
+import TalentTradingSection from "../../components/TalentTradingSection";
+import DownloadApp from "../../components/DownloadApp";
+import VideoBanner2 from "../../components/VideoBanner2";
+import GigsEvents from "../../components/GigsEvents";
+import MeetAndGreet from "../../components/MeetGreetSection";
+import TheFuturesSection from "../../components/TheFuturesSection";
+import OurTeam from "../../components/our_team/OurTeam";
+import ContactUs from "../../components/contact/ContactUs";
+import Podcast from "../../components/podcast/Podcast";
+import Faq from "../../components/faq/Faq";
+import CustomerReview from "../../components/customer_review/CustomerReview";
+import VideoBanner3 from "../../components/VideoBanner3";
+import CelebMerchandiseHero from "../../components/CelebMerchandiseHero";
 const Home = () => {
   const location = useLocation();
   const [isCalculatingNetworthOpen, setIsCalculatingNetworthOpen] =
@@ -35,15 +41,20 @@ const Home = () => {
   }, [location.state]);
 
   return (
-    <div className="mt-20">
-      <Navbar />
-      <VideoBanner />
-      <NetworkStatistics />
-      <TokenLeaderboard />
-      <FameCoin />
-      <Process />
-      <Footer />
-
+    <div>
+      <VideoBanner3 />
+      <TalentTradingSection />
+      <BrandedTalentShares />
+      <DownloadApp />
+      <MeetAndGreet />
+      <Podcast />
+      <CustomerReview />
+      <TheFuturesSection />
+      <GigsEvents />
+      <CelebMerchandiseHero />
+      <OurTeam />
+      <Faq />
+      <ContactUs />
       {isCalculatingNetworthOpen && <CalculatingNetworthPopup />}
       {showCongratulationsPopup && <CongratulationsPopup />}
     </div>

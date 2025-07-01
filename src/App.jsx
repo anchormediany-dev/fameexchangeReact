@@ -15,9 +15,7 @@ import AboutCrypto from "./pages/about_crypto/AboutCrypto";
 import HowToBuySell from "./pages/how_to_buy_sell/HowToBuySell";
 import TermsConditions from "./pages/terms_conditions/TermsConditions";
 import PrivacyPolicy from "./pages/privacy_policy/PrivacyPolicy";
-import Home2 from "./pages/home/Home2";
 import TalentProfile from "./pages/talent_profile/TalentProfile";
-import Footer2 from "./components/Footer2";
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import siteLogo from "./assets/images/site-logo.png";
@@ -28,8 +26,9 @@ import InversePage from "./pages/inverse/InversePage";
 import EventsPage from "./pages/events/EventsPage";
 import FutureMusicians from "./pages/future_musicians/FutureMusicians";
 import TradingAccountPage from "./pages/trading_account/TradingAccountPage";
-import Home3 from "./pages/home/Home3";
+import Home from "./pages/home/Home";
 import Navbar from "./components/Navbar";
+import Footer from "./components/Footer";
 
 // Simple Black Header Component
 const SimpleHeader = () => {
@@ -72,7 +71,6 @@ const SimpleHeader = () => {
   );
 };
 
-// Main Layout Component with Full Animated Header and Footer (Home & Talent Profile)
 const MainLayout = () => {
   return (
     <div className="flex bg-[#171717] flex-col min-h-screen">
@@ -85,7 +83,7 @@ const MainLayout = () => {
       </main>
 
       {/* Footer */}
-      <Footer2 />
+      <Footer />
     </div>
   );
 };
@@ -105,7 +103,6 @@ const SimpleLayout = () => {
   );
 };
 
-// Clean Layout Component without Header and Footer (Auth Pages)
 const CleanLayout = () => {
   return (
     <div className="flex flex-col min-h-screen">
@@ -130,14 +127,12 @@ export default function App() {
   return (
     <AnimatePresence mode="wait">
       <Routes location={location} key={location.pathname}>
-        {/* Routes with Full Animated Header and Footer */}
         <Route path="/" element={<MainLayout />}>
-          {/* Home Page */}
           <Route
             index
             element={
               <MotionPageWrapper>
-                <Home3 />
+                <Home />
               </MotionPageWrapper>
             }
           />
@@ -332,8 +327,6 @@ export default function App() {
 
         {/* Routes with Simple Black Header Only */}
         <Route path="/" element={<SimpleLayout />}></Route>
-
-        {/* Routes without Any Header or Footer (Clean Auth Pages) */}
         <Route path="/" element={<CleanLayout />}>
           {/* Authentication Pages */}
           <Route
