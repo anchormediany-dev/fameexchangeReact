@@ -1,34 +1,40 @@
 import { useEffect, useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
-import { FaBars, FaTimes } from "react-icons/fa";
+import { FaBars, FaTimes, FaSearch } from "react-icons/fa";
+import { MdOutlinePerson } from "react-icons/md";
 import siteLogo from "../assets/images/site-logo.png";
-import LoginModal from "../components/LoginModal";
+import LoginModal from "./LoginModal";
 import SignupModal from "./SignupModal";
 
 const navLinks = [
-  { name: "Trading Chart", scrollTo: "trading-chart" },
-  { name: "Videos", scrollTo: "videos" },
-  { name: "20 Top Talent Tokens", scrollTo: "token-leaderboard" },
-  { name: "NFT", scrollTo: "nft" },
-  { name: "In-Verse", scrollTo: "in-verse" },
-  { name: "Futured", scrollTo: "futured" },
-  { name: "FAQ's", path: "/faqs", isRoute: true },
+  { name: "Home", scrollTo: "home" },
+  { name: "Stocks", scrollTo: "stocks" },
+  { name: "Brands", scrollTo: "brands" },
+  { name: "Meet & Greet", scrollTo: "meet_greet" },
+  { name: "Advertising", scrollTo: "advertising" },
+  { name: "Events", scrollTo: "events" },
+  { name: "About Us", scrollTo: "about_us" },
+  { name: "Contact us", scrollTo: "contact_us" },
 ];
 
-const history = {
-  scrollTarget: null,
-};
+const history = { scrollTarget: null };
+
+// ...imports remain unchanged
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
   const [isSignupModalOpen, setIsSignupModalOpen] = useState(false);
   const [activeSection, setActiveSection] = useState(null);
-  const [activeRoute, setActiveRoute] = useState(null);
-
+  const [searchQuery, setSearchQuery] = useState("");
   const location = useLocation();
   const navigate = useNavigate();
+
+  const handleSearch = (e) => {
+    e.preventDefault();
+    setIsOpen(false);
+  };
 
   const handleScroll = (id) => {
     const element = document.getElementById(id);
@@ -36,14 +42,12 @@ const Navbar = () => {
       const yOffset = -80;
       const y =
         element.getBoundingClientRect().top + window.pageYOffset + yOffset;
-
       window.scrollTo({ top: y, behavior: "smooth" });
     }
   };
 
   const handleNavClick = ({ scrollTo, path, isRoute }) => {
     setIsOpen(false);
-
     if (isRoute && path) {
       navigate(path);
     } else {
@@ -56,22 +60,29 @@ const Navbar = () => {
     }
   };
 
+  const openLoginModal = () => {
+    setIsLoginModalOpen(true);
+    setIsOpen(false);
+  };
+  const closeLoginModal = () => setIsLoginModalOpen(false);
+  const openSignupModal = () => {
+    setIsSignupModalOpen(true);
+    setIsOpen(false);
+  };
+  const closeSignupModal = () => setIsSignupModalOpen(false);
+
   useEffect(() => {
     if (location.pathname === "/" && history.scrollTarget) {
-      const id = history.scrollTarget;
-      setTimeout(() => handleScroll(id), 200);
+      setTimeout(() => handleScroll(history.scrollTarget), 200);
       history.scrollTarget = null;
     }
-    setActiveRoute(location.pathname);
   }, [location]);
 
   useEffect(() => {
     const handleScrollSpy = () => {
       const scrollPos = window.innerHeight / 2;
-
       let currentSection = null;
       navLinks.forEach(({ scrollTo }) => {
-        if (!scrollTo) return;
         const section = document.getElementById(scrollTo);
         if (section) {
           const rect = section.getBoundingClientRect();
@@ -80,7 +91,6 @@ const Navbar = () => {
           }
         }
       });
-
       setActiveSection(currentSection);
     };
 
@@ -88,124 +98,146 @@ const Navbar = () => {
     return () => window.removeEventListener("scroll", handleScrollSpy);
   }, []);
 
-  const openLoginModal = () => {
-    setIsLoginModalOpen(true);
-    setIsOpen(false);
-  };
-
-  const closeLoginModal = () => setIsLoginModalOpen(false);
-
-  const openSignupModal = () => {
-    setIsSignupModalOpen(true);
-    setIsOpen(false);
-  };
-
-  const closeSignupModal = () => setIsSignupModalOpen(false);
-
   return (
-    <nav className="bg-black fixed top-0 left-0 right-0 z-50">
-      <div className="container">
-        <div className="flex justify-between items-center h-20">
+    <>
+      <nav className="fixed top-0 w-full z-50 bg-black shadow-lg font-medium text-sm">
+        <div className="container mx-auto flex items-center justify-between px-4 py-3">
           <Link
             to="/"
-            onClick={() =>
-              window.scrollTo({ top: 0, left: 0, behavior: "smooth" })
-            }
+            onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
           >
             <img src={siteLogo} alt="Logo" className="h-12" />
           </Link>
 
-          {/* Desktop Nav */}
-          <div className="hidden lg:flex  font-navlink xl:space-x-6 space-x-3 items-center">
+          <div className="hidden xl:flex items-center gap-4 ml-4">
             {navLinks.map((link) => (
               <span
                 key={link.name}
                 onClick={() => handleNavClick(link)}
-                className={`cursor-pointer transition ${
-                  link.isRoute
-                    ? activeRoute === link.path
-                      ? "text-primary"
-                      : "hover:text-primary"
-                    : activeSection === link.scrollTo
-                    ? "text-primary"
-                    : "hover:text-primary"
+                className={`cursor-pointer text-white text-sm hover:text-yellow-400 ${
+                  activeSection === link.scrollTo ? "text-yellow-400" : ""
                 }`}
               >
                 {link.name}
               </span>
             ))}
 
-            <button
-              onClick={openLoginModal}
-              className="relative cursor-pointer inline-block font-button-light  text-white group overflow-hidden px-5 py-2"
-            >
-              <span className="absolute inset-0 w-full h-full bg-primary transition-transform duration-300 ease-out transform -translate-x-full group-hover:translate-x-0"></span>
-              <span className="absolute inset-0 border border-primary rounded"></span>
-              <span className="relative z-10">Log In</span>
-            </button>
-            <button
-              onClick={openSignupModal}
-              className="relative cursor-pointer inline-block font-button-light  text-black bg-primary px-5 py-2 rounded hover:opacity-90 transition-all duration-300 shadow-md hover:shadow-xl"
-            >
-              <span className="relative z-10">Sign Up</span>
-            </button>
-          </div>
-
-          {/* Mobile Nav Toggle */}
-          <div className="lg:hidden text-white">
-            <button onClick={() => setIsOpen(!isOpen)}>
-              {isOpen ? <FaTimes size={24} /> : <FaBars size={24} />}
-            </button>
-          </div>
-        </div>
-      </div>
-
-      {/* Mobile Nav */}
-      <AnimatePresence>
-        {isOpen && (
-          <motion.div
-            initial={{ height: 0, opacity: 0 }}
-            animate={{ height: "auto", opacity: 1 }}
-            exit={{ height: 0, opacity: 0 }}
-            className="lg:hidden bg-black text-white px-6 pt-4 pb-6 space-y-4"
-          >
-            {navLinks.map((link) => (
-              <span
-                key={link.name}
-                onClick={() => handleNavClick(link)}
-                className={`block font-navlink cursor-pointer transition ${
-                  link.isRoute
-                    ? activeRoute === link.path
-                      ? "text-primary"
-                      : "hover:text-primary"
-                    : activeSection === link.scrollTo
-                    ? "text-primary"
-                    : "hover:text-primary"
-                }`}
-              >
-                {link.name}
-              </span>
-            ))}
+            <form onSubmit={handleSearch} className="relative w-44 ml-2">
+              <input
+                type="text"
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                placeholder="Search..."
+                className="w-full px-8 py-1.5 rounded-full text-xs text-black bg-white focus:outline-none focus:ring-2 focus:ring-yellow-400"
+              />
+              <FaSearch className="absolute left-2.5 top-2 text-gray-400 text-sm" />
+              {searchQuery && (
+                <button
+                  type="button"
+                  onClick={() => setSearchQuery("")}
+                  className="absolute right-2.5 top-2 text-gray-400 hover:text-gray-600 text-sm"
+                >
+                  &#x2715;
+                </button>
+              )}
+            </form>
 
             <button
               onClick={openLoginModal}
-              className="block font-button-light cursor-pointer text-white border border-primary px-4 py-2 rounded hover:bg-primary hover:text-black transition"
+              className="custom-button-outline !py-1"
             >
-              Log In
+              Login
             </button>
             <button
               onClick={openSignupModal}
-              className="block font-button-light cursor-pointer bg-primary text-black px-4 py-2 rounded hover:bg-primary transition"
+              className="custom-button-two rounded-full !py-1"
             >
               Sign Up
             </button>
-          </motion.div>
-        )}
-      </AnimatePresence>
+          </div>
+
+          <div className="xl:hidden flex gap-2 items-center">
+            <MdOutlinePerson
+              className="text-white text-xl"
+              onClick={openLoginModal}
+            />
+            <button onClick={() => setIsOpen(!isOpen)} className="text-white">
+              {isOpen ? <FaTimes size={20} /> : <FaBars size={20} />}
+            </button>
+          </div>
+        </div>
+
+        <AnimatePresence>
+          {isOpen && (
+            <motion.div
+              initial={{ height: 0, opacity: 0 }}
+              animate={{ height: "auto", opacity: 1 }}
+              exit={{ height: 0, opacity: 0 }}
+              className="xl:hidden bg-black px-4 pt-2 pb-4 space-y-2"
+            >
+              <form onSubmit={handleSearch} className="relative w-full">
+                <input
+                  type="text"
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  placeholder="Search..."
+                  className="w-full px-8 py-2 rounded text-sm text-black bg-white focus:outline-none focus:ring-2 focus:ring-yellow-400"
+                />
+                <FaSearch className="absolute left-2.5 top-2.5 text-gray-400 text-sm" />
+                {searchQuery && (
+                  <button
+                    type="button"
+                    onClick={() => setSearchQuery("")}
+                    className="absolute right-2.5 top-2.5 text-gray-400 hover:text-gray-600 text-sm"
+                  >
+                    &#x2715;
+                  </button>
+                )}
+              </form>
+
+              {navLinks.map((link) => (
+                <div
+                  key={link.name}
+                  onClick={() => handleNavClick(link)}
+                  className={`cursor-pointer text-white text-sm hover:text-yellow-400 ${
+                    activeSection === link.scrollTo ? "text-yellow-400" : ""
+                  }`}
+                >
+                  {link.name}
+                </div>
+              ))}
+
+              <div className="pt-2 border-t border-gray-700 space-y-1">
+                <button
+                  onClick={openLoginModal}
+                  className="text-white text-sm hover:text-yellow-400 w-full text-left"
+                >
+                  Login
+                </button>
+                <button
+                  onClick={openSignupModal}
+                  className="text-white text-sm hover:text-yellow-400 w-full text-left"
+                >
+                  Sign Up
+                </button>
+                <button
+                  onClick={() => {
+                    setIsOpen(false);
+                    navigate("/forgot-password");
+                  }}
+                  className="text-xs text-gray-300 underline w-full text-left mt-1"
+                >
+                  Forgot username/password?
+                </button>
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
+      </nav>
 
       <LoginModal isOpen={isLoginModalOpen} onClose={closeLoginModal} />
       <SignupModal isOpen={isSignupModalOpen} onClose={closeSignupModal} />
-    </nav>
+    </>
   );
 };
 

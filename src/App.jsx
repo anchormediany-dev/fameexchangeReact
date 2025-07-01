@@ -17,13 +17,10 @@ import TermsConditions from "./pages/terms_conditions/TermsConditions";
 import PrivacyPolicy from "./pages/privacy_policy/PrivacyPolicy";
 import Home2 from "./pages/home/Home2";
 import TalentProfile from "./pages/talent_profile/TalentProfile";
-
-// Import your components - adjust paths as needed
-import Navbar2 from "./components/Navbar2"; // Your animated sticky header
-import Footer2 from "./components/Footer2"; // Footer component
+import Footer2 from "./components/Footer2";
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
-import siteLogo from "./assets/images/site-logo.png"; // Adjust path as needed
+import siteLogo from "./assets/images/site-logo.png";
 import SignupTwo from "./pages/signup/SignupTwo";
 import BrandedTalentShares from "./pages/branded_talent_shares/BrandedTalentShares";
 import MeetGreetPage from "./pages/meet_greet/MeetGreetPage";
@@ -33,7 +30,6 @@ import FutureMusicians from "./pages/future_musicians/FutureMusicians";
 import TradingAccountPage from "./pages/trading_account/TradingAccountPage";
 import Home3 from "./pages/home/Home3";
 import Navbar from "./components/Navbar";
-import Navbar3 from "./components/Navbar3";
 
 // Simple Black Header Component
 const SimpleHeader = () => {
@@ -81,7 +77,7 @@ const MainLayout = () => {
   return (
     <div className="flex bg-[#171717] flex-col min-h-screen">
       {/* Full Animated Sticky Header */}
-      <Navbar3 />
+      <Navbar />
 
       {/* Main Content Area */}
       <main className="flex-grow">

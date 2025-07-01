@@ -2,7 +2,6 @@ import { useLocation } from "react-router-dom";
 import { useState, useEffect } from "react";
 import CalculatingNetworthPopup from "../../components/CalculatingNetworthPopup";
 import CongratulationsPopup from "../../components/CongratulationsPopup";
-import Navbar2 from "../../components/Navbar2";
 import HeroSection from "../../components/HeroSection";
 import BrandedTalentShares from "../../components/BrandedTalentShares";
 import TalentTradingSection from "../../components/TalentTradingSection";
