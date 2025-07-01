@@ -32,7 +32,7 @@ import Footer from "../../components/Footer";
 
 const HelpSupport = () => {
   return (
-    <div className="mt-20 flex flex-col min-h-screen">
+    <div className="mt-10 lg:mt-16 flex flex-col min-h-screen">
       <Navbar />
 
       <div className="flex-grow py-12 bg-gradient-custom-vertical2 bg-gradient-custom-horizontal2">

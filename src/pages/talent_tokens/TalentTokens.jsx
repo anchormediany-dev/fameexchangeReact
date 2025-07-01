@@ -126,9 +126,9 @@ const TalentTokens = () => {
   const [selectedToken, setSelectedToken] = useState("MARK ANTHONY");
 
   return (
-    <div className="mt-20">
+    <div className="mt-10 lg:mt-16 bg-black">
       <Navbar />
-      <div className="flex flex-col md:flex-row container  py-12 w-full bg-black text-white">
+      <div className="flex flex-col md:flex-row container  py-12 w-full  text-white">
         {/* Sidebar */}
         <div className="w-full md:w-1/4 bg-[#0C0C0C] p-4">
           <h2 className="text-primary font-heading-section">
