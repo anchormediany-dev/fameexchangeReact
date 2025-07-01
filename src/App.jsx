@@ -172,6 +172,15 @@ export default function App() {
               </MotionPageWrapper>
             }
           />
+          {/* Login page Page */}
+          <Route
+            path="login"
+            element={
+              <MotionPageWrapper>
+                <Login />
+              </MotionPageWrapper>
+            }
+          />
           {/* Inverse Page */}
           <Route
             path="inverse"
@@ -271,7 +280,7 @@ export default function App() {
             </MotionPageWrapper>
           }
         />
-     
+
         <Route
           path="how-to-buy-sell"
           element={
@@ -316,29 +325,6 @@ export default function App() {
             </MotionPageWrapper>
           }
         />
-
-        {/* Routes with Simple Black Header Only */}
-        <Route path="/" element={<SimpleLayout />}></Route>
-        <Route path="/" element={<CleanLayout />}>
-          {/* Authentication Pages */}
-          <Route
-            path="login"
-            element={
-              <MotionPageWrapper>
-                <Login />
-              </MotionPageWrapper>
-            }
-          />
-          <Route
-            path="signup"
-            element={
-              <MotionPageWrapper>
-                {/* <Signup /> */}
-                <Signup />
-              </MotionPageWrapper>
-            }
-          />
-        </Route>
       </Routes>
     </AnimatePresence>
   );
