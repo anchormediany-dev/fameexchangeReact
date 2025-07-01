@@ -9,6 +9,7 @@ import {
 import ImageSwitch from "./ImageSwitch";
 import NotificationTalentLayout from "./NotificationRequests";
 import FriendsEventsSection from "./FriendsAndEvents";
+import PortfolioDashboard from "../../components/PortfolioDashboard";
 
 const TalentProfile = () => {
   const [searchValue, setSearchValue] = useState("");
@@ -241,6 +242,12 @@ const TalentProfile = () => {
       <ImageSwitch />
       <FriendsEventsSection />
       <NotificationTalentLayout />
+      <section className=" px-4 md:px-8 container mx-auto ">
+        <div className="rounded-xl p-6 bg-[#1f1f1f]">
+          <PortfolioDashboard />
+        </div>
+        
+      </section>
     </section>
   );
 };
