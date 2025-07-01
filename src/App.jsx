@@ -19,7 +19,6 @@ import TalentProfile from "./pages/talent_profile/TalentProfile";
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import siteLogo from "./assets/images/site-logo.png";
-import SignupTwo from "./pages/signup/SignupTwo";
 import BrandedTalentShares from "./pages/branded_talent_shares/BrandedTalentShares";
 import MeetGreetPage from "./pages/meet_greet/MeetGreetPage";
 import InversePage from "./pages/inverse/InversePage";
@@ -29,6 +28,7 @@ import TradingAccountPage from "./pages/trading_account/TradingAccountPage";
 import Home from "./pages/home/Home";
 import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
+import Signup from "./pages/signup/Signup";
 
 // Simple Black Header Component
 const SimpleHeader = () => {
@@ -169,7 +169,7 @@ export default function App() {
             path="signup"
             element={
               <MotionPageWrapper>
-                <SignupTwo />
+                <Signup />
               </MotionPageWrapper>
             }
           />
@@ -342,7 +342,7 @@ export default function App() {
             element={
               <MotionPageWrapper>
                 {/* <Signup /> */}
-                <SignupTwo />
+                <Signup />
               </MotionPageWrapper>
             }
           />
