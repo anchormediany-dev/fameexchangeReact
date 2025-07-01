@@ -180,7 +180,7 @@ const Signup = () => {
           <div className="flex mt-10 lg:mt-16 2xl:mt-20 py-12 2xl:py-16  relative bg-[#171717] overflow-hidden">
             <div className="w-full container flex flex-col-reverse lg:flex-row gap-8 z-10">
               {/* Left: Signup Form (3/4 width on large screens) */}
-              <div className="lg:w-[80%] bg-[#222222] p-8 rounded-xl border border-[#333333]">
+              <div className="lg:w-[70%] bg-[#222222] p-8 rounded-xl border border-[#333333]">
                 <h2 className="text-white custom-heading-two mb-8">
                   Join Fame Exchange
                 </h2>
@@ -637,16 +637,19 @@ const Signup = () => {
               </div>
 
               {/* Right Side Welcome (1/4 width on large screens) */}
-              <div className="lg:w-[20%] flex lg:flex-col flex-row items-center lg:items-start text-white space-y-6 pt-6">
+              <div className="lg:w-[30%] flex lg:flex-col flex-row items-center lg:items-start text-white space-y-6 pt-6">
                 <Link className="w-[100%] lg:block hidden" to="/">
                   <img src={siteLogo} alt="Logo" />
                 </Link>
                 <div className="flex flex-col">
                   <h1 className=" mt-5">
-                    <span className="custom-heading-seven"> WELCOME TO </span>
-                    <span className="text-xl">THE FAME ECHANGE</span>
+                    <span className="custom-heading-seven ml-5">
+                      {" "}
+                      WELCOME TO{" "}
+                    </span>
+                    <span className="text-xl ml-5">THE FAME ECHANGE</span>
                   </h1>
-                  <p className="text-white font-normal text-xs">
+                  <p className="text-white font-normal text-xs ml-5">
                     Secure, fast, and fair — your trusted partner in global
                     currency exchange.
                   </p>

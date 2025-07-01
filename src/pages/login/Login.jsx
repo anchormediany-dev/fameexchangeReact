@@ -35,7 +35,7 @@ const LoginPage = () => {
       <div className="flex mt-10 lg:mt-16 2xl:mt-20 py-12 2xl:py-16 bg-[#171717] overflow-hidden">
         <div className="w-full container flex flex-col lg:flex-row gap-8 z-10">
           {/* Login Form */}
-          <div className="lg:w-1/2 bg-[#222222] p-8 rounded-xl border border-[#333333]">
+          <div className="lg:w-[70%] bg-[#222222] p-8 rounded-xl border border-[#333333]">
             <h2 className="text-white custom-heading-two mb-8">Welcome Back</h2>
 
             <form onSubmit={handleSubmit} className="space-y-6">
@@ -171,13 +171,13 @@ const LoginPage = () => {
           </div>
 
           {/* Welcome Section */}
-          <div className="lg:w-1/2 flex flex-col justify-center items-start text-white space-y-6 pt-6 px-4">
+          <div className="lg:w-[30%] flex flex-col justify-center items-start text-white space-y-6 pt-6 px-4">
             <Link className="w-full" to="/">
               <img src={siteLogo} alt="Logo" className="mb-6" />
             </Link>
-            <h1 className="text-3xl ml-10 font-bold">WELCOME TO</h1>
-            <h2 className="text-xl font-semibold ml-10">THE FAME EXCHANGE</h2>
-            <p className="text-sm ml-10">
+            <h1 className="text-3xl ml-5 font-bold">WELCOME TO</h1>
+            <h2 className="text-xl font-semibold ml-5">THE FAME EXCHANGE</h2>
+            <p className="text-sm ml-5">
               Secure, fast, and fair — your trusted partner in global currency
               exchange.
             </p>
