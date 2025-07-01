@@ -11,7 +11,6 @@ import AboutUs from "./pages/about/AboutUs";
 import Regions from "./pages/us_international_english/Regions";
 import AntiMoneyLaundering from "./pages/anti_money_laundering/AntiMoneyLaundering";
 import Faq from "./pages/faq/Faq";
-import AboutCrypto from "./pages/about_crypto/AboutCrypto";
 import HowToBuySell from "./pages/how_to_buy_sell/HowToBuySell";
 import TermsConditions from "./pages/terms_conditions/TermsConditions";
 import PrivacyPolicy from "./pages/privacy_policy/PrivacyPolicy";
@@ -272,14 +271,7 @@ export default function App() {
             </MotionPageWrapper>
           }
         />
-        <Route
-          path="about-crypto"
-          element={
-            <MotionPageWrapper>
-              <AboutCrypto />
-            </MotionPageWrapper>
-          }
-        />
+     
         <Route
           path="how-to-buy-sell"
           element={
