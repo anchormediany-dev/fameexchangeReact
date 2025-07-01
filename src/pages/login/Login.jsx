@@ -103,15 +103,23 @@ const LoginPage = () => {
                     )}
                   </button>
                 </div>
-                <div className="flex justify-end mt-1">
+                <div className="flex justify-between items-center mt-2">
                   <button
                     type="button"
                     onClick={() => setShowForgotPassword(true)}
-                    className="text-white text-sm hover:underline"
+                    className="text-sm text-[#F3BA18] hover:underline transition duration-150 ease-in-out"
                   >
                     Forgot Password?
                   </button>
+                  <button
+                    type="button"
+                    onClick={() => console.log("Handle forgot username")}
+                    className="text-sm text-[#F3BA18] hover:underline transition duration-150 ease-in-out"
+                  >
+                    Forgot Username?
+                  </button>
                 </div>
+
                 {touched.password && !isPasswordValid && (
                   <p className="text-red-500 text-xs mt-1">
                     Password must be at least 6 characters
@@ -167,9 +175,9 @@ const LoginPage = () => {
             <Link className="w-full" to="/">
               <img src={siteLogo} alt="Logo" className="mb-6" />
             </Link>
-            <h1 className="text-3xl font-bold">WELCOME TO</h1>
-            <h2 className="text-xl font-semibold">THE FAME EXCHANGE</h2>
-            <p className="text-sm">
+            <h1 className="text-3xl ml-10 font-bold">WELCOME TO</h1>
+            <h2 className="text-xl font-semibold ml-10">THE FAME EXCHANGE</h2>
+            <p className="text-sm ml-10">
               Secure, fast, and fair — your trusted partner in global currency
               exchange.
             </p>
