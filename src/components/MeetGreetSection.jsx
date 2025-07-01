@@ -316,7 +316,7 @@ const MeetAndGreet = () => {
           transform: scale(1.2) !important;
         }
       `}</style>
-      <Link to="/meet-greet" className="flex mt-10 justify-center">
+      <Link to="/inverse" className="flex mt-10 justify-center">
         <motion.button
           className="custom-button-two"
           whileHover={{ scale: 1.02 }}
