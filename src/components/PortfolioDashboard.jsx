@@ -59,7 +59,7 @@ export default function PortfolioDashboard() {
             <span className="text-yellow-400">$29,908.45</span>
           </h1>
           <p className="text-md md:text-xl text-yellow-300 mt-1">
-            Famecoin Balance <span className="text-yellow-300">1808.24</span>
+            USD Balance <span className="text-yellow-300">1808.24</span>
           </p>
           <p className="text-red-500 text-sm">(-2.01%)</p>
         </div>
@@ -113,83 +113,9 @@ export default function PortfolioDashboard() {
           </ResponsiveContainer>
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-[100px] relative z-10">
-          {/* Buy/Sell Section */}
-          <div className="bg-[#111] rounded-[20px] p-4 ">
-            <div className="flex border-b border-gray-700 mb-4">
-              <button
-                onClick={() => setActiveTab("buy")}
-                className={`py-2 px-4 font-semibold flex-grow text-center ${
-                  activeTab === "buy"
-                    ? "text-primary border-b border-primary"
-                    : "text-[#404040]"
-                } focus:outline-none`}
-                style={{
-                  borderRadius: "4px 4px 0 0",
-                }}
-              >
-                Buy Doge
-              </button>
-              <button
-                onClick={() => setActiveTab("sell")}
-                className={`py-2 px-4 font-semibold flex-grow text-center ${
-                  activeTab === "sell"
-                    ? "text-yellow-400 border-b-2 border-yellow-400"
-                    : "text-[#404040]"
-                } focus:outline-none`}
-                style={{
-                  borderRadius: "4px 4px 0 0",
-                }}
-              >
-                Sell Doge
-              </button>
-            </div>
-
-            <div>
-              <label className="block mb-1">
-                {activeTab === "buy" ? "Buy In" : "Sell In"}
-              </label>
-              <div className="flex items-center bg-[#222] px-4 py-2 rounded mb-3">
-                <span className="text-gray-400 mr-2">USD</span>
-              </div>
-
-              <label className="block mb-1">Amount</label>
-              <input
-                type="number"
-                placeholder="$0.00"
-                className="w-full bg-[#222] px-4 py-2 rounded mb-3 text-white"
-              />
-
-              <p className="text-red-500 text-sm mb-2">
-                Estimated Price{" "}
-                <span className="float-right text-white">$0.0051326</span>
-              </p>
-              <p className="text-white text-sm mb-4">
-                Estimated DOGE <span className="float-right">0.00</span>
-              </p>
-
-              <button
-                onClick={handlePreviewOrderClick}
-                className="w-full py-2 text-primary bg-[#0B0B0B] font-medium rounded cursor-pointer transition"
-              >
-                Preview Order
-              </button>
-
-              <div className="text-center">
-                <p className="text-white text-sm mt-3">$0.32 Available</p>
-                <button className="text-[#FF000D] text-lg mt-2 cursor-pointer">
-                  <div className="flex justify-center items-center">
-                    {" "}
-                    <IoCheckmark className="w-5 h-5" />{" "}
-                    <span>Add to Lists</span>
-                  </div>
-                </button>
-              </div>
-            </div>
-          </div>
-
+        <div className=" relative z-10">
           {/* Portfolio Metrics */}
-          <div className="space-y-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
             <div className="bg-[#111] rounded-xl p-4 border border-[#404040]">
               <h3 className="text-sm  font-normal">You Equity</h3>
               <p className="text-primary text-2xl font-medium">$0.02525869</p>
