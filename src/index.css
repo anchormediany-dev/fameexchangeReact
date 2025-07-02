@@ -972,3 +972,14 @@ p {
 .custom-button-outline:hover::after {
   left: 100%;
 }
+/* Gredient styles */
+.gredient-text {
+  background: linear-gradient(to bottom, #e2cb68 0%, #b8962d 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  display: inline-block;
+}
+.gradient-bg {
+  background: linear-gradient(to bottom, #e2cb68 0%, #b8962d 100%);
+}
