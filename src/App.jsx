@@ -19,7 +19,7 @@ import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import siteLogo from "./assets/images/site-logo.png";
 import BrandedTalentShares from "./pages/branded_talent_shares/BrandedTalentShares";
-import MeetGreetPage from "./pages/meet_greet/MeetGreetPage";
+// import MeetGreetPage from "./pages/meet_greet/MeetGreetPage";
 import InversePage from "./pages/inverse/InversePage";
 import EventsPage from "./pages/events/EventsPage";
 import FutureMusicians from "./pages/future_musicians/FutureMusicians";
@@ -199,14 +199,14 @@ export default function App() {
               </MotionPageWrapper>
             }
           />
-          <Route
+          {/* <Route
             path="meet-greet"
             element={
               <MotionPageWrapper>
                 <MeetGreetPage />
               </MotionPageWrapper>
             }
-          />
+          /> */}
           {/* Branded Tokens Shares Page */}
           <Route
             path="branded-tokens-shares"
