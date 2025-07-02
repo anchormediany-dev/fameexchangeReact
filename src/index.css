@@ -980,6 +980,19 @@ p {
   color: transparent;
   display: inline-block;
 }
+.gradient-text:hover {
+  background: linear-gradient(to bottom, #f5e5a1 0%, #d8b44a 100%);
+  text-shadow: 0 0 8px rgba(232, 199, 74, 0.4);
+}
 .gradient-bg {
   background: linear-gradient(to bottom, #e2cb68 0%, #b8962d 100%);
+}
+
+.gredient-text-two:hover {
+  background: linear-gradient(to bottom, #f5e5a1 0%, #d8b44a 100%);
+  text-shadow: 0 0 8px rgba(232, 199, 74, 0.4);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  display: inline-block;
 }

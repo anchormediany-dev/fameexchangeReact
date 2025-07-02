@@ -20,14 +20,13 @@ const navLinks = [
 
 const history = { scrollTarget: null };
 
-// ...imports remain unchanged
-
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
   const [isSignupModalOpen, setIsSignupModalOpen] = useState(false);
-  const [activeSection, setActiveSection] = useState(null);
+  const [activeSection, setActiveSection] = useState("home");
   const [searchQuery, setSearchQuery] = useState("");
+  const [ignoreScroll, setIgnoreScroll] = useState(false);
   const location = useLocation();
   const navigate = useNavigate();
 
@@ -48,6 +47,16 @@ const Navbar = () => {
 
   const handleNavClick = ({ scrollTo, path, isRoute }) => {
     setIsOpen(false);
+    if (scrollTo === "home") {
+      setIgnoreScroll(true);
+      setActiveSection("home");
+      window.scrollTo({ top: 0, behavior: "smooth" });
+      if (location.pathname !== "/") {
+        navigate("/");
+      }
+      setTimeout(() => setIgnoreScroll(false), 1000);
+      return;
+    }
     if (isRoute && path) {
       navigate(path);
     } else {
@@ -80,90 +89,134 @@ const Navbar = () => {
 
   useEffect(() => {
     const handleScrollSpy = () => {
-      const scrollPos = window.innerHeight / 2;
-      let currentSection = null;
+      if (ignoreScroll) return;
+
+      const scrollPos = window.scrollY + window.innerHeight / 2;
+      let currentSection = activeSection;
+
+      // Always show Home as active when at the very top of the page
+      if (window.scrollY < 100) {
+        setActiveSection("home");
+        return;
+      }
+
       navLinks.forEach(({ scrollTo }) => {
         const section = document.getElementById(scrollTo);
         if (section) {
           const rect = section.getBoundingClientRect();
-          if (rect.top <= scrollPos && rect.bottom > scrollPos) {
+          const sectionTop = window.scrollY + rect.top;
+          const sectionBottom = sectionTop + rect.height;
+
+          if (scrollPos >= sectionTop && scrollPos <= sectionBottom) {
             currentSection = scrollTo;
           }
         }
       });
+
       setActiveSection(currentSection);
     };
 
     window.addEventListener("scroll", handleScrollSpy);
     return () => window.removeEventListener("scroll", handleScrollSpy);
-  }, []);
+  }, [ignoreScroll, activeSection]);
 
   return (
     <>
       <nav className="fixed top-0 w-full z-50 bg-black shadow-lg font-medium text-sm">
-        <div className="container mx-auto flex items-center justify-between px-4 py-3">
+        <div className="container mx-auto flex items-center justify-between px-4 py-5">
           <Link
             to="/"
-            onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
+            onClick={() => {
+              setIgnoreScroll(true);
+              setActiveSection("home");
+              window.scrollTo({ top: 0, behavior: "smooth" });
+              setTimeout(() => setIgnoreScroll(false), 1000);
+            }}
           >
             <img src={siteLogo} alt="Logo" className="h-12" />
           </Link>
 
-          <div className="hidden xl:flex items-center gap-4 ml-4">
+          <div className="hidden xl:flex items-center gap-5 ml-4">
             {navLinks.map((link) => (
-              <span
+              <motion.div
                 key={link.name}
-                onClick={() => handleNavClick(link)}
-                className={`cursor-pointer text-white text-sm hover:text-yellow-400 ${
-                  activeSection === link.scrollTo ? "text-yellow-400" : ""
-                }`}
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+                className="relative"
               >
-                {link.name}
-              </span>
+                <span
+                  onClick={() => handleNavClick(link)}
+                  className={`cursor-pointer text-white text-sm gredient-text-two  transition-colors duration-300 ${
+                    activeSection === link.scrollTo ? "gredient-text" : ""
+                  }`}
+                >
+                  {link.name}
+                </span>
+                {activeSection === link.scrollTo && (
+                  <motion.div
+                    layoutId="navUnderline"
+                    className="absolute bottom-0 left-0 w-full h-0.5 gradient-bg"
+                    transition={{ type: "spring", bounce: 0.2, duration: 0.6 }}
+                  />
+                )}
+              </motion.div>
             ))}
 
-            <form onSubmit={handleSearch} className="relative w-44 ml-2">
-              <input
-                type="text"
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                placeholder="Search..."
-                className="w-full px-8 py-1.5 rounded-full text-xs text-black bg-white focus:outline-none focus:ring-2 focus:ring-yellow-400"
-              />
-              <FaSearch className="absolute left-2.5 top-2 text-gray-400 text-sm" />
-              {searchQuery && (
-                <button
-                  type="button"
-                  onClick={() => setSearchQuery("")}
-                  className="absolute right-2.5 top-2 text-gray-400 hover:text-gray-600 text-sm"
-                >
-                  &#x2715;
-                </button>
-              )}
-            </form>
+            <div className="flex items-center gap-4 ml-4">
+              <form onSubmit={handleSearch} className="relative w-44">
+                <input
+                  type="text"
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  placeholder="Search..."
+                  className="w-full px-8 py-1.5 rounded-full text-xs text-black bg-white focus:outline-none focus:ring-2 focus:ring-yellow-400 transition-all duration-300"
+                />
+                <FaSearch className="absolute left-2.5 top-2 text-gray-400 text-sm" />
+                {searchQuery && (
+                  <button
+                    type="button"
+                    onClick={() => setSearchQuery("")}
+                    className="absolute right-2.5 top-2 text-gray-400 hover:text-gray-600 text-sm transition-colors duration-200"
+                  >
+                    &#x2715;
+                  </button>
+                )}
+              </form>
 
-            <button
-              onClick={openLoginModal}
-              className="custom-button-outline !py-1"
-            >
-              Login
-            </button>
-            <button
-              onClick={openSignupModal}
-              className="custom-button-two rounded-full !py-1"
-            >
-              Sign Up
-            </button>
+              <motion.button
+                onClick={openLoginModal}
+                className="custom-button-outline !py-1"
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+              >
+                Login
+              </motion.button>
+              <motion.button
+                onClick={openSignupModal}
+                className="custom-button-two rounded-full !py-1"
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+              >
+                Sign Up
+              </motion.button>
+            </div>
           </div>
 
-          <div className="xl:hidden flex gap-2 items-center">
-            <MdOutlinePerson
-              className="text-white text-xl"
-              onClick={openLoginModal}
-            />
-            <button onClick={() => setIsOpen(!isOpen)} className="text-white">
+          <div className="xl:hidden flex gap-4 items-center">
+            <motion.div whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.9 }}>
+              <MdOutlinePerson
+                className="text-white text-xl cursor-pointer"
+                onClick={openLoginModal}
+              />
+            </motion.div>
+            <motion.button
+              onClick={() => setIsOpen(!isOpen)}
+              className="text-white"
+              whileHover={{ scale: 1.1 }}
+              whileTap={{ scale: 0.9 }}
+            >
               {isOpen ? <FaTimes size={20} /> : <FaBars size={20} />}
-            </button>
+            </motion.button>
           </div>
         </div>
 
@@ -173,7 +226,8 @@ const Navbar = () => {
               initial={{ height: 0, opacity: 0 }}
               animate={{ height: "auto", opacity: 1 }}
               exit={{ height: 0, opacity: 0 }}
-              className="xl:hidden bg-black px-4 pt-2 pb-4 space-y-2"
+              transition={{ duration: 0.3 }}
+              className="xl:hidden bg-black px-4 pt-2 pb-4 space-y-3 overflow-hidden"
             >
               <form onSubmit={handleSearch} className="relative w-full">
                 <input
@@ -181,54 +235,69 @@ const Navbar = () => {
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
                   placeholder="Search..."
-                  className="w-full px-8 py-2 rounded text-sm text-black bg-white focus:outline-none focus:ring-2 focus:ring-yellow-400"
+                  className="w-full px-8 py-2 rounded text-sm text-black bg-white focus:outline-none focus:ring-2 focus:ring-yellow-400 transition-all duration-300"
                 />
                 <FaSearch className="absolute left-2.5 top-2.5 text-gray-400 text-sm" />
                 {searchQuery && (
                   <button
                     type="button"
                     onClick={() => setSearchQuery("")}
-                    className="absolute right-2.5 top-2.5 text-gray-400 hover:text-gray-600 text-sm"
+                    className="absolute right-2.5 top-2.5 text-gray-400 hover:text-gray-600 text-sm transition-colors duration-200"
                   >
                     &#x2715;
                   </button>
                 )}
               </form>
 
-              {navLinks.map((link) => (
-                <div
-                  key={link.name}
-                  onClick={() => handleNavClick(link)}
-                  className={`cursor-pointer text-white text-sm hover:text-yellow-400 ${
-                    activeSection === link.scrollTo ? "text-yellow-400" : ""
-                  }`}
-                >
-                  {link.name}
-                </div>
-              ))}
+              <div className="grid grid-cols-2 gap-3">
+                {navLinks.map((link) => (
+                  <motion.div
+                    key={link.name}
+                    whileHover={{ scale: 1.02 }}
+                    whileTap={{ scale: 0.98 }}
+                    onClick={() => handleNavClick(link)}
+                    className={`cursor-pointer text-white text-sm  p-2 rounded transition-colors duration-300 ${
+                      activeSection === link.scrollTo
+                        ? "gredient-text bg-gray-800"
+                        : ""
+                    }`}
+                  >
+                    {link.name}
+                  </motion.div>
+                ))}
+              </div>
 
-              <div className="pt-2 border-t border-gray-700 space-y-1">
-                <button
+              <div className="pt-2 border-t border-gray-700 space-y-2">
+                <motion.button
                   onClick={openLoginModal}
-                  className="text-white text-sm hover:text-yellow-400 w-full text-left"
+                  className="w-full text-left"
+                  whileHover={{ x: 5 }}
                 >
-                  Login
-                </button>
-                <button
+                  <span className="text-white text-sm  transition-colors duration-300">
+                    Login
+                  </span>
+                </motion.button>
+                <motion.button
                   onClick={openSignupModal}
-                  className="text-white text-sm hover:text-yellow-400 w-full text-left"
+                  className="w-full text-left"
+                  whileHover={{ x: 5 }}
                 >
-                  Sign Up
-                </button>
-                <button
+                  <span className="text-white text-sm  transition-colors duration-300">
+                    Sign Up
+                  </span>
+                </motion.button>
+                <motion.button
                   onClick={() => {
                     setIsOpen(false);
                     navigate("/forgot-password");
                   }}
-                  className="text-xs text-gray-300 underline w-full text-left mt-1"
+                  className="w-full text-left"
+                  whileHover={{ x: 5 }}
                 >
-                  Forgot username/password?
-                </button>
+                  <span className="text-xs text-gray-300 underline  transition-colors duration-300 mt-1">
+                    Forgot username/password?
+                  </span>
+                </motion.button>
               </div>
             </motion.div>
           )}
