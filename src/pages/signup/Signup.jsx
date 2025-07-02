@@ -587,6 +587,34 @@ const Signup = () => {
                       I'm over 18 years old*
                     </label>
                   </div>
+                  {/* Terms & Conditions Checkbox */}
+                  <div className="flex items-center space-x-3 mb-6">
+                    <input
+                      type="checkbox"
+                      id="terms"
+                      required
+                      className="m rounded bg-transparent border-[#F3BA18] text-[#F3BA18] focus:ring-[#F3BA18] h-5 w-5 flex-shrink-0"
+                    />
+                    <label htmlFor="terms" className="text-sm text-gray-300">
+                      I agree to the{" "}
+                      <Link
+                        to="/terms-conditions"
+                        className="text-[#F3BA18] hover:underline"
+                        target="_blank"
+                      >
+                        Terms & Conditions
+                      </Link>{" "}
+                      and{" "}
+                      <Link
+                        to="/privacy-policy"
+                        className="text-[#F3BA18] hover:underline"
+                        target="_blank"
+                      >
+                        Privacy Policy
+                      </Link>
+                      *
+                    </label>
+                  </div>
                   {/* Submit Button */}
                   <button
                     type="submit"
