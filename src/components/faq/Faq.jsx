@@ -1,96 +1,66 @@
 import { useState } from "react";
-import { FaPlus } from "react-icons/fa";
+import { FaPlus, FaMinus } from "react-icons/fa";
+import { FiArrowRightCircle } from "react-icons/fi";
+import { useNavigate } from "react-router-dom";
 import faqImage from "../../assets/images/faq.png";
+import faqItems from "../../data/faqData";
+
 const Faq = () => {
   const [openFaq, setOpenFaq] = useState(null);
+  const navigate = useNavigate();
 
-  // Toggle FAQ open/close
   const toggleFaq = (index) => {
-    if (openFaq === index) {
-      setOpenFaq(null);
-    } else {
-      setOpenFaq(index);
-    }
+    setOpenFaq(openFaq === index ? null : index);
   };
 
-  // FAQ data
-  const faqItems = [
-    {
-      question: "Does signing up to TFE cost anything?",
-      answer:
-        "No, signing up to The Fame Exchange is completely free. There are no hidden fees or costs associated with creating an account on our platform.",
-    },
-    {
-      question: "What is a Branded Talent Share (BTS)?",
-      answer:
-        "A Branded Talent Share (BTS) is a unique feature that allows artists to collaborate with brands while maintaining creative control. It creates mutual value for both the artist and the sponsoring brand.",
-    },
-    {
-      question: "Can I trade multiple artists?",
-      answer:
-        "Yes, you can trade multiple artists on our platform. There is no limit to the number of artists you can support and trade on The Fame Exchange.",
-    },
-    {
-      question: "How can I get qualified to become part of the TFE platform?",
-      answer:
-        "To qualify for the TFE platform, you need to meet certain criteria including having an established social media presence and demonstrating talent in your field. You can apply through our qualification form on the website.",
-    },
-  ];
-
-  // CSS for exact match
   const goldColor = "#a38b41";
-  const questionBoxStyle = {
-    border: `2px solid #d9c698`,
-    borderRadius: "0px",
-    position: "relative",
-  };
+  const borderStyle = "2px solid #d9c698";
 
   return (
     <div
       className="faq-section relative w-full min-h-[80vh] overflow-hidden"
       style={{ backgroundColor: "#000000" }}
     >
-      {/* Background image with overlay */}
+      {/* Background overlay */}
       <div
         className="absolute inset-0 w-full h-full bg-cover bg-center z-0"
-        style={{
-          backgroundImage: `url(${faqImage})`,
-          opacity: 0.25,
-        }}
+        style={{ backgroundImage: `url(${faqImage})`, opacity: 0.25 }}
       />
 
-      {/* Content container */}
+      {/* Content */}
       <div className="relative z-10 container px-4 py-12 2xl:py-16">
-        <section className="flex justify-between flex-col xl:flex-row">
-          {" "}
-          {/* FAQ header */}
+        <section className="flex flex-col xl:flex-row justify-between">
+          {/* Left Section */}
           <div className="mb-10 w-full xl:max-w-xl">
             <h3 className="custom-heading-six mb-1 text-[#a38b41]">FAQ</h3>
-            <h2 className="custom-heading-one text-[#a38b41] uppercase ">
-              FREQUENTLY ASKED
-              <br />
-              QUESTIONS
+            <h2 className="custom-heading-one text-[#a38b41] uppercase">
+              FREQUENTLY ASKED <br /> QUESTIONS
             </h2>
-            <p className="text-[#a38b41]">
+            <p className="text-[#a38b41] mt-4">
               Looking for answers now? Just ask your question
               <br />
               and it will be answered.
             </p>
           </div>
-          {/* FAQ accordion */}
+
+          {/* Right Section - FAQ Accordion */}
           <div className="w-full xl:max-w-xl space-y-4">
-            {faqItems.map((faq, index) => (
+            {faqItems.slice(0, 4).map((faq, index) => (
               <div
                 key={index}
-                style={questionBoxStyle}
+                style={{ border: borderStyle, borderRadius: 0 }}
                 className="transition-all duration-300"
               >
                 <div
-                  className="flex justify-between items-center p-4 text-white bg-transparent cursor-pointer"
+                  className="flex justify-between items-center p-4 text-white cursor-pointer"
                   onClick={() => toggleFaq(index)}
                 >
-                  <h3 className="text-base font-normal">{faq.question}</h3>
-                  <FaPlus />
+                  <h3 className="text-base font-medium">{faq.question}</h3>
+                  {openFaq === index ? (
+                    <FaMinus className="text-yellow-400" />
+                  ) : (
+                    <FaPlus className="text-yellow-400" />
+                  )}
                 </div>
 
                 {openFaq === index && (
@@ -100,6 +70,15 @@ const Faq = () => {
                 )}
               </div>
             ))}
+
+            {/* View All Button */}
+            <button
+              onClick={() => navigate("/faq")}
+              className="mt-6 flex items-center cursor-pointer justify-self-center px-6 py-3 rounded-lg gradient-bg text-black font-semibold shadow-md hover:scale-105 transition-transform duration-200"
+            >
+              <span className="text-base">View All FAQs</span>
+              <FiArrowRightCircle className="ml-2 text-xl " />
+            </button>
           </div>
         </section>
       </div>

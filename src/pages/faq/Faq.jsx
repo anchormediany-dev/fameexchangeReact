@@ -3,28 +3,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { FaChevronDown } from "react-icons/fa";
 import Footer from "../../components/Footer";
 import Navbar from "../../components/Navbar";
-const faqData = [
-  {
-    question: "How can I use the website?",
-    answer:
-      "To use the website, simply navigate through the different sections using the navigation bar. Click on the titles or buttons to explore the content. If you have specific questions, feel free to reach out through our contact form.",
-  },
-  {
-    question: "What are the website features?",
-    answer:
-      "Our website offers a variety of features including user registration, content browsing, interactive tools, and personalized recommendations. Explore each section to discover all the functionalities available.",
-  },
-  {
-    question: "Is there a support team available?",
-    answer:
-      'Yes, we have a dedicated support team ready to assist you. You can contact us through the "Contact Us" page or email us directly. We aim to respond to all inquiries within 24-48 hours.',
-  },
-  {
-    question: "How often is the content updated?",
-    answer:
-      "We strive to keep our content fresh and relevant. Updates are typically rolled out on a weekly basis, but important announcements and critical information may be updated more frequently.",
-  },
-];
+import faqItems from "../../data/faqData";
 
 const FAQItem = ({ faq, index, isOpen, toggleOpen }) => {
   const questionVariants = {
@@ -78,18 +57,18 @@ const FAQ = () => {
   };
 
   return (
-    <section className="mt-10 lg:mt-16 flex flex-col min-h-screen">
+    <section className="flex flex-col min-h-screen">
       <Navbar />
       <div
-        className="flex-grow py-12 bg-gradient-custom-vertical2 bg-gradient-custom-horizontal2"
+        className="flex-grow mt-10 lg:mt-16 2xl:mt-20 py-12 2xl:py-16 bg-gradient-custom-vertical2 bg-gradient-custom-horizontal2"
         id="faqs"
       >
         <div className="container max-w-screen-xl mx-auto flex flex-col gap-12 px-4 sm:px-6 lg:px-8">
-          <h2 className="text-primary text-center text-3xl sm:text-4xl lg:text-5xl font-bold">
+          <h2 className="gredient-text text-center text-3xl sm:text-4xl lg:text-5xl font-bold">
             Frequently Asked Questions
           </h2>
           <div className="max-w-2xl mx-auto">
-            {faqData.map((faq, index) => (
+            {faqItems.map((faq, index) => (
               <FAQItem
                 key={index}
                 faq={faq}
