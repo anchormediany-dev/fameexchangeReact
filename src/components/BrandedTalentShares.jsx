@@ -315,7 +315,7 @@ const TalentTokenTicker = () => {
   return (
     <div
       ref={sectionRef}
-      id="brands"
+      id="top-talent"
       className="bg-[#171717] text-white  py-12 2xl:py-16"
     >
       <motion.div

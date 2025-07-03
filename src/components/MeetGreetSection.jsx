@@ -184,7 +184,7 @@ const MeetAndGreet = () => {
   return (
     <section
       ref={sectionRef}
-      id="meet_greet"
+      id="inverse"
       className={`${styles.section} py-12 2xl:py-16`}
     >
       {/* Animated background pattern */}

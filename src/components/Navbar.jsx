@@ -9,13 +9,17 @@ import SignupModal from "./SignupModal";
 
 const navLinks = [
   { name: "Home", scrollTo: "home" },
-  { name: "Stocks", scrollTo: "stocks" },
-  { name: "Brands", scrollTo: "brands" },
-  { name: "Meet & Greet", scrollTo: "meet_greet" },
-  { name: "Advertising", scrollTo: "advertising" },
+  { name: "Top Talent", scrollTo: "top-talent" },
+  { name: "Trading Chart", scrollTo: "trading-chart" },
+  { name: "Inverse", scrollTo: "inverse" },
+  { name: "Futures", scrollTo: "futures" },
+  // { name: "Stocks", scrollTo: "stocks" },
+  // { name: "Brands", scrollTo: "brands" },
+  // { name: "Meet & Greet", scrollTo: "meet_greet" },
+  // { name: "Advertising", scrollTo: "advertising" },
   { name: "Events", scrollTo: "events" },
   { name: "About Us", scrollTo: "about_us" },
-  { name: "Contact us", scrollTo: "contact_us" },
+  // { name: "Contact us", scrollTo: "contact_us" },
 ];
 
 const history = { scrollTarget: null };
