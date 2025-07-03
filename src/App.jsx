@@ -3,7 +3,7 @@ import { AnimatePresence } from "framer-motion";
 import Login from "./pages/login/Login";
 import MotionPageWrapper from "./components/MotionPageWrapper";
 import FAQ from "./pages/FAQ";
-import Dashboard from "./pages/dashboard/Dashboard";
+// import Dashboard from "./pages/dashboard/Dashboard";
 import BrandedTokens from "./pages/branded_tokens/BrandedTokens";
 import TalentTokens from "./pages/talent_tokens/TalentTokens";
 import HelpSupport from "./pages/help_support/HelpSupport";
@@ -218,14 +218,14 @@ export default function App() {
           />
         </Route>
         {/* Dashboard Pages */}
-        <Route
+        {/* <Route
           path="dashboard"
           element={
             <MotionPageWrapper>
               <Dashboard />
             </MotionPageWrapper>
           }
-        />
+        /> */}
 
         {/* Token Pages */}
         <Route
