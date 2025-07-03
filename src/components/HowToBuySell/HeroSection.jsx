@@ -3,7 +3,7 @@ import { motion } from "framer-motion";
 const HeroSection = ({ itemVariants, fadeIn }) => (
   <motion.section
     variants={fadeIn}
-    className="py-16 px-4 sm:px-6 mt-16 lg:px-8 container mx-auto text-center"
+    className="mt-10 lg:mt-16 2xl:mt-20 py-12 2xl:py-16 container mx-auto text-center"
   >
     <motion.h1
       variants={itemVariants}
