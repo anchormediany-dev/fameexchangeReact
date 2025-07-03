@@ -1,8 +1,13 @@
-import React from "react";
-import { motion } from "framer-motion";
+import React, { useRef } from "react";
+import { motion, useInView } from "framer-motion";
 import futuresImage from "../assets/images/futures-bg.png";
-
+import { useNavigate } from "react-router-dom";
+import { GoArrowUpRight } from "react-icons/go";
+import { FiMusic } from "react-icons/fi";
 const TheFuturesSection = () => {
+  const navigate = useNavigate();
+  const sectionRef = useRef(null);
+  const isInView = useInView(sectionRef, { once: true, amount: 0.2 });
   const sectionStyle = {
     backgroundImage: `url(${futuresImage})`,
   };
@@ -130,8 +135,10 @@ const TheFuturesSection = () => {
 
   return (
     <motion.section
+      ref={sectionRef}
       className="w-full h-screen md:h-[85vh] lg:h-[80vh] bg-cover bg-center bg-no-repeat relative overflow-hidden"
       style={sectionStyle}
+      id="futures"
       initial="hidden"
       whileInView="visible"
       viewport={{ once: true, amount: 0.3 }}
@@ -179,7 +186,7 @@ const TheFuturesSection = () => {
           </motion.h1>
 
           <motion.p
-            className="text-white tracking-wider uppercase mt-2"
+            className="text-white tracking-wider text-center uppercase mt-2"
             variants={subtitleVariants}
             whileHover={{
               scale: 1.02,
@@ -216,6 +223,19 @@ const TheFuturesSection = () => {
               ))}
             </motion.span>
           </motion.p>
+          <motion.button
+            onClick={() => navigate("/future-musicians")}
+            initial={{ opacity: 0, y: 20 }}
+            animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
+            transition={{ duration: 0.6, delay: 0.6 }}
+            whileHover={{ scale: 1.02 }}
+            className="mt-4 px-4 py-2 cursor-pointer bg-gradient-to-r from-[#a18a3f] to-[#e6ca7c] text-white rounded-lg flex items-center gap-2 hover:brightness-110 transition-all mx-auto"
+          >
+            The Fame Collective
+            <motion.div whileHover={{ x: 3, y: -3 }}>
+              <GoArrowUpRight size={20} />
+            </motion.div>
+          </motion.button>
         </motion.div>
       </motion.div>
 

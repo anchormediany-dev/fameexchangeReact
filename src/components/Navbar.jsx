@@ -18,8 +18,8 @@ const navLinks = [
   // { name: "Meet & Greet", scrollTo: "meet_greet" },
   // { name: "Advertising", scrollTo: "advertising" },
   { name: "Events", scrollTo: "events" },
-  { name: "About Us", scrollTo: "about_us" },
-  // { name: "Contact us", scrollTo: "contact_us" },
+  { name: "About Us", path: "/about-us", isRoute: true },
+  { name: "Contact us", scrollTo: "contact_us" },
 ];
 
 const history = { scrollTarget: null };
