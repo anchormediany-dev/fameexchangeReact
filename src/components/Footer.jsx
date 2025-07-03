@@ -248,13 +248,6 @@ const Footer = () => {
             >
               <motion.li variants={linkVariants}>
                 <motion.div variants={linkVariants} whileHover="hover">
-                  <Link to="/how-to-buy-sell" className="hover:text-primary">
-                    How To Buy/Sell
-                  </Link>
-                </motion.div>
-              </motion.li>
-              <motion.li variants={linkVariants}>
-                <motion.div variants={linkVariants} whileHover="hover">
                   <Link
                     to="/anti-money-laundering"
                     className="hover:text-primary"
@@ -274,6 +267,13 @@ const Footer = () => {
                 <motion.div variants={linkVariants} whileHover="hover">
                   <Link to="/about-us" className="hover:text-primary">
                     About Us
+                  </Link>
+                </motion.div>
+              </motion.li>
+              <motion.li variants={linkVariants}>
+                <motion.div variants={linkVariants} whileHover="hover">
+                  <Link to="/help-support" className="hover:text-primary">
+                    Help & Support
                   </Link>
                 </motion.div>
               </motion.li>
