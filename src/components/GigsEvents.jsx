@@ -11,6 +11,7 @@ import sportsFantasticsImage from "../assets/images/sports-fantastics.png";
 import hollywoodImage from "../assets/images/hollywood-sign-night_Fotor.jpg";
 import pop1 from "../assets/images/pop1.jpg";
 import pop2 from "../assets/images/pop2.jpg";
+import { Link } from "react-router-dom";
 const EventsSectionWrapper = styled.section`
   width: 100%;
   background-image: linear-gradient(rgba(0, 0, 0, 0.85), rgba(0, 0, 0, 0.85)),
@@ -306,7 +307,10 @@ const GigsEvents = () => {
                     <EventContent>
                       <EventTitle>{event.title}</EventTitle>
                       <EventDescription>{event.description}</EventDescription>
-                      <ViewAllButton href={event.link}>View All</ViewAllButton>
+                      <Link to="events">
+                        {" "}
+                        <ViewAllButton>View All</ViewAllButton>
+                      </Link>
                     </EventContent>
                   </EventCard>
                 </SwiperSlide>
@@ -326,7 +330,7 @@ const GigsEvents = () => {
                 whileHover={{ scale: 1.02 }}
                 transition={{ duration: 0.2 }}
               >
-                VIEW ALL
+                <Link to="/events"> VIEW ALL</Link>
               </motion.button>
             </div>
           </motion.div>
