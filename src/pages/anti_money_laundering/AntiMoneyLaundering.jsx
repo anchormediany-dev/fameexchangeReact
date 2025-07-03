@@ -25,7 +25,7 @@ const AntiMoneyLaundering = () => {
     <div className="min-h-screen bg-[#0A0B0E] text-white relative overflow-x-hidden">
       <AMLBackground />
       <Navbar />
-      <main className="relative z-10 pt-28 pb-20 px-4 sm:px-6 md:px-8 lg:px-12 max-w-7xl mx-auto">
+      <main className="relative z-10 pt-28 pb-20 px-4 sm:px-6 md:px-8 lg:px-12 container mx-auto">
         <AMLHero />
 
         {/* Mobile Accordion */}
