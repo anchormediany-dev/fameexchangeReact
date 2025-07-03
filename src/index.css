@@ -978,7 +978,6 @@ p {
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent;
-  display: inline-block;
 }
 .gradient-text:hover {
   background: linear-gradient(to bottom, #f5e5a1 0%, #d8b44a 100%);
@@ -995,4 +994,33 @@ p {
   background-clip: text;
   color: transparent;
   display: inline-block;
+}
+.gredient-icon {
+  color: #e2cb68;
+}
+.gredient-border-bottom {
+  border-bottom: 2px solid #e2cb68;
+}
+.gredient-icon-inactive {
+  color: #c6be9d;
+}
+/* Custom Scrollbar Styling */
+.custom-scrollbar::-webkit-scrollbar {
+  height: 8px;
+}
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: transparent;
+}
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background-color: rgba(255, 255, 255, 0.15);
+  border-radius: 10px;
+}
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+  background-color: rgba(243, 186, 24, 0.5);
+}
+
+/* Firefox */
+.custom-scrollbar {
+  scrollbar-color: rgba(255, 255, 255, 0.15) transparent;
+  scrollbar-width: thin;
 }
