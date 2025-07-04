@@ -1,421 +1,355 @@
-import React, { useState } from "react";
-import {
-  FiChevronDown,
-  FiMail,
-  FiPhone,
-  FiGlobe,
-  FiShield,
-  FiLock,
-  FiUser,
-  FiDatabase,
-  FiShare2,
-  FiClock,
-  FiCheckCircle,
-  FiLink,
-  FiUsers,
-  FiRefreshCw,
-} from "react-icons/fi";
-import {
-  FaUserShield,
-  FaRegHandshake,
-  FaChartLine,
-  FaChild,
-} from "react-icons/fa";
-import { RiExchangeLine } from "react-icons/ri";
+import React from "react";
 import Navbar from "../../components/Navbar";
 import Footer from "../../components/Footer";
 
 const PrivacyPolicy = () => {
-  const [activeSection, setActiveSection] = useState(null);
-
-  // Gradient styles
-  const gradientText = {
-    background: "linear-gradient(to bottom, #e2cb68 0%, #b8962d 100%)",
-    WebkitBackgroundClip: "text",
-    backgroundClip: "text",
-    color: "transparent",
-    display: "inline-block",
-  };
-
-  const gradientBg = {
-    background: "linear-gradient(to bottom, #e2cb68 0%, #b8962d 100%)",
-  };
-
-  const toggleSection = (index) => {
-    setActiveSection(activeSection === index ? null : index);
-  };
-
-  const sections = [
-    {
-      title: "Information We Collect",
-      icon: <FiDatabase className="text-xl" />,
-      content: [
-        {
-          subtitle: "Personal Information:",
-          text: `Fans/Investors: When you create an account, we collect your name, email address, phone number, payment information, and other details necessary for processing transactions. Talent/Artists/Influencers/Athletes: In addition to the information above, we also collect professional details such as career information, social media profiles, and public recognition metrics to help determine the value of Branded Talent Shares (BTS).`,
-        },
-        {
-          subtitle: "Usage Data:",
-          text: `We automatically collect information about how you interact with our platform, including your IP address, browser type, operating system, device information, and browsing activity on the platform. This helps us analyze trends, improve functionality, and ensure the security of the platform.`,
-        },
-        {
-          subtitle: "Cookies and Tracking Technologies:",
-          text: `We use cookies and similar tracking technologies to track activity on our platform. Cookies are small files stored on your device that help us improve your user experience by remembering your preferences and enabling features like secure login.`,
-        },
-      ],
-    },
-    {
-      title: "How We Use Your Information",
-      icon: <RiExchangeLine className="text-xl" />,
-      bullets: [
-        "Account Creation and Management",
-        "Transaction Processing",
-        "Platform Customization",
-        "Communication",
-        "Analytics and Improvements",
-        "Security",
-      ],
-    },
-    {
-      title: "How We Share Your Information",
-      icon: <FiShare2 className="text-xl" />,
-      content: [
-        {
-          subtitle: "Service Providers:",
-          text: `We may share your information with third-party service providers who help us operate the platform. These providers are bound by contractual obligations to protect your data.`,
-        },
-        {
-          subtitle: "Legal Compliance:",
-          text: `We may disclose your personal data if required to do so by law or in response to valid legal requests by public authorities.`,
-        },
-        {
-          subtitle: "Business Transfers:",
-          text: `If we are involved in a merger, acquisition, or sale of assets, your personal data may be transferred. We will notify you beforehand.`,
-        },
-      ],
-    },
-    {
-      title: "Data Retention",
-      icon: <FiClock className="text-xl" />,
-      text: `We retain your personal data for as long as your account is active or as needed to provide services. Contact our support team to deactivate your account or request deletion.`,
-    },
-    {
-      title: "Your Rights",
-      icon: <FiUser className="text-xl" />,
-      bullets: [
-        "Access",
-        "Rectification",
-        "Erasure",
-        "Objection",
-        "Portability",
-      ],
-      note: "To exercise these rights, contact us using the info below. We'll respond in accordance with data protection laws.",
-    },
-    {
-      title: "Data Security",
-      icon: <FiLock className="text-xl" />,
-      text: `We implement appropriate measures like encryption and firewalls. However, no online method is 100% secure.`,
-    },
-    {
-      title: "Third-Party Links",
-      icon: <FiLink className="text-xl" />,
-      text: `Our platform may link to third-party websites. We're not responsible for their privacy policies.`,
-    },
-    {
-      title: "Children's Privacy",
-      icon: <FaChild className="text-xl" />,
-      text: `We do not knowingly collect personal data from children under 13. If found, we will delete such data.`,
-    },
-    {
-      title: "Changes to This Policy",
-      icon: <FiRefreshCw className="text-xl" />,
-      text: `We may update this policy. Review periodically for updates.`,
-    },
-  ];
-
   return (
-    <div className="min-h-screen bg-[#0A0B0E] text-white">
+    <div className="min-h-screen bg-[#0A0B0E] text-white relative overflow-hidden">
       {/* Animated background elements */}
       <div className="fixed inset-0 overflow-hidden pointer-events-none">
         <div className="absolute top-0 left-1/4 w-64 h-64 bg-[#b8962d]/10 rounded-full filter blur-3xl opacity-20"></div>
         <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-[#b8962d]/5 rounded-full filter blur-3xl opacity-10"></div>
       </div>
-
       <Navbar />
+      {/* Main content */}
+      <div className="relative container mx-auto pt-28 pb-20 px-4 sm:px-6 md:px-8 lg:px-12 z-10">
+        <div className="text-center mb-12">
+          <h1 className="text-4xl md:text-5xl font-bold mb-4">
+            Privacy Policy
+          </h1>
+          <p className="text-xl text-gray-300">Effective Date: June 15, 2025</p>
+          <h2 className="text-2xl md:text-3xl font-semibold mt-4 text-[#b8962d]">
+            Privacy Policy for The Fame Exchange Platform
+          </h2>
+        </div>
 
-      <div className="relative z-10 pt-32 pb-20 px-4 sm:px-6 md:px-8 lg:px-12">
-        <div className="container mx-auto max-w-6xl">
-          {/* Hero Header */}
-          <div className="text-center mb-20">
-            <div
-              className="inline-flex items-center justify-center px-6 py-3 rounded-full mb-6 backdrop-blur-sm"
-              style={gradientBg}
-            >
-              <FiShield className="text-[#171717] mr-2" />
-              <span className="text-[#171717] font-medium text-sm uppercase tracking-wider">
-                Privacy Policy
-              </span>
-            </div>
-            <h1 className="text-5xl md:text-6xl lg:text-7xl font-bold text-white mb-6 leading-tight">
-              Your Privacy <span style={gradientText}>Matters</span>
-            </h1>
-            <p className="text-gray-400 text-xl max-w-3xl mx-auto leading-relaxed">
-              Last updated: <span style={gradientText}>June 15, 2025</span>
-            </p>
-          </div>
+        <div className="bg-[#1A1C23]/80 backdrop-blur-sm rounded-xl p-8 md:p-12 border border-gray-800">
+          <p className="mb-8 text-lg">
+            At <strong>The Fame Exchange</strong>, we are committed to
+            protecting your privacy and ensuring that your personal data is
+            handled in a secure and responsible manner. This Privacy Policy
+            outlines the types of information we collect, how we use it, and the
+            steps we take to protect your personal data. By using our platform,
+            you agree to the collection and use of your information in
+            accordance with this policy.
+          </p>
 
-          {/* Introduction Card */}
-          <div className="bg-gradient-to-br from-[#16181D] to-[#0E1015] border border-[#2A2D35] rounded-2xl p-8 mb-16 backdrop-blur-sm shadow-2xl">
-            <div className="flex flex-col md:flex-row items-start">
-              <div className="md:w-1/2 mb-6 md:mb-0 md:pr-8">
-                <h2 className="text-2xl font-bold text-white mb-4">
-                  Our Commitment to You
-                </h2>
-                <p className="text-gray-300 leading-relaxed">
-                  At <span style={gradientText}>The Fame Exchange</span>, we
-                  prioritize your privacy and data security. This policy
-                  explains how we collect, use, and protect your information in
-                  compliance with global data protection regulations.
+          <div className="space-y-12">
+            {/* Section 1 */}
+            <section>
+              <h2 className="text-2xl font-bold mb-6 text-[#b8962d]">
+                1. Information We Collect
+              </h2>
+              <p className="mb-4">
+                We collect personal data in order to provide, improve, and
+                personalize your experience with The Fame Exchange. The data we
+                collect includes:
+              </p>
+
+              <div className="ml-4 space-y-6">
+                <div>
+                  <h3 className="text-xl font-semibold mb-2">
+                    a. Personal Information:
+                  </h3>
+                  <ul className="list-disc pl-6 space-y-2">
+                    <li>
+                      <span className="font-medium">Fans/Investors:</span> When
+                      you create an account, we collect your name, email
+                      address, phone number, payment information, and other
+                      details necessary for processing transactions.
+                    </li>
+                    <li>
+                      <span className="font-medium">
+                        Talent/Artists/Influencers/Athletes:
+                      </span>{" "}
+                      In addition to the information above, we also collect
+                      professional details such as career information, social
+                      media profiles, and public recognition metrics to help
+                      determine the value of Branded Talent Shares (BTS).
+                    </li>
+                  </ul>
+                </div>
+
+                <div>
+                  <h3 className="text-xl font-semibold mb-2">b. Usage Data:</h3>
+                  <p>
+                    We automatically collect information about how you interact
+                    with our platform, including your IP address, browser type,
+                    operating system, device information, and browsing activity
+                    on the platform. This helps us analyze trends, improve
+                    functionality, and ensure the security of the platform.
+                  </p>
+                </div>
+
+                <div>
+                  <h3 className="text-xl font-semibold mb-2">
+                    c. Cookies and Tracking Technologies:
+                  </h3>
+                  <p>
+                    We use cookies and similar tracking technologies to track
+                    activity on our platform. Cookies are small files stored on
+                    your device that help us improve your user experience by
+                    remembering your preferences and enabling features like
+                    secure login.
+                  </p>
+                </div>
+              </div>
+            </section>
+
+            {/* Section 2 */}
+            <section>
+              <h2 className="text-2xl font-bold mb-6 text-[#b8962d]">
+                2. How We Use Your Information
+              </h2>
+              <p className="mb-4">
+                We use your personal data for the following purposes:
+              </p>
+              <ul className="list-disc pl-6 space-y-2">
+                <li>
+                  <span className="font-medium">
+                    Account Creation and Management:
+                  </span>{" "}
+                  To create, maintain, and manage your account, including
+                  providing you with access to features such as purchasing or
+                  selling Branded Talent Shares (BTS) and managing availability
+                  for virtual meet-and-greets.
+                </li>
+                <li>
+                  <span className="font-medium">Transaction Processing:</span>{" "}
+                  To process payments, handle refunds, and facilitate financial
+                  transactions related to your investments or bookings.
+                </li>
+                <li>
+                  <span className="font-medium">Platform Customization:</span>{" "}
+                  To personalize your experience by providing tailored content,
+                  recommendations, and features based on your interactions with
+                  the platform.
+                </li>
+                <li>
+                  <span className="font-medium">Communication:</span> To send
+                  you important updates, such as changes to our terms, policies,
+                  and features. We may also send you promotional materials if
+                  you have opted-in to receive such communications.
+                </li>
+                <li>
+                  <span className="font-medium">
+                    Analytics and Improvements:
+                  </span>{" "}
+                  To improve our platform by analyzing user behavior,
+                  identifying trends, and troubleshooting any issues with
+                  performance.
+                </li>
+                <li>
+                  <span className="font-medium">Security:</span> To monitor for
+                  and protect against fraud, unauthorized access, and other
+                  harmful activities.
+                </li>
+              </ul>
+            </section>
+
+            {/* Section 3 */}
+            <section>
+              <h2 className="text-2xl font-bold mb-6 text-[#b8962d]">
+                3. How We Share Your Information
+              </h2>
+              <p className="mb-4">
+                We value your privacy and take steps to ensure your information
+                is shared only when necessary for the operation of the platform.
+              </p>
+
+              <div className="ml-4 space-y-6">
+                <div>
+                  <h3 className="text-xl font-semibold mb-2">
+                    a. Service Providers:
+                  </h3>
+                  <p>
+                    We may share your information with third-party service
+                    providers who help us operate the platform, such as payment
+                    processors, email providers, or data storage services. These
+                    providers are bound by contractual obligations to protect
+                    your data.
+                  </p>
+                </div>
+
+                <div>
+                  <h3 className="text-xl font-semibold mb-2">
+                    b. Legal Compliance:
+                  </h3>
+                  <p>
+                    We may disclose your personal data if required to do so by
+                    law or in response to valid legal requests by public
+                    authorities, including to meet national security or law
+                    enforcement requirements.
+                  </p>
+                </div>
+
+                <div>
+                  <h3 className="text-xl font-semibold mb-2">
+                    c. Business Transfers:
+                  </h3>
+                  <p>
+                    If we are involved in a merger, acquisition, or sale of
+                    assets, your personal data may be transferred as part of
+                    that transaction. We will notify you before your personal
+                    data is transferred to a new entity.
+                  </p>
+                </div>
+              </div>
+            </section>
+
+            {/* Section 4 */}
+            <section>
+              <h2 className="text-2xl font-bold mb-6 text-[#b8962d]">
+                4. Data Retention
+              </h2>
+              <p>
+                We retain your personal data for as long as your account is
+                active or as needed to provide you with our services. If you
+                wish to deactivate your account or request deletion of your
+                data, you can do so by contacting our support team. Please note
+                that we may retain certain information as required by law or for
+                legitimate business purposes, such as fraud prevention.
+              </p>
+            </section>
+
+            {/* Section 5 */}
+            <section>
+              <h2 className="text-2xl font-bold mb-6 text-[#b8962d]">
+                5. Your Rights
+              </h2>
+              <p className="mb-4">
+                As a user, you have the following rights regarding your personal
+                data:
+              </p>
+              <ul className="list-disc pl-6 space-y-2">
+                <li>
+                  <span className="font-medium">Access:</span> You have the
+                  right to request copies of your personal data.
+                </li>
+                <li>
+                  <span className="font-medium">Rectification:</span> You can
+                  request corrections to any inaccurate or incomplete personal
+                  data.
+                </li>
+                <li>
+                  <span className="font-medium">Erasure:</span> You can request
+                  the deletion of your personal data, subject to certain
+                  conditions.
+                </li>
+                <li>
+                  <span className="font-medium">Objection:</span> You have the
+                  right to object to the processing of your personal data for
+                  specific purposes, such as marketing.
+                </li>
+                <li>
+                  <span className="font-medium">Portability:</span> You may
+                  request that we transfer your personal data to another
+                  organization or directly to you, in a structured, commonly
+                  used, and machine-readable format.
+                </li>
+              </ul>
+              <p className="mt-4">
+                To exercise these rights, please contact us using the
+                information provided below. We will respond to your request in
+                accordance with applicable data protection laws.
+              </p>
+            </section>
+
+            {/* Section 6 */}
+            <section>
+              <h2 className="text-2xl font-bold mb-6 text-[#b8962d]">
+                6. Data Security
+              </h2>
+              <p className="mb-4">
+                We take the security of your personal data seriously and
+                implement appropriate technical and organizational measures to
+                protect it from unauthorized access, disclosure, alteration, or
+                destruction. These measures include encryption, firewalls, and
+                secure data storage systems.
+              </p>
+              <p>
+                However, no method of transmission over the internet or method
+                of electronic storage is 100% secure. While we strive to protect
+                your personal data, we cannot guarantee its absolute security.
+              </p>
+            </section>
+
+            {/* Section 7 */}
+            <section>
+              <h2 className="text-2xl font-bold mb-6 text-[#b8962d]">
+                7. Third-Party Links
+              </h2>
+              <p>
+                Our platform may contain links to third-party websites or
+                services that are not operated by us. We are not responsible for
+                the content, privacy policies, or practices of these third
+                parties. We encourage you to review the privacy policies of any
+                third-party websites you visit.
+              </p>
+            </section>
+
+            {/* Section 8 */}
+            <section>
+              <h2 className="text-2xl font-bold mb-6 text-[#b8962d]">
+                8. Children's Privacy
+              </h2>
+              <p>
+                The Fame Exchange platform is not intended for children under
+                the age of 13. We do not knowingly collect or solicit personal
+                data from children under 13. If we become aware that we have
+                inadvertently collected personal data from a child under 13, we
+                will take steps to delete that information as soon as possible.
+              </p>
+            </section>
+
+            {/* Section 9 */}
+            <section>
+              <h2 className="text-2xl font-bold mb-6 text-[#b8962d]">
+                9. Changes to This Privacy Policy
+              </h2>
+              <p>
+                We may update this Privacy Policy from time to time. Any changes
+                will be posted on this page with an updated "Effective Date." We
+                encourage you to review this Privacy Policy periodically to stay
+                informed about how we are protecting your data.
+              </p>
+            </section>
+
+            {/* Section 10 */}
+            <section>
+              <h2 className="text-2xl font-bold mb-6 text-[#b8962d]">
+                10. Contact Us
+              </h2>
+              <p className="mb-4">
+                If you have any questions or concerns about this Privacy Policy
+                or how we handle your personal data, please contact us at:
+              </p>
+              <div className="space-y-2">
+                <p>
+                  <span className="font-bold">
+                    <strong>The Fame Exchange</strong>
+                  </span>
+                </p>
+                <p>
+                  Email:{" "}
+                  <strong className="text-base">
+                    privacy@thefameexchange.com
+                  </strong>
+                </p>
+                <p>
+                  Phone: <strong className="text-base">1-800-123-4567</strong>
+                </p>
+                <p>
+                  Website:{" "}
+                  <span className="text-blue-400 cursor-pointer">
+                    www.thefameexchange.com
+                  </span>
                 </p>
               </div>
-              <div className="md:w-1/2 bg-[#1A1D24]/50 border border-[#2A2D35] rounded-xl p-6">
-                <h3 className="text-lg font-semibold text-white mb-3 flex items-center">
-                  <FiCheckCircle className="mr-2" style={gradientText} />
-                  Key Principles
-                </h3>
-                <ul className="space-y-3">
-                  <li className="flex items-start">
-                    <span className="mr-2" style={gradientText}>
-                      •
-                    </span>
-                    <span className="text-gray-300">
-                      Transparent data practices
-                    </span>
-                  </li>
-                  <li className="flex items-start">
-                    <span className="mr-2" style={gradientText}>
-                      •
-                    </span>
-                    <span className="text-gray-300">
-                      Minimal data collection
-                    </span>
-                  </li>
-                  <li className="flex items-start">
-                    <span className="mr-2" style={gradientText}>
-                      •
-                    </span>
-                    <span className="text-gray-300">
-                      Enterprise-grade security
-                    </span>
-                  </li>
-                  <li className="flex items-start">
-                    <span className="mr-2" style={gradientText}>
-                      •
-                    </span>
-                    <span className="text-gray-300">
-                      Your control over your data
-                    </span>
-                  </li>
-                </ul>
-              </div>
-            </div>
-          </div>
-
-          {/* Table of Contents (Sticky) */}
-          <div className="sticky top-24 z-20 mb-12 bg-[#16181D]/90 backdrop-blur-md border border-[#2A2D35] rounded-xl p-4 shadow-lg">
-            <h3 className="text-sm font-semibold text-gray-400 mb-3 uppercase tracking-wider">
-              Jump to Section
-            </h3>
-            <div className="flex flex-wrap gap-2">
-              {sections.map((section, index) => (
-                <button
-                  key={index}
-                  onClick={() => {
-                    const element = document.getElementById(`section-${index}`);
-                    element?.scrollIntoView({ behavior: "smooth" });
-                  }}
-                  className="text-xs px-3 py-1.5 text-gray-300 rounded-full transition-all duration-200 flex items-center"
-                  style={
-                    activeSection === index
-                      ? gradientBg
-                      : { background: "#2A2D35" }
-                  }
-                >
-                  {React.cloneElement(section.icon, {
-                    className: `mr-1 text-sm ${
-                      activeSection === index ? "text-[#171717]" : ""
-                    }`,
-                    style: activeSection === index ? {} : gradientText,
-                  })}
-                  <span
-                    className={activeSection === index ? "text-[#171717]" : ""}
-                  >
-                    {section.title}
-                  </span>
-                </button>
-              ))}
-            </div>
-          </div>
-
-          {/* Main Content */}
-          <div className="space-y-6">
-            {sections.map((section, index) => (
-              <div
-                key={index}
-                id={`section-${index}`}
-                className={`bg-gradient-to-br from-[#16181D] to-[#0E1015] border border-[#2A2D35] rounded-2xl p-6 transition-all duration-300 ${
-                  activeSection === index ? "ring-2 ring-[#b8962d]/30" : ""
-                }`}
-              >
-                <button
-                  onClick={() => toggleSection(index)}
-                  className="w-full flex items-center justify-between text-left focus:outline-none group"
-                  aria-expanded={activeSection === index}
-                  aria-controls={`section-content-${index}`}
-                >
-                  <div className="flex items-center">
-                    <div className="p-2 rounded-lg mr-4" style={gradientBg}>
-                      {React.cloneElement(section.icon, {
-                        className: "text-[#171717] text-xl",
-                      })}
-                    </div>
-                    <h2
-                      className="text-xl md:text-2xl font-bold text-white group-hover:text-[#e2cb68] transition-colors duration-200"
-                      style={gradientText}
-                    >
-                      {section.title}
-                    </h2>
-                  </div>
-                  <FiChevronDown className="text-2xl transition-transform text-[#e2cb68] duration-300" />
-                </button>
-
-                <div
-                  id={`section-content-${index}`}
-                  className={`overflow-hidden transition-all duration-300 ease-in-out ${
-                    activeSection === index
-                      ? "mt-6 opacity-100"
-                      : "max-h-0 opacity-0"
-                  }`}
-                >
-                  {section.text && (
-                    <p className="text-gray-300 leading-relaxed">
-                      {section.text}
-                    </p>
-                  )}
-
-                  {section.bullets && (
-                    <ul className="mt-4 space-y-3">
-                      {section.bullets.map((bullet, i) => (
-                        <li key={i} className="flex items-start">
-                          <span className="mr-2 mt-1" style={gradientText}>
-                            •
-                          </span>
-                          <span className="text-gray-300">{bullet}</span>
-                        </li>
-                      ))}
-                    </ul>
-                  )}
-
-                  {section.note && (
-                    <div
-                      className="mt-6 p-4 bg-[#1A1D24] border-l-4 rounded-r-lg"
-                      style={{ borderColor: "#b8962d" }}
-                    >
-                      <p className="text-gray-400 italic">{section.note}</p>
-                    </div>
-                  )}
-
-                  {section.content && (
-                    <div className="mt-6 space-y-6">
-                      {section.content.map((content, i) => (
-                        <div
-                          key={i}
-                          className="bg-[#1A1D24]/50 p-4 rounded-lg border border-[#2A2D35]"
-                        >
-                          <h3
-                            className="text-lg font-semibold mb-2"
-                            style={gradientText}
-                          >
-                            {content.subtitle}
-                          </h3>
-                          <p className="text-gray-300 leading-relaxed">
-                            {content.text}
-                          </p>
-                        </div>
-                      ))}
-                    </div>
-                  )}
-                </div>
-              </div>
-            ))}
-          </div>
-
-          {/* Contact Section */}
-          <div className="mt-20 bg-gradient-to-br from-[#16181D] to-[#0E1015] border border-[#2A2D35] rounded-2xl p-8 shadow-2xl">
-            <div className="text-center mb-10">
-              <h2 className="text-3xl font-bold text-white mb-3">
-                Have Questions?
-              </h2>
-              <p className="text-gray-400 max-w-2xl mx-auto">
-                Contact our Data Protection Officer for any privacy-related
-                inquiries or to exercise your rights.
-              </p>
-            </div>
-
-            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-              <div className="bg-[#1A1D24] hover:bg-[#1A1D24]/80 border border-[#2A2D35] rounded-xl p-6 transition-all duration-300 hover:border-[#b8962d]/30 group">
-                <div
-                  className="p-3 rounded-full inline-flex mb-4 group-hover:bg-[#b8962d]/20 transition-colors duration-300"
-                  style={gradientBg}
-                >
-                  <FiMail className="text-[#171717] text-xl" />
-                </div>
-                <h3 className="text-lg font-medium text-white mb-1">Email</h3>
-                <a
-                  href="mailto:privacy@thefameexchange.com"
-                  className="hover:underline"
-                  style={gradientText}
-                >
-                  privacy@thefameexchange.com
-                </a>
-              </div>
-              <div className="bg-[#1A1D24] hover:bg-[#1A1D24]/80 border border-[#2A2D35] rounded-xl p-6 transition-all duration-300 hover:border-[#b8962d]/30 group">
-                <div
-                  className="p-3 rounded-full inline-flex mb-4 group-hover:bg-[#b8962d]/20 transition-colors duration-300"
-                  style={gradientBg}
-                >
-                  <FiPhone className="text-[#171717] text-xl" />
-                </div>
-                <h3 className="text-lg font-medium text-white mb-1">Phone</h3>
-                <a
-                  href="tel:18001234567"
-                  className="hover:underline"
-                  style={gradientText}
-                >
-                  1-800-123-4567
-                </a>
-              </div>
-              <div className="bg-[#1A1D24] hover:bg-[#1A1D24]/80 border border-[#2A2D35] rounded-xl p-6 transition-all duration-300 hover:border-[#b8962d]/30 group">
-                <div
-                  className="p-3 rounded-full inline-flex mb-4 group-hover:bg-[#b8962d]/20 transition-colors duration-300"
-                  style={gradientBg}
-                >
-                  <FiGlobe className="text-[#171717] text-xl" />
-                </div>
-                <h3 className="text-lg font-medium text-white mb-1">Website</h3>
-                <a
-                  href="https://www.thefameexchange.com"
-                  className="hover:underline"
-                  style={gradientText}
-                >
-                  www.thefameexchange.com
-                </a>
-              </div>
-            </div>
+            </section>
           </div>
         </div>
       </div>
-
       <Footer />
     </div>
   );
