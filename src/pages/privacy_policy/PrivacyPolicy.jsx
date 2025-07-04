@@ -42,8 +42,9 @@ const PrivacyPolicy = () => {
               </h2>
               <p className="mb-4">
                 We collect personal data in order to provide, improve, and
-                personalize your experience with The Fame Exchange. The data we
-                collect includes:
+                personalize your experience with{" "}
+                <strong className="font-medium">The Fame Exchange</strong>. The data we collect
+                includes:
               </p>
 
               <div className="ml-4 space-y-6">
