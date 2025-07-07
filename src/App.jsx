@@ -29,6 +29,7 @@ import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
 import Signup from "./pages/signup/Signup";
 import TalentDashboard from "./pages/talent_dashboard/TalentDashboard";
+import TalentListing from "./pages/talent/TalentListing";
 
 // Simple Black Header Component
 const SimpleHeader = () => {
@@ -196,6 +197,23 @@ export default function App() {
             element={
               <MotionPageWrapper>
                 <TalentDashboard />
+              </MotionPageWrapper>
+            }
+          />
+          {/* Talent Listing */}
+          <Route
+            path="talent"
+            element={
+              <MotionPageWrapper>
+                <TalentListing />
+              </MotionPageWrapper>
+            }
+          />
+          <Route
+            path="talent/:id"
+            element={
+              <MotionPageWrapper>
+                <TalentListing />
               </MotionPageWrapper>
             }
           />
