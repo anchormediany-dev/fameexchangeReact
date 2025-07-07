@@ -1,0 +1,61 @@
+/* calendar-dark.css */
+.rbc-calendar {
+  background-color: #1e1e1e;
+  color: #ffffff;
+  border: none;
+}
+
+.rbc-toolbar {
+  background-color: #222222;
+  color: #f3ba18;
+  padding: 10px;
+  border-bottom: 1px solid #333;
+}
+
+.rbc-toolbar button {
+  background: #2d2d2d;
+  border: 1px solid #444;
+  color: #f3ba18;
+  padding: 5px 10px;
+  border-radius: 6px;
+}
+
+.rbc-toolbar button:hover,
+.rbc-toolbar button:active,
+.rbc-active {
+  background-color: #f3ba18 !important;
+  color: #000 !important;
+}
+
+.rbc-time-view,
+.rbc-month-view {
+  background-color: #1e1e1e;
+}
+
+.rbc-event {
+  background-color: #f3ba18;
+  color: #000;
+  border: none;
+  padding: 3px 6px;
+  border-radius: 4px;
+}
+
+.rbc-time-slot,
+.rbc-day-slot,
+.rbc-time-header-content,
+.rbc-timeslot-group {
+  border-color: #333 !important;
+}
+
+.rbc-time-header,
+.rbc-time-content {
+  border-color: #333 !important;
+}
+
+.rbc-day-bg {
+  background-color: #1e1e1e;
+}
+
+.rbc-today {
+  background-color: #2a2a2a !important;
+}

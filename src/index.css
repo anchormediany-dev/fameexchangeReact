@@ -1001,6 +1001,9 @@ p {
 .gredient-border-bottom {
   border-bottom: 2px solid #e2cb68;
 }
+.gredient-border {
+  border: 1px solid #e2cb68;
+}
 .gredient-icon-inactive {
   color: #c6be9d;
 }

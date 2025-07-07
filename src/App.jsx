@@ -28,6 +28,7 @@ import Home from "./pages/home/Home";
 import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
 import Signup from "./pages/signup/Signup";
+import TalentDashboard from "./pages/talent_dashboard/TalentDashboard";
 
 // Simple Black Header Component
 const SimpleHeader = () => {
@@ -183,10 +184,18 @@ export default function App() {
           />
           {/* Inverse Page */}
           <Route
-            path="inverse"
+            path="inverse2"
             element={
               <MotionPageWrapper>
                 <InversePage />
+              </MotionPageWrapper>
+            }
+          />
+          <Route
+            path="inverse"
+            element={
+              <MotionPageWrapper>
+                <TalentDashboard />
               </MotionPageWrapper>
             }
           />
