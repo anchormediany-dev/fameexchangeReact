@@ -21,10 +21,10 @@ import { FaSearch, FaTimes } from "react-icons/fa";
 import { IoLocationOutline, IoTicketOutline } from "react-icons/io5";
 import { BsBuilding, BsPeople, BsGoogle } from "react-icons/bs";
 import talents from "../../data/talentData";
-
+import FeedbackPopup from "../../components/FeedbackPopup";
 
 const InversePage = () => {
-  const [currentDate, setCurrentDate] = useState(new Date(2025, 6)); // July 2025
+  const [currentDate, setCurrentDate] = useState(new Date(2025, 6));
   const [selectedTalent, setSelectedTalent] = useState(null);
   const [talentAvailabilityEvents, setTalentAvailabilityEvents] = useState([]);
   const [searchValue, setSearchValue] = useState("");
@@ -46,7 +46,11 @@ const InversePage = () => {
     place: "",
     fansName: "",
   });
+  const [isFeedbackShow, setIsFeedbackShow] = useState(false);
 
+  const handleFeedbackPopup = () => {
+    setIsFeedbackShow(false);
+  };
   // Handle search input changes
   const handleSearchChange = (e) => {
     const value = e.target.value;
@@ -535,83 +539,36 @@ const InversePage = () => {
                   {/* Payment Information Section */}
                   <div className="pt-4 border-t border-white/10">
                     <h3 className="text-lg font-medium text-gray-300 mb-4">
-                      Payment Information
+                      Select Payment Method
                     </h3>
-                    <div className="grid grid-cols-2 gap-4">
-                      <div className="col-span-2">
-                        <label className="block text-sm font-medium text-gray-400 mb-2">
-                          Card Number
-                        </label>
-                        <input
-                          type="text"
-                          value={fanRequest.cardNumber}
-                          onChange={(e) =>
-                            handleFanRequestChange(
-                              "cardNumber",
-                              formatCardNumber(e.target.value)
-                            )
-                          }
-                          className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition-all"
-                          placeholder="1234 5678 9012 3456"
-                          maxLength="19"
-                          inputMode="numeric"
-                          pattern="[0-9\s]{13,19}"
-                        />
-                      </div>
 
-                      <div>
-                        <label className="block text-sm font-medium text-gray-400 mb-2">
-                          Expiration Date
-                        </label>
+                    <div className="flex gap-6">
+                      <label className="flex items-center gap-2 text-gray-300">
                         <input
-                          type="text"
-                          value={fanRequest.cardExpiry}
-                          onChange={(e) =>
-                            handleFanRequestChange(
-                              "cardExpiry",
-                              formatExpiry(e.target.value)
-                            )
+                          type="radio"
+                          name="cardType"
+                          value="debit"
+                          checked={fanRequest.cardType === "debit"}
+                          onChange={() =>
+                            handleFanRequestChange("cardType", "debit")
                           }
-                          className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition-all"
-                          placeholder="MM/YY"
-                          maxLength="5"
-                          inputMode="numeric"
-                          pattern="\d\d/\d\d"
+                          className="accent-[#a38b41] w-4 h-4"
                         />
-                      </div>
-
-                      <div>
-                        <label className="block text-sm font-medium text-gray-400 mb-2">
-                          CVV
-                        </label>
+                        Debit Card
+                      </label>
+                      <label className="flex items-center gap-2 text-gray-300">
                         <input
-                          type="password"
-                          value={fanRequest.cardCvv}
-                          onChange={(e) =>
-                            handleFanRequestChange("cardCvv", e.target.value)
+                          type="radio"
+                          name="cardType"
+                          value="credit"
+                          checked={fanRequest.cardType === "credit"}
+                          onChange={() =>
+                            handleFanRequestChange("cardType", "credit")
                           }
-                          className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition-all"
-                          placeholder="•••"
-                          maxLength="3"
-                          inputMode="numeric"
-                          pattern="\d{3,4}"
+                          className="accent-[#a38b41] w-4 h-4"
                         />
-                      </div>
-
-                      <div className="col-span-2">
-                        <label className="block text-sm font-medium text-gray-400 mb-2">
-                          Name on Card
-                        </label>
-                        <input
-                          type="text"
-                          value={fanRequest.cardName}
-                          onChange={(e) =>
-                            handleFanRequestChange("cardName", e.target.value)
-                          }
-                          className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition-all"
-                          placeholder="John Doe"
-                        />
-                      </div>
+                        Credit Card
+                      </label>
                     </div>
                   </div>
                 </div>
@@ -740,6 +697,20 @@ const InversePage = () => {
             </div>
           </div>
         </div>
+      </div>
+      <div className="container mx-auto">
+        {/* Trigger this when meeting ends */}
+        <button
+          onClick={() => setIsFeedbackShow(true)}
+          className="custom-button-two"
+        >
+          Add Feedback
+        </button>
+
+        <FeedbackPopup
+          isFeedbackShow={isFeedbackShow}
+          onClick={handleFeedbackPopup}
+        />
       </div>
     </section>
   );
