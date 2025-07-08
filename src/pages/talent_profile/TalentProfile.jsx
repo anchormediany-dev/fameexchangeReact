@@ -11,6 +11,7 @@ import NotificationTalentLayout from "./NotificationRequests";
 import FriendsEventsSection from "./FriendsAndEvents";
 import PortfolioDashboard from "../../components/PortfolioDashboard";
 import CreateSession from "../../components/talent/create_session/CreateSession";
+import PendingRequests from "../../components/talent/create_session/PendingRequests";
 
 const TalentProfile = () => {
   const [searchValue, setSearchValue] = useState("");
@@ -242,13 +243,13 @@ const TalentProfile = () => {
       </div>
       <ImageSwitch />
       <FriendsEventsSection />
+      <PendingRequests />
       <CreateSession />
       <NotificationTalentLayout />
       <section className=" px-4 md:px-8 container mx-auto ">
         <div className="rounded-xl p-6 bg-[#1f1f1f]">
           <PortfolioDashboard />
         </div>
-        
       </section>
     </section>
   );
