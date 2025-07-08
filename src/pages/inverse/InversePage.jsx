@@ -35,8 +35,37 @@ const InversePage = () => {
     date: "",
     time: "",
     desiredLocation: "",
+    cardNumber: "",
+    cardExpiry: "",
+    cardCvv: "",
+    cardName: "",
   });
+  const formatCardNumber = (value) => {
+    // Remove all non-digit characters
+    const v = value.replace(/\s+/g, "").replace(/[^0-9]/gi, "");
+    // Add space after every 4 digits
+    const matches = v.match(/\d{4,16}/g);
+    const match = (matches && matches[0]) || "";
+    const parts = [];
+    for (let i = 0, len = match.length; i < len; i += 4) {
+      parts.push(match.substring(i, i + 4));
+    }
+    if (parts.length) {
+      return parts.join(" ");
+    } else {
+      return value;
+    }
+  };
 
+  const formatExpiry = (value) => {
+    // Remove all non-digit characters
+    const v = value.replace(/[^0-9]/g, "");
+    // Add slash after 2 digits
+    if (v.length >= 3) {
+      return `${v.slice(0, 2)}/${v.slice(2, 4)}`;
+    }
+    return value;
+  };
   // State for Response Form
   const [responseForm, setResponseForm] = useState({
     availableDates: "",
@@ -47,9 +76,17 @@ const InversePage = () => {
 
   // Handler for Fan Request Form
   const handleFanRequestChange = (field, value) => {
+    let formattedValue = value;
+
+    if (field === "cardNumber") {
+      formattedValue = formatCardNumber(value);
+    } else if (field === "cardExpiry") {
+      formattedValue = formatExpiry(value);
+    }
+
     setFanRequest((prev) => ({
       ...prev,
-      [field]: value,
+      [field]: formattedValue,
     }));
   };
 
@@ -62,14 +99,18 @@ const InversePage = () => {
   };
 
   // Button handlers
-  const handleClear = () => {
-    setFanRequest({
-      talentName: "",
-      date: "",
-      time: "",
-      desiredLocation: "",
-    });
-  };
+ const handleClear = () => {
+  setFanRequest({
+    talentName: "",
+    date: "",
+    time: "",
+    desiredLocation: "",
+    cardNumber: "",
+    cardExpiry: "",
+    cardCvv: "",
+    cardName: ""
+  });
+};
 
   const handleSendRequest = () => {
     console.log("Sending request:", fanRequest);
@@ -712,6 +753,82 @@ const InversePage = () => {
                       className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition-all"
                       placeholder="Enter desired location"
                     />
+                  </div>
+                  {/* Payment Information Section */}
+                  <div className="pt-4 border-t border-white/10">
+                    <h3 className="text-lg font-medium text-gray-300 mb-4">
+                      Payment Information
+                    </h3>
+                    <div className="grid grid-cols-2 gap-4">
+                      <div className="col-span-2">
+                        <label className="block text-sm font-medium text-gray-400 mb-2">
+                          Card Number
+                        </label>
+                        <input
+                          type="text"
+                          value={fanRequest.cardNumber}
+                          onChange={(e) =>
+                            handleFanRequestChange("cardNumber", e.target.value)
+                          }
+                          className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition-all"
+                          placeholder="1234 5678 9012 3456"
+                          maxLength="19"
+                          inputMode="numeric"
+                          pattern="[0-9\s]{13,19}"
+                        />
+                      </div>
+
+                      <div>
+                        <label className="block text-sm font-medium text-gray-400 mb-2">
+                          Expiration Date
+                        </label>
+                        <input
+                          type="text"
+                          value={fanRequest.cardExpiry}
+                          onChange={(e) =>
+                            handleFanRequestChange("cardExpiry", e.target.value)
+                          }
+                          className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition-all"
+                          placeholder="MM/YY"
+                          maxLength="5"
+                          inputMode="numeric"
+                          pattern="\d\d/\d\d"
+                        />
+                      </div>
+
+                      <div>
+                        <label className="block text-sm font-medium text-gray-400 mb-2">
+                          CVV
+                        </label>
+                        <input
+                          type="password"
+                          value={fanRequest.cardCvv}
+                          onChange={(e) =>
+                            handleFanRequestChange("cardCvv", e.target.value)
+                          }
+                          className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition-all"
+                          placeholder="•••"
+                          maxLength="3"
+                          inputMode="numeric"
+                          pattern="\d{3,4}"
+                        />
+                      </div>
+
+                      <div className="col-span-2">
+                        <label className="block text-sm font-medium text-gray-400 mb-2">
+                          Name on Card
+                        </label>
+                        <input
+                          type="text"
+                          value={fanRequest.cardName}
+                          onChange={(e) =>
+                            handleFanRequestChange("cardName", e.target.value)
+                          }
+                          className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition-all"
+                          placeholder="John Doe"
+                        />
+                      </div>
+                    </div>
                   </div>
                 </div>
 
