@@ -8,6 +8,7 @@ import {
   FaUpload,
   FaTrash,
   FaPlus,
+  FaCalendarAlt,
 } from "react-icons/fa";
 
 const actions = [
@@ -20,6 +21,11 @@ const actions = [
     label: "Inverse Request",
     icon: FaFileAlt,
     description: "Request this talent for your project",
+  },
+  {
+    label: "Manage Availability",
+    icon: FaCalendarAlt,
+    description: "Schedule and manage talent availability sessions",
   },
 ];
 
