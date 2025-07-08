@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { useLocation } from "react-router-dom";
 import {
   FiChevronLeft,
   FiChevronRight,
@@ -47,7 +48,21 @@ const InversePage = () => {
     fansName: "",
   });
   const [isFeedbackShow, setIsFeedbackShow] = useState(false);
+  const location = useLocation();
 
+  useEffect(() => {
+    // Wait for content to render
+    const hash = location.hash;
+    if (hash) {
+      // Slight timeout ensures DOM is ready
+      setTimeout(() => {
+        const element = document.querySelector(hash);
+        if (element) {
+          element.scrollIntoView({ behavior: "smooth", block: "start" });
+        }
+      }, 100);
+    }
+  }, [location]);
   const handleFeedbackPopup = () => {
     setIsFeedbackShow(false);
   };
@@ -598,7 +613,10 @@ const InversePage = () => {
             {/* Middle Column - 50% - Stretched Calendar */}
             <div className="lg:col-span-2 flex flex-col space-y-3 h-full">
               {/* Talent Confirmation section */}
-              <div className="bg-white/5 backdrop-blur-xl border border-white/10 rounded-2xl p-3 md:p-4 h-full flex flex-col">
+              <div
+                id="reschedule-section"
+                className="bg-white/5 backdrop-blur-xl border border-white/10 rounded-2xl p-3 md:p-4 h-full flex flex-col"
+              >
                 {/* Response Form */}
 
                 <h2 className="text-2xl font-bold text-primary2 mb-6 text-center">

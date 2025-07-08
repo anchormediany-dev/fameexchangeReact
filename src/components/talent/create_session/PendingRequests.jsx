@@ -20,9 +20,15 @@ import {
   parse,
   getDay,
 } from "date-fns";
+import { useNavigate } from "react-router-dom";
 
 const MeetingRequests = () => {
   const [currentDate, setCurrentDate] = useState(new Date());
+  const navigate = useNavigate();
+
+  const handleReschedule = (id) => {
+    navigate("/inverse#reschedule-section");
+  };
   const [requests, setRequests] = useState([
     // Past month requests
     {
@@ -196,7 +202,7 @@ const MeetingRequests = () => {
   return (
     <div className="container mx-auto flex gap-6 px-4 py-8">
       {/* Calendar Section */}
-      <div className="bg-white/5 w-[50%] backdrop-blur-xl border border-white/10 rounded-2xl p-3 md:p-4 mb-6">
+      <div className="bg-white/5 w-[40%] backdrop-blur-xl border border-white/10 rounded-2xl p-3 md:p-4 mb-6">
         {/* Compact Calendar Header */}
         <h2
           className="text-2xl font-bold text-primary2 mb-6 text-center"
@@ -282,7 +288,7 @@ const MeetingRequests = () => {
       </div>
 
       {/* Requests List */}
-      <section className="w-[50%]">
+      <section className="w-[60%]">
         <AnimatePresence>
           {requests.filter((req) => {
             const requestDate = parse(req.date, "MMMM d, yyyy", new Date());
@@ -325,17 +331,24 @@ const MeetingRequests = () => {
                       <div className="flex gap-2">
                         <button
                           onClick={() => handleDecline(request.id)}
-                          className="flex items-center gap-1 px-3 py-2 rounded-lg bg-red-500/10 hover:bg-red-500/20 border border-red-500/20 hover:border-red-500/40 text-red-400 transition-colors"
+                          className="flex items-center cursor-pointer gap-1 px-3 py-2 rounded-lg bg-red-500/10 hover:bg-red-500/20 border border-red-500/20 hover:border-red-500/40 text-red-400 transition-colors"
                         >
                           <FaTimes />
                           <span className="text-xs">Decline</span>
                         </button>
                         <button
                           onClick={() => handleConfirm(request.id)}
-                          className="flex items-center gap-1 px-3 py-2 rounded-lg bg-gradient-to-r from-[#a38b41] to-[#c2ab67] hover:from-[#c2ab67] hover:to-[#a38b41] text-black transition-all"
+                          className="flex items-center cursor-pointer gap-1 px-3 py-2 rounded-lg bg-gradient-to-r from-[#a38b41] to-[#c2ab67] hover:from-[#c2ab67] hover:to-[#a38b41] text-black transition-all"
                         >
                           <FaCheck />
                           <span className="text-xs">Confirm</span>
+                        </button>
+                        <button
+                          onClick={() => handleReschedule(request.id)}
+                          className="flex items-center cursor-pointer gap-1 px-3 py-2 rounded-lg bg-blue-500/10 hover:bg-blue-500/20 border border-blue-500/20 hover:border-blue-500/40 text-blue-400 transition-colors"
+                        >
+                          <FaCalendarAlt />
+                          <span className="text-xs">Reschedule</span>
                         </button>
                       </div>
                     </div>
