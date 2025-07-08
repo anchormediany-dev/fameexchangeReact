@@ -185,7 +185,7 @@ export default function App() {
           />
           {/* Inverse Page */}
           <Route
-            path="inverse2"
+            path="inverse"
             element={
               <MotionPageWrapper>
                 <InversePage />
@@ -193,7 +193,7 @@ export default function App() {
             }
           />
           <Route
-            path="inverse"
+            path="inverse2"
             element={
               <MotionPageWrapper>
                 <TalentDashboard />

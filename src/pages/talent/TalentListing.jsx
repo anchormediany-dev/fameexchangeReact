@@ -6,24 +6,47 @@ import {
   FaStar,
   FaChevronDown,
   FaChevronUp,
+  FaCalendarAlt,
+  FaClock,
+  FaCheck,
+  FaTimes,
+  FaChevronLeft,
+  FaChevronRight,
 } from "react-icons/fa";
 import { Link } from "react-router-dom";
+import {
+  format,
+  addMonths,
+  subMonths,
+  startOfMonth,
+  endOfMonth,
+  eachDayOfInterval,
+  isSameMonth,
+  isSameDay,
+  parse,
+  getDay,
+} from "date-fns";
 import meet1 from "../../assets/images/meet-1.png";
 import meet2 from "../../assets/images/meet-2.png";
 import meet3 from "../../assets/images/meet-3.png";
 import meet4 from "../../assets/images/meet-4.png";
 import meet5 from "../../assets/images/meet-5.png";
-
 const TalentListing = () => {
   const sectionRef = useRef(null);
+  const calendarRefs = useRef({});
   const isInView = useInView(sectionRef, { once: true, amount: 0.2 });
   const [searchTerm, setSearchTerm] = useState("");
   const [showFilters, setShowFilters] = useState(false);
+  const [calendarVisibleFor, setCalendarVisibleFor] = useState(null);
+  const [currentDate, setCurrentDate] = useState(new Date());
+  const [selectedDate, setSelectedDate] = useState(null);
+
   const [filters, setFilters] = useState({
     category: "",
     minPrice: "",
     maxPrice: "",
     minPopularity: 0,
+    availability: "",
   });
 
   const categories = [
@@ -45,6 +68,12 @@ const TalentListing = () => {
         "Global superstar known for her storytelling songwriting, multiple Grammy wins, and record-breaking albums that have defined a generation of music lovers worldwide.",
       popularity: 95,
       price: "$2,500",
+      availability: [
+        "July 16, 2025",
+        "July 24, 2025",
+        "August 3, 2025",
+        "August 12, 2025",
+      ],
     },
     {
       id: 2,
@@ -55,6 +84,7 @@ const TalentListing = () => {
         "Canadian-American actor known for Deadpool, his witty social media presence, and charismatic performances in both comedy and action films.",
       popularity: 88,
       price: "$3,200",
+      availability: ["July 20, 2025", "August 5, 2025", "August 15, 2025"],
     },
     {
       id: 3,
@@ -65,6 +95,7 @@ const TalentListing = () => {
         "Argentine football legend and former Ballon d'Or winner, widely regarded as one of the greatest players of all time with an extraordinary career spanning decades.",
       popularity: 92,
       price: "$5,000",
+      availability: ["July 18, 2025", "August 1, 2025", "August 10, 2025"],
     },
     {
       id: 4,
@@ -72,9 +103,10 @@ const TalentListing = () => {
       category: "INFLUENCER",
       src: meet4,
       description:
-        "YouTube sensation known for elaborate challenges, massive giveaways, and philanthropic that has revolutionized content creation and online entertainment.",
+        "YouTube sensation known for elaborate challenges, massive giveaways, and philanthropic efforts that have revolutionized content creation and online entertainment.",
       popularity: 90,
       price: "$1,800",
+      availability: ["July 25, 2025", "August 7, 2025"],
     },
     {
       id: 5,
@@ -85,6 +117,7 @@ const TalentListing = () => {
         "Academy Award-winning actress known for her versatile performances in both comedy and drama, with memorable roles in La La Land and Easy A.",
       popularity: 85,
       price: "$2,800",
+      availability: ["July 28, 2025", "August 6, 2025"],
     },
     {
       id: 6,
@@ -95,6 +128,7 @@ const TalentListing = () => {
         "Grammy-winning artist known for his distinctive voice, atmospheric sound, and chart-topping hits that have redefined modern R&B and pop music.",
       popularity: 87,
       price: "$2,200",
+      availability: ["July 22, 2025", "August 2, 2025"],
     },
     {
       id: 7,
@@ -105,6 +139,7 @@ const TalentListing = () => {
         "NBA legend and four-time champion known for his incredible athleticism, business ventures, and advocacy for social justice and education.",
       popularity: 91,
       price: "$4,500",
+      availability: ["July 30, 2025", "August 12, 2025"],
     },
     {
       id: 8,
@@ -115,6 +150,7 @@ const TalentListing = () => {
         "Media mogul and reality TV star known for building a business empire, influencing fashion and beauty trends, and her legal advocacy work.",
       popularity: 89,
       price: "$3,500",
+      availability: ["August 1, 2025", "August 8, 2025"],
     },
     {
       id: 9,
@@ -125,6 +161,7 @@ const TalentListing = () => {
         "Former WWE superstar turned Hollywood megastar, known for his action-packed movies, motivational presence, and positive influence across entertainment and fitness.",
       popularity: 93,
       price: "$4,000",
+      availability: ["July 27, 2025", "August 4, 2025", "August 11, 2025"],
     },
     {
       id: 10,
@@ -135,6 +172,7 @@ const TalentListing = () => {
         "Grammy-winning pop sensation known for her unique style, powerful vocals, and innovative music videos that have captivated millions of fans globally.",
       popularity: 86,
       price: "$2,000",
+      availability: ["July 23, 2025", "August 9, 2025"],
     },
     {
       id: 11,
@@ -145,6 +183,7 @@ const TalentListing = () => {
         "Tennis legend with 23 Grand Slam singles titles, known for her dominance on court, business ventures, and advocacy for equality in sports.",
       popularity: 88,
       price: "$3,800",
+      availability: ["July 29, 2025", "August 13, 2025"],
     },
     {
       id: 12,
@@ -155,6 +194,7 @@ const TalentListing = () => {
         "Versatile actress and fashion icon known for Spider-Man, Euphoria, and Dune, representing a new generation of talent both in acting and in Hollywood.",
       popularity: 84,
       price: "$2,600",
+      availability: ["July 31, 2025", "August 10, 2025"],
     },
     {
       id: 13,
@@ -165,6 +205,7 @@ const TalentListing = () => {
         "World-renowned chef and television personality known for his culinary expertise, fiery personality, and successful restaurant empire spanning the globe.",
       popularity: 82,
       price: "$2,300",
+      availability: ["July 26, 2025", "August 6, 2025"],
     },
     {
       id: 14,
@@ -175,6 +216,7 @@ const TalentListing = () => {
         "Portuguese football icon and five-time Ballon d'Or winner, known for his incredible goal-scoring record and dedication to fitness and excellence.",
       popularity: 94,
       price: "$6,000",
+      availability: ["July 21, 2025", "August 14, 2025"],
     },
     {
       id: 15,
@@ -185,6 +227,7 @@ const TalentListing = () => {
         "Pop superstar with a powerful four-octave vocal range, known for her chart-topping albums and sold-out world tours that captivate millions.",
       popularity: 89,
       price: "$2,400",
+      availability: ["July 17, 2025", "August 5, 2025"],
     },
     {
       id: 16,
@@ -195,37 +238,167 @@ const TalentListing = () => {
         "Beauty entrepreneur and reality star who built a billion-dollar cosmetics empire, known for setting trends in fashion and social media.",
       popularity: 83,
       price: "$3,000",
+      availability: ["July 19, 2025", "August 3, 2025"],
     },
   ];
 
-  // Filter talents based on search and filters
-  const filteredTalents = talents.filter((talent) => {
-    const matchesSearch =
-      talent.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      talent.description.toLowerCase().includes(searchTerm.toLowerCase());
+  // Calendar functions
+  const navigateMonth = (direction) => {
+    setCurrentDate(
+      direction === 1 ? addMonths(currentDate, 1) : subMonths(currentDate, 1)
+    );
+  };
 
+  const generateCalendarDays = () => {
+    const monthStart = startOfMonth(currentDate);
+    const monthEnd = endOfMonth(currentDate);
+    const startDay = getDay(monthStart);
+    const daysInMonth = eachDayOfInterval({ start: monthStart, end: monthEnd });
+
+    const days = [];
+    for (let i = 0; i < startDay; i++) days.push(null);
+    daysInMonth.forEach((day) => days.push(day.getDate()));
+    return days;
+  };
+
+  const dateHasAvailability = (talent, day) => {
+    if (!day) return false;
+    const date = new Date(
+      currentDate.getFullYear(),
+      currentDate.getMonth(),
+      day
+    );
+    return talent.availability.some((availDate) =>
+      isSameDay(parse(availDate, "MMMM d, yyyy", new Date()), date)
+    );
+  };
+
+  // Filter talents
+  const filteredTalents = talents.filter((talent) => {
+    const matchesSearch = talent.name
+      .toLowerCase()
+      .includes(searchTerm.toLowerCase());
     const matchesCategory =
       !filters.category || talent.category === filters.category;
+    const matchesAvailability =
+      !filters.availability ||
+      talent.availability.includes(filters.availability);
 
-    const matchesPrice =
-      (!filters.minPrice || talent.price >= filters.minPrice) &&
-      (!filters.maxPrice || talent.price <= filters.maxPrice);
-
-    const matchesPopularity = talent.popularity >= filters.minPopularity;
-
-    return (
-      matchesSearch && matchesCategory && matchesPrice && matchesPopularity
-    );
+    return matchesSearch && matchesCategory && matchesAvailability;
   });
 
-  const resetFilters = () => {
-    setFilters({
-      category: "",
-      minPrice: "",
-      maxPrice: "",
-      minPopularity: 0,
-    });
-    setSearchTerm("");
+  // Calendar component
+  const TalentCalendar = ({ talent }) => {
+    const monthNames = [
+      "January",
+      "February",
+      "March",
+      "April",
+      "May",
+      "June",
+      "July",
+      "August",
+      "September",
+      "October",
+      "November",
+      "December",
+    ];
+    const dayNames = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+
+    return (
+      <div className="bg-[#222222] rounded-lg p-4 mt-4 border border-[#333333]">
+        <div className="flex items-center justify-between mb-4">
+          <h3 className="font-medium">Available Dates</h3>
+          <div className="flex items-center gap-2">
+            <button
+              onClick={() => navigateMonth(-1)}
+              className="p-1 rounded hover:bg-[#333333]"
+            >
+              <FaChevronLeft size={14} />
+            </button>
+            <span className="text-sm">
+              {monthNames[currentDate.getMonth()]} {currentDate.getFullYear()}
+            </span>
+            <button
+              onClick={() => navigateMonth(1)}
+              className="p-1 rounded hover:bg-[#333333]"
+            >
+              <FaChevronRight size={14} />
+            </button>
+          </div>
+        </div>
+
+        <div className="grid grid-cols-7 gap-1 text-center text-xs mb-2">
+          {dayNames.map((day) => (
+            <div key={day} className="text-gray-400 p-1">
+              {day}
+            </div>
+          ))}
+        </div>
+
+        <div className="grid grid-cols-7 gap-1">
+          {generateCalendarDays().map((day, index) => {
+            const isAvailable = day && dateHasAvailability(talent, day);
+            return (
+              <div key={index} className="aspect-square">
+                {day && (
+                  <button
+                    onClick={() =>
+                      isAvailable &&
+                      setSelectedDate(
+                        new Date(
+                          currentDate.getFullYear(),
+                          currentDate.getMonth(),
+                          day
+                        )
+                      )
+                    }
+                    className={`w-full h-full rounded text-sm ${
+                      isAvailable
+                        ? selectedDate &&
+                          isSameDay(
+                            selectedDate,
+                            new Date(
+                              currentDate.getFullYear(),
+                              currentDate.getMonth(),
+                              day
+                            )
+                          )
+                          ? "bg-[#a38b41] text-white"
+                          : "bg-[#a38b41]/30 hover:bg-[#a38b41]/50 text-white"
+                        : "text-gray-500"
+                    }`}
+                  >
+                    {day}
+                  </button>
+                )}
+              </div>
+            );
+          })}
+        </div>
+
+        {selectedDate && (
+          <div className="mt-4 p-3 bg-[#2d2d2d] rounded border border-[#a38b41]/30">
+            <div className="flex justify-between items-center">
+              <div>
+                <p className="text-sm">
+                  {format(selectedDate, "MMMM d, yyyy")}
+                </p>
+                <p className="text-xs text-gray-400">Available time slots</p>
+              </div>
+              <div className="flex gap-2">
+                <button className="flex items-center gap-1 px-2 py-1 text-xs bg-red-500/10 text-red-400 rounded">
+                  <FaTimes size={10} /> Decline
+                </button>
+                <button className="flex items-center gap-1 px-2 py-1 text-xs bg-[#a38b41] text-black rounded">
+                  <FaCheck size={10} /> Confirm
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
+      </div>
+    );
   };
 
   return (
@@ -252,7 +425,6 @@ const TalentListing = () => {
         {/* Search and Filter Bar */}
         <div className="mb-8">
           <div className="flex flex-col md:flex-row gap-4">
-            {/* Search Input */}
             <div className="relative flex-grow">
               <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                 <FaSearch className="text-gray-400" />
@@ -262,11 +434,10 @@ const TalentListing = () => {
                 placeholder="Search talents..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
-                className="w-full pl-10 pr-4 py-3 bg-[#222222] border border-[#333333] rounded-lg focus:outline-none focus:ring-2 "
+                className="w-full pl-10 pr-4 py-3 bg-[#222222] border border-[#333333] rounded-lg focus:outline-none focus:ring-2"
               />
             </div>
 
-            {/* Filter Toggle Button */}
             <button
               onClick={() => setShowFilters(!showFilters)}
               className="flex items-center justify-center gap-2 px-4 py-3 bg-[#222222] border border-[#333333] rounded-lg hover:bg-[#2d2d2d] transition"
@@ -287,7 +458,6 @@ const TalentListing = () => {
               className="mt-4 p-6 bg-[#222222] rounded-lg border border-[#333333]"
             >
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-                {/* Category Filter */}
                 <div>
                   <label className="block text-sm font-medium mb-2">
                     Category
@@ -307,54 +477,32 @@ const TalentListing = () => {
                   </select>
                 </div>
 
-                {/* Price Range */}
                 <div>
                   <label className="block text-sm font-medium mb-2">
-                    Price Range
-                  </label>
-                  <div className="flex gap-2">
-                    <input
-                      type="number"
-                      placeholder="Min"
-                      value={filters.minPrice}
-                      onChange={(e) =>
-                        setFilters({ ...filters, minPrice: e.target.value })
-                      }
-                      className="w-1/2 p-2 bg-[#2d2d2d] border border-[#333333] rounded"
-                    />
-                    <input
-                      type="number"
-                      placeholder="Max"
-                      value={filters.maxPrice}
-                      onChange={(e) =>
-                        setFilters({ ...filters, maxPrice: e.target.value })
-                      }
-                      className="w-1/2 p-2 bg-[#2d2d2d] border border-[#333333] rounded"
-                    />
-                  </div>
-                </div>
-
-                {/* Popularity Filter */}
-                <div>
-                  <label className="block text-sm font-medium mb-2">
-                    Min Popularity: {filters.minPopularity}%
+                    Available On
                   </label>
                   <input
-                    type="range"
-                    min="0"
-                    max="100"
-                    value={filters.minPopularity}
+                    type="date"
+                    value={filters.availability}
                     onChange={(e) =>
-                      setFilters({ ...filters, minPopularity: e.target.value })
+                      setFilters({ ...filters, availability: e.target.value })
                     }
-                    className="w-full"
+                    className="w-full p-2 bg-[#2d2d2d] border border-[#333333] rounded"
                   />
                 </div>
 
-                {/* Reset Button */}
                 <div className="flex items-end">
                   <button
-                    onClick={resetFilters}
+                    onClick={() => {
+                      setFilters({
+                        category: "",
+                        minPrice: "",
+                        maxPrice: "",
+                        minPopularity: 0,
+                        availability: "",
+                      });
+                      setSearchTerm("");
+                    }}
                     className="px-4 py-2 bg-[#333333] rounded hover:bg-[#3d3d3d] transition"
                   >
                     Reset Filters
@@ -365,32 +513,24 @@ const TalentListing = () => {
           )}
         </div>
 
-        {/* Results Count */}
-        <div className="mb-6 text-gray-400">
-          Showing {filteredTalents.length} of {talents.length} talents
-        </div>
-
         {/* Talent Grid */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
           {filteredTalents.map((talent) => (
             <motion.div
               key={talent.id}
+              ref={(el) => (calendarRefs.current[talent.id] = el)}
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.3 }}
               whileHover={{ y: -5 }}
               className="bg-[#222222] rounded-lg overflow-hidden border border-[#333333] hover:border-[#F3BA18] transition"
             >
-              <div className="relative">
-                <img
-                  src={talent.src}
-                  alt={talent.name}
-                  className="w-full h-64 object-cover"
-                />
-                <div className="absolute top-2 right-2 gradient-bg text-black px-2 py-1 rounded text-xs font-bold">
-                  ${talent.price}
-                </div>
-              </div>
+              <img
+                src={talent.src}
+                alt={talent.name}
+                className="w-full h-48 object-cover"
+              />
+
               <div className="p-4">
                 <div className="flex justify-between items-start mb-2">
                   <h3 className="text-lg font-bold">{talent.name}</h3>
@@ -405,12 +545,30 @@ const TalentListing = () => {
                 <p className="text-gray-400 text-sm mb-4 line-clamp-2">
                   {talent.description}
                 </p>
-                <Link
-                  to={`/talent/${talent.id}`}
-                  className="block w-full text-center gradient-bg text-black font-medium py-2 px-4 rounded transition"
+
+                <button
+                  onClick={() => {
+                    setCalendarVisibleFor((prev) => {
+                      const newId = prev === talent.id ? null : talent.id;
+                      if (newId && calendarRefs.current[newId]) {
+                        setTimeout(() => {
+                          calendarRefs.current[newId]?.scrollIntoView({
+                            behavior: "smooth",
+                            block: "start",
+                          });
+                        }, 100);
+                      }
+                      return newId;
+                    });
+                  }}
+                  className="w-full flex items-center justify-center gap-2 mb-2 gradient-bg text-black font-medium py-2 px-4 rounded transition"
                 >
-                  Book Session
-                </Link>
+                  <FaCalendarAlt /> Check Availability
+                </button>
+
+                {calendarVisibleFor === talent.id && (
+                  <TalentCalendar talent={talent} />
+                )}
               </div>
             </motion.div>
           ))}
@@ -424,8 +582,17 @@ const TalentListing = () => {
               Try adjusting your search or filters
             </p>
             <button
-              onClick={resetFilters}
-              className="px-4 py-2 gradient-bg text-black rounded  transition"
+              onClick={() => {
+                setFilters({
+                  category: "",
+                  minPrice: "",
+                  maxPrice: "",
+                  minPopularity: 0,
+                  availability: "",
+                });
+                setSearchTerm("");
+              }}
+              className="px-4 py-2 gradient-bg text-black rounded transition"
             >
               Reset Filters
             </button>

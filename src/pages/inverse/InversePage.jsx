@@ -20,16 +20,16 @@ import {
 import { FaSearch, FaTimes } from "react-icons/fa";
 import { IoLocationOutline, IoTicketOutline } from "react-icons/io5";
 import { BsBuilding, BsPeople, BsGoogle } from "react-icons/bs";
+import talents from "../../data/talentData";
+
 
 const InversePage = () => {
-  const [currentDate, setCurrentDate] = useState(new Date(2024, 7)); // August 2024
-  const [attendanceOption, setAttendanceOption] = useState("interested");
-  const [eventType, setEventType] = useState("liveInPerson");
-  const [currentSlide, setCurrentSlide] = useState(0);
-  const [uploadedLogo, setUploadedLogo] = useState(null);
-  const [mapZoom, setMapZoom] = useState(12);
-  const [isAutoPlay, setIsAutoPlay] = useState(true);
-  const [slidesPerView, setSlidesPerView] = useState(3);
+  const [currentDate, setCurrentDate] = useState(new Date(2025, 6)); // July 2025
+  const [selectedTalent, setSelectedTalent] = useState(null);
+  const [talentAvailabilityEvents, setTalentAvailabilityEvents] = useState([]);
+  const [searchValue, setSearchValue] = useState("");
+  const [searchResults, setSearchResults] = useState([]);
+  const [showResults, setShowResults] = useState(false);
   const [fanRequest, setFanRequest] = useState({
     talentName: "",
     date: "",
@@ -40,33 +40,6 @@ const InversePage = () => {
     cardCvv: "",
     cardName: "",
   });
-  const formatCardNumber = (value) => {
-    // Remove all non-digit characters
-    const v = value.replace(/\s+/g, "").replace(/[^0-9]/gi, "");
-    // Add space after every 4 digits
-    const matches = v.match(/\d{4,16}/g);
-    const match = (matches && matches[0]) || "";
-    const parts = [];
-    for (let i = 0, len = match.length; i < len; i += 4) {
-      parts.push(match.substring(i, i + 4));
-    }
-    if (parts.length) {
-      return parts.join(" ");
-    } else {
-      return value;
-    }
-  };
-
-  const formatExpiry = (value) => {
-    // Remove all non-digit characters
-    const v = value.replace(/[^0-9]/g, "");
-    // Add slash after 2 digits
-    if (v.length >= 3) {
-      return `${v.slice(0, 2)}/${v.slice(2, 4)}`;
-    }
-    return value;
-  };
-  // State for Response Form
   const [responseForm, setResponseForm] = useState({
     availableDates: "",
     time: "",
@@ -74,23 +47,57 @@ const InversePage = () => {
     fansName: "",
   });
 
-  // Handler for Fan Request Form
-  const handleFanRequestChange = (field, value) => {
-    let formattedValue = value;
+  // Handle search input changes
+  const handleSearchChange = (e) => {
+    const value = e.target.value;
+    setSearchValue(value);
 
-    if (field === "cardNumber") {
-      formattedValue = formatCardNumber(value);
-    } else if (field === "cardExpiry") {
-      formattedValue = formatExpiry(value);
+    if (value.trim()) {
+      const results = talents.filter((talent) =>
+        talent.name.toLowerCase().includes(value.toLowerCase())
+      );
+      setSearchResults(results);
+      setShowResults(true);
+    } else {
+      setSearchResults([]);
+      setShowResults(false);
     }
+  };
 
+  // Select a talent
+  const handleSelectTalent = (talent) => {
+    setSelectedTalent(talent);
     setFanRequest((prev) => ({
       ...prev,
-      [field]: formattedValue,
+      talentName: talent.name,
+    }));
+    setSearchValue("");
+    setShowResults(false);
+
+    // Convert talent availability to calendar events
+    const availabilityEvents = talent.availability.map((dateStr) => {
+      const date = new Date(dateStr);
+      return {
+        date: date.getDate(),
+        name: `${talent.name} Available`,
+        category: "talent",
+        color: "bg-yellow-500",
+        talentId: talent.id,
+      };
+    });
+
+    setTalentAvailabilityEvents(availabilityEvents);
+  };
+
+  // Handle fan request form changes
+  const handleFanRequestChange = (field, value) => {
+    setFanRequest((prev) => ({
+      ...prev,
+      [field]: value,
     }));
   };
 
-  // Handler for Response Form
+  // Handle response form changes
   const handleResponseChange = (field, value) => {
     setResponseForm((prev) => ({
       ...prev,
@@ -98,230 +105,51 @@ const InversePage = () => {
     }));
   };
 
-  // Button handlers
- const handleClear = () => {
-  setFanRequest({
-    talentName: "",
-    date: "",
-    time: "",
-    desiredLocation: "",
-    cardNumber: "",
-    cardExpiry: "",
-    cardCvv: "",
-    cardName: ""
-  });
-};
+  // Clear form
+  const handleClear = () => {
+    setFanRequest({
+      talentName: "",
+      date: "",
+      time: "",
+      desiredLocation: "",
+      cardNumber: "",
+      cardExpiry: "",
+      cardCvv: "",
+      cardName: "",
+    });
+  };
 
+  // Send request
   const handleSendRequest = () => {
     console.log("Sending request:", fanRequest);
     // Add your send request logic here
   };
 
+  // Cancel request
   const handleCancel = () => {
     handleClear();
   };
 
+  // Accept request
   const handleAccepted = () => {
     console.log("Request accepted:", responseForm);
     // Add your acceptance logic here
   };
 
+  // Reject request
   const handleRejected = () => {
     console.log("Request rejected:", responseForm);
     // Add your rejection logic here
   };
-  // Predefined events that show on calendar
-  const [calendarEvents] = useState([
-    {
-      date: 15,
-      name: "Jake's Exchange",
-      category: "networking",
-      color: "bg-blue-500",
-      lat: 40.7589,
-      lng: -73.9851,
-    },
-    {
-      date: 18,
-      name: "Summer Festival",
-      category: "music",
-      color: "bg-purple-500",
-      lat: 40.7831,
-      lng: -73.9712,
-    },
-    {
-      date: 22,
-      name: "Tech Meetup",
-      category: "tech",
-      color: "bg-green-500",
-      lat: 40.7505,
-      lng: -73.9934,
-    },
-    {
-      date: 25,
-      name: "Art Gallery",
-      category: "art",
-      color: "bg-pink-500",
-      lat: 40.7614,
-      lng: -73.9776,
-    },
-    {
-      date: 29,
-      name: "Food Festival",
-      category: "food",
-      color: "bg-orange-500",
-      lat: 40.7282,
-      lng: -74.0776,
-    },
-  ]);
 
-  const [selectedEvent, setSelectedEvent] = useState(calendarEvents[0]);
+  // Calendar navigation
+  const navigateMonth = (direction) => {
+    const newDate = new Date(currentDate);
+    newDate.setMonth(currentDate.getMonth() + direction);
+    setCurrentDate(newDate);
+  };
 
-  const [eventsList] = useState([
-    {
-      id: 1,
-      name: "JAKE'S EXCHANGE LAUNCH PARTY",
-      location: "New York",
-      address: "166 W 46th St, NY 10036",
-      phone: "844-206-6006",
-      website: "hardrockhotelenwyork.com",
-      logo: "https://images.unsplash.com/photo-1531058020387-3be344556be6?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8M3x8ZXZlbnR8ZW58MHx8MHx8fDA%3D",
-      category: "networking",
-    },
-    {
-      id: 2,
-      name: "SUMMER MUSIC FESTIVAL",
-      location: "Brooklyn",
-      address: "123 Festival Ave, Brooklyn NY",
-      phone: "555-123-4567",
-      website: "summerfest.com",
-      logo: "https://images.unsplash.com/photo-1561489396-888724a1543d?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTZ8fGV2ZW50fGVufDB8fDB8fHww",
-      category: "music",
-    },
-    {
-      id: 3,
-      name: "TECH INNOVATION MEETUP",
-      location: "Manhattan",
-      address: "789 Tech St, Manhattan NY",
-      phone: "555-987-6543",
-      website: "techmeetup.com",
-      logo: "https://images.unsplash.com/photo-1560439514-4e9645039924?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MjV8fGV2ZW50fGVufDB8fDB8fHww",
-      category: "tech",
-    },
-    {
-      id: 4,
-      name: "ART GALLERY OPENING",
-      location: "SoHo",
-      address: "456 Art Street, SoHo NY",
-      phone: "555-456-7890",
-      website: "artgallery.com",
-      logo: "https://images.unsplash.com/photo-1472653816316-3ad6f10a6592?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MzN8fGV2ZW50fGVufDB8fDB8fHww",
-      category: "art",
-    },
-  ]);
-
-  const [carouselEvents] = useState([
-    {
-      id: 1,
-      title: "Electronic Music Festival",
-      date: "Aug 15, 2024",
-      location: "Central Park",
-      image:
-        "https://images.pexels.com/photos/1190297/pexels-photo-1190297.jpeg?auto=compress&cs=tinysrgb&w=600",
-      price: "$45",
-      attendees: "2.5K",
-      rating: "4.8",
-    },
-    {
-      id: 2,
-      title: "Tech Conference 2024",
-      date: "Aug 18, 2024",
-      location: "Convention Center",
-      image:
-        "https://images.pexels.com/photos/787961/pexels-photo-787961.jpeg?auto=compress&cs=tinysrgb&w=600",
-      price: "$120",
-      attendees: "1.2K",
-      rating: "4.9",
-    },
-    {
-      id: 3,
-      title: "Food & Wine Tasting",
-      date: "Aug 22, 2024",
-      location: "Rooftop Venue",
-      image:
-        "https://images.pexels.com/photos/433452/pexels-photo-433452.jpeg?auto=compress&cs=tinysrgb&w=600",
-      price: "$65",
-      attendees: "850",
-      rating: "4.7",
-    },
-    {
-      id: 4,
-      title: "Art Exhibition Opening",
-      date: "Aug 25, 2024",
-      location: "Modern Gallery",
-      image:
-        "https://images.pexels.com/photos/625644/pexels-photo-625644.jpeg?auto=compress&cs=tinysrgb&w=600",
-      price: "$25",
-      attendees: "650",
-      rating: "4.6",
-    },
-    {
-      id: 5,
-      title: "Jazz Night Live",
-      date: "Aug 29, 2024",
-      location: "Blue Note Club",
-      image:
-        "https://images.pexels.com/photos/1387174/pexels-photo-1387174.jpeg?auto=compress&cs=tinysrgb&w=600",
-      price: "$35",
-      attendees: "300",
-      rating: "4.8",
-    },
-    {
-      id: 6,
-      title: "Comedy Show",
-      date: "Aug 30, 2024",
-      location: "Comedy Club",
-      image:
-        "https://images.pexels.com/photos/1627935/pexels-photo-1627935.jpeg?auto=compress&cs=tinysrgb&w=600",
-      price: "$30",
-      attendees: "200",
-      rating: "4.5",
-    },
-  ]);
-
-  const monthNames = [
-    "JANUARY",
-    "FEBRUARY",
-    "MARCH",
-    "APRIL",
-    "MAY",
-    "JUNE",
-    "JULY",
-    "AUGUST",
-    "SEPTEMBER",
-    "OCTOBER",
-    "NOVEMBER",
-    "DECEMBER",
-  ];
-
-  const dayNames = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
-
-  // Responsive carousel logic
-  useEffect(() => {
-    const updateSlidesPerView = () => {
-      if (window.innerWidth < 640) {
-        setSlidesPerView(1); // Mobile: 1 slide
-      } else if (window.innerWidth < 1024) {
-        setSlidesPerView(2); // Tablet: 2 slides
-      } else {
-        setSlidesPerView(3); // Desktop: 3 slides
-      }
-    };
-
-    updateSlidesPerView();
-    window.addEventListener("resize", updateSlidesPerView);
-    return () => window.removeEventListener("resize", updateSlidesPerView);
-  }, []);
-
+  // Generate calendar days
   const getDaysInMonth = (date) => {
     return new Date(date.getFullYear(), date.getMonth() + 1, 0).getDate();
   };
@@ -346,187 +174,128 @@ const InversePage = () => {
     return days;
   };
 
-  const navigateMonth = (direction) => {
-    const newDate = new Date(currentDate);
-    newDate.setMonth(currentDate.getMonth() + direction);
-    setCurrentDate(newDate);
-  };
-
+  // Get events for calendar
   const getEventForDate = (day) => {
-    return calendarEvents.find((event) => event.date === day);
+    return talentAvailabilityEvents.find((event) => event.date === day);
   };
 
-  const handleEventClick = (event) => {
-    setSelectedEvent(event);
-  };
+  // Month names
+  const monthNames = [
+    "JANUARY",
+    "FEBRUARY",
+    "MARCH",
+    "APRIL",
+    "MAY",
+    "JUNE",
+    "JULY",
+    "AUGUST",
+    "SEPTEMBER",
+    "OCTOBER",
+    "NOVEMBER",
+    "DECEMBER",
+  ];
 
-  const nextSlide = () => {
-    setCurrentSlide(
-      (prev) =>
-        (prev + 1) %
-        Math.max(1, Math.ceil(carouselEvents.length / slidesPerView))
-    );
-  };
+  // Day names
+  const dayNames = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
 
-  const prevSlide = () => {
-    setCurrentSlide(
-      (prev) =>
-        (prev - 1 + Math.ceil(carouselEvents.length / slidesPerView)) %
-        Math.max(1, Math.ceil(carouselEvents.length / slidesPerView))
-    );
-  };
-
-  const handleLogoUpload = (event) => {
-    const file = event.target.files[0];
-    if (file) {
-      const reader = new FileReader();
-      reader.onload = (e) => {
-        setUploadedLogo({
-          url: e.target.result,
-          name: file.name,
-        });
-      };
-      reader.readAsDataURL(file);
+  // Format card number
+  const formatCardNumber = (value) => {
+    const v = value.replace(/\s+/g, "").replace(/[^0-9]/gi, "");
+    const matches = v.match(/\d{4,16}/g);
+    const match = (matches && matches[0]) || "";
+    const parts = [];
+    for (let i = 0, len = match.length; i < len; i += 4) {
+      parts.push(match.substring(i, i + 4));
     }
-  };
-
-  // Auto-play carousel
-  useEffect(() => {
-    if (!isAutoPlay) return;
-    const interval = setInterval(() => {
-      nextSlide();
-    }, 3500);
-    return () => clearInterval(interval);
-  }, [isAutoPlay, slidesPerView]);
-  const [searchValue, setSearchValue] = useState("");
-  const [isFocused, setIsFocused] = useState(false);
-
-  const handleSearch = (e) => {
-    e.preventDefault();
-    if (searchValue.trim()) {
-      console.log("Searching for:", searchValue);
-      // Add your search logic here
+    if (parts.length) {
+      return parts.join(" ");
     }
+    return value;
   };
 
-  const clearSearch = (e) => {
-    e.preventDefault();
-    e.stopPropagation();
-    setSearchValue("");
-    // Keep focus on input after clearing
-    const input = e.target.closest("form").querySelector("input");
-    if (input) {
-      input.focus();
+  // Format expiry date
+  const formatExpiry = (value) => {
+    const v = value.replace(/[^0-9]/g, "");
+    if (v.length >= 3) {
+      return `${v.slice(0, 2)}/${v.slice(2, 4)}`;
     }
+    return value;
   };
 
-  const handleInputBlur = (e) => {
-    // Only blur if the click is outside the form
-    const form = e.currentTarget.closest("form");
-    setTimeout(() => {
-      if (!form.contains(document.activeElement)) {
-        setIsFocused(false);
-      }
-    }, 100);
-  };
   return (
     <section className="w-full z-50 bg-gradient-to-br py-12 2xl:py-16 flex flex-col 2xl:gap-16 gap-12 px-4 sm:px-6 lg:px-8">
-      <div className="2xl:gap-16 gap-12 px-4 container sm:px-6 lg:px-8 mt-10 lg:mt-16 2xl:mt-20 ">
-        {/* Modern Compact Search Bar */}
+      <div className="2xl:gap-16 gap-12 px-4 container sm:px-6 lg:px-8 mt-10 lg:mt-16 2xl:mt-20">
+        {/* Search Bar */}
         <section className="flex justify-end items-center">
-          <div className="lg:w-[25%] mb-3">
-            <form onSubmit={handleSearch} className="relative group">
-              <div
-                className={`
-                        relative overflow-hidden rounded-2xl transition-all duration-500 ease-out
-                        ${
-                          isFocused
-                            ? "bg-white/10 border border-[#a38b41]/40 shadow-2xl shadow-[#a38b41]/20 scale-[1.02]"
-                            : "bg-white/5 border border-white/10 hover:border-white/20 hover:bg-white/8"
-                        }
-                      `}
-              >
-                {/* Animated background gradient */}
-                <div
-                  className={`
-                          absolute inset-0 bg-gradient-to-r from-[#a38b41]/10 via-transparent to-[#a38b41]/10 
-                          transition-opacity duration-500 pointer-events-none z-5 ${
-                            isFocused ? "opacity-100" : "opacity-0"
-                          }
-                        `}
-                />
-
+          <div className="lg:w-[25%] mb-3 relative">
+            <div className="relative group">
+              <div className="relative overflow-hidden rounded-2xl transition-all duration-500 ease-out bg-white/5 border border-white/10 hover:border-white/20 hover:bg-white/8">
                 {/* Search Input */}
                 <input
                   type="text"
                   value={searchValue}
-                  onChange={(e) => setSearchValue(e.target.value)}
-                  onFocus={() => setIsFocused(true)}
-                  onBlur={handleInputBlur}
-                  placeholder="Search"
+                  onChange={handleSearchChange}
+                  onFocus={() => setShowResults(true)}
+                  onBlur={() => setTimeout(() => setShowResults(false), 200)}
+                  placeholder="Search talents..."
                   className="relative z-10 w-full h-14 sm:h-16 bg-transparent pl-5 pr-24 text-white placeholder-gray-400 focus:outline-none text-sm sm:text-base font-medium placeholder:font-normal"
                 />
 
-                {/* Search Actions */}
+                {/* Search Icon */}
                 <div className="absolute right-3 top-1/2 -translate-y-1/2 flex items-center gap-2 z-20">
-                  {/* Clear Button */}
                   {searchValue && (
                     <button
                       type="button"
-                      onMouseDown={(e) => e.preventDefault()} // Prevent input blur
-                      onClick={clearSearch}
+                      onClick={() => {
+                        setSearchValue("");
+                        setSearchResults([]);
+                      }}
                       className="p-2 text-gray-400 hover:text-white transition-all duration-200 rounded-xl hover:bg-white/10 active:scale-95 z-30"
                     >
                       <FaTimes size={12} />
                     </button>
                   )}
-
-                  {/* Ultra Modern Search Button */}
-                  <button
-                    type="submit"
-                    disabled={!searchValue.trim()}
-                    onMouseDown={(e) => e.preventDefault()} // Prevent input blur
-                    className={`
-                              group/search relative overflow-hidden px-4 py-2 rounded-xl font-bold text-xs transition-all duration-300 flex items-center gap-2 z-30
-                              ${
-                                searchValue.trim()
-                                  ? "bg-gradient-to-r from-[#a38b41] cursor-pointer via-[#c2ab67] to-[#e6ca7c] text-black shadow-lg hover:shadow-xl hover:shadow-[#a38b41]/30 hover:scale-110 active:scale-95"
-                                  : "bg-gray-600/30 text-gray-500 cursor-not-allowed"
-                              }
-                            `}
-                  >
-                    <FaSearch size={11} className="relative z-10" />
-                    <span className="relative z-10 hidden sm:inline">
-                      Enter
-                    </span>
-
-                    {/* Button shine effect */}
-                    {searchValue.trim() && (
-                      <div className="absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent via-white/30 to-transparent group-hover/search:translate-x-full transition-transform duration-700" />
-                    )}
-                  </button>
+                  <div className="p-2 text-gray-400">
+                    <FaSearch size={12} />
+                  </div>
                 </div>
-
-                {/* Search bar shine effect */}
-                <div
-                  className={`
-                          absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent via-white/5 to-transparent 
-                          transition-transform duration-1000 pointer-events-none z-5 ${
-                            isFocused ? "translate-x-full" : ""
-                          }
-                        `}
-                />
               </div>
-            </form>
+
+              {/* Search Results Dropdown */}
+              {showResults && searchResults.length > 0 && (
+                <div className="absolute z-50 mt-2 w-full bg-gray-800 rounded-lg shadow-lg border border-gray-700 max-h-60 overflow-y-auto">
+                  {searchResults.map((talent) => (
+                    <div
+                      key={talent.id}
+                      className="p-3 hover:bg-gray-700 cursor-pointer flex items-center gap-3"
+                      onClick={() => handleSelectTalent(talent)}
+                    >
+                      <div className="w-10 h-10 rounded-full bg-gray-600 flex items-center justify-center">
+                        {talent.name.charAt(0)}
+                      </div>
+                      <div>
+                        <div className="font-medium text-white">
+                          {talent.name}
+                        </div>
+                        <div className="text-xs text-gray-400">
+                          {talent.category} • {talent.price}
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
           </div>
         </section>
-        <div className="flex flex-col 2xl:gap-16 gap-12 ">
+
+        <div className="flex flex-col 2xl:gap-16 gap-12">
           {/* First Row - Stretched Three Columns */}
           <div className="grid grid-cols-1 lg:grid-cols-4 gap-10 lg:gap-12 xl:gap-16 2xl:gap-20 items-stretch">
             {/* Right Column - 50% - Stretched */}
             <div className="lg:col-span-2 flex flex-col space-y-3 h-full">
               {/* Welcome section */}
-              <div className="bg-white/5 backdrop-blur-xl border border-white/10 rounded-2xl  p-3 md:p-4 flex-1">
+              <div className="bg-white/5 backdrop-blur-xl border border-white/10 rounded-2xl p-3 md:p-4 flex-1">
                 <div className="text-center mb-6">
                   <h1 className="custom-heading-seven mb-2 uppercase">
                     <span className="font-semibold">Welcome to our </span>
@@ -543,9 +312,34 @@ const InversePage = () => {
                 </p>
               </div>
 
+              {/* Selected Talent Info */}
+              {/* {selectedTalent && (
+                <div className="bg-white/5 backdrop-blur-xl border border-white/10 rounded-2xl p-3 md:p-4 flex-1">
+                  <h2 className="text-xl font-bold text-primary2 mb-4 text-center">
+                    Selected Talent
+                  </h2>
+                  <div className="flex items-center gap-4 mb-4">
+                    <div className="w-16 h-16 rounded-full bg-gray-600 flex items-center justify-center">
+                      {selectedTalent.name.charAt(0)}
+                    </div>
+                    <div>
+                      <h3 className="font-bold text-white">
+                        {selectedTalent.name}
+                      </h3>
+                      <p className="text-sm text-gray-400">
+                        {selectedTalent.category} • {selectedTalent.price}
+                      </p>
+                    </div>
+                  </div>
+                  <p className="text-gray-300 text-sm">
+                    {selectedTalent.description}
+                  </p>
+                </div>
+              )} */}
+
               {/* Image section */}
-              <div className="bg-white/5 backdrop-blur-xl border border-white/10 rounded-2xl  p-3 md:p-4 flex-1">
-                <div className="flex flex-col gap-2 justify-center ">
+              <div className="bg-white/5 backdrop-blur-xl border border-white/10 rounded-2xl p-3 md:p-4 flex-1">
+                <div className="flex flex-col gap-2 justify-center">
                   <h2 className="text-2xl font-bold text-primary2 mb-6 text-center">
                     Talent Token Brand
                   </h2>
@@ -557,10 +351,11 @@ const InversePage = () => {
                 </div>
               </div>
             </div>
+
             {/* Middle Column - 50% - Stretched Calendar */}
             <div className="lg:col-span-2 flex flex-col space-y-3 h-full">
               {/* Compact Buy Tickets */}
-              <div className="bg-white/5 backdrop-blur-xl border border-white/10 rounded-2xl  p-3 md:p-4">
+              <div className="bg-white/5 backdrop-blur-xl border border-white/10 rounded-2xl p-3 md:p-4">
                 <div>
                   <h2 className="text-2xl font-bold uppercase text-white mb-6 text-center">
                     Request your{" "}
@@ -570,7 +365,7 @@ const InversePage = () => {
                   </h2>
                   <a
                     href="#tickets"
-                    className="max-w-[80%] mx-auto flex items-center justify-center space-x-2 p-3 rounded-xl transition-all duration-300 font-semibold hover:scale-105  text-white"
+                    className="max-w-[80%] mx-auto flex items-center justify-center space-x-2 p-3 rounded-xl transition-all duration-300 font-semibold hover:scale-105 text-white"
                     style={{ backgroundColor: "#a38b41" }}
                   >
                     <span className="text-sm">Inverse Request</span>
@@ -578,11 +373,13 @@ const InversePage = () => {
                   </a>
                 </div>
               </div>
-              {/* Celender section */}
-              <div className="bg-white/5 backdrop-blur-xl border border-white/10 rounded-2xl  p-3 md:p-4 h-full flex flex-col">
-                {/* Compact Calendar Header */}
-                <h2 className="text-2xl  font-bold text-primary2 mb-6 text-center">
-                  Talent Dates Available
+
+              {/* Calendar section */}
+              <div className="bg-white/5 backdrop-blur-xl border border-white/10 rounded-2xl p-3 md:p-4 h-full flex flex-col">
+                <h2 className="text-2xl font-bold text-primary2 mb-6 text-center">
+                  {selectedTalent
+                    ? `${selectedTalent.name}'s Availability`
+                    : "Talent Dates Available"}
                 </h2>
                 <div className="flex items-center justify-center space-x-2 sm:space-x-4 mb-4 sm:mb-6">
                   <button
@@ -606,14 +403,6 @@ const InversePage = () => {
                       {monthNames[currentDate.getMonth()]}{" "}
                       {currentDate.getFullYear()}
                     </h2>
-                    {selectedEvent && (
-                      <p className="text-xs sm:text-sm text-gray-400 mt-1">
-                        <span
-                          className={`inline-block w-2 h-2 rounded-full mr-2 ${selectedEvent.color}`}
-                        ></span>
-                        {selectedEvent.name}
-                      </p>
-                    )}
                   </div>
 
                   <button
@@ -624,7 +413,7 @@ const InversePage = () => {
                   </button>
                 </div>
 
-                {/* Compact Calendar Grid */}
+                {/* Calendar Grid */}
                 <div className="flex-1 flex flex-col">
                   <div className="grid grid-cols-7 gap-1 mb-2 sm:mb-3">
                     {dayNames.map((day) => (
@@ -640,22 +429,13 @@ const InversePage = () => {
                   <div className="grid grid-cols-7 gap-1 flex-1">
                     {generateCalendarDays().map((day, index) => {
                       const event = day ? getEventForDate(day) : null;
-                      const isSelected =
-                        selectedEvent &&
-                        event &&
-                        selectedEvent.date === event.date;
                       return (
                         <div key={index} className="aspect-square">
                           {day && (
                             <button
-                              onClick={() => event && handleEventClick(event)}
-                              className={`w-full h-full flex flex-col items-center justify-center text-xs font-medium rounded-lg transition-all duration-300 hover:scale-105 relative ${
+                              className={`w-full h-full flex flex-col items-center justify-center text-xs font-medium rounded-lg transition-all duration-300 ${
                                 event
-                                  ? `${event.color} text-white  ${
-                                      isSelected
-                                        ? "ring-2 ring-white/70 ring-offset-2 ring-offset-gray-800 scale-110"
-                                        : "hover:ring-2 hover:ring-white/50"
-                                    }`
+                                  ? "bg-yellow-500 text-white hover:ring-2 hover:ring-white/50"
                                   : "hover:bg-white/10 text-gray-300 border border-white/5 hover:border-[#a38b41]/30"
                               }`}
                             >
@@ -664,11 +444,8 @@ const InversePage = () => {
                               </span>
                               {event && (
                                 <span className="text-xs mt-1 truncate w-full px-1 hidden sm:block">
-                                  {event.name.split(" ")[0]}
+                                  Available
                                 </span>
-                              )}
-                              {isSelected && (
-                                <div className="absolute -top-1 -right-1 w-2 h-2 sm:w-3 sm:h-3 bg-yellow-400 rounded-full border-2 border-gray-800 animate-pulse"></div>
                               )}
                             </button>
                           )}
@@ -681,14 +458,15 @@ const InversePage = () => {
             </div>
           </div>
         </div>
+
         {/* Request form and talent confirmation */}
-        <div className="flex flex-col 2xl:gap-16 gap-12 mt-10 lg:mt-16 2xl:mt-20 ">
+        <div className="flex flex-col 2xl:gap-16 gap-12 mt-10 lg:mt-16 2xl:mt-20">
           {/* First Row - Stretched Three Columns */}
           <div className="grid grid-cols-1 lg:grid-cols-4 gap-10 lg:gap-12 xl:gap-16 2xl:gap-20 items-stretch">
             {/* Right Column - 50% - Stretched */}
             <div className="lg:col-span-2 flex flex-col space-y-3 h-full">
               {/* Fan Request Form section */}
-              <div className="bg-white/5 backdrop-blur-xl border border-white/10 rounded-2xl  p-3 md:p-4 flex-1">
+              <div className="bg-white/5 backdrop-blur-xl border border-white/10 rounded-2xl p-3 md:p-4 flex-1">
                 <h2 className="text-2xl font-bold text-primary2 mb-6 text-center">
                   Fan Inverse Request Form
                 </h2>
@@ -768,7 +546,10 @@ const InversePage = () => {
                           type="text"
                           value={fanRequest.cardNumber}
                           onChange={(e) =>
-                            handleFanRequestChange("cardNumber", e.target.value)
+                            handleFanRequestChange(
+                              "cardNumber",
+                              formatCardNumber(e.target.value)
+                            )
                           }
                           className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition-all"
                           placeholder="1234 5678 9012 3456"
@@ -786,7 +567,10 @@ const InversePage = () => {
                           type="text"
                           value={fanRequest.cardExpiry}
                           onChange={(e) =>
-                            handleFanRequestChange("cardExpiry", e.target.value)
+                            handleFanRequestChange(
+                              "cardExpiry",
+                              formatExpiry(e.target.value)
+                            )
                           }
                           className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition-all"
                           placeholder="MM/YY"
@@ -857,7 +641,7 @@ const InversePage = () => {
             {/* Middle Column - 50% - Stretched Calendar */}
             <div className="lg:col-span-2 flex flex-col space-y-3 h-full">
               {/* Talent Confirmation section */}
-              <div className="bg-white/5 backdrop-blur-xl border border-white/10 rounded-2xl  p-3 md:p-4 h-full flex flex-col">
+              <div className="bg-white/5 backdrop-blur-xl border border-white/10 rounded-2xl p-3 md:p-4 h-full flex flex-col">
                 {/* Response Form */}
 
                 <h2 className="text-2xl font-bold text-primary2 mb-6 text-center">
@@ -877,11 +661,11 @@ const InversePage = () => {
                       className="w-full px-4 py-3 border-2 border-gray-300 outline outline-1 outline-gray-300 text-primary2 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all"
                     >
                       <option value="">Select available date</option>
-                      <option value="2025-06-01">June 1, 2025</option>
-                      <option value="2025-06-02">June 2, 2025</option>
-                      <option value="2025-06-03">June 3, 2025</option>
-                      <option value="2025-06-04">June 4, 2025</option>
-                      <option value="2025-06-05">June 5, 2025</option>
+                      {selectedTalent?.availability.map((date, index) => (
+                        <option key={index} value={date}>
+                          {date}
+                        </option>
+                      ))}
                     </select>
                   </div>
 
