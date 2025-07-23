@@ -331,8 +331,8 @@ const AMlPolicy = () => {
             </p>
             <ul className="list-disc pl-6 space-y-2 mb-6">
               <li>
-                File a Suspicious Activity Report (SAR) with the appropriate
-                federal or state authorities when required.
+                <strong> File a Suspicious Activity Report (SAR)</strong> with
+                the appropriate federal or state authorities when required.
               </li>
               <li>Maintain a copy of the report and internal notes.</li>
               <li>
@@ -357,16 +357,24 @@ const AMlPolicy = () => {
             </p>
             <ul className="list-disc pl-6 space-y-2 mt-2">
               <li>
-                Countries sanctioned by the U.S. Department of the Treasury's
-                Office of Foreign Assets Control (OFAC).
+                Countries sanctioned by the{" "}
+                <strong>
+                  U.S. Department of the Treasury's Office of Foreign Assets
+                  Control (OFAC).
+                </strong>
               </li>
               <li>
-                Jurisdictions known for high risk of money laundering or
-                terrorist financing (per FATF).
+                Jurisdictions known for{" "}
+                <strong>
+                  high risk of money laundering or terrorist financing
+                </strong>{" "}
+                (per FATF).
               </li>
               <li>
-                Users identified on Sanctions, Blocked Persons, or Terror
-                Watchlists.
+                Users identified on{" "}
+                <strong>
+                  Sanctions, Blocked Persons, or Terror Watchlists.
+                </strong>
               </li>
             </ul>
           </section>
@@ -379,8 +387,9 @@ const AMlPolicy = () => {
             <p>In compliance with applicable regulations:</p>
             <ul className="list-disc pl-6 space-y-2 mt-2">
               <li>
-                All KYC data is securely retained for a minimum of 5 years from
-                account closure or last transaction.
+                All KYC data is securely retained for a{" "}
+                <strong>minimum of 5 years</strong> from account closure or last
+                transaction.
               </li>
               <li>
                 SARs and internal reports are kept confidential and protected.
