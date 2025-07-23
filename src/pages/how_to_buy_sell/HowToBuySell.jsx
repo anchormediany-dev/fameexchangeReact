@@ -4,7 +4,6 @@ import Navbar from "../../components/Navbar";
 import Footer from "../../components/Footer";
 import HeroSection from "../../components/HowToBuySell/HeroSection";
 import UserTypesSection from "../../components/HowToBuySell/UserTypesSection";
-import StepList from "../../components/HowToBuySell/StepList";
 import FeatureCards from "../../components/HowToBuySell/FeatureCards";
 import OptionalFeaturesTable from "../../components/HowToBuySell/OptionalFeaturesTable";
 import TipsAndNotes from "../../components/HowToBuySell/TipsAndNotes";
@@ -18,6 +17,7 @@ import {
   FiCreditCard,
   FiDollarSign,
   FiCheck,
+  FiArrowRight,
 } from "react-icons/fi";
 
 const HowToBuySell = () => {
@@ -97,108 +97,16 @@ const HowToBuySell = () => {
       features: ["Trading dashboard", "Trend insights", "Analytics"],
     },
   ];
-
-  const buySteps = [
-    {
-      step: 1,
-      title: "Create an Account",
-      icon: <FiUser />,
-      details: [
-        "Go to www.thefameexchange.com",
-        "Click on Sign Up",
-        "Choose your role: Fan, Super Fan, or Investor",
-        "Complete and submit the registration form",
-        "Verify your identity (for large purchases, KYC may be needed)",
-      ],
-    },
-    {
-      step: 2,
-      title: "Explore Talent Profiles",
-      icon: <FiSearch />,
-      details: [
-        "Use the search bar or explore trending Talent",
-        "Each profile shows:",
-        "Fame Score (brand strength)",
-        "BTS Value & Performance Chart",
-        "News, social mentions, and upcoming events",
-      ],
-    },
-    {
-      step: 3,
-      title: "Fund Your Wallet",
-      icon: <FiCreditCard />,
-      details: [
-        "Navigate to the Wallet Dashboard",
-        "Choose a payment method:",
-        "Credit/Debit Card",
-        "ACH Transfer",
-        "Apple Pay / Google Pay (if available)",
-      ],
-    },
-    {
-      step: 4,
-      title: "Buy Your First BTS",
-      icon: <FiShoppingCart />,
-      details: [
-        "On a Talent's profile, click 'Buy BTS'",
-        "Select number of shares to purchase",
-        "Confirm the amount and click 'Purchase'",
-        "Your BTS will appear instantly in your dashboard",
-      ],
-    },
-  ];
-
-  const sellSteps = [
-    {
-      step: 1,
-      title: "Open Your Portfolio",
-      icon: <FiBarChart2 />,
-      details: [
-        "Go to your Holdings Dashboard",
-        "View the BTS you currently own",
-      ],
-    },
-    {
-      step: 2,
-      title: "Choose a Talent to Sell",
-      icon: <FiUser />,
-      details: [
-        "Click on a Talent to view details and trends",
-        "Click on 'Sell BTS'",
-      ],
-    },
-    {
-      step: 3,
-      title: "Set Quantity & Price",
-      icon: <FiDollarSign />,
-      details: [
-        "Choose how many shares to sell",
-        "Sell at current market rate, or",
-        "Set your own asking price",
-      ],
-    },
-    {
-      step: 4,
-      title: "Complete Your Sale",
-      icon: <FiCheck />,
-      details: [
-        "Review estimated returns and any fees",
-        "Click 'Confirm Sale'",
-        "Funds will be added to your wallet after the sale",
-      ],
-    },
-  ];
-
   const featureCards = [
     {
       icon: <FiStar />,
-      title: "Super Fan Rewards",
+      title: "Bonus For Super Fans",
       description:
         "Enjoy exclusive discounts, early BTS access, and VIP fan experiences.",
     },
     {
       icon: <FiBarChart2 />,
-      title: "Powerful Investor Tools",
+      title: "Investor Tools",
       description:
         "Access real-time data, trend signals, and performance analytics.",
     },
@@ -215,7 +123,7 @@ const HowToBuySell = () => {
       feature: "Fame Score Alerts",
       availableTo: "Super Fans, Investors",
       description:
-        "Get notified when a Talent’s fame score or BTS value changes.",
+        "Get notified when a Talent's fame score or BTS value changes.",
     },
     {
       feature: "Virtual Meet & Greets",
@@ -339,11 +247,350 @@ const HowToBuySell = () => {
               exit={{ opacity: 0, x: 20 }}
               transition={{ duration: 0.3 }}
             >
-              <StepList
-                steps={buySteps}
-                stepVariants={stepVariants}
-                colors={colors}
-              />
+              {/* Buy Steps - Static Implementation */}
+              <div className="relative">
+                <div
+                  className="absolute left-8 top-0 h-full w-0.5 bg-gray-600 opacity-30"
+                  style={{ marginLeft: "28px" }}
+                ></div>
+
+                {/* Step 1 */}
+                <motion.div
+                  custom={0}
+                  variants={stepVariants}
+                  initial="hidden"
+                  animate="visible"
+                  className="flex relative mb-8 last:mb-0"
+                >
+                  <div className="flex flex-col items-center mr-6 z-10">
+                    <motion.div
+                      whileHover={{ scale: 1.1 }}
+                      className="rounded-full w-14 h-14 flex items-center justify-center gradient-bg text-black"
+                    >
+                      <FiUser />
+                    </motion.div>
+                    <div className="w-0.5 h-full bg-gray-500 opacity-30 my-2"></div>
+                  </div>
+                  <motion.div
+                    whileHover={{ scale: 1.01 }}
+                    className="flex-1 p-6 rounded-xl"
+                    style={{
+                      backgroundColor: colors.cardBg,
+                      border: `1px solid ${colors.border}`,
+                      boxShadow: "0 4px 6px rgba(0, 0, 0, 0.1)",
+                    }}
+                  >
+                    <div className="flex items-center mb-4">
+                      <span className="text-xl font-bold mr-3 gredient-text">
+                        Step 1
+                      </span>
+                      <h3
+                        className="text-xl font-bold"
+                        style={{ color: colors.text }}
+                      >
+                        Create an Account
+                      </h3>
+                    </div>
+                    <ul className="space-y-2 pl-1">
+                      <li
+                        className="flex items-start gap-2 text-sm"
+                        style={{ color: colors.textSecondary }}
+                      >
+                        <FiArrowRight className="mt-1 text-base gredient-icon" />
+                        <span>
+                          Visit <a href="#">www.thefameexchange.com</a>
+                        </span>
+                      </li>
+                      <li
+                        className="flex items-start gap-2 text-sm"
+                        style={{ color: colors.textSecondary }}
+                      >
+                        <FiArrowRight className="mt-1 text-base gredient-icon" />
+                        <span>
+                          Click on <strong>Sign Up</strong>
+                        </span>
+                      </li>
+                      <li
+                        className="flex items-start gap-2 text-sm"
+                        style={{ color: colors.textSecondary }}
+                      >
+                        <FiArrowRight className="mt-1 text-base gredient-icon" />
+                        <span>
+                          Choose your role:{" "}
+                          <strong>Fan, Super Fan, or Investor</strong>
+                        </span>
+                      </li>
+                      <li
+                        className="flex items-start gap-2 text-sm"
+                        style={{ color: colors.textSecondary }}
+                      >
+                        <FiArrowRight className="mt-1 text-base gredient-icon" />
+                        <span>Complete the registration form</span>
+                      </li>
+                      <li
+                        className="flex items-start gap-2 text-sm"
+                        style={{ color: colors.textSecondary }}
+                      >
+                        <FiArrowRight className="mt-1 text-base gredient-icon" />
+                        <span>
+                          Verify your identity (KYC may be required for larger
+                          purchases)
+                        </span>
+                      </li>
+                    </ul>
+                  </motion.div>
+                </motion.div>
+
+                {/* Step 2 */}
+                <motion.div
+                  custom={1}
+                  variants={stepVariants}
+                  initial="hidden"
+                  animate="visible"
+                  className="flex relative mb-8 last:mb-0"
+                >
+                  <div className="flex flex-col items-center mr-6 z-10">
+                    <motion.div
+                      whileHover={{ scale: 1.1 }}
+                      className="rounded-full w-14 h-14 flex items-center justify-center gradient-bg text-black"
+                    >
+                      <FiSearch />
+                    </motion.div>
+                    <div className="w-0.5 h-full bg-gray-500 opacity-30 my-2"></div>
+                  </div>
+                  <motion.div
+                    whileHover={{ scale: 1.01 }}
+                    className="flex-1 p-6 rounded-xl"
+                    style={{
+                      backgroundColor: colors.cardBg,
+                      border: `1px solid ${colors.border}`,
+                      boxShadow: "0 4px 6px rgba(0, 0, 0, 0.1)",
+                    }}
+                  >
+                    <div className="flex items-center mb-4">
+                      <span className="text-xl font-bold mr-3 gredient-text">
+                        Step 2
+                      </span>
+                      <h3
+                        className="text-xl font-bold"
+                        style={{ color: colors.text }}
+                      >
+                        Browse Talent Profiles
+                      </h3>
+                    </div>
+                    <ul className="space-y-2 pl-1">
+                      <li
+                        className="flex items-start gap-2 text-sm"
+                        style={{ color: colors.textSecondary }}
+                      >
+                        <FiArrowRight className="mt-1 text-base gredient-icon" />
+                        <span>
+                          Use the search bar or explore trending Talent
+                        </span>
+                      </li>
+                      <li
+                        className="flex items-start gap-2 text-sm"
+                        style={{ color: colors.textSecondary }}
+                      >
+                        <FiArrowRight className="mt-1 text-base gredient-icon" />
+                        <span>View each profile’s:</span>
+                      </li>
+                      <li
+                        className="flex items-start gap-2 text-sm"
+                        style={{ color: colors.textSecondary }}
+                      >
+                        <FiArrowRight className="mt-1 text-base gredient-icon" />
+                        <span>
+                          <strong>Fame Score</strong> (brand strength)
+                        </span>
+                      </li>
+                      <li
+                        className="flex items-start gap-2 text-sm"
+                        style={{ color: colors.textSecondary }}
+                      >
+                        <FiArrowRight className="mt-1 text-base gredient-icon" />
+                        <span>BTS Value</span>
+                      </li>
+                      <li
+                        className="flex items-start gap-2 text-sm"
+                        style={{ color: colors.textSecondary }}
+                      >
+                        <FiArrowRight className="mt-1 text-base gredient-icon" />
+                        <span>Performance Chart</span>
+                      </li>
+                      <li
+                        className="flex items-start gap-2 text-sm"
+                        style={{ color: colors.textSecondary }}
+                      >
+                        <FiArrowRight className="mt-1 text-base gredient-icon" />
+                        <span>News & Social Mentions</span>
+                      </li>
+                      <li
+                        className="flex items-start gap-2 text-sm"
+                        style={{ color: colors.textSecondary }}
+                      >
+                        <FiArrowRight className="mt-1 text-base gredient-icon" />
+                        <span>Upcoming Events or Drops</span>
+                      </li>
+                    </ul>
+                  </motion.div>
+                </motion.div>
+
+                {/* Step 3 */}
+                <motion.div
+                  custom={2}
+                  variants={stepVariants}
+                  initial="hidden"
+                  animate="visible"
+                  className="flex relative mb-8 last:mb-0"
+                >
+                  <div className="flex flex-col items-center mr-6 z-10">
+                    <motion.div
+                      whileHover={{ scale: 1.1 }}
+                      className="rounded-full w-14 h-14 flex items-center justify-center gradient-bg text-black"
+                    >
+                      <FiCreditCard />
+                    </motion.div>
+                    <div className="w-0.5 h-full bg-gray-500 opacity-30 my-2"></div>
+                  </div>
+                  <motion.div
+                    whileHover={{ scale: 1.01 }}
+                    className="flex-1 p-6 rounded-xl"
+                    style={{
+                      backgroundColor: colors.cardBg,
+                      border: `1px solid ${colors.border}`,
+                      boxShadow: "0 4px 6px rgba(0, 0, 0, 0.1)",
+                    }}
+                  >
+                    <div className="flex items-center mb-4">
+                      <span className="text-xl font-bold mr-3 gredient-text">
+                        Step 3
+                      </span>
+                      <h3
+                        className="text-xl font-bold"
+                        style={{ color: colors.text }}
+                      >
+                        Add Funds
+                      </h3>
+                    </div>
+                    <ul className="space-y-2 pl-1">
+                      <li
+                        className="flex items-start gap-2 text-sm"
+                        style={{ color: colors.textSecondary }}
+                      >
+                        <FiArrowRight className="mt-1 text-base gredient-icon" />
+                        <span>Go to your Wallet Dashboard</span>
+                      </li>
+                      <li
+                        className="flex items-start gap-2 text-sm"
+                        style={{ color: colors.textSecondary }}
+                      >
+                        <FiArrowRight className="mt-1 text-base gredient-icon" />
+                        <span>Add funds via:</span>
+                      </li>
+                      <li
+                        className="flex items-start gap-2 text-sm"
+                        style={{ color: colors.textSecondary }}
+                      >
+                        <FiArrowRight className="mt-1 text-base gredient-icon" />
+                        <span>Credit/Debit Card</span>
+                      </li>
+                      <li
+                        className="flex items-start gap-2 text-sm"
+                        style={{ color: colors.textSecondary }}
+                      >
+                        <FiArrowRight className="mt-1 text-base gredient-icon" />
+                        <span>ACH Transfer</span>
+                      </li>
+                      <li
+                        className="flex items-start gap-2 text-sm"
+                        style={{ color: colors.textSecondary }}
+                      >
+                        <FiArrowRight className="mt-1 text-base gredient-icon" />
+                        <span>Apple Pay / Google Pay (if available)</span>
+                      </li>
+                    </ul>
+                  </motion.div>
+                </motion.div>
+
+                {/* Step 4 */}
+                <motion.div
+                  custom={3}
+                  variants={stepVariants}
+                  initial="hidden"
+                  animate="visible"
+                  className="flex relative mb-8 last:mb-0"
+                >
+                  <div className="flex flex-col items-center mr-6 z-10">
+                    <motion.div
+                      whileHover={{ scale: 1.1 }}
+                      className="rounded-full w-14 h-14 flex items-center justify-center gradient-bg text-black"
+                    >
+                      <FiShoppingCart />
+                    </motion.div>
+                  </div>
+                  <motion.div
+                    whileHover={{ scale: 1.01 }}
+                    className="flex-1 p-6 rounded-xl"
+                    style={{
+                      backgroundColor: colors.cardBg,
+                      border: `1px solid ${colors.border}`,
+                      boxShadow: "0 4px 6px rgba(0, 0, 0, 0.1)",
+                    }}
+                  >
+                    <div className="flex items-center mb-4">
+                      <span className="text-xl font-bold mr-3 gredient-text">
+                        Step 4
+                      </span>
+                      <h3
+                        className="text-xl font-bold"
+                        style={{ color: colors.text }}
+                      >
+                        Buy BTS
+                      </h3>
+                    </div>
+                    <ul className="space-y-2 pl-1">
+                      <li
+                        className="flex items-start gap-2 text-sm"
+                        style={{ color: colors.textSecondary }}
+                      >
+                        <FiArrowRight className="mt-1 text-base gredient-icon" />
+                        <span>
+                          Click <strong>Buy BTS</strong> on the Talent’s page
+                        </span>
+                      </li>
+                      <li
+                        className="flex items-start gap-2 text-sm"
+                        style={{ color: colors.textSecondary }}
+                      >
+                        <FiArrowRight className="mt-1 text-base gredient-icon" />
+                        <span>Select the number of shares</span>
+                      </li>
+                      <li
+                        className="flex items-start gap-2 text-sm"
+                        style={{ color: colors.textSecondary }}
+                      >
+                        <FiArrowRight className="mt-1 text-base gredient-icon" />
+                        <span>
+                          Confirm the total and{" "}
+                          <strong>click “Purchase”</strong>
+                        </span>
+                      </li>
+                      <li
+                        className="flex items-start gap-2 text-sm"
+                        style={{ color: colors.textSecondary }}
+                      >
+                        <FiArrowRight className="mt-1 text-base gredient-icon" />
+                        <span>
+                          Your BTS will be added instantly to your{" "}
+                          <strong>Holdings Dashboard</strong>
+                        </span>
+                      </li>
+                    </ul>
+                  </motion.div>
+                </motion.div>
+              </div>
+
               <FeatureCards
                 features={featureCards}
                 colors={colors}
@@ -358,18 +605,274 @@ const HowToBuySell = () => {
               exit={{ opacity: 0, x: -20 }}
               transition={{ duration: 0.3 }}
             >
-              <StepList
-                steps={sellSteps}
-                stepVariants={stepVariants}
-                colors={colors}
-              />
+              {/* Sell Steps - Static Implementation */}
+              <div className="relative">
+                <div
+                  className="absolute left-8 top-0 h-full w-0.5 bg-gray-600 opacity-30"
+                  style={{ marginLeft: "28px" }}
+                ></div>
+
+                {/* Step 1 */}
+                <motion.div
+                  custom={0}
+                  variants={stepVariants}
+                  initial="hidden"
+                  animate="visible"
+                  className="flex relative mb-8 last:mb-0"
+                >
+                  <div className="flex flex-col items-center mr-6 z-10">
+                    <motion.div
+                      whileHover={{ scale: 1.1 }}
+                      className="rounded-full w-14 h-14 flex items-center justify-center gradient-bg text-black"
+                    >
+                      <FiBarChart2 />
+                    </motion.div>
+                    <div className="w-0.5 h-full bg-gray-500 opacity-30 my-2"></div>
+                  </div>
+                  <motion.div
+                    whileHover={{ scale: 1.01 }}
+                    className="flex-1 p-6 rounded-xl"
+                    style={{
+                      backgroundColor: colors.cardBg,
+                      border: `1px solid ${colors.border}`,
+                      boxShadow: "0 4px 6px rgba(0, 0, 0, 0.1)",
+                    }}
+                  >
+                    <div className="flex items-center mb-4">
+                      <span className="text-xl font-bold mr-3 gredient-text">
+                        Step 1
+                      </span>
+                      <h3
+                        className="text-xl font-bold"
+                        style={{ color: colors.text }}
+                      >
+                        Access Your Portfolio
+                      </h3>
+                    </div>
+                    <ul className="space-y-2 pl-1">
+                      <li
+                        className="flex items-start gap-2 text-sm"
+                        style={{ color: colors.textSecondary }}
+                      >
+                        <FiArrowRight className="mt-1 text-base gredient-icon" />
+                        <span>
+                          Navigate to your ?<strong>Holdings Dashboard</strong>
+                        </span>
+                      </li>
+                      <li
+                        className="flex items-start gap-2 text-sm"
+                        style={{ color: colors.textSecondary }}
+                      >
+                        <FiArrowRight className="mt-1 text-base gredient-icon" />
+                        <span>View all BTS you currently own</span>
+                      </li>
+                    </ul>
+                  </motion.div>
+                </motion.div>
+
+                {/* Step 2 */}
+                <motion.div
+                  custom={1}
+                  variants={stepVariants}
+                  initial="hidden"
+                  animate="visible"
+                  className="flex relative mb-8 last:mb-0"
+                >
+                  <div className="flex flex-col items-center mr-6 z-10">
+                    <motion.div
+                      whileHover={{ scale: 1.1 }}
+                      className="rounded-full w-14 h-14 flex items-center justify-center gradient-bg text-black"
+                    >
+                      <FiUser />
+                    </motion.div>
+                    <div className="w-0.5 h-full bg-gray-500 opacity-30 my-2"></div>
+                  </div>
+                  <motion.div
+                    whileHover={{ scale: 1.01 }}
+                    className="flex-1 p-6 rounded-xl"
+                    style={{
+                      backgroundColor: colors.cardBg,
+                      border: `1px solid ${colors.border}`,
+                      boxShadow: "0 4px 6px rgba(0, 0, 0, 0.1)",
+                    }}
+                  >
+                    <div className="flex items-center mb-4">
+                      <span className="text-xl font-bold mr-3 gredient-text">
+                        Step 2
+                      </span>
+                      <h3
+                        className="text-xl font-bold"
+                        style={{ color: colors.text }}
+                      >
+                        Select the Talent You Want to Sell
+                      </h3>
+                    </div>
+                    <ul className="space-y-2 pl-1">
+                      <li
+                        className="flex items-start gap-2 text-sm"
+                        style={{ color: colors.textSecondary }}
+                      >
+                        <FiArrowRight className="mt-1 text-base gredient-icon" />
+                        <span>
+                          Click the Talent name to view current market trends
+                          and your purchase history
+                        </span>
+                      </li>
+                      <li
+                        className="flex items-start gap-2 text-sm"
+                        style={{ color: colors.textSecondary }}
+                      >
+                        <FiArrowRight className="mt-1 text-base gredient-icon" />
+                        <span>
+                          Choose <strong>Sell BTS</strong>
+                        </span>
+                      </li>
+                    </ul>
+                  </motion.div>
+                </motion.div>
+
+                {/* Step 3 */}
+                <motion.div
+                  custom={2}
+                  variants={stepVariants}
+                  initial="hidden"
+                  animate="visible"
+                  className="flex relative mb-8 last:mb-0"
+                >
+                  <div className="flex flex-col items-center mr-6 z-10">
+                    <motion.div
+                      whileHover={{ scale: 1.1 }}
+                      className="rounded-full w-14 h-14 flex items-center justify-center gradient-bg text-black"
+                    >
+                      <FiDollarSign />
+                    </motion.div>
+                    <div className="w-0.5 h-full bg-gray-500 opacity-30 my-2"></div>
+                  </div>
+                  <motion.div
+                    whileHover={{ scale: 1.01 }}
+                    className="flex-1 p-6 rounded-xl"
+                    style={{
+                      backgroundColor: colors.cardBg,
+                      border: `1px solid ${colors.border}`,
+                      boxShadow: "0 4px 6px rgba(0, 0, 0, 0.1)",
+                    }}
+                  >
+                    <div className="flex items-center mb-4">
+                      <span className="text-xl font-bold mr-3 gredient-text">
+                        Step 3
+                      </span>
+                      <h3
+                        className="text-xl font-bold"
+                        style={{ color: colors.text }}
+                      >
+                        Set Sale Amount and Price
+                      </h3>
+                    </div>
+                    <ul className="space-y-2 pl-1">
+                      <li
+                        className="flex items-start gap-2 text-sm"
+                        style={{ color: colors.textSecondary }}
+                      >
+                        <FiArrowRight className="mt-1 text-base gredient-icon" />
+                        <span>
+                          Sell at <strong>current market price</strong>, or
+                        </span>
+                      </li>
+                      <li
+                        className="flex items-start gap-2 text-sm"
+                        style={{ color: colors.textSecondary }}
+                      >
+                        <FiArrowRight className="mt-1 text-base gredient-icon" />
+                        <span>
+                          Set a <strong>custom ask price</strong>
+                        </span>
+                      </li>
+                      <li
+                        className="flex items-start gap-2 text-sm"
+                        style={{ color: colors.textSecondary }}
+                      >
+                        <FiArrowRight className="mt-1 text-base gredient-icon" />
+                        <span>Choose the number of shares to sell</span>
+                      </li>
+                    </ul>
+                  </motion.div>
+                </motion.div>
+
+                {/* Step 4 */}
+                <motion.div
+                  custom={3}
+                  variants={stepVariants}
+                  initial="hidden"
+                  animate="visible"
+                  className="flex relative mb-8 last:mb-0"
+                >
+                  <div className="flex flex-col items-center mr-6 z-10">
+                    <motion.div
+                      whileHover={{ scale: 1.1 }}
+                      className="rounded-full w-14 h-14 flex items-center justify-center gradient-bg text-black"
+                    >
+                      <FiCheck />
+                    </motion.div>
+                  </div>
+                  <motion.div
+                    whileHover={{ scale: 1.01 }}
+                    className="flex-1 p-6 rounded-xl"
+                    style={{
+                      backgroundColor: colors.cardBg,
+                      border: `1px solid ${colors.border}`,
+                      boxShadow: "0 4px 6px rgba(0, 0, 0, 0.1)",
+                    }}
+                  >
+                    <div className="flex items-center mb-4">
+                      <span className="text-xl font-bold mr-3 gredient-text">
+                        Step 4
+                      </span>
+                      <h3
+                        className="text-xl font-bold"
+                        style={{ color: colors.text }}
+                      >
+                        Confirm Sale
+                      </h3>
+                    </div>
+                    <ul className="space-y-2 pl-1">
+                      <li
+                        className="flex items-start gap-2 text-sm"
+                        style={{ color: colors.textSecondary }}
+                      >
+                        <FiArrowRight className="mt-1 text-base gredient-icon" />
+                        <span>Review fees (if any) and net return</span>
+                      </li>
+                      <li
+                        className="flex items-start gap-2 text-sm"
+                        style={{ color: colors.textSecondary }}
+                      >
+                        <FiArrowRight className="mt-1 text-base gredient-icon" />
+                        <span>
+                          Click <strong>“Confirm Sale”</strong>
+                        </span>
+                      </li>
+                      <li
+                        className="flex items-start gap-2 text-sm"
+                        style={{ color: colors.textSecondary }}
+                      >
+                        <FiArrowRight className="mt-1 text-base gredient-icon" />
+                        <span>
+                          Funds will be credited back to your Wallet once the
+                          sale is completed
+                        </span>
+                      </li>
+                    </ul>
+                  </motion.div>
+                </motion.div>
+              </div>
+
               <FeatureCards
                 features={[
                   {
                     icon: <FiBarChart2 />,
-                    title: "Advanced Selling Features",
+                    title: "Super Fans and Investors",
                     description:
-                      "Limit orders, automated rules, depth charts, and bulk options",
+                      "Super Fans and Investors can place Limit Orders, set up Auto-Sell Rules, and monitor Live BTS Marketboards",
                   },
                 ]}
                 colors={colors}
