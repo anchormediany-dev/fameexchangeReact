@@ -437,6 +437,14 @@ const TermsAndConditions = () => {
                 <p>
                   Phone: <strong className="text-base">1-800-123-4567</strong>
                 </p>
+                <p>
+                  <strong>
+                    {" "}
+                    By using The Fame Exchange, you acknowledge that you have
+                    read, understood, and agree to be bound by these Terms and
+                    Conditions.
+                  </strong>
+                </p>
               </div>
             </section>
           </div>
