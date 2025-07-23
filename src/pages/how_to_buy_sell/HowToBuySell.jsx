@@ -81,31 +81,27 @@ const HowToBuySell = () => {
     {
       type: "Fan",
       icon: <FiUser />,
-      description: "A casual supporter who buys BTS to show support.",
-      features: ["Buy and sell BTS", "Access meet & greet sessions"],
+      description: "Casual supporter, may purchase small quantities of BTS",
+      features: ["Buy/Sell BTS", "Join meet & greets"],
     },
     {
       type: "Super Fan",
       icon: <FiStar />,
-      description: "An engaged supporter with larger BTS holdings.",
-      features: ["Trade BTS", "Unlock premium perks", "Get early access"],
+      description: "Highly engaged supporter, often holds large BTS quantities",
+      features: ["BTS trading", "Premium perks", "Early access"],
     },
     {
       type: "Investor",
       icon: <FiBarChart2 />,
-      description: "A strategic user focused on trends and market growth.",
-      features: [
-        "Access trading tools",
-        "View trend insights",
-        "Analyze analytics",
-      ],
+      description: "Financially motivated, focused on trending talent",
+      features: ["Trading dashboard", "Trend insights", "Analytics"],
     },
   ];
 
   const buySteps = [
     {
       step: 1,
-      title: "Create Your Account",
+      title: "Create an Account",
       icon: <FiUser />,
       details: [
         "Go to www.thefameexchange.com",
@@ -267,6 +263,29 @@ const HowToBuySell = () => {
         itemVariants={itemVariants}
         fadeIn={fadeIn}
       />
+      <section className="px-4 sm:px-6 lg:px-8 container mx-auto mb-16">
+        <motion.div
+          initial="hidden"
+          animate="visible"
+          variants={fadeIn}
+          className="text-left mb-10"
+        >
+          <h2 className="text-3xl font-semibold text-white mb-4">
+            What is a Branded Talent Share (BTS)?
+          </h2>
+          <p className="text-gray-300 text-lg leading-relaxed">
+            A <strong>Branded Talent Share (BTS)</strong> is a digital
+            engagement unit that allows fans, super fans, and investors to show
+            support for a Talent (Artist, Athlete, or Influencer) while
+            participating in their rising popularity. BTS are{" "}
+            <strong>not securities or equity shares</strong>—they represent
+            <strong>
+              fan-driven sentiment, social value, and brand momentum
+            </strong>
+            .
+          </p>
+        </motion.div>
+      </section>
       <UserTypesSection
         userTypes={userTypes}
         itemVariants={itemVariants}

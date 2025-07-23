@@ -7,15 +7,11 @@ const HeroSection = ({ itemVariants, fadeIn }) => (
   >
     <motion.h1
       variants={itemVariants}
-      className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6"
+      className="text-4xl md:text-5xl lg:text-6xl font-bold"
     >
       How to <span className="gredient-text">Buy</span> or{" "}
       <span className="gredient-text">Sell</span> a Branded Talent Share (BTS)
     </motion.h1>
-    <motion.p variants={itemVariants} className="text-xl max-w-4xl mx-auto">
-      Your complete guide to trading digital engagement units on The Fame
-      Exchange platform
-    </motion.p>
   </motion.section>
 );
 
