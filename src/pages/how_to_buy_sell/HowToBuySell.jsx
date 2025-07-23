@@ -645,24 +645,16 @@ const HowToBuySell = () => {
                         Access Your Portfolio
                       </h3>
                     </div>
-                    <ul className="space-y-2 pl-1">
-                      <li
-                        className="flex items-start gap-2 text-sm"
-                        style={{ color: colors.textSecondary }}
-                      >
-                        <FiArrowRight className="mt-1 text-base gredient-icon" />
+                    <ol className="space-y-2 pl-1 list-decimal list-inside text-sm font-medium custom-golden-list">
+                      <li className="text-white">
                         <span>
-                          Navigate to your ?<strong>Holdings Dashboard</strong>
+                          Navigate to your <strong>Holdings Dashboard</strong>
                         </span>
                       </li>
-                      <li
-                        className="flex items-start gap-2 text-sm"
-                        style={{ color: colors.textSecondary }}
-                      >
-                        <FiArrowRight className="mt-1 text-base gredient-icon" />
+                      <li className="text-white">
                         <span>View all BTS you currently own</span>
                       </li>
-                    </ul>
+                    </ol>
                   </motion.div>
                 </motion.div>
 
@@ -703,27 +695,19 @@ const HowToBuySell = () => {
                         Select the Talent You Want to Sell
                       </h3>
                     </div>
-                    <ul className="space-y-2 pl-1">
-                      <li
-                        className="flex items-start gap-2 text-sm"
-                        style={{ color: colors.textSecondary }}
-                      >
-                        <FiArrowRight className="mt-1 text-base gredient-icon" />
+                    <ol className="space-y-2 pl-1 list-decimal list-inside text-sm font-medium custom-golden-list">
+                      <li className="text-white">
                         <span>
                           Click the Talent name to view current market trends
                           and your purchase history
                         </span>
                       </li>
-                      <li
-                        className="flex items-start gap-2 text-sm"
-                        style={{ color: colors.textSecondary }}
-                      >
-                        <FiArrowRight className="mt-1 text-base gredient-icon" />
+                      <li className="text-white">
                         <span>
                           Choose <strong>Sell BTS</strong>
                         </span>
                       </li>
-                    </ul>
+                    </ol>
                   </motion.div>
                 </motion.div>
 
@@ -764,33 +748,22 @@ const HowToBuySell = () => {
                         Set Sale Amount and Price
                       </h3>
                     </div>
-                    <ul className="space-y-2 pl-1">
-                      <li
-                        className="flex items-start gap-2 text-sm"
-                        style={{ color: colors.textSecondary }}
-                      >
-                        <FiArrowRight className="mt-1 text-base gredient-icon" />
-                        <span>
-                          Sell at <strong>current market price</strong>, or
-                        </span>
+                    <ol className="space-y-2 pl-1 list-decimal list-inside text-sm font-medium custom-golden-list">
+                      <li className="text-white">
+                        <span>You can:</span>
+                        <ul className="list-disc list-inside pl-4 mt-1 space-y-1">
+                          <li className="text-white">
+                            Sell at <strong>current market price</strong>, or
+                          </li>
+                          <li className="text-white">
+                            Set a <strong>custom ask price</strong>
+                          </li>
+                          <li className="text-white">
+                            Choose the number of shares to sell
+                          </li>
+                        </ul>
                       </li>
-                      <li
-                        className="flex items-start gap-2 text-sm"
-                        style={{ color: colors.textSecondary }}
-                      >
-                        <FiArrowRight className="mt-1 text-base gredient-icon" />
-                        <span>
-                          Set a <strong>custom ask price</strong>
-                        </span>
-                      </li>
-                      <li
-                        className="flex items-start gap-2 text-sm"
-                        style={{ color: colors.textSecondary }}
-                      >
-                        <FiArrowRight className="mt-1 text-base gredient-icon" />
-                        <span>Choose the number of shares to sell</span>
-                      </li>
-                    </ul>
+                    </ol>
                   </motion.div>
                 </motion.div>
 
@@ -830,33 +803,19 @@ const HowToBuySell = () => {
                         Confirm Sale
                       </h3>
                     </div>
+
                     <ul className="space-y-2 pl-1">
-                      <li
-                        className="flex items-start gap-2 text-sm"
-                        style={{ color: colors.textSecondary }}
-                      >
-                        <FiArrowRight className="mt-1 text-base gredient-icon" />
-                        <span>Review fees (if any) and net return</span>
-                      </li>
-                      <li
-                        className="flex items-start gap-2 text-sm"
-                        style={{ color: colors.textSecondary }}
-                      >
-                        <FiArrowRight className="mt-1 text-base gredient-icon" />
-                        <span>
+                      {" "}
+                      <li> <strong>Review fees (if any) and net return</strong></li>{" "}
+                      <ol className="space-y-2 pl-1 list-decimal list-inside text-sm font-medium custom-golden-list">
+                        <li className="text-white">
                           Click <strong>“Confirm Sale”</strong>
-                        </span>
-                      </li>
-                      <li
-                        className="flex items-start gap-2 text-sm"
-                        style={{ color: colors.textSecondary }}
-                      >
-                        <FiArrowRight className="mt-1 text-base gredient-icon" />
-                        <span>
+                        </li>
+                        <li className="text-white">
                           Funds will be credited back to your Wallet once the
                           sale is completed
-                        </span>
-                      </li>
+                        </li>
+                      </ol>
                     </ul>
                   </motion.div>
                 </motion.div>

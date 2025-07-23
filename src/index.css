@@ -1027,3 +1027,8 @@ p {
   scrollbar-color: rgba(255, 255, 255, 0.15) transparent;
   scrollbar-width: thin;
 }
+/* Apply golden color to ordered list numbers only */
+ol.custom-golden-list > li::marker {
+  color: #e2cb68; /* your theme's golden color */
+  font-weight: 600;
+}
