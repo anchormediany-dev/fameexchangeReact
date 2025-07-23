@@ -19,7 +19,7 @@ const TermsAndConditions = () => {
           <h1 className="text-4xl md:text-5xl font-bold mb-4">
             Terms and Conditions
           </h1>
-          <div className="text-xl text-gray-300 space-y-2">
+          <div className="text-xl text-gray-300 flex gap-5 items-center justify-center">
             <p>Effective Date: June 15, 2025</p>
             <p>Last Updated: June 15, 2025</p>
           </div>
