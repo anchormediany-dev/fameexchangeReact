@@ -33,8 +33,9 @@ const TermsAndConditions = () => {
             Welcome to <strong>The Fame Exchange</strong>. These Terms and
             Conditions ("Terms") govern your use of our website, mobile
             applications, services, and products (collectively, the "Platform")
-            operated by The Fame Exchange Inc., located at 825 E Gate Blvd,
-            Garden City, NY 11530 ("Fame Exchange," "we," "our," or "us").
+            operated by <strong>The Fame Exchange Inc.,</strong> located at 825
+            E Gate Blvd, Garden City, NY 11530 ("Fame Exchange," "we," "our," or
+            "us").
           </p>
           <p className="mb-8 text-lg">
             Please read these Terms carefully before using the Platform. By
@@ -79,11 +80,13 @@ const TermsAndConditions = () => {
               </p>
               <ul className="list-disc pl-6 space-y-2 mb-4">
                 <li>
-                  A social trading platform where fans and investors can engage
-                  with Talent by acquiring Branded Talent Shares (BTS).
+                  A social trading platform where{" "}
+                  <strong>fans and investors can engage with Talent</strong> by
+                  acquiring <strong>Branded Talent Shares (BTS)</strong>.
                 </li>
                 <li>
-                  A virtual reality platform for live INVERSE Meet & Greets,
+                  A virtual reality platform for live{" "}
+                  <strong>INVERSE Meet & Greets,</strong>
                   enabling fans to schedule real-time digital interactions with
                   Talent.
                 </li>
@@ -97,12 +100,13 @@ const TermsAndConditions = () => {
                 </li>
               </ul>
               <p>
-                The Fame Exchange does not offer or sell any securities or
-                financial instruments and is not a registered broker-dealer,
-                investment advisor, or crowdfunding portal. BTS are not shares
-                in the legal or equity sense—they are non-financial
-                participation tokens representing fan engagement and popularity,
-                not ownership or earnings rights.
+                The Fame Exchange does{" "}
+                <strong>not offer or sell any securities</strong> or financial
+                instruments and is not a registered broker-dealer, investment
+                advisor, or crowdfunding portal. BTS are not shares in the legal
+                or equity sense—they are non-financial participation tokens
+                representing fan engagement and popularity, not ownership or
+                earnings rights.
               </p>
             </section>
 
@@ -162,8 +166,8 @@ const TermsAndConditions = () => {
                 5. Branded Talent Shares (BTS)
               </h2>
               <p className="mb-4">
-                BTS are fan engagement units associated with registered Talent
-                on the platform. They are:
+                BTS are <strong>fan engagement units</strong> associated with
+                registered Talent on the platform. They are:
               </p>
               <ul className="list-disc pl-6 space-y-2 mb-4">
                 <li>
@@ -177,8 +181,13 @@ const TermsAndConditions = () => {
                 </li>
               </ul>
               <p className="mb-4">
-                BTS are not investment vehicles. Any engagement or purchase is
-                entirely at your discretion and for entertainment purposes only.
+                <strong>BTS are not investment vehicles</strong>. Any engagement
+                or purchase is{" "}
+                <strong>
+                  entirely at your discretion and for entertainment purposes
+                  only
+                </strong>
+                .
               </p>
               <p>
                 We reserve the right to modify, suspend, or terminate the BTS
@@ -213,9 +222,12 @@ const TermsAndConditions = () => {
                     b. Fan Cancellations (INVERSE Experiences)
                   </h3>
                   <p>
-                    Cancellations must be made at least 24 hours before the
-                    scheduled session for a full refund. Late cancellations or
-                    no-shows are non-refundable. Exceptions may apply for
+                    Cancellations must be made{" "}
+                    <strong>
+                      at least 24 hours before the scheduled session
+                    </strong>{" "}
+                    for a full refund. Late cancellations or no-shows are{" "}
+                    <strong>non-refundable</strong>. Exceptions may apply for
                     technical issues or verified emergencies at Fame Exchange's
                     discretion.
                   </p>
@@ -276,9 +288,9 @@ const TermsAndConditions = () => {
               </p>
               <p>
                 You retain ownership of any content you submit or upload, but by
-                doing so, you grant The Fame Exchange a non-exclusive,
-                royalty-free, worldwide license to use, display, and promote
-                that content on the platform.
+                doing so, you grant The Fame Exchange a{" "}
+                <strong>non-exclusive, royalty-free, worldwide license</strong>{" "}
+                to use, display, and promote that content on the platform.
               </p>
             </section>
 
@@ -288,16 +300,17 @@ const TermsAndConditions = () => {
                 9. Disclaimers
               </h2>
               <p className="mb-4">
-                The Platform is provided "as-is" and "as-available" without
-                warranties of any kind.
+                The Platform is provided "<strong>as-is</strong>" and "
+                <strong>as-available</strong>" without warranties of any kind.
               </p>
               <p className="mb-4">
-                We do not guarantee that the BTS market or fan interest will
-                increase in value.
+                We do <strong>not guarantee</strong> that the BTS market or fan
+                interest will increase in value.
               </p>
               <p className="mb-4">
-                Fame Exchange does not guarantee availability or specific
-                results from virtual events or BTS purchases.
+                Fame Exchange does{" "}
+                <strong>not guarantee availability or specific results</strong>{" "}
+                from virtual events or BTS purchases.
               </p>
               <p>We disclaim all warranties, including but not limited to:</p>
               <ul className="list-disc pl-6 mt-2 space-y-1">
@@ -313,10 +326,13 @@ const TermsAndConditions = () => {
                 10. Limitation of Liability
               </h2>
               <p className="mb-4">
-                To the fullest extent permitted by law, The Fame Exchange and
-                its affiliates will not be liable for any indirect, incidental,
-                special, consequential, or punitive damages arising from your
-                use or inability to use the platform.
+                To the fullest extent permitted by law,{" "}
+                <strong>
+                  The Fame Exchange and its affiliates will not be liable
+                </strong>{" "}
+                for any indirect, incidental, special, consequential, or
+                punitive damages arising from your use or inability to use the
+                platform.
               </p>
               <p>
                 Total liability shall not exceed the amount paid by you (if any)
@@ -372,11 +388,12 @@ const TermsAndConditions = () => {
                 13. Governing Law and Jurisdiction
               </h2>
               <p>
-                These Terms shall be governed by the laws of the State of New
-                York, without regard to its conflict of law principles. Any
-                legal action or proceeding shall be brought exclusively in the
-                state or federal courts located in Nassau County, NY, and you
-                consent to the jurisdiction and venue of such courts.
+                These Terms shall be governed by the laws of the{" "}
+                <strong>State of New York</strong>, without regard to its
+                conflict of law principles. Any legal action or proceeding shall
+                be brought exclusively in the state or federal courts located in{" "}
+                <strong>Nassau County, NY</strong>, and you consent to the
+                jurisdiction and venue of such courts.
               </p>
             </section>
 
@@ -388,9 +405,9 @@ const TermsAndConditions = () => {
               <p>
                 You agree to first attempt to resolve any dispute informally by
                 contacting us. If resolution cannot be reached, both parties
-                agree to binding arbitration in accordance with the rules of the
-                American Arbitration Association. Class actions and jury trials
-                are waived.
+                agree to <strong>binding arbitration</strong> in accordance with
+                the rules of the American Arbitration Association. Class actions
+                and jury trials are waived.
               </p>
             </section>
 
