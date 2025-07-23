@@ -116,45 +116,41 @@ const HowToBuySell = () => {
     {
       feature: "BTS Watchlist",
       availableTo: "All Users",
-      description:
-        "Bookmark your favorite Talents and get updates automatically.",
+      description: "Track favorite Talent and receive updates",
     },
     {
       feature: "Fame Score Alerts",
       availableTo: "Super Fans, Investors",
-      description:
-        "Get notified when a Talent's fame score or BTS value changes.",
+      description: "Be notified when BTS value or score changes",
     },
     {
-      feature: "Virtual Meet & Greets",
+      feature: "Virtual Meet & Greet Booking",
       availableTo: "Fans & Up",
-      description: "Book exclusive 1-on-1 sessions using your BTS balance.",
+      description: "Spend BTS to schedule 1-on-1 VR time with Talent",
     },
     {
-      feature: "Priority Drops",
+      feature: "Priority Drops Access",
       availableTo: "Super Fans",
-      description:
-        "Be first in line for limited-edition BTS sales and launches.",
+      description: "Early entry to new or limited-edition BTS sales",
     },
     {
-      feature: "Advanced Analytics",
+      feature: "Market Insights & Analytics",
       availableTo: "Investors",
-      description:
-        "Compare trends, visualize performance, and optimize timing.",
+      description: "Data dashboards, trending comparisons",
     },
   ];
 
   const tips = [
-    "BTS values are influenced by media visibility, fan engagement, and momentum.",
-    "Stay active with BTS and Talent pages to increase your community impact.",
-    "Consider holding shares during hype surges for potentially higher returns.",
+    "BTS values fluctuate based on talent visibility, media mentions, and fan activity.",
+    "Engage with the talent’s posts and BTS to increase your potential influence.",
+    "Selling quickly may lead to lower returns, while holding during surges could increase value.",
   ];
 
   const importantNotes = [
-    "BTS are for entertainment and engagement purposes only—not investments.",
-    "They do not grant equity, ownership, or voting rights.",
-    "All transactions are processed in U.S. Dollars (USD).",
-    "You may need to complete identity verification for large transactions (per AML/KYC policies).",
+    "BTS are for entertainment and engagement purposes only.",
+    "They do not represent legal equity, voting rights, or ownership in a business.",
+    "All transactions are in U.S. Dollars.",
+    "You may be required to submit ID verification for large-value transactions (per our AML/KYC policy).",
   ];
 
   return (
