@@ -1,5 +1,6 @@
+// src/features/auth/Signup.js
 import { useState, useRef, useEffect } from "react";
-import { FaEnvelope, FaLock, FaUser, FaChevronDown } from "react-icons/fa";
+import { FaEnvelope, FaLock, FaUser } from "react-icons/fa";
 import { FcGoogle } from "react-icons/fc";
 import { FaFacebookF } from "react-icons/fa";
 import { IoEyeOffSharp, IoEyeSharp } from "react-icons/io5";
@@ -9,62 +10,42 @@ import SignupOtpVerification from "../../components/SignupOtpVerification";
 import siteLogo from "../../assets/images/site-logo.png";
 import TalentDropdown from "../../components/TalentDropdown";
 import RepresentationSection from "../../components/RepresentationSection";
-
-const talentOptions = ["Actor", "Model", "Athlete", "Entertainer"];
-const representationOptions = [
-  "Brand Ambassador",
-  "Host",
-  "Social Media",
-  "Spokesperson",
-];
-const habitOptions = [
-  "Reading",
-  "Traveling",
-  "Cooking",
-  "Fitness",
-  "Gaming",
-  "Music",
-];
-
+import { useSignupMutation } from "../../app/authApi";
+import { useNavigate } from "react-router-dom";
 const Signup = () => {
+  const [signup, { isLoading, error }] = useSignupMutation();
+  const navigate = useNavigate();
   const [formData, setFormData] = useState({
-    talentName: "",
-    stageName: "",
-    brandName: "",
+    name: "",
     email: "",
     password: "",
     confirmPassword: "",
+    stage_name: "",
+    token_brand_name: "",
   });
   const [touched, setTouched] = useState({
-    talentName: false,
+    name: false,
     email: false,
     password: false,
     confirmPassword: false,
   });
   const [showPassword, setShowPassword] = useState(false);
-  const [hasRepresentation, setHasRepresentation] = useState(false);
   const [isOver18, setIsOver18] = useState(false);
+  const [agreedTerms, setAgreedTerms] = useState(false);
   const [isOtpOpen, setIsOtpOpen] = useState(false);
+  const [signupResponse, setSignupResponse] = useState(null);
 
-  // Dropdown states
-  const [showTalentDropdown, setShowTalentDropdown] = useState(false);
-  const [showRepresentationDropdown, setShowRepresentationDropdown] =
-    useState(false);
-  const [showHabitsDropdown, setShowHabitsDropdown] = useState(false);
-  const [selectedTalents, setSelectedTalents] = useState([]);
-  const [selectedRepresentationTypes, setSelectedRepresentationTypes] =
-    useState([]);
-  const [selectedHabits, setSelectedHabits] = useState([]);
-
-  const talentDropdownRef = useRef(null);
-  const representationDropdownRef = useRef(null);
-  const habitsDropdownRef = useRef(null);
+  // Talent and representation data
+  const [talentData, setTalentData] = useState([]);
+  const [isRepHave, setIsRepHave] = useState(false);
+  const [selectedReps, setSelectedReps] = useState([]);
+  const [representationData, setRepresentationData] = useState([]);
 
   // Validation
   const isEmailValid = formData.email.includes("@");
   const isPasswordValid = formData.password.length >= 6;
   const passwordsMatch = formData.password === formData.confirmPassword;
-  const isTalentNameValid = formData.talentName.trim() !== "";
+  const isNameValid = formData.name.trim() !== "";
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -74,110 +55,74 @@ const Signup = () => {
     }));
   };
 
-  // const handleSubmit = (e) => {
-  //   e.preventDefault();
-  //   if (
-  //     !isEmailValid ||
-  //     !isPasswordValid ||
-  //     !passwordsMatch ||
-  //     !isTalentNameValid ||
-  //     !isOver18
-  //   )
-  //     return;
-  //   console.log("Submit", {
-  //     ...formData,
-  //     talents: selectedTalents,
-  //     representationTypes: selectedRepresentationTypes,
-  //     habits: selectedHabits,
-  //   });
-  //   setIsOtpOpen(true);
-  // };
-  // Your are checkbox
-  const [selectedOptions, setSelectedOptions] = useState([]);
-
-  const options = ["Talent", "Athlete", "Influencer"];
-
-  const handleCheckboxChange = (option) => {
-    if (selectedOptions.includes(option)) {
-      setSelectedOptions(selectedOptions.filter((item) => item !== option));
-    } else {
-      setSelectedOptions([...selectedOptions, option]);
-    }
-  };
-
-  // Dropdown toggle functions
-  const toggleSelection = (item, selectedItems, setSelectedItems) => {
-    if (selectedItems.includes(item)) {
-      setSelectedItems(selectedItems.filter((t) => t !== item));
-    } else {
-      setSelectedItems([...selectedItems, item]);
-    }
-  };
-
-  // Close dropdowns when clicking outside
-  useEffect(() => {
-    const handleClickOutside = (event) => {
-      if (
-        talentDropdownRef.current &&
-        !talentDropdownRef.current.contains(event.target)
-      ) {
-        setShowTalentDropdown(false);
-      }
-      if (
-        representationDropdownRef.current &&
-        !representationDropdownRef.current.contains(event.target)
-      ) {
-        setShowRepresentationDropdown(false);
-      }
-      if (
-        habitsDropdownRef.current &&
-        !habitsDropdownRef.current.contains(event.target)
-      ) {
-        setShowHabitsDropdown(false);
-      }
-    };
-
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
-    };
-  }, []);
-  const [talentFormData, setTalentFormData] = useState({
-    talents: [],
-    subTalents: [],
-  });
-
   const handleTalentChange = (data) => {
-    setTalentFormData(data);
+    setTalentData(data);
   };
 
-  const handleSubmit = (e) => {
+  const handleRepresentationChange = (data) => {
+    setIsRepHave(data.hasRepresentation);
+    setSelectedReps(data.selectedRepTypes);
+    setRepresentationData(data.representatives);
+  };
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
+
     if (
       !isEmailValid ||
       !isPasswordValid ||
       !passwordsMatch ||
-      !isTalentNameValid ||
-      !isOver18
-    )
+      !isNameValid ||
+      !isOver18 ||
+      !agreedTerms
+    ) {
       return;
+    }
 
-    console.log("Submit", {
-      ...formData,
-      talents: selectedTalents,
-      subTalents: selectedSubTalents,
-      representationTypes: selectedRepresentationTypes,
-      habits: selectedHabits,
+    // Format talent data for API
+    const formattedTalentData = talentData.talents.map((talent) => {
+      const talentOption = talentOptions.find((t) => t.value === talent);
+      return {
+        category: talentOption?.label || talent,
+        subcategories: talentOption?.subcategories
+          ? talentData.subTalents.filter((sub) =>
+              talentOption.subcategories.includes(sub)
+            )
+          : [],
+      };
     });
 
-    setIsOtpOpen(true);
+    const signupData = {
+      name: formData.name,
+      email: formData.email,
+      password: formData.password,
+      stage_name: formData.stage_name,
+      role: "TALENT",
+      token_brand_name: formData.token_brand_name,
+      is_over_18: isOver18,
+      agreed_terms: agreedTerms,
+      talent: formattedTalentData,
+      is_rep_have: isRepHave,
+      selected_reps: selectedReps,
+      representation: representationData,
+    };
+
+    try {
+      const response = await signup(signupData).unwrap();
+      setSignupResponse(response);
+      // setIsOtpOpen(true);
+      navigate(`/verify/${formData.email}`);
+    } catch (err) {
+      console.error("Signup failed:", err);
+      navigate(`/verify/${formData.email}`);
+    }
   };
 
   return (
     <>
       {!isOtpOpen ? (
         <MotionPageWrapper>
-          <div className="flex mt-10 lg:mt-16 2xl:mt-20 py-12 2xl:py-16  relative bg-[#171717] overflow-hidden">
+          <div className="flex mt-10 lg:mt-16 2xl:mt-20 py-12 2xl:py-16 relative bg-[#171717] overflow-hidden">
             <div className="w-full container flex flex-col-reverse lg:flex-row gap-8 z-10">
               {/* Left: Signup Form (3/4 width on large screens) */}
               <div className="lg:w-[70%] bg-[#222222] p-8 rounded-xl border border-[#333333]">
@@ -186,19 +131,19 @@ const Signup = () => {
                 </h2>
 
                 <form onSubmit={handleSubmit} className="space-y-6">
-                  {/* First row - Talent Name and Email */}
+                  {/* First row - Name and Email */}
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    {/* Talent Name */}
+                    {/* Name */}
                     <div>
                       <label
-                        htmlFor="talentName"
+                        htmlFor="name"
                         className="block text-white text-sm font-medium mb-2"
                       >
                         User Name*
                       </label>
                       <div
                         className={`flex items-center border rounded-lg px-4 py-3 bg-[#2d2d2d] ${
-                          touched.talentName && !isTalentNameValid
+                          touched.name && !isNameValid
                             ? "border-red-500"
                             : "border-none"
                         }`}
@@ -206,20 +151,18 @@ const Signup = () => {
                         <FaUser className="text-gray-400 mr-3" />
                         <input
                           type="text"
-                          id="talentName"
-                          name="talentName"
+                          id="name"
+                          name="name"
                           placeholder="User Name"
-                          value={formData.talentName}
+                          value={formData.name}
                           onChange={handleChange}
-                          onBlur={() =>
-                            setTouched({ ...touched, talentName: true })
-                          }
+                          onBlur={() => setTouched({ ...touched, name: true })}
                           className="bg-transparent outline-none w-full text-white placeholder-gray-400"
                         />
                       </div>
-                      {touched.talentName && !isTalentNameValid && (
+                      {touched.name && !isNameValid && (
                         <p className="text-red-500 text-xs mt-1">
-                          Talent name is required
+                          Name is required
                         </p>
                       )}
                     </div>
@@ -264,7 +207,7 @@ const Signup = () => {
                     {/* Stage Name */}
                     <div>
                       <label
-                        htmlFor="stageName"
+                        htmlFor="stage_name"
                         className="block text-white text-sm font-medium mb-2"
                       >
                         Stage Name
@@ -273,10 +216,10 @@ const Signup = () => {
                         <FaUser className="text-gray-400 mr-3" />
                         <input
                           type="text"
-                          id="stageName"
-                          name="stageName"
+                          id="stage_name"
+                          name="stage_name"
                           placeholder="Stage Name"
-                          value={formData.stageName}
+                          value={formData.stage_name}
                           onChange={handleChange}
                           className="bg-transparent outline-none w-full text-white placeholder-gray-400"
                         />
@@ -286,7 +229,7 @@ const Signup = () => {
                     {/* Brand Name */}
                     <div>
                       <label
-                        htmlFor="brandName"
+                        htmlFor="token_brand_name"
                         className="block text-white text-sm font-medium mb-2"
                       >
                         Brand Name
@@ -295,10 +238,10 @@ const Signup = () => {
                         <FaUser className="text-gray-400 mr-3" />
                         <input
                           type="text"
-                          id="brandName"
-                          name="brandName"
+                          id="token_brand_name"
+                          name="token_brand_name"
                           placeholder="Brand Name"
-                          value={formData.brandName}
+                          value={formData.token_brand_name}
                           onChange={handleChange}
                           className="bg-transparent outline-none w-full text-white placeholder-gray-400"
                         />
@@ -402,173 +345,13 @@ const Signup = () => {
                       )}
                     </div>
                   </div>
+
                   <TalentDropdown onFormChange={handleTalentChange} />
 
-                  {/* <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <div className="flex sm:flex-row flex-col sm:items-center gap-3 pr-3">
-                      <h3 className="text-white font-medium">You Are:</h3>
-                      <div className="flex flex-col sm:flex-row gap-3">
-                        {options.map((option) => (
-                          <label
-                            key={option}
-                            className="flex items-center space-x-3 cursor-pointer"
-                          >
-                            <input
-                              type="checkbox"
-                              checked={selectedOptions.includes(option)}
-                              onChange={() => handleCheckboxChange(option)}
-                              className="h-5 w-5 rounded border-2 border-[#F3BA18] bg-transparent text-[#F3BA18] focus:ring-[#F3BA18] focus:ring-offset-[#171717]"
-                            />
-                            <span className="text-white">{option}</span>
-                          </label>
-                        ))}
-                      </div>
-                    </div> */}
+                  <RepresentationSection
+                    onFormChange={handleRepresentationChange}
+                  />
 
-                  {/* Talent Dropdown */}
-                  {/* <div className="w-full">
-                      <div className="relative" ref={talentDropdownRef}>
-                        <button
-                          type="button"
-                          onClick={() =>
-                            setShowTalentDropdown(!showTalentDropdown)
-                          }
-                          className="w-full flex items-center justify-between border border-[#F3BA18] rounded-lg px-3  py-3 bg-[#2d2d2d] text-white text-left"
-                        >
-                          <span>
-                            {selectedTalents.length > 0
-                              ? selectedTalents.join(", ")
-                              : "What's Your Talent(s)"}
-                          </span>
-                          <FaChevronDown
-                            className={`transition-transform ${
-                              showTalentDropdown ? "transform rotate-180" : ""
-                            }`}
-                          />
-                        </button>
-                        {showTalentDropdown && (
-                          <div className="absolute z-10 mt-1 w-full bg-[#2d2d2d] border border-[#F3BA18] rounded-lg shadow-lg max-h-60 overflow-auto">
-                            {talentOptions.map((talent) => (
-                              <div
-                                key={talent}
-                                className="p-3 hover:bg-[#3d3d3d]"
-                              >
-                                <label className="flex items-center space-x-3 cursor-pointer">
-                                  <input
-                                    type="checkbox"
-                                    checked={selectedTalents.includes(talent)}
-                                    onChange={() =>
-                                      toggleSelection(
-                                        talent,
-                                        selectedTalents,
-                                        setSelectedTalents
-                                      )
-                                    }
-                                    className="rounded bg-transparent border-[#F3BA18] text-[#F3BA18] focus:ring-[#F3BA18] h-5 w-5"
-                                  />
-                                  <span className="text-white">{talent}</span>
-                                </label>
-                              </div>
-                            ))}
-                          </div>
-                        )}
-                      </div>
-                    </div> */}
-                  {/* </div> */}
-
-                  {touched.talentName && !isOver18 && (
-                    <p className="text-red-500 text-xs mt-1">
-                      You must be 18 or older to sign up
-                    </p>
-                  )}
-
-                  {/* Representation Checkbox and Dropdown */}
-                  {/* <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <div className="flex items-center space-x-3">
-                      <input
-                        type="checkbox"
-                        id="representation"
-                        checked={hasRepresentation}
-                        onChange={(e) => {
-                          setHasRepresentation(e.target.checked);
-                          if (!e.target.checked) {
-                            setSelectedRepresentationTypes([]);
-                            setShowRepresentationDropdown(false);
-                          }
-                        }}
-                        className="rounded bg-transparent border-[#F3BA18] text-[#F3BA18] focus:ring-[#F3BA18] h-5 w-5"
-                      />
-                      <label
-                        htmlFor="representation"
-                        className={`text-sm ${
-                          hasRepresentation ? "text-[#F3BA18]" : "text-gray-400"
-                        }`}
-                      >
-                        I am Represented
-                      </label>
-                    </div>
-
-                    {hasRepresentation && (
-                      <div>
-                        <div
-                          className="relative"
-                          ref={representationDropdownRef}
-                        >
-                          <button
-                            type="button"
-                            onClick={() =>
-                              setShowRepresentationDropdown(
-                                !showRepresentationDropdown
-                              )
-                            }
-                            className="w-full flex items-center justify-between border border-[#F3BA18] rounded-lg px-4 py-3 bg-[#2d2d2d] text-white text-left"
-                          >
-                            <span>
-                              {selectedRepresentationTypes.length > 0
-                                ? selectedRepresentationTypes.join(", ")
-                                : "Representation Type"}
-                            </span>
-                            <FaChevronDown
-                              className={`transition-transform ${
-                                showRepresentationDropdown
-                                  ? "transform rotate-180"
-                                  : ""
-                              }`}
-                            />
-                          </button>
-                          {showRepresentationDropdown && (
-                            <div className="absolute z-10 mt-1 w-full bg-[#2d2d2d] border border-[#F3BA18] rounded-lg shadow-lg max-h-60 overflow-auto">
-                              {representationOptions.map((type) => (
-                                <div
-                                  key={type}
-                                  className="p-3 hover:bg-[#3d3d3d]"
-                                >
-                                  <label className="flex items-center space-x-3 cursor-pointer">
-                                    <input
-                                      type="checkbox"
-                                      checked={selectedRepresentationTypes.includes(
-                                        type
-                                      )}
-                                      onChange={() =>
-                                        toggleSelection(
-                                          type,
-                                          selectedRepresentationTypes,
-                                          setSelectedRepresentationTypes
-                                        )
-                                      }
-                                      className="rounded bg-transparent border-[#F3BA18] text-[#F3BA18] focus:ring-[#F3BA18] h-5 w-5"
-                                    />
-                                    <span className="text-white">{type}</span>
-                                  </label>
-                                </div>
-                              ))}
-                            </div>
-                          )}
-                        </div>
-                      </div>
-                    )}
-                  </div> */}
-                  <RepresentationSection />
                   {/* Age Checkbox */}
                   <div className="flex items-center space-x-3">
                     <input
@@ -587,12 +370,14 @@ const Signup = () => {
                       I'm over 18 years old*
                     </label>
                   </div>
+
                   {/* Terms & Conditions Checkbox */}
                   <div className="flex items-center space-x-3 mb-6">
                     <input
                       type="checkbox"
                       id="terms"
-                      required
+                      checked={agreedTerms}
+                      onChange={(e) => setAgreedTerms(e.target.checked)}
                       className="m rounded bg-transparent border-[#F3BA18] text-[#F3BA18] focus:ring-[#F3BA18] h-5 w-5 flex-shrink-0"
                     />
                     <label htmlFor="terms" className="text-sm text-gray-300">
@@ -615,6 +400,7 @@ const Signup = () => {
                       *
                     </label>
                   </div>
+
                   {/* Submit Button */}
                   <button
                     type="submit"
@@ -622,13 +408,22 @@ const Signup = () => {
                       !isEmailValid ||
                       !isPasswordValid ||
                       !passwordsMatch ||
-                      !isTalentNameValid ||
-                      !isOver18
+                      !isNameValid ||
+                      !isOver18 ||
+                      !agreedTerms ||
+                      isLoading
                     }
                     className="w-full bg-gradient-to-r from-[#F3BA18] to-[#FF9900] hover:from-[#FF9900] hover:to-[#F3BA18] text-white font-bold py-3 px-4 rounded-lg transition-all duration-300 disabled:opacity-80 disabled:cursor-not-allowed"
                   >
-                    Sign Up
+                    {isLoading ? "Signing Up..." : "Sign Up"}
                   </button>
+
+                  {error && (
+                    <div className="text-red-500 text-center mt-2">
+                      {error.data?.message ||
+                        "Signup failed. Please try again."}
+                    </div>
+                  )}
                 </form>
 
                 {/* Divider */}
@@ -687,10 +482,49 @@ const Signup = () => {
           </div>
         </MotionPageWrapper>
       ) : (
-        <SignupOtpVerification />
+        <SignupOtpVerification signupResponse={signupResponse} />
       )}
     </>
   );
 };
 
 export default Signup;
+
+// Talent options data (should be in a separate constants file or at the top of the component file)
+const talentOptions = [
+  {
+    label: "Athlete",
+    value: "Athlete",
+    subcategories: [
+      "Baseball",
+      "Basketball",
+      "Football",
+      "Soccer",
+      "Tennis",
+      "Golf",
+      "Hockey",
+      "Swimming",
+      "Track & Field",
+      "Volleyball",
+      "Wrestling",
+      "MMA",
+      "Boxing",
+      "Cycling",
+      "Skateboarding",
+      "Snowboarding",
+      "Surfing",
+      "Gymnastics",
+      "Lacrosse",
+      "Rugby",
+    ],
+  },
+  { label: "Actor", value: "Actor" },
+  { label: "Model", value: "Model" },
+  { label: "Musician", value: "Musician" },
+  { label: "Band", value: "Band" },
+  { label: "Entertainer", value: "Entertainer" },
+  { label: "Brand Ambassador", value: "Brand Ambassador" },
+  { label: "Host", value: "Host" },
+  { label: "Social Media Rep", value: "Social Media Rep" },
+  { label: "Spokesperson", value: "Spokesperson" },
+];

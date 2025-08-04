@@ -2,6 +2,8 @@ import { Routes, Route, useLocation, Outlet } from "react-router-dom";
 import { AnimatePresence } from "framer-motion";
 import Login from "./pages/login/Login";
 import MotionPageWrapper from "./components/MotionPageWrapper";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import FAQ from "./pages/FAQ";
 // import Dashboard from "./pages/dashboard/Dashboard";
 import BrandedTokens from "./pages/branded_tokens/BrandedTokens";
@@ -30,6 +32,7 @@ import Footer from "./components/Footer";
 import Signup from "./pages/signup/Signup";
 import TalentDashboard from "./pages/talent_dashboard/TalentDashboard";
 import TalentListing from "./pages/talent/TalentListing";
+import SignupOtpVerification from "./components/SignupOtpVerification";
 
 // Simple Black Header Component
 const SimpleHeader = () => {
@@ -171,6 +174,14 @@ export default function App() {
             element={
               <MotionPageWrapper>
                 <Signup />
+              </MotionPageWrapper>
+            }
+          />
+          <Route
+            path="verify/:email"
+            element={
+              <MotionPageWrapper>
+                <SignupOtpVerification />
               </MotionPageWrapper>
             }
           />
@@ -353,6 +364,17 @@ export default function App() {
           }
         />
       </Routes>
+      <ToastContainer
+        position="top-right"
+        autoClose={3000}
+        hideProgressBar={false}
+        newestOnTop
+        closeOnClick
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="dark"
+      />
     </AnimatePresence>
   );
 }
