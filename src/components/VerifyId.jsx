@@ -79,14 +79,12 @@ const VerifyId = () => {
                 </div>
               )}
             </div>
-
             {/* Conditional Text (Removed after image upload) */}
             {!selectedImage && (
               <h2 className="text-white heading-500-40">
                 We need to verify you id
               </h2>
             )}
-
             {/* Upload Button (Initially visible if no image is selected) */}
             {!selectedImage && (
               <button
@@ -96,7 +94,7 @@ const VerifyId = () => {
                 Upload
               </button>
             )}
-
+            1234
             {/* Submit Button (Visible after image is uploaded) */}
             {selectedImage && (
               <button
@@ -115,7 +113,7 @@ const VerifyId = () => {
   );
 };
 
-// export default VerifyId;
+export default VerifyId;
 // import React, { useState, useRef } from "react";
 // import idCardPlaceholder from "../assets/images/id-card-placeholder.png";
 // import { FaPencilAlt } from "react-icons/fa";
