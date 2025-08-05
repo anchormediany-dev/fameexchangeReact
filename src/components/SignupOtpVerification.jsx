@@ -1,12 +1,22 @@
-import React, { useState } from "react";
-import { useParams } from "react-router-dom";
+import React, { useState, useEffect } from "react";
+import { useParams, useLocation ,useNavigate} from "react-router-dom";
 import MotionPageWrapper from "./MotionPageWrapper";
 import VerifyId from "../components/VerifyId";
 import { useVerifyOtpMutation } from "../app/authApi";
 import { toast } from "react-toastify";
 
 const SignupOtpVerification = () => {
-  const { email } = useParams(); // 🔥 Get email from URL: /verify/:email
+  const location = useLocation();
+  const navigate = useNavigate();
+  const email = location.state?.email || sessionStorage.getItem("signupEmail");
+  useEffect(() => {
+    if (!email) {
+      // Redirect if email is missing
+      navigate("/signup");
+    }
+  }, [email, navigate]);
+
+  if (!email) return null;
   const [code, setCode] = useState(["", "", "", ""]);
   const [isVerifyOpen, setIsVerifyOpen] = useState(false);
   const [verifyOtp, { isLoading, isError, error }] = useVerifyOtpMutation();

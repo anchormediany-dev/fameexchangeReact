@@ -111,10 +111,13 @@ const Signup = () => {
       const response = await signup(signupData).unwrap();
       setSignupResponse(response);
       // setIsOtpOpen(true);
-      navigate(`/verify/${formData.email}`);
+      sessionStorage.setItem("signupEmail", formData.email);
+      navigate("/verify-otp", {
+        state: { email: formData.email },
+      });
     } catch (err) {
       console.error("Signup failed:", err);
-      navigate(`/verify/${formData.email}`);
+      // navigate(`/verify/${formData.email}`);
     }
   };
 

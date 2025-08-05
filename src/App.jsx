@@ -178,7 +178,7 @@ export default function App() {
             }
           />
           <Route
-            path="verify/:email"
+            path="verify-otp"
             element={
               <MotionPageWrapper>
                 <SignupOtpVerification />
