@@ -7,7 +7,11 @@ import { Link, useNavigate } from "react-router-dom";
 import MotionPageWrapper from "../../components/MotionPageWrapper";
 import ForgotPassword from "../../components/ForgotPassword";
 import siteLogo from "../../assets/images/site-logo.png";
-
+import { jwtDecode } from "jwt-decode";
+import { useSigninMutation } from "../../app/authApi";
+import { useDispatch } from "react-redux";
+import { toast } from "react-toastify";
+import { setCredentials } from "../../features/auth/authSlice";
 const LoginPage = () => {
   const [formData, setFormData] = useState({ email: "", password: "" });
   const [touched, setTouched] = useState({ email: false, password: false });
@@ -23,11 +27,35 @@ const LoginPage = () => {
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
-  const handleSubmit = (e) => {
+  // const handleSubmit = (e) => {
+  //   e.preventDefault();
+  //   if (!isEmailValid || !isPasswordValid) return;
+  //   console.log("Login submitted: ", formData);
+  //   navigate("/dashboard");
+  // };
+  const dispatch = useDispatch();
+  const [signin, { isLoading }] = useSigninMutation();
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
+
     if (!isEmailValid || !isPasswordValid) return;
-    console.log("Login submitted: ", formData);
-    navigate("/dashboard");
+
+    try {
+      const response = await signin(formData).unwrap(); // response = { message, token }
+
+      const { token } = response;
+      const decodedUser = jwtDecode(token); // decodedUser = { id, email, is_verified, ... }
+      console.log(decodedUser);
+      dispatch(setCredentials({ accessToken: token, user: decodedUser }));
+      toast.success("Login successful!");
+      setTimeout(() => {
+        navigate("/verify-id");
+      }, 500);
+    } catch (error) {
+      console.error("Login failed:", error);
+      toast.error(error?.data?.message || "Login failed. Please try again.");
+    }
   };
 
   return !showForgotPassword ? (
@@ -131,7 +159,7 @@ const LoginPage = () => {
               <button
                 type="submit"
                 disabled={!isEmailValid || !isPasswordValid}
-                className="w-full bg-gradient-to-r from-[#F3BA18] to-[#FF9900] hover:from-[#FF9900] hover:to-[#F3BA18] text-white font-bold py-3 px-4 rounded-lg transition-all duration-300 disabled:opacity-80 disabled:cursor-not-allowed"
+                className="w-full bg-gradient-to-r cursor-pointer from-[#F3BA18] to-[#FF9900] hover:from-[#FF9900] hover:to-[#F3BA18] text-white font-bold py-3 px-4 rounded-lg transition-all duration-300 disabled:opacity-80 disabled:cursor-not-allowed"
               >
                 Log In
               </button>

@@ -1,142 +1,19 @@
-import React, { useState, useRef } from "react";
-import idCardPlaceholder from "../assets/images/id-card-placeholder.png";
-import { FaPencilAlt } from "react-icons/fa";
-import NetworthCalculator from "./NetworthCalculator";
-import { useVerifyIdMutation } from "../app/authApi";
-const VerifyId = () => {
-  const [selectedImage, setSelectedImage] = useState(null);
-  const fileInputRef = useRef(null);
-  const [isHovering, setIsHovering] = useState(false);
-  const [isVerifyCompleted, setIsVerifyCompleted] = useState(false);
-  const handleImageUpload = (event) => {
-    const file = event.target.files[0];
-    if (file) {
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        setSelectedImage(reader.result);
-      };
-      reader.readAsDataURL(file);
-    }
-  };
-
-  const handleButtonClick = () => {
-    fileInputRef.current.click();
-  };
-
-  const handleChangeImage = () => {
-    fileInputRef.current.click();
-  };
-
-  const handleSubmit = () => {
-    if (selectedImage) {
-      console.log("Submitting image:", selectedImage);
-    } else {
-      alert("Please upload an image first.");
-    }
-    setIsVerifyCompleted(true);
-  };
-
-  return (
-    <>
-      {!isVerifyCompleted ? (
-        <div className="min-h-screen bg-[#0b0b0b] relative overflow-hidden flex items-center justify-center">
-          {/* Background Bubbles */}
-          <div className="absolute top-[-100px] left-[-100px] w-[300px] h-[300px] rounded-full bg-white opacity-[0.03] animate-bubble1" />
-          <div className="absolute top-[120px] right-[180px] w-[120px] h-[120px] rounded-full bg-white opacity-[0.06] animate-bubble2" />
-          <div className="absolute bottom-[100px] left-[80px] w-[50px] h-[50px] rounded-full bg-white opacity-[0.06] animate-bubble3" />
-          <div className="absolute bottom-[40px] right-[40px] w-[80px] h-[80px] rounded-full bg-white opacity-[0.04] animate-bubble4" />
-          <div className="absolute top-[50px] right-[-50px] w-[150px] h-[150px] rounded-full bg-white opacity-[0.05] animate-bubble5" />
-          <div className="absolute bottom-[-80px] left-[-30px] w-[200px] h-[200px] rounded-full bg-white opacity-[0.04] animate-bubble6" />
-
-          {/* Content */}
-          <div className=" z-10 flex flex-col items-center gap-8 text-center p-6">
-            {/* ID Card Upload Area */}
-            <div
-              className="relative w-48 h-48 rounded-md overflow-hidden cursor-pointer"
-              onMouseEnter={() => selectedImage && setIsHovering(true)}
-              onMouseLeave={() => setIsHovering(false)}
-              onClick={selectedImage ? handleChangeImage : handleButtonClick}
-            >
-              <img
-                src={selectedImage || idCardPlaceholder}
-                alt="Identity verification"
-                className={`object-cover w-full h-full transition-opacity duration-300 ${
-                  isHovering && selectedImage ? "opacity-50" : "opacity-100"
-                }`}
-              />
-              <input
-                type="file"
-                accept="image/*"
-                onChange={handleImageUpload}
-                className="hidden"
-                ref={fileInputRef}
-              />
-              {isHovering && selectedImage && (
-                <div className="absolute inset-0 flex items-center justify-center bg-black bg-opacity-50">
-                  <div className="bg-primary text-black rounded-full p-2 cursor-pointer">
-                    <FaPencilAlt />
-                  </div>
-                </div>
-              )}
-            </div>
-            {/* Conditional Text (Removed after image upload) */}
-            {!selectedImage && (
-              <h2 className="text-white heading-500-40">
-                We need to verify you id
-              </h2>
-            )}
-            {/* Upload Button (Initially visible if no image is selected) */}
-            {!selectedImage && (
-              <button
-                onClick={handleButtonClick}
-                className="bg-black w-full hover:scale-105 text-primary heading-500-23 px-6 py-3 rounded-xl transition-all duration-300 relative group  cursor-pointer"
-              >
-                Upload
-              </button>
-            )}
-            1234
-            {/* Submit Button (Visible after image is uploaded) */}
-            {selectedImage && (
-              <button
-                onClick={handleSubmit}
-                className="bg-black w-full hover:scale-105 text-primary  px-6 py-3 rounded-xl transition-all duration-300 relative group cursor-pointer heading-500-23"
-              >
-                Submit
-              </button>
-            )}
-          </div>
-        </div>
-      ) : (
-        <NetworthCalculator />
-      )}
-    </>
-  );
-};
-
-export default VerifyId;
 // import React, { useState, useRef } from "react";
 // import idCardPlaceholder from "../assets/images/id-card-placeholder.png";
 // import { FaPencilAlt } from "react-icons/fa";
 // import NetworthCalculator from "./NetworthCalculator";
 // import { useVerifyIdMutation } from "../app/authApi";
-// import { toast } from "react-toastify";
-
 // const VerifyId = () => {
 //   const [selectedImage, setSelectedImage] = useState(null);
-//   const [imageFile, setImageFile] = useState(null);
 //   const fileInputRef = useRef(null);
 //   const [isHovering, setIsHovering] = useState(false);
 //   const [isVerifyCompleted, setIsVerifyCompleted] = useState(false);
-
-//   const [verifyId, { isLoading }] = useVerifyIdMutation();
-
 //   const handleImageUpload = (event) => {
 //     const file = event.target.files[0];
 //     if (file) {
-//       setImageFile(file); // Store file for FormData
 //       const reader = new FileReader();
 //       reader.onloadend = () => {
-//         setSelectedImage(reader.result); // For preview only
+//         setSelectedImage(reader.result);
 //       };
 //       reader.readAsDataURL(file);
 //     }
@@ -150,25 +27,13 @@ export default VerifyId;
 //     fileInputRef.current.click();
 //   };
 
-//   const handleSubmit = async () => {
-//     if (!imageFile) {
-//       toast.error("Please upload an image first.");
-//       return;
+//   const handleSubmit = () => {
+//     if (selectedImage) {
+//       console.log("Submitting image:", selectedImage);
+//     } else {
+//       alert("Please upload an image first.");
 //     }
-
-//     const formData = new FormData();
-//     formData.append("images", imageFile); // Key must match your backend
-
-//     try {
-//       const response = await verifyId(formData).unwrap();
-//       toast.success(
-//         response?.message || "ID verification submitted successfully."
-//       );
-//       setIsVerifyCompleted(true);
-//     } catch (error) {
-//       console.error("Upload failed:", error);
-//       toast.error(error?.data?.error || "Failed to upload ID.");
-//     }
+//     setIsVerifyCompleted(true);
 //   };
 
 //   return (
@@ -184,7 +49,8 @@ export default VerifyId;
 //           <div className="absolute bottom-[-80px] left-[-30px] w-[200px] h-[200px] rounded-full bg-white opacity-[0.04] animate-bubble6" />
 
 //           {/* Content */}
-//           <div className="z-10 flex flex-col items-center gap-8 text-center p-6">
+//           <div className=" z-10 flex flex-col items-center gap-8 text-center p-6">
+//             {/* ID Card Upload Area */}
 //             <div
 //               className="relative w-48 h-48 rounded-md overflow-hidden cursor-pointer"
 //               onMouseEnter={() => selectedImage && setIsHovering(true)}
@@ -213,29 +79,29 @@ export default VerifyId;
 //                 </div>
 //               )}
 //             </div>
-
+//             {/* Conditional Text (Removed after image upload) */}
 //             {!selectedImage && (
 //               <h2 className="text-white heading-500-40">
-//                 We need to verify your ID
+//                 We need to verify you id
 //               </h2>
 //             )}
-
+//             {/* Upload Button (Initially visible if no image is selected) */}
 //             {!selectedImage && (
 //               <button
 //                 onClick={handleButtonClick}
-//                 className="bg-black w-full hover:scale-105 text-primary heading-500-23 px-6 py-3 rounded-xl transition-all duration-300 relative group cursor-pointer"
+//                 className="bg-black w-full hover:scale-105 text-primary heading-500-23 px-6 py-3 rounded-xl transition-all duration-300 relative group  cursor-pointer"
 //               >
 //                 Upload
 //               </button>
 //             )}
 
+//             {/* Submit Button (Visible after image is uploaded) */}
 //             {selectedImage && (
 //               <button
 //                 onClick={handleSubmit}
-//                 className="bg-black w-full hover:scale-105 text-primary px-6 py-3 rounded-xl transition-all duration-300 relative group cursor-pointer heading-500-23"
-//                 disabled={isLoading}
+//                 className="bg-black w-full hover:scale-105 text-primary  px-6 py-3 rounded-xl transition-all duration-300 relative group cursor-pointer heading-500-23"
 //               >
-//                 {isLoading ? "Submitting..." : "Submit"}
+//                 Submit
 //               </button>
 //             )}
 //           </div>
@@ -248,3 +114,137 @@ export default VerifyId;
 // };
 
 // export default VerifyId;
+import React, { useState, useRef } from "react";
+import idCardPlaceholder from "../assets/images/id-card-placeholder.png";
+import { FaPencilAlt } from "react-icons/fa";
+import NetworthCalculator from "./NetworthCalculator";
+import { useVerifyIdMutation } from "../app/authApi";
+import { toast } from "react-toastify";
+
+const VerifyId = () => {
+  const [selectedImage, setSelectedImage] = useState(null);
+  const [imageFile, setImageFile] = useState(null);
+  const fileInputRef = useRef(null);
+  const [isHovering, setIsHovering] = useState(false);
+  const [isVerifyCompleted, setIsVerifyCompleted] = useState(false);
+
+  const [verifyId, { isLoading }] = useVerifyIdMutation();
+
+  const handleImageUpload = (event) => {
+    const file = event.target.files[0];
+    if (file) {
+      setImageFile(file); // Store file for FormData
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setSelectedImage(reader.result); // For preview only
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
+  const handleButtonClick = () => {
+    fileInputRef.current.click();
+  };
+
+  const handleChangeImage = () => {
+    fileInputRef.current.click();
+  };
+
+  const handleSubmit = async () => {
+    if (!imageFile) {
+      toast.error("Please upload an image first.");
+      return;
+    }
+
+    const formData = new FormData();
+    formData.append("images", imageFile); // Key must match your backend
+
+    try {
+      const response = await verifyId(formData).unwrap();
+      toast.success(
+        response?.message || "ID verification submitted successfully."
+      );
+      setIsVerifyCompleted(true);
+    } catch (error) {
+      console.error("Upload failed:", error);
+      toast.error(error?.data?.error || "Failed to upload ID.");
+    }
+  };
+
+  return (
+    <>
+      {!isVerifyCompleted ? (
+        <div className="min-h-screen bg-[#0b0b0b] relative overflow-hidden flex items-center justify-center">
+          {/* Background Bubbles */}
+          <div className="absolute top-[-100px] left-[-100px] w-[300px] h-[300px] rounded-full bg-white opacity-[0.03] animate-bubble1" />
+          <div className="absolute top-[120px] right-[180px] w-[120px] h-[120px] rounded-full bg-white opacity-[0.06] animate-bubble2" />
+          <div className="absolute bottom-[100px] left-[80px] w-[50px] h-[50px] rounded-full bg-white opacity-[0.06] animate-bubble3" />
+          <div className="absolute bottom-[40px] right-[40px] w-[80px] h-[80px] rounded-full bg-white opacity-[0.04] animate-bubble4" />
+          <div className="absolute top-[50px] right-[-50px] w-[150px] h-[150px] rounded-full bg-white opacity-[0.05] animate-bubble5" />
+          <div className="absolute bottom-[-80px] left-[-30px] w-[200px] h-[200px] rounded-full bg-white opacity-[0.04] animate-bubble6" />
+
+          {/* Content */}
+          <div className="z-10 flex flex-col items-center gap-8 text-center p-6">
+            <div
+              className="relative w-48 h-48 rounded-md overflow-hidden cursor-pointer"
+              onMouseEnter={() => selectedImage && setIsHovering(true)}
+              onMouseLeave={() => setIsHovering(false)}
+              onClick={selectedImage ? handleChangeImage : handleButtonClick}
+            >
+              <img
+                src={selectedImage || idCardPlaceholder}
+                alt="Identity verification"
+                className={`object-cover w-full h-full transition-opacity duration-300 ${
+                  isHovering && selectedImage ? "opacity-50" : "opacity-100"
+                }`}
+              />
+              <input
+                type="file"
+                accept="image/*"
+                onChange={handleImageUpload}
+                className="hidden"
+                ref={fileInputRef}
+              />
+              {isHovering && selectedImage && (
+                <div className="absolute inset-0 flex items-center justify-center bg-black bg-opacity-50">
+                  <div className="bg-primary text-black rounded-full p-2 cursor-pointer">
+                    <FaPencilAlt />
+                  </div>
+                </div>
+              )}
+            </div>
+
+            {!selectedImage && (
+              <h2 className="text-white heading-500-40">
+                We need to verify your ID
+              </h2>
+            )}
+
+            {!selectedImage && (
+              <button
+                onClick={handleButtonClick}
+                className="bg-black w-full hover:scale-105 text-primary heading-500-23 px-6 py-3 rounded-xl transition-all duration-300 relative group cursor-pointer"
+              >
+                Upload
+              </button>
+            )}
+
+            {selectedImage && (
+              <button
+                onClick={handleSubmit}
+                className="bg-black w-full hover:scale-105 text-primary px-6 py-3 rounded-xl transition-all duration-300 relative group cursor-pointer heading-500-23"
+                disabled={isLoading}
+              >
+                {isLoading ? "Submitting..." : "Submit"}
+              </button>
+            )}
+          </div>
+        </div>
+      ) : (
+        <NetworthCalculator />
+      )}
+    </>
+  );
+};
+
+export default VerifyId;

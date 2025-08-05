@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useParams, useLocation, useNavigate } from "react-router-dom";
 import MotionPageWrapper from "./MotionPageWrapper";
 // import VerifyId from "../components/VerifyId";
-import { useVerifyOtpMutation } from "../app/authApi";
+import { useVerifyOtpMutation, useResendOtpMutation } from "../app/authApi";
 import { toast } from "react-toastify";
 
 const SignupOtpVerification = () => {
@@ -20,7 +20,15 @@ const SignupOtpVerification = () => {
   const [code, setCode] = useState(["", "", "", ""]);
   const [isVerifyOpen, setIsVerifyOpen] = useState(false);
   const [verifyOtp, { isLoading, isError, error }] = useVerifyOtpMutation();
-
+  const [resendOtp, { isLoading: isResending }] = useResendOtpMutation();
+  const handleResendOtp = async () => {
+    try {
+      const res = await resendOtp({ email }).unwrap();
+      toast.success(res.message || "OTP resent successfully!");
+    } catch (err) {
+      toast.error(err?.data?.message || "Failed to resend OTP.");
+    }
+  };
   const handleChange = (value, index) => {
     if (value.length > 1) return;
 
@@ -50,7 +58,7 @@ const SignupOtpVerification = () => {
       }, 500);
       // setIsVerifyOpen(true);
     } catch (err) {
-      toast.error(err?.data?.message || "OTP verification failed.");
+      toast.error(err?.data?.error || "OTP verification failed.");
     }
   };
 
@@ -101,8 +109,12 @@ const SignupOtpVerification = () => {
             {/* Resend */}
             <p className="text-xs text-white mt-2">
               Didn't receive a code?
-              <button className="text-[#F3BA18] underline ml-1 cursor-pointer hover:underline">
-                Resend
+              <button
+                onClick={handleResendOtp}
+                disabled={isResending}
+                className="text-[#F3BA18] underline ml-1 cursor-pointer hover:underline"
+              >
+                {isResending ? "Sending..." : "Resend"}
               </button>
             </p>
           </div>

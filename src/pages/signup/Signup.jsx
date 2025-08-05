@@ -420,7 +420,7 @@ const Signup = () => {
                       !agreedTerms ||
                       isLoading
                     }
-                    className="w-full bg-gradient-to-r from-[#F3BA18] to-[#FF9900] hover:from-[#FF9900] hover:to-[#F3BA18] text-white font-bold py-3 px-4 rounded-lg transition-all duration-300 disabled:opacity-80 disabled:cursor-not-allowed"
+                    className="w-full bg-gradient-to-r cursor-pointer from-[#F3BA18] to-[#FF9900] hover:from-[#FF9900] hover:to-[#F3BA18] text-white font-bold py-3 px-4 rounded-lg transition-all duration-300 disabled:opacity-80 disabled:cursor-not-allowed"
                   >
                     {isLoading ? "Signing Up..." : "Sign Up"}
                   </button>

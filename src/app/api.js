@@ -7,7 +7,7 @@ const baseQuery = fetchBaseQuery({
     const token = getState().auth.accessToken;
     const secretKey = import.meta.env.VITE_SECRET_KEY;
     if (token) {
-      headers.set("authorization", `Bearer ${token}`);
+      headers.set("x-auth-token", `Bearer ${token}`);
     }
     if (secretKey) {
       headers.set("secret-key", secretKey);
