@@ -34,6 +34,7 @@ import TalentDashboard from "./pages/talent_dashboard/TalentDashboard";
 import TalentListing from "./pages/talent/TalentListing";
 import SignupOtpVerification from "./components/SignupOtpVerification";
 import VerifyId from "./components/VerifyId";
+import NetworthCalculator from "./components/NetworthCalculator";
 
 // Simple Black Header Component
 const SimpleHeader = () => {
@@ -191,6 +192,14 @@ export default function App() {
             element={
               <MotionPageWrapper>
                 <VerifyId />
+              </MotionPageWrapper>
+            }
+          />
+          <Route
+            path="networth-calculator"
+            element={
+              <MotionPageWrapper>
+                <NetworthCalculator />
               </MotionPageWrapper>
             }
           />

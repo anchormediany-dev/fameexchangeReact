@@ -33,6 +33,13 @@ export const authApi = api.injectEndpoints({
         body: data,
       }),
     }),
+    networthCalculate: builder.mutation({
+      query: (data) => ({
+        url: "/networth/save",
+        method: "POST",
+        body: data,
+      }),
+    }),
     resendOtp: builder.mutation({
       query: (data) => ({
         url: "/auth/resend-otp",
@@ -65,6 +72,7 @@ export const {
   useVerifyOtpMutation,
   useVerifyIdMutation,
   useResendOtpMutation,
+  useNetworthCalculateMutation,
   useForgetPasswordMutation,
   useResetPasswordMutation,
 } = authApi;

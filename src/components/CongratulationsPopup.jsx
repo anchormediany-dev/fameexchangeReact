@@ -23,7 +23,7 @@ const CongratulationsPopup = ({ onClose }) => {
   const handleGoToDashboard = () => {
     onClose?.();
     setTimeout(() => {
-      navigate("/login");
+      navigate("/dashboard");
     }, 300);
   };
 
