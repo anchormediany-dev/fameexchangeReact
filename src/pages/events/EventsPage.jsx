@@ -920,7 +920,7 @@ const UltraModernEventsPllatform = () => {
                           <FiPhone className="w-3 h-3" />
                           <span>{event.phone}</span>
                         </a>
-                        <a
+                        {/* <a
                           href={`https://${event.website}`}
                           target="_blank"
                           rel="noopener noreferrer"
@@ -928,7 +928,7 @@ const UltraModernEventsPllatform = () => {
                         >
                           <FiGlobe className="w-3 h-3" />
                           <span className="truncate">{event.website}</span>
-                        </a>
+                        </a> */}
                       </div>
                     </div>
                   </div>
@@ -956,9 +956,9 @@ const UltraModernEventsPllatform = () => {
                     <th className="text-left p-3 text-gray-300 font-semibold text-sm">
                       Phone
                     </th>
-                    <th className="text-left p-3 text-gray-300 font-semibold text-sm">
+                    {/* <th className="text-left p-3 text-gray-300 font-semibold text-sm">
                       Website
-                    </th>
+                    </th> */}
                   </tr>
                 </thead>
                 <tbody>
@@ -1014,7 +1014,7 @@ const UltraModernEventsPllatform = () => {
                           <span className="text-sm">{event.phone}</span>
                         </a>
                       </td>
-                      <td className="p-3">
+                      {/* <td className="p-3">
                         <a
                           href={`https://${event.website}`}
                           target="_blank"
@@ -1027,7 +1027,7 @@ const UltraModernEventsPllatform = () => {
                           </span>
                           <FiExternalLink className="w-3 h-3 opacity-0 group-hover:opacity-100 transition-opacity" />
                         </a>
-                      </td>
+                      </td> */}
                     </tr>
                   ))}
                 </tbody>
