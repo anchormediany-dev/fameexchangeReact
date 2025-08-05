@@ -1,4 +1,4 @@
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import {
   FaEdit,
   FaSave,
@@ -10,7 +10,8 @@ import {
   FaPlus,
   FaCalendarAlt,
 } from "react-icons/fa";
-
+import { toast } from "react-toastify";
+import { useGetUserByIdQuery } from "../../app/authApi";
 const actions = [
   {
     label: "Sponsor Talent",
@@ -28,59 +29,96 @@ const actions = [
     description: "Schedule and manage talent availability sessions",
   },
 ];
+const IMAGE_BASE_URL = import.meta.env.VITE_API_IMAGE_BASE_URL;
 
-const ImageUploadSwitcher = () => {
+const ImageUploadSwitcher = ({ userData, updateMyProfile }) => {
+  const user = JSON.parse(localStorage.getItem("user"));
+  const userId = user?.id;
   // Initialize with default images and 8 slots total
-  const [images, setImages] = useState([
-    "https://images.unsplash.com/photo-1573140247632-f8fd74997d5c?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MzB8fHBlcnNvbnxlbnwwfHwwfHx8MA%3D%3D",
-    "https://images.unsplash.com/photo-1517841905240-472988babdf9?w=400&h=500&fit=crop&crop=face",
-    "https://images.unsplash.com/photo-1531746020798-e6953c6e8e04?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MzV8fHBlcnNvbnxlbnwwfHwwfHx8MA%3D%3D",
-    "https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=400&h=500&fit=crop&crop=face",
-    "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8cGVyc29ufGVufDB8fDB8fHww", // Empty slots
-    "https://plus.unsplash.com/premium_photo-1690407617542-2f210cf20d7e?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NXx8cGVyc29ufGVufDB8fDB8fHww",
-    "https://images.unsplash.com/photo-1580489944761-15a19d654956?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTB8fHBlcnNvbnxlbnwwfHwwfHx8MA%3D%3D",
-    "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTh8fHBlcnNvbnxlbnwwfHwwfHx8MA%3D%3D",
-  ]);
-
+  // const [images, setImages] = useState([
+  //   "https://images.unsplash.com/photo-1573140247632-f8fd74997d5c?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MzB8fHBlcnNvbnxlbnwwfHwwfHx8MA%3D%3D",
+  //   "https://images.unsplash.com/photo-1517841905240-472988babdf9?w=400&h=500&fit=crop&crop=face",
+  //   "https://images.unsplash.com/photo-1531746020798-e6953c6e8e04?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MzV8fHBlcnNvbnxlbnwwfHwwfHx8MA%3D%3D",
+  //   "https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=400&h=500&fit=crop&crop=face",
+  //   "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8cGVyc29ufGVufDB8fDB8fHww", // Empty slots
+  //   "https://plus.unsplash.com/premium_photo-1690407617542-2f210cf20d7e?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NXx8cGVyc29ufGVufDB8fDB8fHww",
+  //   "https://images.unsplash.com/photo-1580489944761-15a19d654956?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTB8fHBlcnNvbnxlbnwwfHwwfHx8MA%3D%3D",
+  //   "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTh8fHBlcnNvbnxlbnwwfHwwfHx8MA%3D%3D",
+  // ]);
+  const [images, setImages] = useState(Array(8).fill(null));
   const [selectedImage, setSelectedImage] = useState(0);
+  const { data: userDataOne, isLoading, isError } = useGetUserByIdQuery(userId);
+  useEffect(() => {
+    if (userData?.userDocument?.documents?.length) {
+      const backendImages = userData?.user?.images?.map(
+        (doc) => `${IMAGE_BASE_URL}${doc.replace(/\\/g, "/")}`
+      );
+
+      const paddedImages = [...backendImages];
+      while (paddedImages.length < 8) paddedImages.push(null);
+
+      setImages(paddedImages);
+      console.log("Loaded images:", paddedImages);
+    }
+  }, [userData]);
+  // const [selectedImage, setSelectedImage] = useState(0);
   const [editingBio, setEditingBio] = useState(false);
   const [dragOver, setDragOver] = useState(null);
   const fileInputRef = useRef(null);
   const [uploadingSlot, setUploadingSlot] = useState(null);
 
-  const [bioText, setBioText] = useState(
-    `Sarah Mitchell | Lifestyle Influencer | Los Angeles, CA
+  //   const [bioText, setBioText] = useState(
+  //     `Sarah Mitchell | Lifestyle Influencer | Los Angeles, CA
 
-Professional Summary:
-With over 5 years of experience in content creation, I specialize in fashion, travel, and wellness content that inspires authenticity. My work has been featured in Vogue, Cosmopolitan, and Travel + Leisure.
+  // Professional Summary:
+  // With over 5 years of experience in content creation, I specialize in fashion, travel, and wellness content that inspires authenticity. My work has been featured in Vogue, Cosmopolitan, and Travel + Leisure.
 
-Key Achievements:
-- Grew Instagram following from 0 to 500k+ in 3 years
-- Collaborated with 50+ brands including Nike, Sephora, and Airbnb
-- Named "Top Rising Influencer" by Influencer Magazine (2022)
-- Launched successful merchandise line with 10k+ units sold
+  // Key Achievements:
+  // - Grew Instagram following from 0 to 500k+ in 3 years
+  // - Collaborated with 50+ brands including Nike, Sephora, and Airbnb
+  // - Named "Top Rising Influencer" by Influencer Magazine (2022)
+  // - Launched successful merchandise line with 10k+ units sold
 
-Content Focus Areas:
-• Affordable fashion styling
-• Sustainable travel tips
-• Mental health awareness
-• Body positivity advocacy
-• Minimalist lifestyle
+  // Content Focus Areas:
+  // • Affordable fashion styling
+  // • Sustainable travel tips
+  // • Mental health awareness
+  // • Body positivity advocacy
+  // • Minimalist lifestyle
 
-Current Projects:
-- Developing my own skincare line (launching Q3 2023)
-- Hosting monthly IG Live Q&A sessions
-- Writing an e-book on building authentic social media presence
-`
-  );
+  // Current Projects:
+  // - Developing my own skincare line (launching Q3 2023)
+  // - Hosting monthly IG Live Q&A sessions
+  // - Writing an e-book on building authentic social media presence
+  // `
+  //   );
+  const [bioText, setBioText] = useState("");
+  // useEffect(() => {
+  //   if (userData?.user?.biography) {
+  //     setBioText(userData.user.biography);
+  //   }
+  // }, [userData]);
+  const saveBio = async () => {
+    try {
+      const formData = new FormData();
+      formData.append("biography", bioText);
+
+      await updateMyProfile(formData).unwrap();
+      setBioText(formData.get("biography"));
+      setEditingBio(false);
+      toast.success("Biography updated successfully");
+    } catch (err) {
+      console.error("Error updating biography:", err);
+    }
+  };
 
   const handleActionClick = (label) => {
     console.log(`${label} clicked`);
   };
 
-  const saveBio = () => {
-    setEditingBio(false);
-  };
+  // const saveBio = () => {
+  //   setEditingBio(false);
+  // };
 
   const cancelEdit = () => {
     setEditingBio(false);
@@ -147,6 +185,38 @@ Current Projects:
       fileInputRef.current.click();
     }
   };
+  const handleImageUpdate = async () => {
+    try {
+      // Filter out nulls and convert DataURLs to File objects if needed
+      const validImages = images.filter(Boolean);
+
+      const formData = new FormData();
+      validImages.forEach((img, index) => {
+        if (img.startsWith("data:image")) {
+          const blob = dataURLtoBlob(img);
+          formData.append("images", blob, `image-${index}.png`);
+        }
+      });
+
+      const res = await updateMyProfile(formData).unwrap();
+      toast.success(res?.message);
+    } catch (error) {
+      toast.error("Data not saved!", error);
+    }
+  };
+
+  // Helper to convert DataURL to Blob
+  const dataURLtoBlob = (dataUrl) => {
+    const arr = dataUrl.split(",");
+    const mime = arr[0].match(/:(.*?);/)[1];
+    const bstr = atob(arr[1]);
+    let n = bstr.length;
+    const u8arr = new Uint8Array(n);
+    while (n--) {
+      u8arr[n] = bstr.charCodeAt(n);
+    }
+    return new Blob([u8arr], { type: mime });
+  };
 
   return (
     <div className="container grid grid-cols-1 lg:grid-cols-3 gap-6 px-4">
@@ -158,7 +228,7 @@ Current Projects:
             {images[selectedImage] ? (
               <img
                 src={images[selectedImage]}
-                alt="Selected"
+                alt={images[selectedImage]}
                 className="w-full h-full object-cover transition-all duration-300 group-hover:scale-105"
               />
             ) : (
@@ -240,7 +310,12 @@ Current Projects:
             </div>
           ))}
         </div>
-
+        <button
+          onClick={handleImageUpdate}
+          className="mt-4 w-full bg-green-600 hover:bg-green-700 text-white py-2 rounded-lg text-sm"
+        >
+          Save Uploaded Images
+        </button>
         {/* Hidden file input */}
         <input
           ref={fileInputRef}
@@ -261,7 +336,7 @@ Current Projects:
           <div className="space-y-4 flex-1">
             <div className="group relative flex-1 flex flex-col h-full">
               <label className="text-xl uppercase text-[#a38b41] mb-5 font-bold">
-                Sarah Mitchell
+                {userData?.user?.name}
               </label>
               <div className="flex justify-between items-center mb-2">
                 <label className="text-xs uppercase text-gray-400 font-semibold">
@@ -306,7 +381,7 @@ Current Projects:
               ) : (
                 <div className="flex-1 px-3 py-2 bg-white/5 text-white border border-white/10 rounded-lg overflow-hidden">
                   <pre className="text-sm whitespace-pre-wrap font-sans h-full">
-                    {bioText}
+                    {userData?.user?.biography}
                   </pre>
                 </div>
               )}

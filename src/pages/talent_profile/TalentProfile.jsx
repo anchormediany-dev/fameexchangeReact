@@ -12,11 +12,19 @@ import FriendsEventsSection from "./FriendsAndEvents";
 import PortfolioDashboard from "../../components/PortfolioDashboard";
 import CreateSession from "../../components/talent/create_session/CreateSession";
 import PendingRequests from "../../components/talent/create_session/PendingRequests";
-
+import {
+  useGetUserByIdQuery,
+  useUpdateMyProfileMutation,
+} from "../../app/authApi";
 const TalentProfile = () => {
+  const userLocalData = JSON.parse(localStorage.getItem("user")); // replace "user" with your actual key
+  const userId = userLocalData?.id;
   const [searchValue, setSearchValue] = useState("");
   const [isFocused, setIsFocused] = useState(false);
-
+  const [updateMyProfile, { isLoading: isUpdating, error: isUpdatingError }] =
+    useUpdateMyProfileMutation();
+  const { data: userData, isLoading, isError } = useGetUserByIdQuery(userId);
+  console.log(userData?.user?.name, "user data");
   const handleSearch = (e) => {
     e.preventDefault();
     if (searchValue.trim()) {
@@ -241,7 +249,7 @@ const TalentProfile = () => {
           </div>
         </div>
       </div>
-      <ImageSwitch />
+      <ImageSwitch userData={userData} updateMyProfile={updateMyProfile} />
       <FriendsEventsSection />
       <PendingRequests />
       <CreateSession />

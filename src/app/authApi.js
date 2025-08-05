@@ -1,6 +1,4 @@
-// src/features/api/authApi.js
 import { api } from "./api";
-
 export const authApi = api.injectEndpoints({
   endpoints: (builder) => ({
     signup: builder.mutation({
@@ -63,6 +61,23 @@ export const authApi = api.injectEndpoints({
         body: data,
       }),
     }),
+    // User Profile API's
+    // In your authApi.js or wherever your RTK Query API is defined:
+    updateMyProfile: builder.mutation({
+      query: (profileData) => ({
+        url: "/user/update-user-profile",
+        method: "POST",
+        body: profileData,
+      }),
+      invalidatesTags: (result, error, body) => [
+        { type: "User", id: JSON.parse(localStorage.getItem("user"))?.id },
+      ],
+    }),
+
+    getUserById: builder.query({
+      query: (id) => `/user/get/${id}`,
+      providesTags: (result, error, id) => [{ type: "User", id }],
+    }),
   }),
 });
 
@@ -75,4 +90,7 @@ export const {
   useNetworthCalculateMutation,
   useForgetPasswordMutation,
   useResetPasswordMutation,
+  // User Profile API's
+  useUpdateMyProfileMutation,
+  useGetUserByIdQuery,
 } = authApi;

@@ -12,6 +12,7 @@ const baseQuery = fetchBaseQuery({
     if (secretKey) {
       headers.set("secret-key", secretKey);
     }
+    headers.set("ngrok-skip-browser-warning", 69420);
     return headers;
   },
 });

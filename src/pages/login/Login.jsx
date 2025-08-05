@@ -51,7 +51,7 @@ const LoginPage = () => {
       toast.success("Login successful!");
       setTimeout(() => {
         if (decodedUser.KYC_Verified) {
-          navigate("/dashboard");
+          navigate("/talent-profile");
         } else {
           navigate("/verify-id");
         }
