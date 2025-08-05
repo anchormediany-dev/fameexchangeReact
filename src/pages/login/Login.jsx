@@ -50,7 +50,11 @@ const LoginPage = () => {
       dispatch(setCredentials({ accessToken: token, user: decodedUser }));
       toast.success("Login successful!");
       setTimeout(() => {
-        navigate("/verify-id");
+        if (decodedUser.KYC_Verified) {
+          navigate("/dashboard");
+        } else {
+          navigate("/verify-id");
+        }
       }, 500);
     } catch (error) {
       console.error("Login failed:", error);
