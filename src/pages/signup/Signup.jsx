@@ -12,6 +12,7 @@ import TalentDropdown from "../../components/TalentDropdown";
 import RepresentationSection from "../../components/RepresentationSection";
 import { useSignupMutation } from "../../app/authApi";
 import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 const Signup = () => {
   const [signup, { isLoading, error }] = useSignupMutation();
   const navigate = useNavigate();
@@ -110,14 +111,17 @@ const Signup = () => {
     try {
       const response = await signup(signupData).unwrap();
       setSignupResponse(response);
+      toast.success(response?.emailVerification || "Signup successful!");
+
       // setIsOtpOpen(true);
       sessionStorage.setItem("signupEmail", formData.email);
-      navigate("/verify-otp", {
-        state: { email: formData.email },
-      });
+      setTimeout(() => {
+        navigate("/verify-otp", {
+          state: { email: formData.email },
+        });
+      }, 500);
     } catch (err) {
-      console.error("Signup failed:", err);
-      // navigate(`/verify/${formData.email}`);
+      toast.error(err?.data?.message);
     }
   };
 

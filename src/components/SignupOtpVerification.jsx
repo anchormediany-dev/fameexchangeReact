@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useParams, useLocation ,useNavigate} from "react-router-dom";
+import { useParams, useLocation, useNavigate } from "react-router-dom";
 import MotionPageWrapper from "./MotionPageWrapper";
 import VerifyId from "../components/VerifyId";
 import { useVerifyOtpMutation } from "../app/authApi";
@@ -55,7 +55,7 @@ const SignupOtpVerification = () => {
     <>
       {!isVerifyOpen ? (
         <MotionPageWrapper>
-          <div className="flex items-center justify-center px-4 py-16 relative overflow-hidden bg-[#0b0b0b]">
+          <div className="flex items-center h-screen justify-center px-4 py-16 relative overflow-hidden bg-[#0b0b0b]">
             {/* Background circles */}
             <div className="absolute top-[-100px] left-[-100px] w-[300px] h-[300px] rounded-full bg-white opacity-[0.03]" />
             <div className="absolute top-[120px] right-[180px] w-[120px] h-[120px] rounded-full bg-white opacity-[0.06]" />
