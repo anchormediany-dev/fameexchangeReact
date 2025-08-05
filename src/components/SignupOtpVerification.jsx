@@ -45,7 +45,10 @@ const SignupOtpVerification = () => {
       const otp = code.join("");
       const res = await verifyOtp({ email, otp }).unwrap();
       toast.success("OTP Verified Successfully!");
-      setIsVerifyOpen(true);
+      setTimeout(() => {
+        navigate("/verify-id");
+      }, 500);
+      // setIsVerifyOpen(true);
     } catch (err) {
       toast.error(err?.data?.message || "OTP verification failed.");
     }

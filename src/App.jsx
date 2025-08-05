@@ -33,6 +33,7 @@ import Signup from "./pages/signup/Signup";
 import TalentDashboard from "./pages/talent_dashboard/TalentDashboard";
 import TalentListing from "./pages/talent/TalentListing";
 import SignupOtpVerification from "./components/SignupOtpVerification";
+import VerifyId from "./components/VerifyId";
 
 // Simple Black Header Component
 const SimpleHeader = () => {
@@ -182,6 +183,14 @@ export default function App() {
             element={
               <MotionPageWrapper>
                 <SignupOtpVerification />
+              </MotionPageWrapper>
+            }
+          />
+          <Route
+            path="verify-id"
+            element={
+              <MotionPageWrapper>
+                <VerifyId />
               </MotionPageWrapper>
             }
           />
