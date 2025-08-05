@@ -26,7 +26,13 @@ export const authApi = api.injectEndpoints({
         body: data,
       }),
     }),
-
+    verifyId: builder.mutation({
+      query: (data) => ({
+        url: "/user_documents/upload-docs",
+        method: "POST",
+        body: data,
+      }),
+    }),
     resendOtp: builder.mutation({
       query: (data) => ({
         url: "/auth/resend-otp",
@@ -57,6 +63,7 @@ export const {
   useSignupMutation,
   useSigninMutation,
   useVerifyOtpMutation,
+  useVerifyIdMutation,
   useResendOtpMutation,
   useForgetPasswordMutation,
   useResetPasswordMutation,
