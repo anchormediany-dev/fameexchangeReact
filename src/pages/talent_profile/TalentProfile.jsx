@@ -7,7 +7,7 @@ import {
   FaTimes,
 } from "react-icons/fa";
 import ImageSwitch from "./ImageSwitch";
-import NotificationTalentLayout from "./NotificationRequests";
+
 import PortfolioDashboard from "../../components/PortfolioDashboard";
 import CreateSession from "../../components/talent/create_session/CreateSession";
 import PendingRequests from "../../components/talent/create_session/PendingRequests";
@@ -17,6 +17,8 @@ import {
 } from "../../app/authApi";
 import EventsSection from "../../components/talent_profile/EventsSection";
 import FriendsSection from "../../components/talent_profile/FriendsSection";
+import Notifications from "../../components/talent_profile/Notifications";
+import TalentLinks from "../../components/talent_profile/TalentLinks";
 const TalentProfile = () => {
   const userLocalData = JSON.parse(localStorage.getItem("user")); // replace "user" with your actual key
   const userId = userLocalData?.id;
@@ -262,7 +264,12 @@ const TalentProfile = () => {
 
       <PendingRequests />
       <CreateSession />
-      <NotificationTalentLayout userData={userData} />
+      <div className="bg-[#171717] px-4 md:px-8 container text-white">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+          <Notifications />
+          <TalentLinks userData={userData} />
+        </div>{" "}
+      </div>
       <section className=" px-4 md:px-8 container mx-auto ">
         <div className="rounded-xl p-6 bg-[#1f1f1f]">
           <PortfolioDashboard />

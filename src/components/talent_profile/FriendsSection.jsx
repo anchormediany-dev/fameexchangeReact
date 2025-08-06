@@ -34,9 +34,9 @@ const FriendsSection = () => {
     setEditingFriends(false);
   };
 
-  if (isFriendsError) {
-    toast.error(friendsError?.data?.message || "Failed to fetch friends.");
-  }
+  //   if (isFriendsError) {
+  //     toast.error(friendsError?.data?.message || "Failed to fetch friends.");
+  //   }
 
   return (
     <div className="bg-[#1f1f1f] rounded-xl shadow-lg">
