@@ -6,6 +6,7 @@ import {
   FaTiktok,
   FaSnapchatGhost,
   FaDiscord,
+  FaTwitter,
   FaReddit,
   FaBell,
   FaExternalLinkAlt,
@@ -56,18 +57,52 @@ const notifications = [
   },
 ];
 
-const socialLinks = [
-  { name: "YouTube", icon: <FaYoutube />, url: "#" },
-  { name: "Facebook", icon: <FaFacebook />, url: "#" },
-  { name: "Instagram", icon: <FaInstagram />, url: "#" },
-  { name: "LinkedIn", icon: <FaLinkedin />, url: "#" },
-  { name: "TikTok", icon: <FaTiktok />, url: "#" },
-  { name: "Snapchat", icon: <FaSnapchatGhost />, url: "#" },
-  { name: "Discord", icon: <FaDiscord />, url: "#" },
-  { name: "Reddit", icon: <FaReddit />, url: "#" },
-];
+// const socialLinks = [
+//   { name: "YouTube", icon: <FaYoutube />, url: "#" },
+//   { name: "Facebook", icon: <FaFacebook />, url: "#" },
+//   { name: "Instagram", icon: <FaInstagram />, url: "#" },
+//   { name: "LinkedIn", icon: <FaLinkedin />, url: "#" },
+//   { name: "TikTok", icon: <FaTiktok />, url: "#" },
+//   { name: "Snapchat", icon: <FaSnapchatGhost />, url: "#" },
+//   { name: "Discord", icon: <FaDiscord />, url: "#" },
+//   { name: "Reddit", icon: <FaReddit />, url: "#" },
+// ];
 
-export default function NotificationTalentLayout() {
+export default function NotificationTalentLayout({ userData }) {
+  const user = userData?.user || {};
+
+  const socialLinks = [
+    user.social_youtube && {
+      name: "YouTube",
+      icon: <FaYoutube />,
+      url: user.social_youtube,
+    },
+    user.social_facebook && {
+      name: "Facebook",
+      icon: <FaFacebook />,
+      url: user.social_facebook,
+    },
+    user.social_insta && {
+      name: "Instagram",
+      icon: <FaInstagram />,
+      url: user.social_insta,
+    },
+    user.social_tiktok && {
+      name: "TikTok",
+      icon: <FaTiktok />,
+      url: user.social_tiktok,
+    },
+    user.social_snap && {
+      name: "Snapchat",
+      icon: <FaSnapchatGhost />,
+      url: user.social_snap,
+    },
+    user.social_twitter && {
+      name: "Twitter",
+      icon: <FaTwitter />,
+      url: user.social_twitter,
+    },
+  ].filter(Boolean);
   return (
     <div className="bg-[#171717] px-4 md:px-8 container text-white">
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">

@@ -83,6 +83,14 @@ export const authApi = api.injectEndpoints({
       query: () => "/events",
       providesTags: ["Events"],
     }),
+    // friends API's
+    removeFriend: builder.mutation({
+      query: (id) => ({
+        url: `/friends/${id}`,
+        method: "DELETE",
+      }),
+      invalidatesTags: ["Friends"],
+    }),
   }),
 });
 
@@ -100,4 +108,6 @@ export const {
   useGetUserByIdQuery,
   // Events
   useGetEventsQuery,
+  // Friends API's
+  useRemoveFriendMutation,
 } = authApi;

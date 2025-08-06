@@ -20,9 +20,7 @@ const CreateSession = () => {
       return;
     }
   };
-  const toggleActivation = () => {
-    setSettings((prev) => ({ ...prev, isActive: !prev.isActive }));
-  };
+
   return (
     <section className="flex container flex-col gap-4">
       {/* Header */}
@@ -35,16 +33,6 @@ const CreateSession = () => {
             Configure your availability for fans
           </p>
         </div>
-        <button
-          onClick={toggleActivation}
-          className={`px-5 py-2 rounded-full font-semibold text-white transition ${
-            settings.isActive
-              ? "bg-green-600 hover:bg-green-700"
-              : "bg-gray-600 hover:bg-gray-700"
-          }`}
-        >
-          {settings.isActive ? "Active" : "Inactive"}
-        </button>
       </div>
       <div className="bg-[#222222] border border-[#333333] rounded-xl p-6 shadow space-y-6">
         <h2 className="text-2xl font-semibold text-white mb-2">
