@@ -106,6 +106,9 @@ export const authApi = api.injectEndpoints({
         body: data,
       }),
     }),
+    getAllFanRequests: builder.query({
+      query: () => "/fan-request/get-all",
+    }),
 
     talentConfirmationRequest: builder.mutation({
       query: (data) => ({
@@ -154,4 +157,5 @@ export const {
   useGetConfirmedTalentRequestsQuery,
   useFanInverseRequestMutation,
   useTalentConfirmationRequestMutation,
+  useGetAllFanRequestsQuery,
 } = authApi;

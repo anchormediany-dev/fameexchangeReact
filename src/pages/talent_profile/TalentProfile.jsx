@@ -19,6 +19,7 @@ import EventsSection from "../../components/talent_profile/EventsSection";
 import FriendsSection from "../../components/talent_profile/FriendsSection";
 import Notifications from "../../components/talent_profile/Notifications";
 import TalentLinks from "../../components/talent_profile/TalentLinks";
+import MeetingRequests from "../../components/talent_profile/MeetingRequests";
 const TalentProfile = () => {
   const userLocalData = JSON.parse(localStorage.getItem("user")); // replace "user" with your actual key
   const userId = userLocalData?.id;
@@ -262,7 +263,8 @@ const TalentProfile = () => {
         </div>
       </div>
 
-      <PendingRequests />
+      {/* <PendingRequests /> */}
+      <MeetingRequests />
       <CreateSession />
       <div className="bg-[#171717] px-4 md:px-8 container text-white">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
