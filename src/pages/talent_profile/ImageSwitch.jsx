@@ -51,7 +51,7 @@ const ImageUploadSwitcher = ({ userData, updateMyProfile }) => {
   useEffect(() => {
     if (userData?.user?.images?.length) {
       const backendImages = userData?.user?.images?.map(
-        (doc) => `${IMAGE_BASE_URL}${doc.replace(/\\/g, "/")}`
+        (doc) => `${IMAGE_BASE_URL}${doc?.fileUrl?.replace(/\\/g, "/")}`
       );
 
       const paddedImages = [...backendImages];
@@ -67,37 +67,9 @@ const ImageUploadSwitcher = ({ userData, updateMyProfile }) => {
   const fileInputRef = useRef(null);
   const [uploadingSlot, setUploadingSlot] = useState(null);
 
-  //   const [bioText, setBioText] = useState(
-  //     `Sarah Mitchell | Lifestyle Influencer | Los Angeles, CA
-
-  // Professional Summary:
-  // With over 5 years of experience in content creation, I specialize in fashion, travel, and wellness content that inspires authenticity. My work has been featured in Vogue, Cosmopolitan, and Travel + Leisure.
-
-  // Key Achievements:
-  // - Grew Instagram following from 0 to 500k+ in 3 years
-  // - Collaborated with 50+ brands including Nike, Sephora, and Airbnb
-  // - Named "Top Rising Influencer" by Influencer Magazine (2022)
-  // - Launched successful merchandise line with 10k+ units sold
-
-  // Content Focus Areas:
-  // • Affordable fashion styling
-  // • Sustainable travel tips
-  // • Mental health awareness
-  // • Body positivity advocacy
-  // • Minimalist lifestyle
-
-  // Current Projects:
-  // - Developing my own skincare line (launching Q3 2023)
-  // - Hosting monthly IG Live Q&A sessions
-  // - Writing an e-book on building authentic social media presence
-  // `
-  //   );
+ 
   const [bioText, setBioText] = useState("");
-  // useEffect(() => {
-  //   if (userData?.user?.biography) {
-  //     setBioText(userData.user.biography);
-  //   }
-  // }, [userData]);
+  
   const saveBio = async () => {
     try {
       const formData = new FormData();
@@ -116,9 +88,7 @@ const ImageUploadSwitcher = ({ userData, updateMyProfile }) => {
     console.log(`${label} clicked`);
   };
 
-  // const saveBio = () => {
-  //   setEditingBio(false);
-  // };
+  
 
   const cancelEdit = () => {
     setEditingBio(false);

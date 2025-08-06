@@ -78,6 +78,11 @@ export const authApi = api.injectEndpoints({
       query: (id) => `/user/get/${id}`,
       providesTags: (result, error, id) => [{ type: "User", id }],
     }),
+    // Get events
+    getEvents: builder.query({
+      query: () => "/events",
+      providesTags: ["Events"],
+    }),
   }),
 });
 
@@ -93,4 +98,6 @@ export const {
   // User Profile API's
   useUpdateMyProfileMutation,
   useGetUserByIdQuery,
+  // Events
+  useGetEventsQuery,
 } = authApi;

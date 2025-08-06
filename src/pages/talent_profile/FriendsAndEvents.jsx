@@ -7,8 +7,14 @@ import {
   FaRegCalendarAlt,
   FaEllipsisH,
 } from "react-icons/fa";
-
+import { useGetUserByIdQuery } from "../../app/authApi";
 const FriendsEventsSection = () => {
+  const user = JSON.parse(localStorage.getItem("user"));
+  const userId = user?.id;
+
+  const { data, isLoading, isError, error } = useGetUserByIdQuery(userId);
+  const events = data?.events || [];
+  console.log(events);
   const [friends, setFriends] = useState([
     {
       id: 1,
@@ -49,49 +55,6 @@ const FriendsEventsSection = () => {
       id: 8,
       name: "Zendaya",
       avatar: "https://randomuser.me/api/portraits/women/25.jpg",
-    },
-  ]);
-
-  const [events] = useState([
-    {
-      id: 1,
-      title: "Charity Fashion Show",
-      date: "2023-12-15",
-      type: "upcoming",
-      description:
-        "Annual charity event supporting children education. Featuring designs from local artists.",
-    },
-    {
-      id: 2,
-      title: "Music Festival Performance",
-      date: "2023-11-20",
-      type: "latest",
-      description:
-        "Headlining the main stage at the International Music Festival with special guests.",
-    },
-    {
-      id: 3,
-      title: "Art Exhibition Opening",
-      date: "2024-01-10",
-      type: "upcoming",
-      description:
-        "Curating and presenting contemporary art pieces from emerging artists.",
-    },
-    {
-      id: 4,
-      title: "Charity Fashion Show",
-      date: "2023-12-15",
-      type: "upcoming",
-      description:
-        "Annual charity event supporting children education. Featuring designs from local artists.",
-    },
-     {
-      id: 5,
-      title: "Music Festival Performance",
-      date: "2023-11-20",
-      type: "latest",
-      description:
-        "Headlining the main stage at the International Music Festival with special guests.",
     },
   ]);
 
@@ -223,7 +186,7 @@ const FriendsEventsSection = () => {
                 >
                   <div className="flex flex-col gap-1">
                     <div className="flex items-center text-sm text-gray-400 mb-1">
-                      <span
+                      {/* <span
                         className={`px-2 py-0.5 rounded-full text-xs mr-2 ${
                           event.type === "upcoming"
                             ? "bg-blue-900 text-blue-300"
@@ -231,6 +194,9 @@ const FriendsEventsSection = () => {
                         }`}
                       >
                         {event.type === "upcoming" ? "Upcoming" : "Latest"}
+                      </span> */}
+                      <span className="px-2 py-0.5 rounded-full text-xs mr-2 bg-green-900 text-green-300">
+                        {event?.event_type}
                       </span>
                       <span className="flex items-center">
                         {event.type === "upcoming" ? (
@@ -238,7 +204,7 @@ const FriendsEventsSection = () => {
                         ) : (
                           <FaCalendarAlt className="mr-1" />
                         )}
-                        {new Date(event.date).toLocaleDateString("en-US", {
+                        {new Date(event.datetime).toLocaleDateString("en-US", {
                           year: "numeric",
                           month: "short",
                           day: "numeric",
@@ -246,11 +212,11 @@ const FriendsEventsSection = () => {
                       </span>
                     </div>
                     <h4 className="text-white font-semibold text-base">
-                      {event.title}
+                      {event?.title}
                     </h4>
                     <div className="flex justify-between">
                       <p className="text-sm text-gray-400 line-clamp-2">
-                        {event.description}
+                        {event?.details}
                       </p>
                       <button className="text-yellow-400 text-xs  cursor-pointer hover:underline">
                         View details →
