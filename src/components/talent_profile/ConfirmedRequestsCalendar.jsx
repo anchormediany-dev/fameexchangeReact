@@ -166,7 +166,7 @@ const ConfirmedRequestsCalendar = () => {
         </div>
       </div>
 
-      {selectedDate && (
+      {/* {selectedDate && (
         <div className="mt-4 p-3 bg-[#1f1f1f] rounded-lg border border-[#a38b41]/30">
           <h3 className="text-white font-medium mb-2">
             {format(selectedDate, "MMMM d, yyyy")}
@@ -194,7 +194,7 @@ const ConfirmedRequestsCalendar = () => {
             <p className="text-sm text-gray-500">No confirmed meetings</p>
           )}
         </div>
-      )}
+      )} */}
     </div>
   );
 };
