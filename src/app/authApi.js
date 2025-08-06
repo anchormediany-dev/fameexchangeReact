@@ -93,6 +93,11 @@ export const authApi = api.injectEndpoints({
       query: (userId) => `/notifications/${userId}`,
       providesTags: ["Notifications"],
     }),
+    // confirmed talent request
+    getConfirmedTalentRequests: builder.query({
+      query: () => `/talent-confirmation/`,
+      providesTags: ["ConfirmedTalentRequests"],
+    }),
 
     // friends API's
     removeFriend: builder.mutation({
@@ -129,4 +134,6 @@ export const {
   useGetAllFriendsQuery,
   // Notifications
   useGetNotificationsQuery,
+  // Confirmed talent requests
+  useGetConfirmedTalentRequestsQuery,
 } = authApi;

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import {
   FaCheck,
   FaTimes,
@@ -21,87 +21,31 @@ import {
   getDay,
 } from "date-fns";
 import { useNavigate } from "react-router-dom";
-
+import { useGetConfirmedTalentRequestsQuery } from "../../../app/authApi";
 const MeetingRequests = () => {
+  const {
+    data: confirmedData,
+    isLoading,
+    isError,
+    error,
+  } = useGetConfirmedTalentRequestsQuery();
+  const requests =
+    confirmedData?.data?.map((item) => ({
+      id: item._id,
+      date: new Date(item.confirmedDate).toLocaleDateString("en-US", {
+        year: "numeric",
+        month: "long",
+        day: "numeric",
+      }),
+      time: item.time,
+      status: "pending",
+    })) || [];
   const [currentDate, setCurrentDate] = useState(new Date());
   const navigate = useNavigate();
 
   const handleReschedule = (id) => {
     navigate("/inverse#reschedule-section");
   };
-  const [requests, setRequests] = useState([
-    // Past month requests
-    {
-      id: 1,
-      date: "June 5, 2025",
-      time: "10:00 AM",
-      status: "pending",
-    },
-    {
-      id: 2,
-      date: "June 15, 2025",
-      time: "3:30 PM",
-      status: "pending",
-    },
-    {
-      id: 3,
-      date: "June 22, 2025",
-      time: "1:00 PM",
-      status: "pending",
-    },
-
-    // Current month requests
-    {
-      id: 4,
-      date: "July 16, 2025",
-      time: "2:00 PM",
-      status: "pending",
-    },
-    {
-      id: 5,
-      date: "July 24, 2025",
-      time: "4:00 PM",
-      status: "pending",
-    },
-    {
-      id: 6,
-      date: "July 28, 2025",
-      time: "11:00 AM",
-      status: "pending",
-    },
-
-    // Future month requests
-    {
-      id: 7,
-      date: "August 3, 2025",
-      time: "9:30 AM",
-      status: "pending",
-    },
-    {
-      id: 8,
-      date: "August 12, 2025",
-      time: "5:00 PM",
-      status: "pending",
-    },
-    {
-      id: 9,
-      date: "August 19, 2025",
-      time: "2:15 PM",
-      status: "pending",
-    },
-    {
-      id: 10,
-      date: "September 7, 2025",
-      time: "10:45 AM",
-      status: "pending",
-    },
-    {
-      id: 11,
-      date: "September 14, 2025",
-      time: "3:00 PM",
-      status: "pending",
-    },
-  ]);
 
   // Calendar data
   const monthNames = [
@@ -213,7 +157,7 @@ const MeetingRequests = () => {
             backgroundClip: "text",
           }}
         >
-          Meeting Requests
+          Confrimed Requests
         </h2>
 
         <div className="flex items-center justify-center space-x-2 sm:space-x-4 mb-4 sm:mb-6">
