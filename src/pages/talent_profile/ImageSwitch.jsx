@@ -49,7 +49,7 @@ const ImageUploadSwitcher = ({ userData, updateMyProfile }) => {
   const [selectedImage, setSelectedImage] = useState(0);
   const { data: userDataOne, isLoading, isError } = useGetUserByIdQuery(userId);
   useEffect(() => {
-    if (userData?.userDocument?.documents?.length) {
+    if (userData?.user?.images?.length) {
       const backendImages = userData?.user?.images?.map(
         (doc) => `${IMAGE_BASE_URL}${doc.replace(/\\/g, "/")}`
       );
