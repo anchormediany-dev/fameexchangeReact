@@ -8,7 +8,6 @@ import {
 } from "react-icons/fa";
 import ImageSwitch from "./ImageSwitch";
 import NotificationTalentLayout from "./NotificationRequests";
-import FriendsEventsSection from "./FriendsAndEvents";
 import PortfolioDashboard from "../../components/PortfolioDashboard";
 import CreateSession from "../../components/talent/create_session/CreateSession";
 import PendingRequests from "../../components/talent/create_session/PendingRequests";
@@ -16,6 +15,8 @@ import {
   useGetUserByIdQuery,
   useUpdateMyProfileMutation,
 } from "../../app/authApi";
+import EventsSection from "../../components/talent_profile/EventsSection";
+import FriendsSection from "../../components/talent_profile/FriendsSection";
 const TalentProfile = () => {
   const userLocalData = JSON.parse(localStorage.getItem("user")); // replace "user" with your actual key
   const userId = userLocalData?.id;
@@ -250,7 +251,15 @@ const TalentProfile = () => {
         </div>
       </div>
       <ImageSwitch userData={userData} updateMyProfile={updateMyProfile} />
-      <FriendsEventsSection />
+      <div className="bg-[#171717] text-white">
+        <div className="container">
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+            <FriendsSection />
+            <EventsSection />
+          </div>
+        </div>
+      </div>
+
       <PendingRequests />
       <CreateSession />
       <NotificationTalentLayout userData={userData} />
