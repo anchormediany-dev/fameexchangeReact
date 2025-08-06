@@ -13,35 +13,35 @@ import {
 
 const TalentLinks = ({ userData: user }) => {
   const socialLinks = [
-    user?.social_youtube && {
+    user?.user?.social_youtube && {
       name: "YouTube",
       icon: <FaYoutube />,
-      url: user.social_youtube,
+      url: user?.user?.social_youtube,
     },
-    user?.social_facebook && {
+    user?.user?.social_facebook && {
       name: "Facebook",
       icon: <FaFacebook />,
-      url: user.social_facebook,
+      url: user?.user?.social_facebook,
     },
-    user?.social_insta && {
+    user?.user?.social_insta && {
       name: "Instagram",
       icon: <FaInstagram />,
-      url: user.social_insta,
+      url: user?.user?.social_insta,
     },
-    user?.social_tiktok && {
+    user?.user?.social_tiktok && {
       name: "TikTok",
       icon: <FaTiktok />,
-      url: user.social_tiktok,
+      url: user?.user?.social_tiktok,
     },
-    user?.social_snap && {
+    user?.user?.social_snap && {
       name: "Snapchat",
       icon: <FaSnapchatGhost />,
-      url: user.social_snap,
+      url: user?.user?.social_snap,
     },
-    user?.social_twitter && {
+    user?.user?.social_twitter && {
       name: "Twitter",
       icon: <FaTwitter />,
-      url: user.social_twitter,
+      url: user?.user?.social_twitter,
     },
   ].filter(Boolean);
 
