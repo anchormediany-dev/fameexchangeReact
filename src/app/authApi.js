@@ -88,6 +88,12 @@ export const authApi = api.injectEndpoints({
       query: () => "/events",
       providesTags: ["Events"],
     }),
+    // Notifications
+    getNotifications: builder.query({
+      query: (userId) => `/notifications/${userId}`,
+      providesTags: ["Notifications"],
+    }),
+
     // friends API's
     removeFriend: builder.mutation({
       query: (id) => ({
@@ -121,4 +127,6 @@ export const {
   // Friends API's
   useRemoveFriendMutation,
   useGetAllFriendsQuery,
+  // Notifications
+  useGetNotificationsQuery,
 } = authApi;
