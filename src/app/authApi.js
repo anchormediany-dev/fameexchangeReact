@@ -62,7 +62,6 @@ export const authApi = api.injectEndpoints({
       }),
     }),
     // User Profile API's
-    // In your authApi.js or wherever your RTK Query API is defined:
     updateMyProfile: builder.mutation({
       query: (profileData) => ({
         url: "/user/update-user-profile",
@@ -73,7 +72,13 @@ export const authApi = api.injectEndpoints({
         { type: "User", id: JSON.parse(localStorage.getItem("user"))?.id },
       ],
     }),
-
+    deleteProfileImage: builder.mutation({
+      query: (imageId) => ({
+        url: `/user/profile/image/${imageId}`,
+        method: "DELETE",
+      }),
+      invalidatesTags: ["User"],
+    }),
     getUserById: builder.query({
       query: (id) => `/user/get/${id}`,
       providesTags: (result, error, id) => [{ type: "User", id }],
@@ -106,6 +111,7 @@ export const {
   // User Profile API's
   useUpdateMyProfileMutation,
   useGetUserByIdQuery,
+  useDeleteProfileImageMutation,
   // Events
   useGetEventsQuery,
   // Friends API's

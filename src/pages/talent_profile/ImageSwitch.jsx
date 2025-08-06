@@ -11,7 +11,10 @@ import {
   FaCalendarAlt,
 } from "react-icons/fa";
 import { toast } from "react-toastify";
-import { useGetUserByIdQuery } from "../../app/authApi";
+import {
+  useGetUserByIdQuery,
+  useDeleteProfileImageMutation,
+} from "../../app/authApi";
 const actions = [
   {
     label: "Sponsor Talent",
@@ -48,6 +51,8 @@ const ImageUploadSwitcher = ({ userData, updateMyProfile }) => {
   const [images, setImages] = useState(Array(8).fill(null));
   const [selectedImage, setSelectedImage] = useState(0);
   const { data: userDataOne, isLoading, isError } = useGetUserByIdQuery(userId);
+  const [deleteProfileImage] = useDeleteProfileImageMutation();
+
   useEffect(() => {
     if (userData?.user?.images?.length) {
       const backendImages = userData?.user?.images?.map(
@@ -67,9 +72,8 @@ const ImageUploadSwitcher = ({ userData, updateMyProfile }) => {
   const fileInputRef = useRef(null);
   const [uploadingSlot, setUploadingSlot] = useState(null);
 
- 
   const [bioText, setBioText] = useState("");
-  
+
   const saveBio = async () => {
     try {
       const formData = new FormData();
@@ -87,8 +91,6 @@ const ImageUploadSwitcher = ({ userData, updateMyProfile }) => {
   const handleActionClick = (label) => {
     console.log(`${label} clicked`);
   };
-
-  
 
   const cancelEdit = () => {
     setEditingBio(false);
@@ -134,17 +136,24 @@ const ImageUploadSwitcher = ({ userData, updateMyProfile }) => {
   };
 
   // Remove image
-  const removeImage = (slotIndex) => {
-    const newImages = [...images];
-    newImages[slotIndex] = null;
-    setImages(newImages);
+  const removeImage = async (slotIndex) => {
+    try {
+      // Get image fileUrl and ID from original userData
+      const originalImage = userData?.user?.images?.[slotIndex];
+      if (originalImage?._id) {
+        const response = await deleteProfileImage(originalImage._id).unwrap();
+        toast.success(response?.message || "Image deleted successfully");
+      }
 
-    // Find next available image to select
-    const nextImageIndex = newImages.findIndex((img) => img !== null);
-    if (nextImageIndex !== -1) {
-      setSelectedImage(nextImageIndex);
-    } else {
-      setSelectedImage(0); // Default to first slot
+      const newImages = [...images];
+      newImages[slotIndex] = null;
+      setImages(newImages);
+
+      const nextImageIndex = newImages.findIndex((img) => img !== null);
+      setSelectedImage(nextImageIndex !== -1 ? nextImageIndex : 0);
+    } catch (error) {
+      console.error("Failed to delete image:", error);
+      toast.error("Failed to delete image");
     }
   };
 
@@ -282,7 +291,7 @@ const ImageUploadSwitcher = ({ userData, updateMyProfile }) => {
         </div>
         <button
           onClick={handleImageUpdate}
-          className="mt-4 w-full bg-green-600 hover:bg-green-700 text-white py-2 rounded-lg text-sm"
+          className="mt-4 w-full bg-green-600 cursor-pointer hover:bg-green-700 text-white py-2 rounded-lg text-sm"
         >
           Save Uploaded Images
         </button>
