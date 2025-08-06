@@ -5,6 +5,7 @@ import MotionPageWrapper from "./components/MotionPageWrapper";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import FAQ from "./pages/FAQ";
+import ProtectedRoute from "./routes/ProtectedRoute";
 // import Dashboard from "./pages/dashboard/Dashboard";
 import BrandedTokens from "./pages/branded_tokens/BrandedTokens";
 import TalentTokens from "./pages/talent_tokens/TalentTokens";
@@ -35,6 +36,7 @@ import TalentListing from "./pages/talent/TalentListing";
 import SignupOtpVerification from "./components/SignupOtpVerification";
 import VerifyId from "./components/VerifyId";
 import NetworthCalculator from "./components/NetworthCalculator";
+import GuestOnlyRoute from "./routes/GuestOnlyRoute";
 
 // Simple Black Header Component
 const SimpleHeader = () => {
@@ -144,14 +146,16 @@ export default function App() {
           />
 
           {/* Talent Profile Page */}
-          <Route
-            path="talent-profile"
-            element={
-              <MotionPageWrapper>
-                <TalentProfile />
-              </MotionPageWrapper>
-            }
-          />
+          <Route element={<ProtectedRoute />}>
+            <Route
+              path="talent-profile"
+              element={
+                <MotionPageWrapper>
+                  <TalentProfile />
+                </MotionPageWrapper>
+              }
+            />
+          </Route>
           {/* future_musicians Page */}
           <Route
             path="future-musicians"
@@ -171,14 +175,16 @@ export default function App() {
             }
           />
           {/* Signup page Page */}
-          <Route
-            path="signup"
-            element={
-              <MotionPageWrapper>
-                <Signup />
-              </MotionPageWrapper>
-            }
-          />
+          <Route element={<GuestOnlyRoute />}>
+            <Route
+              path="signup"
+              element={
+                <MotionPageWrapper>
+                  <Signup />
+                </MotionPageWrapper>
+              }
+            />
+          </Route>
           <Route
             path="verify-otp"
             element={
@@ -204,14 +210,16 @@ export default function App() {
             }
           />
           {/* Login page Page */}
-          <Route
-            path="login"
-            element={
-              <MotionPageWrapper>
-                <Login />
-              </MotionPageWrapper>
-            }
-          />
+          <Route element={<GuestOnlyRoute />}>
+            <Route
+              path="login"
+              element={
+                <MotionPageWrapper>
+                  <Login />
+                </MotionPageWrapper>
+              }
+            />
+          </Route>
           {/* Inverse Page */}
           <Route
             path="inverse"
