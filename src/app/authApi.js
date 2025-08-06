@@ -99,6 +99,22 @@ export const authApi = api.injectEndpoints({
       providesTags: ["ConfirmedTalentRequests"],
     }),
 
+    fanInverseRequest: builder.mutation({
+      query: (data) => ({
+        url: "/fan-request/",
+        method: "POST",
+        body: data,
+      }),
+    }),
+
+    talentConfirmationRequest: builder.mutation({
+      query: (data) => ({
+        url: "/talent-confirmation/",
+        method: "POST",
+        body: data,
+      }),
+    }),
+
     // friends API's
     removeFriend: builder.mutation({
       query: (id) => ({
@@ -136,4 +152,6 @@ export const {
   useGetNotificationsQuery,
   // Confirmed talent requests
   useGetConfirmedTalentRequestsQuery,
+  useFanInverseRequestMutation,
+  useTalentConfirmationRequestMutation,
 } = authApi;
