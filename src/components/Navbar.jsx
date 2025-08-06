@@ -6,7 +6,8 @@ import { MdOutlinePerson } from "react-icons/md";
 import siteLogo from "../assets/images/site-logo.png";
 import LoginModal from "./LoginModal";
 import SignupModal from "./SignupModal";
-
+import { useDispatch } from "react-redux";
+import { logout } from "../features/auth/authSlice";
 const navLinks = [
   { name: "Home", scrollTo: "home" },
   { name: "Top Talent", scrollTo: "top-talent" },
@@ -25,6 +26,9 @@ const navLinks = [
 const history = { scrollTarget: null };
 
 const Navbar = () => {
+  const dispatch = useDispatch();
+  const userLocalData = JSON.parse(localStorage.getItem("user"));
+  const userId = userLocalData?.id;
   const [isOpen, setIsOpen] = useState(false);
   const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
   const [isSignupModalOpen, setIsSignupModalOpen] = useState(false);
@@ -33,7 +37,10 @@ const Navbar = () => {
   const [ignoreScroll, setIgnoreScroll] = useState(false);
   const location = useLocation();
   const navigate = useNavigate();
-
+  const handleLogout = () => {
+    dispatch(logout());
+    navigate("/login"); // or your login/homepage
+  };
   const handleSearch = (e) => {
     e.preventDefault();
     setIsOpen(false);
@@ -186,23 +193,39 @@ const Navbar = () => {
                   </button>
                 )}
               </form>
-
-              <motion.button
-                onClick={openLoginModal}
-                className="custom-button-outline !py-1"
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-              >
-                Login
-              </motion.button>
-              <motion.button
-                onClick={openSignupModal}
-                className="custom-button-two rounded-full !py-1"
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-              >
-                Sign Up
-              </motion.button>
+              {userId ? (
+                <>
+                  {" "}
+                  <motion.button
+                    onClick={handleLogout}
+                    className="custom-button-outline !py-1"
+                    whileHover={{ scale: 1.05 }}
+                    whileTap={{ scale: 0.95 }}
+                  >
+                    Logout
+                  </motion.button>
+                </>
+              ) : (
+                <>
+                  {" "}
+                  <motion.button
+                    onClick={openLoginModal}
+                    className="custom-button-outline !py-1"
+                    whileHover={{ scale: 1.05 }}
+                    whileTap={{ scale: 0.95 }}
+                  >
+                    Login
+                  </motion.button>
+                  <motion.button
+                    onClick={openSignupModal}
+                    className="custom-button-two rounded-full !py-1"
+                    whileHover={{ scale: 1.05 }}
+                    whileTap={{ scale: 0.95 }}
+                  >
+                    Sign Up
+                  </motion.button>
+                </>
+              )}
             </div>
           </div>
 
