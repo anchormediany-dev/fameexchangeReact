@@ -96,6 +96,10 @@ export const authApi = api.injectEndpoints({
       }),
       invalidatesTags: ["Friends"],
     }),
+    getAllFriends: builder.query({
+      query: () => "/friends",
+      providesTags: ["Friends"],
+    }),
   }),
 });
 
@@ -116,4 +120,5 @@ export const {
   useGetEventsQuery,
   // Friends API's
   useRemoveFriendMutation,
+  useGetAllFriendsQuery,
 } = authApi;

@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import {
   FaUserFriends,
   FaTrash,
@@ -7,57 +7,64 @@ import {
   FaRegCalendarAlt,
   FaEllipsisH,
 } from "react-icons/fa";
-import { useGetUserByIdQuery } from "../../app/authApi";
+import { toast } from "react-toastify";
+import { useGetUserByIdQuery, useGetAllFriendsQuery } from "../../app/authApi";
 const FriendsEventsSection = () => {
   const user = JSON.parse(localStorage.getItem("user"));
   const userId = user?.id;
 
   const { data, isLoading, isError, error } = useGetUserByIdQuery(userId);
   const events = data?.events || [];
-  console.log(events);
-  const [friends, setFriends] = useState([
-    {
-      id: 1,
-      name: "Alex Johnson",
-      avatar: "https://randomuser.me/api/portraits/women/44.jpg",
-    },
-    {
-      id: 2,
-      name: "Sam Wilson",
-      avatar: "https://randomuser.me/api/portraits/men/32.jpg",
-    },
-    {
-      id: 3,
-      name: "Taylor Swift",
-      avatar: "https://randomuser.me/api/portraits/women/68.jpg",
-    },
-    {
-      id: 4,
-      name: "Jamie Lee",
-      avatar: "https://randomuser.me/api/portraits/women/63.jpg",
-    },
-    {
-      id: 5,
-      name: "Chris Evans",
-      avatar: "https://randomuser.me/api/portraits/men/22.jpg",
-    },
-    {
-      id: 6,
-      name: "Emma Watson",
-      avatar: "https://randomuser.me/api/portraits/women/33.jpg",
-    },
-    {
-      id: 7,
-      name: "Tom Holland",
-      avatar: "https://randomuser.me/api/portraits/men/45.jpg",
-    },
-    {
-      id: 8,
-      name: "Zendaya",
-      avatar: "https://randomuser.me/api/portraits/women/25.jpg",
-    },
-  ]);
+  const {
+    data: friendsData,
+    isLoading: isFriendsLoading,
+    isError: isFriendsError,
+    error: friendsError,
+  } = useGetAllFriendsQuery();
 
+  // const [friends, setFriends] = useState([
+  //   {
+  //     id: 1,
+  //     name: "Alex Johnson",
+  //     avatar: "https://randomuser.me/api/portraits/women/44.jpg",
+  //   },
+  //   {
+  //     id: 2,
+  //     name: "Sam Wilson",
+  //     avatar: "https://randomuser.me/api/portraits/men/32.jpg",
+  //   },
+  //   {
+  //     id: 3,
+  //     name: "Taylor Swift",
+  //     avatar: "https://randomuser.me/api/portraits/women/68.jpg",
+  //   },
+  //   {
+  //     id: 4,
+  //     name: "Jamie Lee",
+  //     avatar: "https://randomuser.me/api/portraits/women/63.jpg",
+  //   },
+  //   {
+  //     id: 5,
+  //     name: "Chris Evans",
+  //     avatar: "https://randomuser.me/api/portraits/men/22.jpg",
+  //   },
+  //   {
+  //     id: 6,
+  //     name: "Emma Watson",
+  //     avatar: "https://randomuser.me/api/portraits/women/33.jpg",
+  //   },
+  //   {
+  //     id: 7,
+  //     name: "Tom Holland",
+  //     avatar: "https://randomuser.me/api/portraits/men/45.jpg",
+  //   },
+  //   {
+  //     id: 8,
+  //     name: "Zendaya",
+  //     avatar: "https://randomuser.me/api/portraits/women/25.jpg",
+  //   },
+  // ]);
+  const friends = friendsData?.data || [];
   const [editingFriends, setEditingFriends] = useState(false);
   const [selected, setSelected] = useState([]);
 
@@ -77,7 +84,21 @@ const FriendsEventsSection = () => {
     setSelected([]);
     setEditingFriends(false);
   };
+  useEffect(() => {
+    if (!isFriendsLoading && friendsData?.success && friends.length === 0) {
+      toast.error("No friends found.");
+    }
 
+    if (isFriendsError) {
+      toast.error(friendsError?.data?.message || "Failed to fetch friends.");
+    }
+  }, [
+    isFriendsLoading,
+    friendsData,
+    friends.length,
+    isFriendsError,
+    friendsError,
+  ]);
   return (
     <div className="bg-[#171717] text-white">
       <div className="container">
@@ -101,39 +122,47 @@ const FriendsEventsSection = () => {
 
             <div className="p-4">
               <div className="grid grid-cols-2 sm:grid-cols-2 gap-3">
-                {friends.slice(0, 8).map((friend) => (
-                  <div
-                    key={friend.id}
-                    className="relative group rounded-lg p-2 hover:bg-[#333333] transition"
-                  >
-                    <div className="max-w-full">
-                      <img
-                        src={friend.avatar}
-                        alt={friend.name}
-                        className="rounded-full w-16 h-16 object-cover mx-auto mb-1"
-                      />
-                      <p className=" text-center">{friend.name}</p>
-                    </div>
-
-                    {editingFriends ? (
-                      <div className="absolute top-1 left-1">
-                        <input
-                          type="checkbox"
-                          checked={selected.includes(friend.id)}
-                          onChange={() => toggleSelect(friend.id)}
-                          className="form-checkbox h-4 w-4 text-yellow-400 bg-[#1f1f1f] border-gray-600"
-                        />
-                      </div>
-                    ) : (
-                      <button
-                        onClick={() => removeFriend(friend.id)}
-                        className="absolute top-1 right-1 text-red-400 opacity-0 group-hover:opacity-100 transition"
-                      >
-                        <FaTrash size={12} />
-                      </button>
-                    )}
+                {friends.length === 0 && !isFriendsLoading ? (
+                  <div className="col-span-2 text-center text-gray-400">
+                    No friends found.
                   </div>
-                ))}
+                ) : (
+                  friends.slice(0, 8).map((friend) => (
+                    <div
+                      key={friend._id}
+                      className="relative group rounded-lg p-2 hover:bg-[#333333] transition"
+                    >
+                      <div className="max-w-full">
+                        <img
+                          src={`https://ui-avatars.com/api/?name=${encodeURIComponent(
+                            friend.friendName
+                          )}&background=random`}
+                          alt={friend.friendName}
+                          className="rounded-full w-16 h-16 object-cover mx-auto mb-1"
+                        />
+                        <p className=" text-center">{friend.friendName}</p>
+                      </div>
+
+                      {editingFriends ? (
+                        <div className="absolute top-1 left-1">
+                          <input
+                            type="checkbox"
+                            checked={selected.includes(friend.id)}
+                            onChange={() => toggleSelect(friend.id)}
+                            className="form-checkbox h-4 w-4 text-yellow-400 bg-[#1f1f1f] border-gray-600"
+                          />
+                        </div>
+                      ) : (
+                        <button
+                          onClick={() => removeFriend(friend.id)}
+                          className="absolute top-1 right-1 text-red-400 opacity-0 group-hover:opacity-100 transition"
+                        >
+                          <FaTrash size={12} />
+                        </button>
+                      )}
+                    </div>
+                  ))
+                )}
               </div>
 
               <div className="mt-4 flex justify-between items-center">
