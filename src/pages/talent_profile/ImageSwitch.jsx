@@ -15,6 +15,7 @@ import {
   useGetUserByIdQuery,
   useDeleteProfileImageMutation,
 } from "../../app/authApi";
+
 const actions = [
   {
     label: "Sponsor Talent",
@@ -37,42 +38,24 @@ const IMAGE_BASE_URL = import.meta.env.VITE_API_IMAGE_BASE_URL;
 const ImageUploadSwitcher = ({ userData, updateMyProfile }) => {
   const user = JSON.parse(localStorage.getItem("user"));
   const userId = user?.id;
-  // Initialize with default images and 8 slots total
-  // const [images, setImages] = useState([
-  //   "https://images.unsplash.com/photo-1573140247632-f8fd74997d5c?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MzB8fHBlcnNvbnxlbnwwfHwwfHx8MA%3D%3D",
-  //   "https://images.unsplash.com/photo-1517841905240-472988babdf9?w=400&h=500&fit=crop&crop=face",
-  //   "https://images.unsplash.com/photo-1531746020798-e6953c6e8e04?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MzV8fHBlcnNvbnxlbnwwfHwwfHx8MA%3D%3D",
-  //   "https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=400&h=500&fit=crop&crop=face",
-  //   "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8cGVyc29ufGVufDB8fDB8fHww", // Empty slots
-  //   "https://plus.unsplash.com/premium_photo-1690407617542-2f210cf20d7e?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NXx8cGVyc29ufGVufDB8fDB8fHww",
-  //   "https://images.unsplash.com/photo-1580489944761-15a19d654956?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTB8fHBlcnNvbnxlbnwwfHwwfHx8MA%3D%3D",
-  //   "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTh8fHBlcnNvbnxlbnwwfHwwfHx8MA%3D%3D",
-  // ]);
-  const [images, setImages] = useState(Array(8).fill(null));
+  const [images, setImages] = useState([]);
   const [selectedImage, setSelectedImage] = useState(0);
   const { data: userDataOne, isLoading, isError } = useGetUserByIdQuery(userId);
   const [deleteProfileImage] = useDeleteProfileImageMutation();
+  const [editingBio, setEditingBio] = useState(false);
+  const [dragOver, setDragOver] = useState(false);
+  const fileInputRef = useRef(null);
+  const [isUploading, setIsUploading] = useState(false);
+  const [bioText, setBioText] = useState("");
 
   useEffect(() => {
     if (userData?.user?.images?.length) {
       const backendImages = userData?.user?.images?.map(
         (doc) => `${IMAGE_BASE_URL}${doc?.fileUrl?.replace(/\\/g, "/")}`
       );
-
-      const paddedImages = [...backendImages];
-      while (paddedImages.length < 8) paddedImages.push(null);
-
-      setImages(paddedImages);
-      console.log("Loaded images:", paddedImages);
+      setImages(backendImages);
     }
   }, [userData]);
-  // const [selectedImage, setSelectedImage] = useState(0);
-  const [editingBio, setEditingBio] = useState(false);
-  const [dragOver, setDragOver] = useState(null);
-  const fileInputRef = useRef(null);
-  const [uploadingSlot, setUploadingSlot] = useState(null);
-
-  const [bioText, setBioText] = useState("");
 
   const saveBio = async () => {
     try {
@@ -96,81 +79,57 @@ const ImageUploadSwitcher = ({ userData, updateMyProfile }) => {
     setEditingBio(false);
   };
 
-  // Handle file upload
-  const handleFileUpload = (file, slotIndex) => {
-    if (file && file.type.startsWith("image/")) {
-      setUploadingSlot(slotIndex);
-      const reader = new FileReader();
-      reader.onload = (e) => {
-        const newImages = [...images];
-        newImages[slotIndex] = e.target.result;
-        setImages(newImages);
-        setUploadingSlot(null);
+  // Handle file selection
+  const handleFileSelect = async (files) => {
+    const imageFiles = Array.from(files).filter((file) =>
+      file.type.startsWith("image/")
+    );
 
-        // Auto-select uploaded image if it's the first one or current slot is empty
-        if (slotIndex === 0 || !images[selectedImage]) {
-          setSelectedImage(slotIndex);
-        }
-      };
-      reader.readAsDataURL(file);
+    if (imageFiles.length === 0) {
+      toast.error("Please select valid image files");
+      return;
     }
-  };
 
-  // Handle drag and drop
-  const handleDragOver = (e, slotIndex) => {
-    e.preventDefault();
-    setDragOver(slotIndex);
-  };
+    setIsUploading(true);
 
-  const handleDragLeave = () => {
-    setDragOver(null);
-  };
-
-  const handleDrop = (e, slotIndex) => {
-    e.preventDefault();
-    setDragOver(null);
-    const files = Array.from(e.dataTransfer.files);
-    if (files[0]) {
-      handleFileUpload(files[0], slotIndex);
-    }
-  };
-
-  // Remove image
-  const removeImage = async (slotIndex) => {
     try {
-      // Get image fileUrl and ID from original userData
-      const originalImage = userData?.user?.images?.[slotIndex];
-      if (originalImage?._id) {
-        const response = await deleteProfileImage(originalImage._id).unwrap();
-        toast.success(response?.message || "Image deleted successfully");
+      // Read all selected files
+      const newImages = await Promise.all(
+        imageFiles.map((file) => {
+          return new Promise((resolve) => {
+            const reader = new FileReader();
+            reader.onload = (e) => resolve(e.target.result);
+            reader.readAsDataURL(file);
+          });
+        })
+      );
+
+      // Combine existing images with new ones
+      const updatedImages = [...images, ...newImages];
+      setImages(updatedImages);
+
+      // Auto-select the first new image if no image was selected before
+      if (images.length === 0 && newImages.length > 0) {
+        setSelectedImage(0);
       }
 
-      const newImages = [...images];
-      newImages[slotIndex] = null;
-      setImages(newImages);
-
-      const nextImageIndex = newImages.findIndex((img) => img !== null);
-      setSelectedImage(nextImageIndex !== -1 ? nextImageIndex : 0);
+      // Automatically save to backend
+      await saveImagesToBackend(updatedImages);
     } catch (error) {
-      console.error("Failed to delete image:", error);
-      toast.error("Failed to delete image");
+      console.error("Error processing images:", error);
+      toast.error("Error uploading images");
+    } finally {
+      setIsUploading(false);
     }
   };
 
-  // Trigger file input
-  const triggerFileInput = (slotIndex) => {
-    setUploadingSlot(slotIndex);
-    if (fileInputRef.current) {
-      fileInputRef.current.click();
-    }
-  };
-  const handleImageUpdate = async () => {
+  // Save images to backend
+  const saveImagesToBackend = async (imagesToSave) => {
     try {
-      // Filter out nulls and convert DataURLs to File objects if needed
-      const validImages = images.filter(Boolean);
-
       const formData = new FormData();
-      validImages.forEach((img, index) => {
+
+      // Convert DataURLs to Blobs and add to FormData
+      imagesToSave.forEach((img, index) => {
         if (img.startsWith("data:image")) {
           const blob = dataURLtoBlob(img);
           formData.append("images", blob, `image-${index}.png`);
@@ -178,9 +137,59 @@ const ImageUploadSwitcher = ({ userData, updateMyProfile }) => {
       });
 
       const res = await updateMyProfile(formData).unwrap();
-      toast.success(res?.message);
+      toast.success(res?.message || "Images saved successfully");
     } catch (error) {
-      toast.error("Data not saved!", error);
+      console.error("Failed to save images:", error);
+      toast.error("Failed to save images");
+    }
+  };
+
+  // Handle drag and drop
+  const handleDragOver = (e) => {
+    e.preventDefault();
+    setDragOver(true);
+  };
+
+  const handleDragLeave = () => {
+    setDragOver(false);
+  };
+
+  const handleDrop = (e) => {
+    e.preventDefault();
+    setDragOver(false);
+    if (e.dataTransfer.files.length > 0) {
+      handleFileSelect(e.dataTransfer.files);
+    }
+  };
+
+  // Remove image
+  const removeImage = async (index) => {
+    try {
+      // Check if this is an existing image from backend
+      if (index < userData?.user?.images?.length) {
+        const imageId = userData.user.images[index]._id;
+        const response = await deleteProfileImage(imageId).unwrap();
+        toast.success(response?.message || "Image deleted successfully");
+      }
+
+      const newImages = [...images];
+      newImages.splice(index, 1);
+      setImages(newImages);
+
+      // Adjust selected image index if needed
+      if (selectedImage >= newImages.length && newImages.length > 0) {
+        setSelectedImage(newImages.length - 1);
+      } else if (newImages.length === 0) {
+        setSelectedImage(0);
+      }
+
+      // Save changes if there are remaining images
+      if (newImages.length > 0) {
+        await saveImagesToBackend(newImages);
+      }
+    } catch (error) {
+      console.error("Failed to delete image:", error);
+      toast.error("Failed to delete image");
     }
   };
 
@@ -199,36 +208,44 @@ const ImageUploadSwitcher = ({ userData, updateMyProfile }) => {
 
   return (
     <div className="container grid grid-cols-1 lg:grid-cols-3 gap-6 px-4">
-      {/* Compact Image Upload Gallery - First Column */}
+      {/* Image Upload Gallery - First Column */}
       <div className="bg-white/5 backdrop-blur-xl border border-white/10 rounded-2xl shadow-xl p-3 md:p-4">
-        {/* Compact Main Image Display */}
+        {/* Main Image Display */}
         <div className="relative group mb-3">
           <div className="aspect-square md:aspect-[4/3] rounded-lg md:rounded-xl overflow-hidden bg-gradient-to-br from-gray-800 to-gray-900 shadow-md relative">
-            {images[selectedImage] ? (
+            {images.length > 0 && images[selectedImage] ? (
               <img
                 src={images[selectedImage]}
-                alt={images[selectedImage]}
+                alt={`Selected ${selectedImage + 1}`}
                 className="w-full h-full object-cover transition-all duration-300 group-hover:scale-105"
               />
             ) : (
-              <div className="w-full h-full flex items-center justify-center text-gray-400">
-                <div className="text-center">
-                  <FaUpload className="mx-auto mb-1 text-lg md:text-xl" />
-                  <p className="text-xs">Select Image</p>
+              <div
+                className={`w-full h-full flex items-center justify-center transition-all ${
+                  dragOver ? "bg-[#a38b41]/10 border-[#a38b41]" : ""
+                }`}
+                onDragOver={handleDragOver}
+                onDragLeave={handleDragLeave}
+                onDrop={handleDrop}
+                onClick={() => fileInputRef.current?.click()}
+              >
+                <div className="text-center p-4">
+                  <FaUpload className="mx-auto mb-3 text-2xl text-gray-400" />
+                  <p className="text-sm text-gray-300">
+                    Drag & drop images here or click to browse
+                  </p>
+                  <p className="text-xs text-gray-500 mt-1">
+                    Supports multiple image selection
+                  </p>
                 </div>
               </div>
             )}
-
-            {/* Compact Image Counter */}
-            {/* <div className="absolute bottom-1 left-1 bg-black/60 text-white px-1.5 py-0.5 rounded text-xs">
-                {selectedImage + 1}/8
-              </div> */}
           </div>
         </div>
 
-        {/* Responsive Grid: 2 columns on mobile, 4 on larger screens */}
-        <div className="grid grid-cols-4 lg:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-2 md:gap-3">
-          {Array.from({ length: 8 }).map((_, idx) => (
+        {/* Thumbnail Grid */}
+        <div className="grid grid-cols-4 gap-2 md:gap-3">
+          {images.map((img, idx) => (
             <div
               key={idx}
               className={`relative group aspect-square rounded-md overflow-hidden transition-all duration-200 ${
@@ -237,73 +254,55 @@ const ImageUploadSwitcher = ({ userData, updateMyProfile }) => {
                   : "hover:scale-105"
               }`}
             >
-              {images[idx] ? (
-                // Image exists
-                <>
-                  <button
-                    onClick={() => setSelectedImage(idx)}
-                    className="w-full h-full"
-                  >
-                    <img
-                      src={images[idx]}
-                      alt={`Slot ${idx + 1}`}
-                      className="w-full h-full object-cover"
-                    />
-                  </button>
+              <button
+                onClick={() => setSelectedImage(idx)}
+                className="w-full h-full"
+              >
+                <img
+                  src={img}
+                  alt={`Thumbnail ${idx + 1}`}
+                  className="w-full h-full object-cover"
+                />
+              </button>
 
-                  {/* Compact remove button */}
-                  <button
-                    onClick={() => removeImage(idx)}
-                    className="absolute top-0.5 right-0.5 bg-red-600 hover:bg-red-700 text-white p-0.5 md:p-1 rounded-full opacity-0 group-hover:opacity-100 transition-opacity text-xs"
-                  >
-                    <FaTimes size={6} className="md:hidden" />
-                    <FaTimes size={8} className="hidden md:block" />
-                  </button>
-                </>
-              ) : (
-                // Empty slot - compact upload area
-                <div
-                  className={`w-full h-full bg-white/5 border border-dashed border-white/20 hover:border-[#a38b41]/50 flex items-center justify-center cursor-pointer transition-all ${
-                    dragOver === idx ? "border-[#a38b41] bg-[#a38b41]/10" : ""
-                  } ${uploadingSlot === idx ? "animate-pulse" : ""}`}
-                  onClick={() => triggerFileInput(idx)}
-                  onDragOver={(e) => handleDragOver(e, idx)}
-                  onDragLeave={handleDragLeave}
-                  onDrop={(e) => handleDrop(e, idx)}
-                >
-                  <div className="text-center text-gray-400">
-                    {uploadingSlot === idx ? (
-                      <div className="animate-spin text-[#a38b41]">
-                        <FaUpload size={8} className="md:hidden" />
-                        <FaUpload size={10} className="hidden md:block" />
-                      </div>
-                    ) : (
-                      <>
-                        <FaPlus size={8} className="md:hidden" />
-                        <FaPlus size={10} className="hidden md:block" />
-                      </>
-                    )}
-                  </div>
-                </div>
-              )}
+              <button
+                onClick={() => removeImage(idx)}
+                className="absolute top-0.5 right-0.5 bg-red-600 hover:bg-red-700 text-white p-1 rounded-full opacity-0 group-hover:opacity-100 transition-opacity"
+              >
+                <FaTimes size={10} />
+              </button>
             </div>
           ))}
+
+          {/* Add more images button */}
+          {images.length < 20 && (
+            <div
+              className={`aspect-square rounded-md overflow-hidden bg-white/5 border border-dashed border-white/20 flex items-center justify-center cursor-pointer transition-all ${
+                dragOver ? "border-[#a38b41] bg-[#a38b41]/10" : ""
+              } ${isUploading ? "animate-pulse" : ""}`}
+              onClick={() => fileInputRef.current?.click()}
+              onDragOver={handleDragOver}
+              onDragLeave={handleDragLeave}
+              onDrop={handleDrop}
+            >
+              <div className="text-center p-2">
+                <FaPlus className="mx-auto text-gray-400" />
+                <p className="text-xs text-gray-400 mt-1">Add More</p>
+              </div>
+            </div>
+          )}
         </div>
-        <button
-          onClick={handleImageUpdate}
-          className="mt-4 w-full bg-green-600 cursor-pointer hover:bg-green-700 text-white py-2 rounded-lg text-sm"
-        >
-          Save Uploaded Images
-        </button>
+
         {/* Hidden file input */}
         <input
           ref={fileInputRef}
           type="file"
           accept="image/*"
           className="hidden"
+          multiple
           onChange={(e) => {
-            if (e.target.files[0] && uploadingSlot !== null) {
-              handleFileUpload(e.target.files[0], uploadingSlot);
+            if (e.target.files.length > 0) {
+              handleFileSelect(e.target.files);
             }
           }}
         />
