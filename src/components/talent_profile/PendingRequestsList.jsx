@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   FaCheck,
@@ -11,7 +12,8 @@ import { useNavigate } from "react-router-dom";
 import { useGetAllFanRequestsQuery } from "../../app/authApi";
 import { toast } from "react-toastify";
 
-const PendingRequestsList = ({ currentDate, onConfirm, onDecline }) => {
+const PendingRequestsList = () => {
+  const [currentDate, setCurrentDate] = useState(new Date());
   const navigate = useNavigate();
   const {
     data: fanRequestsData,
@@ -80,10 +82,14 @@ const PendingRequestsList = ({ currentDate, onConfirm, onDecline }) => {
   }
 
   return (
-    <section className="w-[60%]">
+    <section className="w-full lg:w-[60%]">
       <AnimatePresence>
         {filteredRequests.length > 0 ? (
-          <div className="space-y-3">
+          <div
+            className={`space-y-3 flex-1 ${
+              filteredRequests.length > 5 ? "overflow-y-auto pr-2" : ""
+            }`}
+          >
             {filteredRequests.map((request) => (
               <motion.div
                 key={request.id}

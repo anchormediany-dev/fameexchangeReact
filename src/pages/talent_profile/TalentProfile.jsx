@@ -19,7 +19,8 @@ import EventsSection from "../../components/talent_profile/EventsSection";
 import FriendsSection from "../../components/talent_profile/FriendsSection";
 import Notifications from "../../components/talent_profile/Notifications";
 import TalentLinks from "../../components/talent_profile/TalentLinks";
-import MeetingRequests from "../../components/talent_profile/MeetingRequests";
+import ConfirmedRequestsCalendar from "../../components/talent_profile/ConfirmedRequestsCalendar";
+import PendingRequestsList from "../../components/talent_profile/PendingRequestsList";
 const TalentProfile = () => {
   const userLocalData = JSON.parse(localStorage.getItem("user")); // replace "user" with your actual key
   const userId = userLocalData?.id;
@@ -264,7 +265,10 @@ const TalentProfile = () => {
       </div>
 
       {/* <PendingRequests /> */}
-      <MeetingRequests />
+      <div className="container mx-auto flex flex-col lg:flex-row gap-6 px-4 py-8 h-full min-h-[400px]">
+        <ConfirmedRequestsCalendar />
+        <PendingRequestsList />
+      </div>
       <CreateSession />
       <div className="bg-[#171717] px-4 md:px-8 container text-white">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">

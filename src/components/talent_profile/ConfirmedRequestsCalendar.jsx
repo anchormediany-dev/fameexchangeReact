@@ -96,7 +96,7 @@ const ConfirmedRequestsCalendar = () => {
   }
 
   return (
-    <div className="bg-white/5 w-[40%] backdrop-blur-xl border border-white/10 rounded-2xl p-3 md:p-4 mb-6">
+    <div className="bg-white/5 w-full lg:w-[40%] backdrop-blur-xl border border-white/10 rounded-2xl p-3 md:p-4 mb-6">
       <h2 className="text-2xl font-bold text-primary2 mb-6 text-center gradient-text">
         Confirmed Requests
       </h2>
