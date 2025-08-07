@@ -79,7 +79,7 @@ const FriendsSection = () => {
           ) : (
             friends.slice(0, 8).map((friend) => (
               <div
-                key={friend._id}
+                key={friend.friendId}
                 className="relative group rounded-lg p-2 hover:bg-[#333333] transition"
               >
                 <div className="max-w-full">
@@ -97,14 +97,14 @@ const FriendsSection = () => {
                   <div className="absolute top-1 left-1">
                     <input
                       type="checkbox"
-                      checked={selected.includes(friend._id)}
-                      onChange={() => toggleSelect(friend._id)}
+                      checked={selected.includes(friend.friendId)}
+                      onChange={() => toggleSelect(friend.friendId)}
                       className="form-checkbox h-4 w-4 text-yellow-400 bg-[#1f1f1f] border-gray-600"
                     />
                   </div>
                 ) : (
                   <button
-                    onClick={() => removeFriend(friend._id)}
+                    onClick={() => removeFriend(friend.friendId)}
                     className="absolute top-1 right-1 text-red-400 opacity-0 group-hover:opacity-100 transition"
                   >
                     <FaTrash size={12} />
@@ -125,7 +125,7 @@ const FriendsSection = () => {
               >
                 Remove Selected
               </button>
-              <button
+              {/* <button
                 onClick={() => {
                   setEditingFriends(false);
                   setSelected([]);
@@ -133,7 +133,7 @@ const FriendsSection = () => {
                 className="text-sm text-yellow-400 hover:text-yellow-500"
               >
                 Done
-              </button>
+              </button> */}
             </>
           )}
         </div>
