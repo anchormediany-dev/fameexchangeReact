@@ -23,6 +23,7 @@ import { IoLocationOutline, IoTicketOutline } from "react-icons/io5";
 import { BsBuilding, BsPeople, BsGoogle } from "react-icons/bs";
 import talents from "../../data/talentData";
 import FeedbackPopup from "../../components/FeedbackPopup";
+import TalentDatesCalendar from "../../components/inverse/TalentDatesCalendar";
 
 const InversePage = () => {
   const [currentDate, setCurrentDate] = useState(new Date(2025, 6));
@@ -394,86 +395,7 @@ const InversePage = () => {
               </div>
 
               {/* Calendar section */}
-              <div className="bg-white/5 backdrop-blur-xl border border-white/10 rounded-2xl p-3 md:p-4 h-full flex flex-col">
-                <h2 className="text-2xl font-bold text-primary2 mb-6 text-center">
-                  {selectedTalent
-                    ? `${selectedTalent.name}'s Availability`
-                    : "Talent Dates Available"}
-                </h2>
-                <div className="flex items-center justify-center space-x-2 sm:space-x-4 mb-4 sm:mb-6">
-                  <button
-                    onClick={() => navigateMonth(-1)}
-                    className="w-6 h-6 sm:w-8 sm:h-8 bg-white/10 hover:bg-white/20 rounded-lg flex items-center justify-center transition-all duration-300 hover:scale-110"
-                  >
-                    <FiChevronLeft className="w-3 h-3 sm:w-4 sm:h-4" />
-                  </button>
-
-                  <div className="text-center">
-                    <h2
-                      className="text-lg sm:text-2xl font-bold"
-                      style={{
-                        background:
-                          "linear-gradient(to right, #a38b41, #d4c374)",
-                        WebkitBackgroundClip: "text",
-                        WebkitTextFillColor: "transparent",
-                        backgroundClip: "text",
-                      }}
-                    >
-                      {monthNames[currentDate.getMonth()]}{" "}
-                      {currentDate.getFullYear()}
-                    </h2>
-                  </div>
-
-                  <button
-                    onClick={() => navigateMonth(1)}
-                    className="w-6 h-6 sm:w-8 sm:h-8 bg-white/10 hover:bg-white/20 rounded-lg flex items-center justify-center transition-all duration-300 hover:scale-110"
-                  >
-                    <FiChevronRight className="w-3 h-3 sm:w-4 sm:h-4" />
-                  </button>
-                </div>
-
-                {/* Calendar Grid */}
-                <div className="flex-1 flex flex-col">
-                  <div className="grid grid-cols-7 gap-1 mb-2 sm:mb-3">
-                    {dayNames.map((day) => (
-                      <div
-                        key={day}
-                        className="text-center font-semibold p-1 sm:p-2 text-gray-300 text-xs"
-                      >
-                        {day.slice(0, 3)}
-                      </div>
-                    ))}
-                  </div>
-
-                  <div className="grid grid-cols-7 gap-1 flex-1">
-                    {generateCalendarDays().map((day, index) => {
-                      const event = day ? getEventForDate(day) : null;
-                      return (
-                        <div key={index} className="aspect-square">
-                          {day && (
-                            <button
-                              className={`w-full h-full flex flex-col items-center justify-center text-xs font-medium rounded-lg transition-all duration-300 ${
-                                event
-                                  ? "bg-yellow-500 text-white hover:ring-2 hover:ring-white/50"
-                                  : "hover:bg-white/10 text-gray-300 border border-white/5 hover:border-[#a38b41]/30"
-                              }`}
-                            >
-                              <span className="font-bold text-xs sm:text-sm">
-                                {day}
-                              </span>
-                              {event && (
-                                <span className="text-xs mt-1 truncate w-full px-1 hidden sm:block">
-                                  Available
-                                </span>
-                              )}
-                            </button>
-                          )}
-                        </div>
-                      );
-                    })}
-                  </div>
-                </div>
-              </div>
+              <TalentDatesCalendar />
             </div>
           </div>
         </div>

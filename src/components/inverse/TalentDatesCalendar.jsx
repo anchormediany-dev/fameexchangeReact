@@ -17,14 +17,13 @@ import {
   format,
   parseISO,
 } from "date-fns";
-import { useGetConfirmedTalentRequestsQuery } from "../../app/authApi";
+import { useGetUpcomingSessionsQuery } from "../../app/authApi";
 import { toast } from "react-toastify";
 
 const TalentDatesCalendar = () => {
   const [currentDate, setCurrentDate] = useState(new Date());
   const [selectedDate, setSelectedDate] = useState(null);
-  const { data, isLoading, isError, error } =
-    useGetConfirmedTalentRequestsQuery();
+  const { data, isLoading, isError, error } = useGetUpcomingSessionsQuery();
 
   const monthNames = [
     "January",
@@ -44,7 +43,9 @@ const TalentDatesCalendar = () => {
 
   useEffect(() => {
     if (isError) {
-      toast.error(error?.data?.message || "Failed to load confirmed requests");
+      toast.error(
+        error?.data?.message || "Failed to load talent available dates"
+      );
     }
   }, [isError, error]);
 
@@ -71,19 +72,15 @@ const TalentDatesCalendar = () => {
     setSelectedDate(date);
   };
 
-  const isConfirmedDate = (date) => {
-    if (!data?.data) return false;
-    return data.data.some((req) => {
-      const requestDate = parseISO(req.confirmedDate);
-      return isSameDay(requestDate, date);
-    });
+  const normalizeDate = (dateStr) => {
+    const parsed = new Date(dateStr);
+    return new Date(parsed.getFullYear(), parsed.getMonth(), parsed.getDate());
   };
-
-  const getConfirmedRequestsForDate = (date) => {
-    if (!data?.data) return [];
-    return data.data.filter((req) => {
-      const requestDate = parseISO(req.confirmedDate);
-      return isSameDay(requestDate, date);
+  const isConfirmedDate = (date) => {
+    if (!data?.sessions) return false;
+    return data.sessions.some((session) => {
+      const sessionDate = normalizeDate(session.sessionDate);
+      return isSameDay(sessionDate, date);
     });
   };
 
@@ -96,8 +93,9 @@ const TalentDatesCalendar = () => {
   }
 
   return (
-    <div className="bg-white/5 w-full lg:w-[40%] backdrop-blur-xl border border-white/10 rounded-2xl p-3 md:p-4 mb-6">
-      <h2 className="text-2xl font-bold text-primary2 mb-6 text-center gradient-text">
+    <div className="bg-white/5 backdrop-blur-xl border border-white/10 rounded-2xl p-3 md:p-4 h-full flex flex-col">
+      <h2 className="text-2xl font-bold text-primary2 mb-6 text-center">
+        {/* <h2 className="text-2xl font-bold text-primary2 mb-6 text-center gradient-text"> */}
         Talent Dates Available
       </h2>
 

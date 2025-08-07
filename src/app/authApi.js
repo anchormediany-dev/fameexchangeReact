@@ -128,6 +128,11 @@ export const authApi = api.injectEndpoints({
       }),
       invalidatesTags: ["Sessions"],
     }),
+    getUpcomingSessions: builder.query({
+      query: () => "/sessions/upcoming",
+      providesTags: ["Sessions"],
+    }),
+
     // friends API's
     deleteFriends: builder.mutation({
       query: (data) => ({
@@ -168,6 +173,7 @@ export const {
   useResetPasswordMutation,
   // Sessions
   useCreateSessionMutation,
+  useGetUpcomingSessionsQuery,
   // User Profile API's
   useUpdateMyProfileMutation,
   useGetUserByIdQuery,
