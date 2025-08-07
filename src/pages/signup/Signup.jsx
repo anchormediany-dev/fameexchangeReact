@@ -13,8 +13,11 @@ import RepresentationSection from "../../components/RepresentationSection";
 import { useSignupMutation } from "../../app/authApi";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
+import { useDispatch } from "react-redux";
+import { setCredentials } from "../../features/auth/authSlice";
 const Signup = () => {
   const [signup, { isLoading, error }] = useSignupMutation();
+  const dispatch = useDispatch();
   const navigate = useNavigate();
   const [formData, setFormData] = useState({
     name: "",
@@ -110,16 +113,22 @@ const Signup = () => {
 
     try {
       const response = await signup(signupData).unwrap();
-      setSignupResponse(response);
-      toast.success(response?.emailVerification || "Signup successful!");
-
-      // setIsOtpOpen(true);
-      sessionStorage.setItem("signupEmail", formData.email);
       setTimeout(() => {
         navigate("/verify-otp", {
           state: { email: formData.email },
         });
       }, 500);
+      const user = {
+        id: response.userId,
+        email: signupData.email,
+        is_verified: false,
+        KYC_Verified: false,
+      };
+      dispatch(setCredentials({ accessToken: response.token, user }));
+
+      setSignupResponse(response);
+      toast.success(response?.emailVerification || "Signup successful!");
+      sessionStorage.setItem("signupEmail", formData.email);
     } catch (err) {
       toast.error(err?.data?.message);
     }
