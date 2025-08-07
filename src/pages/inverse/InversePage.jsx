@@ -555,7 +555,7 @@ const InversePage = () => {
                       onChange={(e) =>
                         handleResponseChange("availableDates", e.target.value)
                       }
-                      className="w-full px-4 py-3 border-2 border-gray-300 outline outline-1 outline-gray-300 text-primary2 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all"
+                      className="w-full px-4 py-3 border-2 border-gray-300 outline-1 outline-gray-300 text-primary2 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all"
                     >
                       <option value="">Select available date</option>
                       {selectedTalent?.availability.map((date, index) => (
@@ -589,7 +589,7 @@ const InversePage = () => {
                       onChange={(e) =>
                         handleResponseChange("place", e.target.value)
                       }
-                      className="w-full px-4 py-3 border border-gray-400 outline outline-1 outline-gray-300 text-primary2 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all"
+                      className="w-full px-4 py-3 border border-gray-400 outline-1 outline-gray-300 text-primary2 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all"
                     >
                       <option value="">Select place</option>
                       <option value="new-york">New York</option>
