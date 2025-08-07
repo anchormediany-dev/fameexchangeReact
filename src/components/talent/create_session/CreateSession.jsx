@@ -22,7 +22,7 @@ const CreateSession = () => {
       price: "50",
       bufferTime: 15,
       timeZone: moment.tz.guess(),
-      accessType: "Browser",
+      accessType: "online",
       // isActive: false,
       sessionDate: "",
       sessionTime: "",
@@ -231,7 +231,7 @@ const CreateSession = () => {
                 Access Type
               </label>
               <div className="flex gap-4">
-                {["VR", "Browser"].map((type) => (
+                {["online", "onsite"].map((type) => (
                   <label key={type} className="flex items-center gap-2">
                     <input
                       type="radio"
@@ -242,7 +242,7 @@ const CreateSession = () => {
                       className="gredient-text bg-transparent"
                     />
                     <span className="capitalize text-white">
-                      {type === "VR" ? "VR" : "Browser"} Access
+                      {type === "online" ? "Online" : "Onsite"}
                     </span>
                   </label>
                 ))}
