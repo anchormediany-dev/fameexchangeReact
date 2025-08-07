@@ -692,14 +692,14 @@ const FriendsSection = () => {
       refetchUsers();
     }
   }, [showAddFriendPopup, refetchUsers]);
-
+  const currentUser = JSON.parse(localStorage.getItem("user"));
   return (
     <div className="bg-[#1f1f1f] rounded-xl shadow-lg">
       <div className="p-4 border-b border-gray-700 flex justify-between items-center">
         <h3 className="text-lg font-semibold text-white">
           {showAddFriendPopup
             ? "Add New Friend"
-            : `My Friends (${friends.length})`}
+            : `${currentUser?.name}'s Friends (${friends.length})`}
         </h3>
         <div className="flex items-center gap-2">
           {!showAddFriendPopup && (
