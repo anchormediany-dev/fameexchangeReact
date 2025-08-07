@@ -1,7 +1,10 @@
 import { useState } from "react";
 import { FaTrash, FaHeart, FaEllipsisH } from "react-icons/fa";
 import { toast } from "react-toastify";
-import { useGetAllFriendsQuery } from "../../app/authApi";
+import {
+  useGetAllFriendsQuery,
+  useDeleteFriendsMutation,
+} from "../../app/authApi";
 
 const FriendsSection = () => {
   const {
@@ -10,7 +13,7 @@ const FriendsSection = () => {
     isError: isFriendsError,
     error: friendsError,
   } = useGetAllFriendsQuery();
-
+  const [deleteFriends, { isLoading: isDeleting }] = useDeleteFriendsMutation();
   const friends = friendsData?.data || [];
   const [editingFriends, setEditingFriends] = useState(false);
   const [selected, setSelected] = useState([]);
@@ -21,17 +24,29 @@ const FriendsSection = () => {
     );
   };
 
-  const removeFriend = (id) => {
-    // Implement actual removal logic here
-    toast.success(`Friend ${id} removed`);
-    setSelected((prev) => prev.filter((i) => i !== id));
+  const removeFriend = async (id) => {
+    try {
+      const res = await deleteFriends({ friendIds: [id] }).unwrap();
+      console.log(res);
+      toast.success(`${res?.message}`);
+      setSelected((prev) => prev.filter((i) => i !== id));
+    } catch (error) {
+      console.error(error);
+      toast.error(error?.data?.message || "Failed to remove friend");
+    }
   };
 
-  const removeMultipleFriends = () => {
-    // Implement actual removal logic here
-    toast.success(`${selected.length} friends removed`);
-    setSelected([]);
-    setEditingFriends(false);
+  const removeMultipleFriends = async () => {
+    try {
+      const res = await deleteFriends({ friendIds: selected }).unwrap();
+      console.log(res);
+      toast.success(`${res?.message}`);
+      setSelected([]);
+      setEditingFriends(false);
+    } catch (error) {
+      console.error(error);
+      toast.error(error?.data?.message || "Failed to remove selected friends");
+    }
   };
 
   //   if (isFriendsError) {

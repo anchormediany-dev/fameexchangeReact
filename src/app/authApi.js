@@ -129,13 +129,15 @@ export const authApi = api.injectEndpoints({
       invalidatesTags: ["Sessions"],
     }),
     // friends API's
-    removeFriend: builder.mutation({
-      query: (id) => ({
-        url: `/friends/${id}`,
+    deleteFriends: builder.mutation({
+      query: (data) => ({
+        url: "/friends/",
         method: "DELETE",
+        body: data, // expects { friendIds: [...] }
       }),
       invalidatesTags: ["Friends"],
     }),
+
     getAllFriends: builder.query({
       query: () => "/friends",
       providesTags: ["Friends"],
@@ -161,7 +163,7 @@ export const {
   // Events
   useGetEventsQuery,
   // Friends API's
-  useRemoveFriendMutation,
+  useDeleteFriendsMutation,
   useGetAllFriendsQuery,
   // Notifications
   useGetNotificationsQuery,
