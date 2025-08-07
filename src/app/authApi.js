@@ -119,7 +119,15 @@ export const authApi = api.injectEndpoints({
       }),
       invalidatesTags: ["FanRequests"],
     }),
-
+    // Sessions
+    createSession: builder.mutation({
+      query: (sessionData) => ({
+        url: "/sessions/",
+        method: "POST",
+        body: sessionData,
+      }),
+      invalidatesTags: ["Sessions"],
+    }),
     // friends API's
     removeFriend: builder.mutation({
       query: (id) => ({
@@ -144,6 +152,8 @@ export const {
   useNetworthCalculateMutation,
   useForgetPasswordMutation,
   useResetPasswordMutation,
+  // Sessions
+  useCreateSessionMutation,
   // User Profile API's
   useUpdateMyProfileMutation,
   useGetUserByIdQuery,
