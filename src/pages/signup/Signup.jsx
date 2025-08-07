@@ -1,5 +1,5 @@
 // src/features/auth/Signup.js
-import { useState, useRef, useEffect } from "react";
+import { useState } from "react";
 import { FaEnvelope, FaLock, FaUser } from "react-icons/fa";
 import { FcGoogle } from "react-icons/fc";
 import { FaFacebookF } from "react-icons/fa";
@@ -127,370 +127,368 @@ const Signup = () => {
 
   return (
     <>
-      {!isOtpOpen ? (
-        <MotionPageWrapper>
-          <div className="flex mt-10 lg:mt-16 2xl:mt-20 py-12 2xl:py-16 relative bg-[#171717] overflow-hidden">
-            <div className="w-full container flex flex-col-reverse lg:flex-row gap-8 z-10">
-              {/* Left: Signup Form (3/4 width on large screens) */}
-              <div className="lg:w-[70%] bg-[#222222] p-8 rounded-xl border border-[#333333]">
-                <h2 className="text-white custom-heading-two mb-8">
-                  Join Fame Exchange
-                </h2>
+      <MotionPageWrapper>
+        <div className="flex mt-10 lg:mt-16 2xl:mt-20 py-12 2xl:py-16 relative bg-[#171717] overflow-hidden">
+          <div className="w-full container flex flex-col-reverse lg:flex-row gap-8 z-10">
+            {/* Left: Signup Form (3/4 width on large screens) */}
+            <div className="lg:w-[70%] bg-[#222222] p-8 rounded-xl border border-[#333333]">
+              <h2 className="text-white custom-heading-two mb-8">
+                Join Fame Exchange
+              </h2>
 
-                <form onSubmit={handleSubmit} className="space-y-6">
-                  {/* First row - Name and Email */}
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    {/* Name */}
-                    <div>
-                      <label
-                        htmlFor="name"
-                        className="block text-white text-sm font-medium mb-2"
-                      >
-                        User Name*
-                      </label>
-                      <div
-                        className={`flex items-center border rounded-lg px-4 py-3 bg-[#2d2d2d] ${
-                          touched.name && !isNameValid
-                            ? "border-red-500"
-                            : "border-none"
-                        }`}
-                      >
-                        <FaUser className="text-gray-400 mr-3" />
-                        <input
-                          type="text"
-                          id="name"
-                          name="name"
-                          placeholder="User Name"
-                          value={formData.name}
-                          onChange={handleChange}
-                          onBlur={() => setTouched({ ...touched, name: true })}
-                          className="bg-transparent outline-none w-full text-white placeholder-gray-400"
-                        />
-                      </div>
-                      {touched.name && !isNameValid && (
-                        <p className="text-red-500 text-xs mt-1">
-                          Name is required
-                        </p>
-                      )}
-                    </div>
-
-                    {/* Email */}
-                    <div>
-                      <label
-                        htmlFor="email"
-                        className="block text-white text-sm font-medium mb-2"
-                      >
-                        Email*
-                      </label>
-                      <div
-                        className={`flex items-center border rounded-lg px-4 py-3 bg-[#2d2d2d] ${
-                          touched.email && !isEmailValid
-                            ? "border-red-500"
-                            : "border-none"
-                        }`}
-                      >
-                        <FaEnvelope className="text-gray-400 mr-3" />
-                        <input
-                          type="email"
-                          id="email"
-                          name="email"
-                          placeholder="Email"
-                          value={formData.email}
-                          onChange={handleChange}
-                          onBlur={() => setTouched({ ...touched, email: true })}
-                          className="bg-transparent outline-none w-full text-white placeholder-gray-400"
-                        />
-                      </div>
-                      {touched.email && !isEmailValid && (
-                        <p className="text-red-500 text-xs mt-1">
-                          Invalid email address
-                        </p>
-                      )}
-                    </div>
-                  </div>
-
-                  {/* Second row - Stage Name and Brand Name */}
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    {/* Stage Name */}
-                    <div>
-                      <label
-                        htmlFor="stage_name"
-                        className="block text-white text-sm font-medium mb-2"
-                      >
-                        Stage Name
-                      </label>
-                      <div className="flex items-center border border-none rounded-lg px-4 py-3 bg-[#2d2d2d]">
-                        <FaUser className="text-gray-400 mr-3" />
-                        <input
-                          type="text"
-                          id="stage_name"
-                          name="stage_name"
-                          placeholder="Stage Name"
-                          value={formData.stage_name}
-                          onChange={handleChange}
-                          className="bg-transparent outline-none w-full text-white placeholder-gray-400"
-                        />
-                      </div>
-                    </div>
-
-                    {/* Brand Name */}
-                    <div>
-                      <label
-                        htmlFor="token_brand_name"
-                        className="block text-white text-sm font-medium mb-2"
-                      >
-                        Brand Name
-                      </label>
-                      <div className="flex items-center border border-none rounded-lg px-4 py-3 bg-[#2d2d2d]">
-                        <FaUser className="text-gray-400 mr-3" />
-                        <input
-                          type="text"
-                          id="token_brand_name"
-                          name="token_brand_name"
-                          placeholder="Brand Name"
-                          value={formData.token_brand_name}
-                          onChange={handleChange}
-                          className="bg-transparent outline-none w-full text-white placeholder-gray-400"
-                        />
-                      </div>
-                    </div>
-                  </div>
-
-                  {/* Single row - Password and Confirm Password */}
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    {/* Password */}
-                    <div>
-                      <label
-                        htmlFor="password"
-                        className="block text-white text-sm font-medium mb-2"
-                      >
-                        Password*
-                      </label>
-                      <div
-                        className={`flex items-center border rounded-lg px-4 py-3 bg-[#2d2d2d] ${
-                          touched.password && !isPasswordValid
-                            ? "border-red-500"
-                            : "border-none"
-                        }`}
-                      >
-                        <FaLock className="text-gray-400 mr-3" />
-                        <input
-                          type={showPassword ? "text" : "password"}
-                          id="password"
-                          name="password"
-                          placeholder="Password"
-                          value={formData.password}
-                          onChange={handleChange}
-                          onBlur={() =>
-                            setTouched({ ...touched, password: true })
-                          }
-                          className="bg-transparent outline-none w-full text-white placeholder-gray-400"
-                        />
-                        <button
-                          type="button"
-                          onClick={() => setShowPassword(!showPassword)}
-                          className="ml-2 text-gray-400 hover:text-[#F3BA18] focus:outline-none"
-                        >
-                          {showPassword ? (
-                            <IoEyeOffSharp size={20} />
-                          ) : (
-                            <IoEyeSharp size={20} />
-                          )}
-                        </button>
-                      </div>
-                      {touched.password && !isPasswordValid && (
-                        <p className="text-red-500 text-xs mt-1">
-                          Password must be at least 6 characters
-                        </p>
-                      )}
-                    </div>
-
-                    {/* Confirm Password */}
-                    <div>
-                      <label
-                        htmlFor="confirmPassword"
-                        className="block text-white text-sm font-medium mb-2"
-                      >
-                        Confirm Password*
-                      </label>
-                      <div
-                        className={`flex items-center border rounded-lg px-4 py-3 bg-[#2d2d2d] ${
-                          touched.confirmPassword && !passwordsMatch
-                            ? "border-red-500"
-                            : "border-none"
-                        }`}
-                      >
-                        <FaLock className="text-gray-400 mr-3" />
-                        <input
-                          type={showPassword ? "text" : "password"}
-                          id="confirmPassword"
-                          name="confirmPassword"
-                          placeholder="Confirm password"
-                          value={formData.confirmPassword}
-                          onChange={handleChange}
-                          onBlur={() =>
-                            setTouched({ ...touched, confirmPassword: true })
-                          }
-                          className="bg-transparent outline-none w-full text-white placeholder-gray-400"
-                        />
-                        <button
-                          type="button"
-                          onClick={() => setShowPassword(!showPassword)}
-                          className="ml-2 text-gray-400 hover:text-[#F3BA18] focus:outline-none"
-                        >
-                          {showPassword ? (
-                            <IoEyeOffSharp size={20} />
-                          ) : (
-                            <IoEyeSharp size={20} />
-                          )}
-                        </button>
-                      </div>
-                      {touched.confirmPassword && !passwordsMatch && (
-                        <p className="text-red-500 text-xs mt-1">
-                          Passwords do not match
-                        </p>
-                      )}
-                    </div>
-                  </div>
-
-                  <TalentDropdown onFormChange={handleTalentChange} />
-
-                  <RepresentationSection
-                    onFormChange={handleRepresentationChange}
-                  />
-
-                  {/* Age Checkbox */}
-                  <div className="flex items-center space-x-3">
-                    <input
-                      type="checkbox"
-                      id="over18"
-                      checked={isOver18}
-                      onChange={(e) => setIsOver18(e.target.checked)}
-                      className="rounded bg-transparent border-[#F3BA18] text-[#F3BA18] focus:ring-[#F3BA18] h-5 w-5"
-                    />
+              <form onSubmit={handleSubmit} className="space-y-6">
+                {/* First row - Name and Email */}
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  {/* Name */}
+                  <div>
                     <label
-                      htmlFor="over18"
-                      className={`text-sm ${
-                        isOver18 ? "text-[#F3BA18]" : "text-gray-400"
+                      htmlFor="name"
+                      className="block text-white text-sm font-medium mb-2"
+                    >
+                      User Name*
+                    </label>
+                    <div
+                      className={`flex items-center border rounded-lg px-4 py-3 bg-[#2d2d2d] ${
+                        touched.name && !isNameValid
+                          ? "border-red-500"
+                          : "border-none"
                       }`}
                     >
-                      I'm over 18 years old*
-                    </label>
-                  </div>
-
-                  {/* Terms & Conditions Checkbox */}
-                  <div className="flex items-center space-x-3 mb-6">
-                    <input
-                      type="checkbox"
-                      id="terms"
-                      checked={agreedTerms}
-                      onChange={(e) => setAgreedTerms(e.target.checked)}
-                      className="m rounded bg-transparent border-[#F3BA18] text-[#F3BA18] focus:ring-[#F3BA18] h-5 w-5 flex-shrink-0"
-                    />
-                    <label htmlFor="terms" className="text-sm text-gray-300">
-                      I agree to the{" "}
-                      <Link
-                        to="/terms-conditions"
-                        className="text-[#F3BA18] hover:underline"
-                        target="_blank"
-                      >
-                        Terms & Conditions
-                      </Link>{" "}
-                      and{" "}
-                      <Link
-                        to="/privacy-policy"
-                        className="text-[#F3BA18] hover:underline"
-                        target="_blank"
-                      >
-                        Privacy Policy
-                      </Link>
-                      *
-                    </label>
-                  </div>
-
-                  {/* Submit Button */}
-                  <button
-                    type="submit"
-                    disabled={
-                      !isEmailValid ||
-                      !isPasswordValid ||
-                      !passwordsMatch ||
-                      !isNameValid ||
-                      !isOver18 ||
-                      !agreedTerms ||
-                      isLoading
-                    }
-                    className="w-full bg-gradient-to-r cursor-pointer from-[#F3BA18] to-[#FF9900] hover:from-[#FF9900] hover:to-[#F3BA18] text-white font-bold py-3 px-4 rounded-lg transition-all duration-300 disabled:opacity-80 disabled:cursor-not-allowed"
-                  >
-                    {isLoading ? "Signing Up..." : "Sign Up"}
-                  </button>
-
-                  {error && (
-                    <div className="text-red-500 text-center mt-2">
-                      {error.data?.message ||
-                        "Signup failed. Please try again."}
+                      <FaUser className="text-gray-400 mr-3" />
+                      <input
+                        type="text"
+                        id="name"
+                        name="name"
+                        placeholder="User Name"
+                        value={formData.name}
+                        onChange={handleChange}
+                        onBlur={() => setTouched({ ...touched, name: true })}
+                        className="bg-transparent outline-none w-full text-white placeholder-gray-400"
+                      />
                     </div>
-                  )}
-                </form>
-
-                {/* Divider */}
-                <div className="relative my-6">
-                  <div className="absolute inset-0 flex items-center">
-                    <div className="w-full border-t border-[#333333]"></div>
+                    {touched.name && !isNameValid && (
+                      <p className="text-red-500 text-xs mt-1">
+                        Name is required
+                      </p>
+                    )}
                   </div>
-                  <div className="relative flex justify-center">
-                    <span className="bg-[#222222] px-4 text-gray-400 text-sm">
-                      OR
-                    </span>
+
+                  {/* Email */}
+                  <div>
+                    <label
+                      htmlFor="email"
+                      className="block text-white text-sm font-medium mb-2"
+                    >
+                      Email*
+                    </label>
+                    <div
+                      className={`flex items-center border rounded-lg px-4 py-3 bg-[#2d2d2d] ${
+                        touched.email && !isEmailValid
+                          ? "border-red-500"
+                          : "border-none"
+                      }`}
+                    >
+                      <FaEnvelope className="text-gray-400 mr-3" />
+                      <input
+                        type="email"
+                        id="email"
+                        name="email"
+                        placeholder="Email"
+                        value={formData.email}
+                        onChange={handleChange}
+                        onBlur={() => setTouched({ ...touched, email: true })}
+                        className="bg-transparent outline-none w-full text-white placeholder-gray-400"
+                      />
+                    </div>
+                    {touched.email && !isEmailValid && (
+                      <p className="text-red-500 text-xs mt-1">
+                        Invalid email address
+                      </p>
+                    )}
                   </div>
                 </div>
 
-                {/* Social Login */}
-                <div className="space-y-4">
-                  <button className="w-full flex items-center justify-center gap-3 bg-[#2d2d2d] hover:bg-[#3d3d3d] text-white py-3 px-4 rounded-lg border border-[#333333] transition">
-                    <FcGoogle size={20} />
-                    <span>Continue With Google</span>
-                  </button>
-                  <button className="w-full flex items-center justify-center gap-3 bg-[#2d2d2d] hover:bg-[#3d3d3d] text-white py-3 px-4 rounded-lg border border-[#333333] transition">
-                    <FaFacebookF size={20} className="text-[#1877F2]" />
-                    <span>Continue With Facebook</span>
-                  </button>
+                {/* Second row - Stage Name and Brand Name */}
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  {/* Stage Name */}
+                  <div>
+                    <label
+                      htmlFor="stage_name"
+                      className="block text-white text-sm font-medium mb-2"
+                    >
+                      Stage Name
+                    </label>
+                    <div className="flex items-center border border-none rounded-lg px-4 py-3 bg-[#2d2d2d]">
+                      <FaUser className="text-gray-400 mr-3" />
+                      <input
+                        type="text"
+                        id="stage_name"
+                        name="stage_name"
+                        placeholder="Stage Name"
+                        value={formData.stage_name}
+                        onChange={handleChange}
+                        className="bg-transparent outline-none w-full text-white placeholder-gray-400"
+                      />
+                    </div>
+                  </div>
+
+                  {/* Brand Name */}
+                  <div>
+                    <label
+                      htmlFor="token_brand_name"
+                      className="block text-white text-sm font-medium mb-2"
+                    >
+                      Brand Name
+                    </label>
+                    <div className="flex items-center border border-none rounded-lg px-4 py-3 bg-[#2d2d2d]">
+                      <FaUser className="text-gray-400 mr-3" />
+                      <input
+                        type="text"
+                        id="token_brand_name"
+                        name="token_brand_name"
+                        placeholder="Brand Name"
+                        value={formData.token_brand_name}
+                        onChange={handleChange}
+                        className="bg-transparent outline-none w-full text-white placeholder-gray-400"
+                      />
+                    </div>
+                  </div>
                 </div>
 
-                {/* Link to Login */}
-                <p className="text-gray-400 text-center mt-6 text-sm">
-                  Already have an account?{" "}
-                  <Link to="/login" className="text-[#F3BA18] hover:underline">
-                    Log In
-                  </Link>
-                </p>
+                {/* Single row - Password and Confirm Password */}
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  {/* Password */}
+                  <div>
+                    <label
+                      htmlFor="password"
+                      className="block text-white text-sm font-medium mb-2"
+                    >
+                      Password*
+                    </label>
+                    <div
+                      className={`flex items-center border rounded-lg px-4 py-3 bg-[#2d2d2d] ${
+                        touched.password && !isPasswordValid
+                          ? "border-red-500"
+                          : "border-none"
+                      }`}
+                    >
+                      <FaLock className="text-gray-400 mr-3" />
+                      <input
+                        type={showPassword ? "text" : "password"}
+                        id="password"
+                        name="password"
+                        placeholder="Password"
+                        value={formData.password}
+                        onChange={handleChange}
+                        onBlur={() =>
+                          setTouched({ ...touched, password: true })
+                        }
+                        className="bg-transparent outline-none w-full text-white placeholder-gray-400"
+                      />
+                      <button
+                        type="button"
+                        onClick={() => setShowPassword(!showPassword)}
+                        className="ml-2 text-gray-400 hover:text-[#F3BA18] focus:outline-none"
+                      >
+                        {showPassword ? (
+                          <IoEyeOffSharp size={20} />
+                        ) : (
+                          <IoEyeSharp size={20} />
+                        )}
+                      </button>
+                    </div>
+                    {touched.password && !isPasswordValid && (
+                      <p className="text-red-500 text-xs mt-1">
+                        Password must be at least 6 characters
+                      </p>
+                    )}
+                  </div>
+
+                  {/* Confirm Password */}
+                  <div>
+                    <label
+                      htmlFor="confirmPassword"
+                      className="block text-white text-sm font-medium mb-2"
+                    >
+                      Confirm Password*
+                    </label>
+                    <div
+                      className={`flex items-center border rounded-lg px-4 py-3 bg-[#2d2d2d] ${
+                        touched.confirmPassword && !passwordsMatch
+                          ? "border-red-500"
+                          : "border-none"
+                      }`}
+                    >
+                      <FaLock className="text-gray-400 mr-3" />
+                      <input
+                        type={showPassword ? "text" : "password"}
+                        id="confirmPassword"
+                        name="confirmPassword"
+                        placeholder="Confirm password"
+                        value={formData.confirmPassword}
+                        onChange={handleChange}
+                        onBlur={() =>
+                          setTouched({ ...touched, confirmPassword: true })
+                        }
+                        className="bg-transparent outline-none w-full text-white placeholder-gray-400"
+                      />
+                      <button
+                        type="button"
+                        onClick={() => setShowPassword(!showPassword)}
+                        className="ml-2 text-gray-400 hover:text-[#F3BA18] focus:outline-none"
+                      >
+                        {showPassword ? (
+                          <IoEyeOffSharp size={20} />
+                        ) : (
+                          <IoEyeSharp size={20} />
+                        )}
+                      </button>
+                    </div>
+                    {touched.confirmPassword && !passwordsMatch && (
+                      <p className="text-red-500 text-xs mt-1">
+                        Passwords do not match
+                      </p>
+                    )}
+                  </div>
+                </div>
+
+                <TalentDropdown onFormChange={handleTalentChange} />
+
+                <RepresentationSection
+                  onFormChange={handleRepresentationChange}
+                />
+
+                {/* Age Checkbox */}
+                <div className="flex items-center space-x-3">
+                  <input
+                    type="checkbox"
+                    id="over18"
+                    checked={isOver18}
+                    onChange={(e) => setIsOver18(e.target.checked)}
+                    className="rounded bg-transparent border-[#F3BA18] text-[#F3BA18] focus:ring-[#F3BA18] h-5 w-5"
+                  />
+                  <label
+                    htmlFor="over18"
+                    className={`text-sm ${
+                      isOver18 ? "text-[#F3BA18]" : "text-gray-400"
+                    }`}
+                  >
+                    I'm over 18 years old*
+                  </label>
+                </div>
+
+                {/* Terms & Conditions Checkbox */}
+                <div className="flex items-center space-x-3 mb-6">
+                  <input
+                    type="checkbox"
+                    id="terms"
+                    checked={agreedTerms}
+                    onChange={(e) => setAgreedTerms(e.target.checked)}
+                    className="m rounded bg-transparent border-[#F3BA18] text-[#F3BA18] focus:ring-[#F3BA18] h-5 w-5 flex-shrink-0"
+                  />
+                  <label htmlFor="terms" className="text-sm text-gray-300">
+                    I agree to the{" "}
+                    <Link
+                      to="/terms-conditions"
+                      className="text-[#F3BA18] hover:underline"
+                      target="_blank"
+                    >
+                      Terms & Conditions
+                    </Link>{" "}
+                    and{" "}
+                    <Link
+                      to="/privacy-policy"
+                      className="text-[#F3BA18] hover:underline"
+                      target="_blank"
+                    >
+                      Privacy Policy
+                    </Link>
+                    *
+                  </label>
+                </div>
+
+                {/* Submit Button */}
+                <button
+                  type="submit"
+                  disabled={
+                    !isEmailValid ||
+                    !isPasswordValid ||
+                    !passwordsMatch ||
+                    !isNameValid ||
+                    !isOver18 ||
+                    !agreedTerms ||
+                    isLoading
+                  }
+                  className="w-full bg-gradient-to-r cursor-pointer from-[#F3BA18] to-[#FF9900] hover:from-[#FF9900] hover:to-[#F3BA18] text-white font-bold py-3 px-4 rounded-lg transition-all duration-300 disabled:opacity-80 disabled:cursor-not-allowed"
+                >
+                  {isLoading ? "Signing Up..." : "Sign Up"}
+                </button>
+
+                {error && (
+                  <div className="text-red-500 text-center mt-2">
+                    {error.data?.message || "Signup failed. Please try again."}
+                  </div>
+                )}
+              </form>
+
+              {/* Divider */}
+              <div className="relative my-6">
+                <div className="absolute inset-0 flex items-center">
+                  <div className="w-full border-t border-[#333333]"></div>
+                </div>
+                <div className="relative flex justify-center">
+                  <span className="bg-[#222222] px-4 text-gray-400 text-sm">
+                    OR
+                  </span>
+                </div>
               </div>
 
-              {/* Right Side Welcome (1/4 width on large screens) */}
-              <div className="lg:w-[30%] flex lg:flex-col flex-row items-center lg:items-start text-white space-y-6 pt-6">
-                <Link className="w-[100%] lg:block hidden" to="/">
-                  <img src={siteLogo} alt="Logo" />
+              {/* Social Login */}
+              <div className="space-y-4">
+                <button className="w-full flex items-center justify-center gap-3 bg-[#2d2d2d] hover:bg-[#3d3d3d] text-white py-3 px-4 rounded-lg border border-[#333333] transition">
+                  <FcGoogle size={20} />
+                  <span>Continue With Google</span>
+                </button>
+                <button className="w-full flex items-center justify-center gap-3 bg-[#2d2d2d] hover:bg-[#3d3d3d] text-white py-3 px-4 rounded-lg border border-[#333333] transition">
+                  <FaFacebookF size={20} className="text-[#1877F2]" />
+                  <span>Continue With Facebook</span>
+                </button>
+              </div>
+
+              {/* Link to Login */}
+              <p className="text-gray-400 text-center mt-6 text-sm">
+                Already have an account?{" "}
+                <Link to="/login" className="text-[#F3BA18] hover:underline">
+                  Log In
                 </Link>
-                <div className="flex flex-col">
-                  <h1 className=" mt-5">
-                    <span className="custom-heading-seven ml-5">
-                      {" "}
-                      WELCOME TO{" "}
-                    </span>
-                    <span className="text-xl ml-5">THE FAME ECHANGE</span>
-                  </h1>
-                  <p className="text-white font-normal text-xs ml-5">
-                    Secure, fast, and fair — your trusted partner in global
-                    currency exchange.
-                  </p>
-                </div>
+              </p>
+            </div>
+
+            {/* Right Side Welcome (1/4 width on large screens) */}
+            <div className="lg:w-[30%] flex lg:flex-col flex-row items-center lg:items-start text-white space-y-6 pt-6">
+              <Link className="w-[100%] lg:block hidden" to="/">
+                <img src={siteLogo} alt="Logo" />
+              </Link>
+              <div className="flex flex-col">
+                <h1 className=" mt-5">
+                  <span className="custom-heading-seven ml-5">
+                    {" "}
+                    WELCOME TO{" "}
+                  </span>
+                  <span className="text-xl ml-5">THE FAME ECHANGE</span>
+                </h1>
+                <p className="text-white font-normal text-xs ml-5">
+                  Secure, fast, and fair — your trusted partner in global
+                  currency exchange.
+                </p>
               </div>
             </div>
           </div>
-        </MotionPageWrapper>
-      ) : (
+        </div>
+      </MotionPageWrapper>
+      {/* ) : (
         <SignupOtpVerification signupResponse={signupResponse} />
-      )}
+      )} */}
     </>
   );
 };
