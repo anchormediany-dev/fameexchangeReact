@@ -108,6 +108,7 @@ export const authApi = api.injectEndpoints({
     }),
     getAllFanRequests: builder.query({
       query: () => "/fan-request/get-all",
+      providesTags: ["FanRequests"],
     }),
 
     talentConfirmationRequest: builder.mutation({
@@ -116,6 +117,7 @@ export const authApi = api.injectEndpoints({
         method: "POST",
         body: data,
       }),
+      invalidatesTags: ["FanRequests"],
     }),
 
     // friends API's

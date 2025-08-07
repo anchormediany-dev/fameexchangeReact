@@ -9,11 +9,16 @@ import {
 } from "react-icons/fa";
 import { parse, isSameMonth, parseISO, format } from "date-fns";
 import { useNavigate } from "react-router-dom";
-import { useGetAllFanRequestsQuery } from "../../app/authApi";
+import {
+  useGetAllFanRequestsQuery,
+  useTalentConfirmationRequestMutation,
+} from "../../app/authApi";
 import { toast } from "react-toastify";
 
 const PendingRequestsList = () => {
   const [currentDate, setCurrentDate] = useState(new Date());
+  const [activeRequestId, setActiveRequestId] = useState(null);
+  const [loadingAction, setLoadingAction] = useState(null);
   const navigate = useNavigate();
   const {
     data: fanRequestsData,
@@ -21,6 +26,11 @@ const PendingRequestsList = () => {
     isError,
     error,
   } = useGetAllFanRequestsQuery();
+  const [
+    confirmTalentRequest,
+    { isLoading: isConfirming, isError: isConfirmError, error: confirmError },
+  ] = useTalentConfirmationRequestMutation();
+
   const handleReschedule = (id) => {
     navigate("/inverse#reschedule-section");
   };
@@ -50,6 +60,36 @@ const PendingRequestsList = () => {
     const requestDate = parseISO(req.rawDate);
     return isSameMonth(requestDate, currentDate) && req.status === "pending";
   });
+  const handleTalentConfirmation = async (requestId, status) => {
+    const request = filteredRequests.find((r) => r.id === requestId);
+    if (!request) return;
+
+    const payload = {
+      requestId: request.id,
+      confirmedDate: request.rawDate,
+      time: request.time,
+      location: request.location,
+      fanName: request.fanName,
+      status,
+    };
+
+    try {
+      setActiveRequestId(requestId);
+      setLoadingAction(status);
+      await confirmTalentRequest(payload).unwrap();
+      toast.success(
+        `Request ${
+          status === "accepted" ? "confirmed" : "declined"
+        } successfully.`
+      );
+    } catch (err) {
+      console.error("Talent confirmation error:", err);
+      toast.error(err?.data?.message || "Request failed.");
+    } finally {
+      setActiveRequestId(null);
+      setLoadingAction(null);
+    }
+  };
 
   if (isLoading) {
     return (
@@ -124,20 +164,62 @@ const PendingRequestsList = () => {
                     </div>
                   </div>
                   <div className="flex gap-2">
+                    {/* Decline Button */}
                     <button
-                      onClick={() => onDecline(request.id)}
-                      className="flex items-center gap-1 px-3 py-2 rounded-lg bg-red-500/10 hover:bg-red-500/20 border border-red-500/20 text-red-400 transition-colors"
+                      onClick={() =>
+                        handleTalentConfirmation(request.id, "decline")
+                      }
+                      disabled={isConfirming && activeRequestId === request.id}
+                      className={`flex items-center gap-1 px-3 py-2 rounded-lg transition-all ${
+                        isConfirming && activeRequestId === request.id
+                          ? "cursor-not-allowed"
+                          : ""
+                      } ${
+                        isConfirming &&
+                        activeRequestId === request.id &&
+                        loadingAction === "decline"
+                          ? "bg-gray-500/40 text-white"
+                          : "bg-red-500/10 hover:bg-red-500/20 border border-red-500/20 text-red-400"
+                      }`}
                     >
-                      <FaTimes />
+                      {isConfirming &&
+                      activeRequestId === request.id &&
+                      loadingAction === "decline" ? (
+                        <FaSpinner className="animate-spin text-xs" />
+                      ) : (
+                        <FaTimes />
+                      )}
                       <span className="text-xs">Decline</span>
                     </button>
+
+                    {/* Confirm Button */}
                     <button
-                      onClick={() => onConfirm(request.id)}
-                      className="flex items-center gap-1 px-3 py-2 rounded-lg bg-gradient-to-r from-[#a38b41] to-[#c2ab67] text-black transition-all"
+                      onClick={() =>
+                        handleTalentConfirmation(request.id, "accepted")
+                      }
+                      disabled={isConfirming && activeRequestId === request.id}
+                      className={`flex items-center gap-1 px-3 py-2 rounded-lg transition-all ${
+                        isConfirming && activeRequestId === request.id
+                          ? "cursor-not-allowed"
+                          : ""
+                      } ${
+                        isConfirming &&
+                        activeRequestId === request.id &&
+                        loadingAction === "accepted"
+                          ? "bg-gray-500/40 text-white"
+                          : "bg-gradient-to-r from-[#a38b41] to-[#c2ab67] text-black"
+                      }`}
                     >
-                      <FaCheck />
+                      {isConfirming &&
+                      activeRequestId === request.id &&
+                      loadingAction === "accepted" ? (
+                        <FaSpinner className="animate-spin text-xs" />
+                      ) : (
+                        <FaCheck />
+                      )}
                       <span className="text-xs">Confirm</span>
                     </button>
+
                     <button
                       onClick={() => handleReschedule(request.id)}
                       className="flex items-center gap-1 px-3 py-2 rounded-lg bg-blue-500/10 hover:bg-blue-500/20 border border-blue-500/20 text-blue-400 transition-colors"
