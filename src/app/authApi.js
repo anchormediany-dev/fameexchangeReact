@@ -142,6 +142,18 @@ export const authApi = api.injectEndpoints({
       query: () => "/friends",
       providesTags: ["Friends"],
     }),
+    addFriend: builder.mutation({
+      query: (body) => ({
+        url: "/friends",
+        method: "POST",
+        body,
+      }),
+      invalidatesTags: ["Friends"],
+    }),
+
+    getUsers: builder.query({
+      query: () => "/user/getusers",
+    }),
   }),
 });
 
@@ -165,6 +177,8 @@ export const {
   // Friends API's
   useDeleteFriendsMutation,
   useGetAllFriendsQuery,
+  useAddFriendMutation,
+  useGetUsersQuery,
   // Notifications
   useGetNotificationsQuery,
   // Confirmed talent requests
