@@ -1,22 +1,30 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useNetworthCalculateMutation } from "../app/authApi";
+import FameExchangeLoader from "./FameExchangeLoader";
 
 const NetworthCalculator = () => {
   const navigate = useNavigate();
-  const [saveNetworth] = useNetworthCalculateMutation();
+  const [saveNetworth, { isLoading, error }] = useNetworthCalculateMutation();
 
   const [formData, setFormData] = useState({
     fullName: "",
     tokenBrandName: "",
     tokenName: "",
     tokenSupply: "",
-    youtube: "https://www.youtube.com/@MrBeast",
-    twitter: "https://twitter.com/MrBeast",
-    instagram: "https://www.instagram.com/mrbeast",
-    facebook: "https://www.facebook.com/MrBeast",
-    tiktok: "https://www.tiktok.com/@mrbeast",
-    snapchat: "https://www.snapchat.com/add/mrbeast",
+    youtube: "",
+    twitter: "",
+    instagram: "",
+    facebook: "",
+    tiktok: "",
+    snapchat: "",
+
+    //  youtube: "https://www.youtube.com/@MrBeast",
+    // twitter: "https://twitter.com/MrBeast",
+    // instagram: "https://www.instagram.com/mrbeast",
+    // facebook: "https://www.facebook.com/MrBeast",
+    // tiktok: "https://www.tiktok.com/@mrbeast",
+    // snapchat: "https://www.snapchat.com/add/mrbeast",
   });
 
   const [errors, setErrors] = useState({});
@@ -43,7 +51,7 @@ const NetworthCalculator = () => {
 
     if (!formData.tokenSupply.trim()) {
       newErrors.tokenSupply = "Token Supply is required";
-      
+
       isValid = false;
     }
 
@@ -119,11 +127,14 @@ const NetworthCalculator = () => {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-y-4 md:gap-x-6 w-full">
             {/* Full Name - Taking full width */}
             <div className="md:col-span-2">
+              <label htmlFor="fullName" className="text-white block mb-1">
+                Full Name
+              </label>
               <input
                 type="text"
                 id="fullName"
                 placeholder="Full Name"
-                className={`bg-transparent border border-primary rounded-xl px-4 py-2 w-full text-white placeholder:text-text-gray-400 heading-400-15 focus:outline-none focus:border-[2px] ${
+                className={`bg-transparent border  rounded-xl px-4 py-2 w-full text-white placeholder:text-text-gray-400 heading-400-15 focus:outline-none focus:border-[2px] ${
                   errors.fullName ? "border-red-500" : ""
                 }`}
                 value={formData.fullName}
@@ -139,11 +150,17 @@ const NetworthCalculator = () => {
               <h2 className="text-white heading-500-30 mb-3">Token Brand</h2>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
+                  <label
+                    htmlFor="tokenBrandName"
+                    className="text-white block mb-1"
+                  >
+                    Token Brand Name
+                  </label>
                   <input
                     type="text"
                     id="tokenBrandName"
                     placeholder="Token Brand Name"
-                    className={`bg-transparent border border-primary rounded-xl heading-400-15 px-4 py-2 w-full text-white placeholder:text-text-gray-400 focus:outline-none focus:border-[2px] ${
+                    className={`bg-transparent border  rounded-xl heading-400-15 px-4 py-2 w-full text-white placeholder:text-text-gray-400 focus:outline-none focus:border-[2px] ${
                       errors.tokenBrandName ? "border-red-500" : ""
                     }`}
                     value={formData.tokenBrandName}
@@ -157,10 +174,13 @@ const NetworthCalculator = () => {
                 </div>
 
                 <div>
+                  <label htmlFor="tokenName" className="text-white block mb-1">
+                    Token Name
+                  </label>
                   <input
                     id="tokenName"
                     placeholder="Token Name"
-                    className={`bg-transparent border heading-400-15 border-primary rounded-xl px-4 py-2 w-full text-white placeholder:text-text-gray-400 focus:outline-none focus:border-[2px] ${
+                    className={`bg-transparent border heading-400-15  rounded-xl px-4 py-2 w-full text-white placeholder:text-text-gray-400 focus:outline-none focus:border-[2px] ${
                       errors.tokenName ? "border-red-500" : ""
                     }`}
                     value={formData.tokenName}
@@ -174,11 +194,17 @@ const NetworthCalculator = () => {
                 </div>
 
                 <div>
+                  <label
+                    htmlFor="tokenSupply"
+                    className="text-white block mb-1"
+                  >
+                    Token Supply
+                  </label>
                   <input
                     type="text"
                     id="tokenSupply"
                     placeholder="Token Supply"
-                    className={`bg-transparent border heading-400-15 border-primary rounded-xl px-4 py-2 w-full text-white placeholder:text-text-gray-400 focus:outline-none focus:border-[2px] ${
+                    className={`bg-transparent border heading-400-15  rounded-xl px-4 py-2 w-full text-white placeholder:text-text-gray-400 focus:outline-none focus:border-[2px] ${
                       errors.tokenSupply ? "border-red-500" : ""
                     }`}
                     value={formData.tokenSupply}
@@ -198,61 +224,79 @@ const NetworthCalculator = () => {
               <h2 className="text-white heading-500-30 mb-3">Social Media</h2>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
+                  <label htmlFor="twitter" className="text-white block mb-1">
+                    Twitter
+                  </label>
                   <input
                     type="url"
                     id="twitter"
                     placeholder="Twitter URL"
-                    className="bg-transparent heading-400-15 border border-primary rounded-xl px-4 py-2 w-full text-white placeholder:text-text-gray-400 focus:outline-none focus:border-[2px]"
+                    className="bg-transparent heading-400-15 border  rounded-xl px-4 py-2 w-full text-white placeholder:text-text-gray-400 focus:outline-none focus:border-[2px]"
                     value={formData.twitter}
                     onChange={handleChange}
                   />
                 </div>
                 <div>
+                  <label htmlFor="youtube" className="text-white block mb-1">
+                    Youtube
+                  </label>
                   <input
                     type="url"
                     id="youtube"
                     placeholder="YouTube URL"
-                    className="bg-transparent heading-400-15 border border-primary rounded-xl px-4 py-2 w-full text-white placeholder:text-text-gray-400 focus:outline-none focus:border-[2px]"
+                    className="bg-transparent heading-400-15 border  rounded-xl px-4 py-2 w-full text-white placeholder:text-text-gray-400 focus:outline-none focus:border-[2px]"
                     value={formData.youtube}
                     onChange={handleChange}
                   />
                 </div>
                 <div>
+                  <label htmlFor="facebook" className="text-white block mb-1">
+                    Facebook
+                  </label>
                   <input
                     type="url"
                     id="facebook"
                     placeholder="Facebook URL"
-                    className="bg-transparent heading-400-15 border border-primary rounded-xl px-4 py-2 w-full text-white placeholder:text-text-gray-400 focus:outline-none focus:border-[2px]"
+                    className="bg-transparent heading-400-15 border  rounded-xl px-4 py-2 w-full text-white placeholder:text-text-gray-400 focus:outline-none focus:border-[2px]"
                     value={formData.facebook}
                     onChange={handleChange}
                   />
                 </div>
                 <div>
+                  <label htmlFor="tiktok" className="text-white block mb-1">
+                    Tiktok
+                  </label>
                   <input
                     type="url"
                     id="tiktok"
                     placeholder="TikTok URL"
-                    className="bg-transparent heading-400-15 border border-primary rounded-xl px-4 py-2 w-full text-white placeholder:text-text-gray-400 focus:outline-none focus:border-[2px]"
+                    className="bg-transparent heading-400-15 border  rounded-xl px-4 py-2 w-full text-white placeholder:text-text-gray-400 focus:outline-none focus:border-[2px]"
                     value={formData.tiktok}
                     onChange={handleChange}
                   />
                 </div>
                 <div>
+                  <label htmlFor="instagram" className="text-white block mb-1">
+                    Instagram
+                  </label>
                   <input
                     type="url"
                     id="instagram"
                     placeholder="Instagram URL"
-                    className="bg-transparent border heading-400-15 border-primary rounded-xl px-4 py-2 w-full text-white placeholder:text-text-gray-400 focus:outline-none focus:border-[2px]"
+                    className="bg-transparent border heading-400-15  rounded-xl px-4 py-2 w-full text-white placeholder:text-text-gray-400 focus:outline-none focus:border-[2px]"
                     value={formData.instagram}
                     onChange={handleChange}
                   />
                 </div>
                 <div>
+                  <label htmlFor="snapchat" className="text-white block mb-1">
+                    Snapchat
+                  </label>
                   <input
                     type="url"
                     id="snapchat"
                     placeholder="Snapchat URL"
-                    className="bg-transparent border heading-400-15 border-primary rounded-xl px-4 py-2 w-full text-white placeholder:text-text-gray-400 focus:outline-none focus:border-[2px]"
+                    className="bg-transparent border heading-400-15  rounded-xl px-4 py-2 w-full text-white placeholder:text-text-gray-400 focus:outline-none focus:border-[2px]"
                     value={formData.snapchat}
                     onChange={handleChange}
                   />
@@ -271,6 +315,11 @@ const NetworthCalculator = () => {
             {isSubmitting ? "Calculating..." : "Calculate"}
           </button>
         </form>
+        {isLoading && (
+          <div className="mt-6 flex justify-center">
+            <FameExchangeLoader />
+          </div>
+        )}
       </div>
     </div>
   );
