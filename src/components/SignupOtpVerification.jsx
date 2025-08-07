@@ -54,7 +54,7 @@ const SignupOtpVerification = () => {
       const res = await verifyOtp({ email, otp }).unwrap();
       toast.success("OTP Verified Successfully!");
       setTimeout(() => {
-        navigate("/login");
+        navigate("/verify-id");
       }, 500);
       // setIsVerifyOpen(true);
     } catch (err) {
