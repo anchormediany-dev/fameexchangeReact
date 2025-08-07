@@ -23,7 +23,7 @@ const CongratulationsPopup = ({ onClose }) => {
   const handleGoToDashboard = () => {
     onClose?.();
     setTimeout(() => {
-      navigate("/dashboard");
+      navigate("/login");
     }, 300);
   };
 
@@ -61,7 +61,8 @@ const CongratulationsPopup = ({ onClose }) => {
             type="button"
             className="bg-gray heading-500-23 text-center hover:bg-primary hover:text-white w-full hover:scale-105 text-primary  px-6 py-3 rounded-md transition-all duration-300 group cursor-pointer"
           >
-            Go To Dashboard
+            {/* Go To Dashboard */}
+            Go To Login
           </button>
         </motion.div>
       </motion.div>
