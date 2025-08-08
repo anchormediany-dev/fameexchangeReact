@@ -17,13 +17,18 @@ import {
   format,
   parseISO,
 } from "date-fns";
-import { useGetUpcomingSessionsQuery } from "../../app/authApi";
+// import { useGetUpcomingSessionsQuery } from "../../app/authApi";
 import { toast } from "react-toastify";
 
-const TalentDatesCalendar = () => {
+const TalentDatesCalendar = ({
+  sessionsData: data,
+  isLoading,
+  isError,
+  error,
+}) => {
   const [currentDate, setCurrentDate] = useState(new Date());
   const [selectedDate, setSelectedDate] = useState(null);
-  const { data, isLoading, isError, error } = useGetUpcomingSessionsQuery();
+  // const { data, isLoading, isError, error } = useGetUpcomingSessionsQuery();
 
   const monthNames = [
     "January",

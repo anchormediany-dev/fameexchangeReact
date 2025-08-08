@@ -7,14 +7,20 @@ import FeedbackPopup from "../../components/FeedbackPopup";
 import TalentDatesCalendar from "../../components/inverse/TalentDatesCalendar";
 import TalentConfirmationForm from "../../components/inverse/TalentConfirmationForm";
 import FanInverseRequestForm from "../../components/inverse/FanInverseRequestForm";
-
+import { useGetUpcomingSessionsQuery } from "../../app/authApi";
 const InversePage = () => {
   const [searchValue, setSearchValue] = useState("");
   const [searchResults, setSearchResults] = useState([]);
   const [showResults, setShowResults] = useState(false);
   const [isFeedbackShow, setIsFeedbackShow] = useState(false);
   const location = useLocation();
-
+  const { selectedRequestId, selectedFanName } = location.state || {};
+  const {
+    data: sessionsData,
+    isLoading,
+    isError,
+    error,
+  } = useGetUpcomingSessionsQuery();
   useEffect(() => {
     // Wait for content to render
     const hash = location.hash;
@@ -198,14 +204,26 @@ const InversePage = () => {
                   </a>
                 </div>
               </div>
-              <TalentDatesCalendar />
+              <TalentDatesCalendar
+                sessionsData={sessionsData}
+                isLoading={isLoading}
+                isError={isError}
+                error={error}
+              />
             </div>
           </div>
         </div>
         <div className="flex flex-col 2xl:gap-16 gap-12 mt-10 lg:mt-16 2xl:mt-20">
           <div className="grid grid-cols-1 lg:grid-cols-4 gap-10 lg:gap-12 xl:gap-16 2xl:gap-20 items-stretch">
             <FanInverseRequestForm />
-            <TalentConfirmationForm />
+            <TalentConfirmationForm
+              selectedFanName={selectedFanName}
+              selectedRequestId={selectedRequestId}
+              sessionsData={sessionsData}
+              isLoading={isLoading}
+              isError={isError}
+              error={error}
+            />
           </div>
         </div>
       </div>

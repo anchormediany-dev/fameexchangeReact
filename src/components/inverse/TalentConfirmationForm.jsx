@@ -1,30 +1,29 @@
 import { useState, useEffect } from "react";
 import { useLocation } from "react-router-dom";
 
-const TalentConfirmationForm = () => {
+const TalentConfirmationForm = ({
+  selectedRequestId,
+  selectedFanName,
+  sessionsData,
+  isLoading,
+  isError,
+  error,
+}) => {
+  console.log(sessionsData?.sessions[0]?.sessionDate);
   const [responseForm, setResponseForm] = useState({
     availableDates: "",
     time: "",
     place: "",
-    fansName: "",
+    fansName: selectedFanName || "",
   });
 
   const location = useLocation();
-  const selectedTalent = location.state?.selectedTalent;
 
   const handleResponseChange = (field, value) => {
     setResponseForm({
       ...responseForm,
       [field]: value,
     });
-  };
-
-  const handleAccepted = () => {
-    console.log("Accepted:", responseForm);
-  };
-
-  const handleRejected = () => {
-    console.log("Reschedule:", responseForm);
   };
 
   useEffect(() => {
@@ -64,9 +63,9 @@ const TalentConfirmationForm = () => {
               className="w-full px-4 py-3 border-2 border-gray-300 outline-1 outline-gray-300 text-primary2 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all"
             >
               <option value="">Select available date</option>
-              {selectedTalent?.availability.map((date, index) => (
-                <option key={index} value={date}>
-                  {date}
+              {sessionsData?.sessions?.map((session) => (
+                <option key={session._id} value={session.sessionDate}>
+                  {session.sessionDate}
                 </option>
               ))}
             </select>
@@ -112,7 +111,7 @@ const TalentConfirmationForm = () => {
             <input
               type="text"
               value={responseForm.fansName}
-              onChange={(e) => handleResponseChange("fansName", e.target.value)}
+              readOnly
               className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition-all"
               placeholder="Enter fan's name"
             />
@@ -120,14 +119,14 @@ const TalentConfirmationForm = () => {
         </div>
 
         <div className="flex gap-4 mt-8 justify-center">
-          <button
+          {/* <button
             onClick={handleAccepted}
             className="px-8 py-3 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors font-medium"
           >
             Accepted
-          </button>
+          </button> */}
           <button
-            onClick={handleRejected}
+            // onClick={handleReschedule}
             className="px-8 py-3 bg-primary2 text-white rounded-lg hover:bg-primary2 transition-colors font-medium"
           >
             Reschedule

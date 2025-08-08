@@ -32,11 +32,10 @@ const PendingRequestsList = () => {
   ] = useTalentConfirmationRequestMutation();
 
   const handleReschedule = (request) => {
-    const fanName = request?.fanName || "Unknown Fan";
-    const requestId = request?.id;
-    console.log(requestId);
+    const selectedFanName = request?.fanName || "Unknown Fan";
+    const selectedRequestId = request?.id;
     navigate("/inverse#reschedule-section", {
-      state: { requestId, fanName },
+      state: { selectedRequestId, selectedFanName },
     });
   };
 
