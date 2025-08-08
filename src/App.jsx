@@ -37,6 +37,7 @@ import SignupOtpVerification from "./components/SignupOtpVerification";
 import VerifyId from "./components/VerifyId";
 import NetworthCalculator from "./components/NetworthCalculator";
 import GuestOnlyRoute from "./routes/GuestOnlyRoute";
+import EventCreateForm from "./pages/create_events/EventCreateForm";
 
 // Simple Black Header Component
 const SimpleHeader = () => {
@@ -152,6 +153,17 @@ export default function App() {
               element={
                 <MotionPageWrapper>
                   <TalentProfile />
+                </MotionPageWrapper>
+              }
+            />
+          </Route>
+          {/* Create event */}
+          <Route element={<ProtectedRoute />}>
+            <Route
+              path="add-event"
+              element={
+                <MotionPageWrapper>
+                  <EventCreateForm />
                 </MotionPageWrapper>
               }
             />
