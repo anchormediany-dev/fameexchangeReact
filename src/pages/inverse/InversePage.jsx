@@ -1,26 +1,7 @@
 import { useState, useEffect } from "react";
 import { useLocation } from "react-router-dom";
-import {
-  FiChevronLeft,
-  FiChevronRight,
-  FiPlus,
-  FiUpload,
-  FiGlobe,
-  FiPhone,
-  FiVideo,
-  FiUsers,
-  FiHeart,
-  FiX,
-  FiExternalLink,
-  FiZoomIn,
-  FiZoomOut,
-  FiNavigation,
-  FiPlay,
-  FiPause,
-} from "react-icons/fi";
+import { FiExternalLink } from "react-icons/fi";
 import { FaSearch, FaTimes } from "react-icons/fa";
-import { IoLocationOutline, IoTicketOutline } from "react-icons/io5";
-import { BsBuilding, BsPeople, BsGoogle } from "react-icons/bs";
 import talents from "../../data/talentData";
 import FeedbackPopup from "../../components/FeedbackPopup";
 import TalentDatesCalendar from "../../components/inverse/TalentDatesCalendar";
@@ -28,28 +9,9 @@ import TalentConfirmationForm from "../../components/inverse/TalentConfirmationF
 import FanInverseRequestForm from "../../components/inverse/FanInverseRequestForm";
 
 const InversePage = () => {
-  const [currentDate, setCurrentDate] = useState(new Date(2025, 6));
-
-  const [talentAvailabilityEvents, setTalentAvailabilityEvents] = useState([]);
   const [searchValue, setSearchValue] = useState("");
   const [searchResults, setSearchResults] = useState([]);
   const [showResults, setShowResults] = useState(false);
-  const [fanRequest, setFanRequest] = useState({
-    talentName: "",
-    date: "",
-    time: "",
-    desiredLocation: "",
-    cardNumber: "",
-    cardExpiry: "",
-    cardCvv: "",
-    cardName: "",
-  });
-  const [responseForm, setResponseForm] = useState({
-    availableDates: "",
-    time: "",
-    place: "",
-    fansName: "",
-  });
   const [isFeedbackShow, setIsFeedbackShow] = useState(false);
   const location = useLocation();
 
@@ -89,159 +51,8 @@ const InversePage = () => {
   // Select a talent
   const handleSelectTalent = (talent) => {
     setSelectedTalent(talent);
-    setFanRequest((prev) => ({
-      ...prev,
-      talentName: talent.name,
-    }));
     setSearchValue("");
     setShowResults(false);
-
-    // Convert talent availability to calendar events
-    const availabilityEvents = talent.availability.map((dateStr) => {
-      const date = new Date(dateStr);
-      return {
-        date: date.getDate(),
-        name: `${talent.name} Available`,
-        category: "talent",
-        color: "bg-yellow-500",
-        talentId: talent.id,
-      };
-    });
-
-    setTalentAvailabilityEvents(availabilityEvents);
-  };
-
-  // Handle fan request form changes
-  const handleFanRequestChange = (field, value) => {
-    setFanRequest((prev) => ({
-      ...prev,
-      [field]: value,
-    }));
-  };
-
-  // Handle response form changes
-  const handleResponseChange = (field, value) => {
-    setResponseForm((prev) => ({
-      ...prev,
-      [field]: value,
-    }));
-  };
-
-  // Clear form
-  const handleClear = () => {
-    setFanRequest({
-      talentName: "",
-      date: "",
-      time: "",
-      desiredLocation: "",
-      cardNumber: "",
-      cardExpiry: "",
-      cardCvv: "",
-      cardName: "",
-    });
-  };
-
-  // Send request
-  const handleSendRequest = () => {
-    console.log("Sending request:", fanRequest);
-    // Add your send request logic here
-  };
-
-  // Cancel request
-  const handleCancel = () => {
-    handleClear();
-  };
-
-  // Accept request
-  const handleAccepted = () => {
-    console.log("Request accepted:", responseForm);
-    // Add your acceptance logic here
-  };
-
-  // Reject request
-  const handleRejected = () => {
-    console.log("Request rejected:", responseForm);
-    // Add your rejection logic here
-  };
-
-  // Calendar navigation
-  const navigateMonth = (direction) => {
-    const newDate = new Date(currentDate);
-    newDate.setMonth(currentDate.getMonth() + direction);
-    setCurrentDate(newDate);
-  };
-
-  // Generate calendar days
-  const getDaysInMonth = (date) => {
-    return new Date(date.getFullYear(), date.getMonth() + 1, 0).getDate();
-  };
-
-  const getFirstDayOfMonth = (date) => {
-    return new Date(date.getFullYear(), date.getMonth(), 1).getDay();
-  };
-
-  const generateCalendarDays = () => {
-    const daysInMonth = getDaysInMonth(currentDate);
-    const firstDay = getFirstDayOfMonth(currentDate);
-    const days = [];
-
-    for (let i = 0; i < firstDay; i++) {
-      days.push(null);
-    }
-
-    for (let day = 1; day <= daysInMonth; day++) {
-      days.push(day);
-    }
-
-    return days;
-  };
-
-  // Get events for calendar
-  const getEventForDate = (day) => {
-    return talentAvailabilityEvents.find((event) => event.date === day);
-  };
-
-  // Month names
-  const monthNames = [
-    "JANUARY",
-    "FEBRUARY",
-    "MARCH",
-    "APRIL",
-    "MAY",
-    "JUNE",
-    "JULY",
-    "AUGUST",
-    "SEPTEMBER",
-    "OCTOBER",
-    "NOVEMBER",
-    "DECEMBER",
-  ];
-
-  // Day names
-  const dayNames = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
-
-  // Format card number
-  const formatCardNumber = (value) => {
-    const v = value.replace(/\s+/g, "").replace(/[^0-9]/gi, "");
-    const matches = v.match(/\d{4,16}/g);
-    const match = (matches && matches[0]) || "";
-    const parts = [];
-    for (let i = 0, len = match.length; i < len; i += 4) {
-      parts.push(match.substring(i, i + 4));
-    }
-    if (parts.length) {
-      return parts.join(" ");
-    }
-    return value;
-  };
-
-  // Format expiry date
-  const formatExpiry = (value) => {
-    const v = value.replace(/[^0-9]/g, "");
-    if (v.length >= 3) {
-      return `${v.slice(0, 2)}/${v.slice(2, 4)}`;
-    }
-    return value;
   };
 
   return (
@@ -312,11 +123,8 @@ const InversePage = () => {
         </section>
 
         <div className="flex flex-col 2xl:gap-16 gap-12">
-          {/* First Row - Stretched Three Columns */}
           <div className="grid grid-cols-1 lg:grid-cols-4 gap-10 lg:gap-12 xl:gap-16 2xl:gap-20 items-stretch">
-            {/* Right Column - 50% - Stretched */}
             <div className="lg:col-span-2 flex flex-col space-y-3 h-full">
-              {/* Welcome section */}
               <div className="bg-white/5 backdrop-blur-xl border border-white/10 rounded-2xl p-3 md:p-4 flex-1">
                 <div className="text-center mb-6">
                   <h1 className="custom-heading-seven mb-2 uppercase">
@@ -358,8 +166,6 @@ const InversePage = () => {
                   </p>
                 </div>
               )} */}
-
-              {/* Image section */}
               <div className="bg-white/5 backdrop-blur-xl border border-white/10 rounded-2xl p-3 md:p-4 flex-1">
                 <div className="flex flex-col gap-2 justify-center">
                   <h2 className="text-2xl font-bold text-primary2 mb-6 text-center">
@@ -373,10 +179,7 @@ const InversePage = () => {
                 </div>
               </div>
             </div>
-
-            {/* Middle Column - 50% - Stretched Calendar */}
             <div className="lg:col-span-2 flex flex-col space-y-3 h-full">
-              {/* Compact Buy Tickets */}
               <div className="bg-white/5 backdrop-blur-xl border border-white/10 rounded-2xl p-3 md:p-4">
                 <div>
                   <h2 className="text-2xl font-bold uppercase text-white mb-6 text-center">
@@ -395,26 +198,18 @@ const InversePage = () => {
                   </a>
                 </div>
               </div>
-
-              {/* Calendar section */}
               <TalentDatesCalendar />
             </div>
           </div>
         </div>
-
-        {/* Request form and talent confirmation */}
         <div className="flex flex-col 2xl:gap-16 gap-12 mt-10 lg:mt-16 2xl:mt-20">
-          {/* First Row - Stretched Three Columns */}
           <div className="grid grid-cols-1 lg:grid-cols-4 gap-10 lg:gap-12 xl:gap-16 2xl:gap-20 items-stretch">
-            {/* Right Column - 50% - Stretched */}
             <FanInverseRequestForm />
-            {/* Middle Column - 50% - Stretched Calendar */}
             <TalentConfirmationForm />
           </div>
         </div>
       </div>
       <div className="container mx-auto">
-        {/* Trigger this when meeting ends */}
         <button
           onClick={() => setIsFeedbackShow(true)}
           className="custom-button-two"
