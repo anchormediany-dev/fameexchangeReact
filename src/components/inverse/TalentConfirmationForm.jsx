@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { useLocation } from "react-router-dom";
-
+import { useRescheduleTalentConfirmationMutation } from "../../app/authApi"; // Import the mutation hook
+import { toast } from "react-toastify";
 const TalentConfirmationForm = ({
   selectedRequestId,
   selectedFanName,
@@ -9,7 +10,6 @@ const TalentConfirmationForm = ({
   isError,
   error,
 }) => {
-  console.log(sessionsData?.sessions[0]?.sessionDate);
   const [responseForm, setResponseForm] = useState({
     availableDates: "",
     time: "",
@@ -19,11 +19,44 @@ const TalentConfirmationForm = ({
 
   const location = useLocation();
 
+  // Initialize the mutation hook for reschedule
+  const [
+    rescheduleTalentRequest,
+    {
+      isLoading: isRescheduling,
+      isError: isRescheduleError,
+      error: rescheduleError,
+    },
+  ] = useRescheduleTalentConfirmationMutation();
+
   const handleResponseChange = (field, value) => {
     setResponseForm({
       ...responseForm,
       [field]: value,
     });
+  };
+
+  // Handle reschedule request
+  const handleReschedule = async () => {
+    const { availableDates, time, place } = responseForm;
+    if (!availableDates || !time || !place) {
+      toast.error("Please fill in all fields to reschedule.");
+      return;
+    }
+
+    try {
+      const payload = {
+        selectedRequestId,
+        confirmedDate: availableDates,
+        time: time,
+        location: place,
+      };
+      const response = await rescheduleTalentRequest(payload).unwrap();
+      toast.success(response?.message);
+    } catch (err) {
+      toast.error(err?.data?.message);
+      console.log(err);
+    }
   };
 
   useEffect(() => {
@@ -38,6 +71,15 @@ const TalentConfirmationForm = ({
     }
   }, [location]);
 
+  // Check for loading and error states
+  if (isLoading) {
+    return <p>Loading sessions...</p>;
+  }
+
+  if (isError) {
+    return <p>Error: {error?.message || "Failed to load sessions."}</p>;
+  }
+
   return (
     <div className="lg:col-span-2 flex flex-col space-y-3 h-full">
       <div
@@ -45,7 +87,6 @@ const TalentConfirmationForm = ({
         className="bg-white/5 backdrop-blur-xl border border-white/10 rounded-2xl p-3 md:p-4 h-full flex flex-col"
       >
         {/* Response Form */}
-
         <h2 className="text-2xl font-bold text-primary2 mb-6 text-center">
           Talent Confirmation
         </h2>
@@ -119,19 +160,21 @@ const TalentConfirmationForm = ({
         </div>
 
         <div className="flex gap-4 mt-8 justify-center">
-          {/* <button
-            onClick={handleAccepted}
-            className="px-8 py-3 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors font-medium"
-          >
-            Accepted
-          </button> */}
           <button
-            // onClick={handleReschedule}
+            onClick={handleReschedule}
             className="px-8 py-3 bg-primary2 text-white rounded-lg hover:bg-primary2 transition-colors font-medium"
+            disabled={isRescheduling}
           >
-            Reschedule
+            {isRescheduling ? "Rescheduling..." : "Reschedule"}
           </button>
         </div>
+
+        {/* Show error if reschedule failed */}
+        {isRescheduleError && (
+          <p className="text-red-500 text-center mt-4">
+            {rescheduleError?.message || "Failed to reschedule."}
+          </p>
+        )}
       </div>
     </div>
   );

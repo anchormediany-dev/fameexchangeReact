@@ -140,7 +140,18 @@ export const authApi = api.injectEndpoints({
       query: () => "/sessions/upcoming",
       providesTags: ["Sessions"],
     }),
-
+    // Request confirmation reschedule
+    rescheduleTalentConfirmation: builder.mutation({
+      query: (data) => ({
+        url: `/talent-confirmation/${data.selectedRequestId}/reschedule`,
+        method: "PUT",
+        body: {
+          confirmedDate: data.confirmedDate,
+          time: data.time,
+          location: data.location,
+        },
+      }),
+    }),
     // friends API's
     deleteFriends: builder.mutation({
       query: (data) => ({
@@ -200,6 +211,8 @@ export const {
   useFanInverseRequestMutation,
   useTalentConfirmationRequestMutation,
   useGetAllFanRequestsQuery,
+  // Talent confirmation
+  useRescheduleTalentConfirmationMutation,
   // contact us
   useContactUsMutation,
 } = authApi;
