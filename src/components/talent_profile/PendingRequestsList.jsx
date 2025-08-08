@@ -31,11 +31,15 @@ const PendingRequestsList = () => {
     { isLoading: isConfirming, isError: isConfirmError, error: confirmError },
   ] = useTalentConfirmationRequestMutation();
 
-  const handleReschedule = (id) => {
-    navigate("/inverse#reschedule-section");
+  const handleReschedule = (request) => {
+    const fanName = request?.fanName || "Unknown Fan";
+    const requestId = request?.id;
+    console.log(requestId);
+    navigate("/inverse#reschedule-section", {
+      state: { requestId, fanName },
+    });
   };
 
-  // Transform API data to match expected format
   const transformRequests = (data) => {
     if (!data?.data) return [];
 
@@ -221,7 +225,7 @@ const PendingRequestsList = () => {
                     </button>
 
                     <button
-                      onClick={() => handleReschedule(request.id)}
+                      onClick={() => handleReschedule(request)}
                       className="flex items-center gap-1 px-3 py-2 rounded-lg bg-blue-500/10 hover:bg-blue-500/20 border border-blue-500/20 text-blue-400 transition-colors"
                     >
                       <FaCalendarAlt />
