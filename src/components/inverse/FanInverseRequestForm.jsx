@@ -1,5 +1,7 @@
 import { useState, useEffect } from "react";
 import { useLocation } from "react-router-dom";
+import { useFanInverseRequestMutation } from "../../app/authApi";
+import { toast } from "react-toastify";
 const FanInverseRequestForm = ({ isTalentName }) => {
   const [fanRequest, setFanRequest] = useState({
     talentName: isTalentName ? isTalentName : "",
@@ -25,7 +27,8 @@ const FanInverseRequestForm = ({ isTalentName }) => {
       }, 100);
     }
   }, [location]);
-
+  const [sendFanRequest, { isLoading, isError, error }] =
+    useFanInverseRequestMutation();
   // Handle fan request form changes
   const handleFanRequestChange = (field, value) => {
     setFanRequest((prev) => ({
@@ -37,7 +40,7 @@ const FanInverseRequestForm = ({ isTalentName }) => {
   // Clear form
   const handleClear = () => {
     setFanRequest({
-      talentName: "",
+      // talentName: "",
       date: "",
       time: "",
       desiredLocation: "",
@@ -49,9 +52,34 @@ const FanInverseRequestForm = ({ isTalentName }) => {
   };
 
   // Send request
-  const handleSendRequest = () => {
-    console.log("Sending request:", fanRequest);
-    // Add your send request logic here
+  const handleSendRequest = async () => {
+    if (
+      !isTalentName
+        ? isTalentName
+        : fanRequest.talentName ||
+          !fanRequest.date ||
+          !fanRequest.time ||
+          !fanRequest.desiredLocation ||
+          !fanRequest.cardType
+    ) {
+      toast.error("Please fill in all the required fields.");
+      return;
+    }
+    try {
+      const requestBody = {
+        talentName: isTalentName ? isTalentName : fanRequest.talentName,
+        date: fanRequest.date,
+        time: fanRequest.time,
+        location: fanRequest.desiredLocation,
+        paymentMethod:
+          fanRequest.cardType === "credit" ? "Credit Card" : "Debit Card",
+      };
+      await sendFanRequest(requestBody).unwrap();
+      toast.success("Inverse request sent successfully!");
+      handleClear();
+    } catch (err) {
+      toast.error(error?.data.message);
+    }
   };
 
   // Cancel request
