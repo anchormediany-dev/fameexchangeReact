@@ -11,7 +11,10 @@ import {
 } from "../../app/authApi";
 import SearchTalents from "../../components/inverse/SearchTalents";
 const InversePage = () => {
-  const [selectedSearchuser, setSelectedSearchUser] = useState(null);
+  const userTalentData = JSON.parse(localStorage.getItem("user"));
+  const [selectedSearchuser, setSelectedSearchUser] = useState(
+    userTalentData?.id
+  );
   const {
     data: usersData,
     isLoading: isUsersLoading,

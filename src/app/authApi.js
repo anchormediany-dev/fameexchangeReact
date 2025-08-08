@@ -137,9 +137,12 @@ export const authApi = api.injectEndpoints({
       invalidatesTags: ["Sessions"],
     }),
     getUpcomingSessions: builder.query({
-      query: () => "/sessions/upcoming",
+      query: (userId) => {
+        return `/sessions/upcoming/${userId}`;
+      },
       providesTags: ["Sessions"],
     }),
+
     // Request confirmation reschedule
     rescheduleTalentConfirmation: builder.mutation({
       query: (data) => ({
