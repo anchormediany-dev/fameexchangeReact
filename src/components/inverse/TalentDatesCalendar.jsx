@@ -1,11 +1,5 @@
 import { useState, useEffect } from "react";
-import {
-  FaChevronLeft,
-  FaChevronRight,
-  FaCheckCircle,
-  FaClock,
-  FaMapMarkerAlt,
-} from "react-icons/fa";
+import { FaChevronLeft, FaChevronRight, FaCheckCircle } from "react-icons/fa";
 import {
   addMonths,
   subMonths,
@@ -14,8 +8,6 @@ import {
   eachDayOfInterval,
   getDay,
   isSameDay,
-  format,
-  parseISO,
 } from "date-fns";
 // import { useGetUpcomingSessionsQuery } from "../../app/authApi";
 import { toast } from "react-toastify";

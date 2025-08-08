@@ -5,9 +5,19 @@ import FeedbackPopup from "../../components/FeedbackPopup";
 import TalentDatesCalendar from "../../components/inverse/TalentDatesCalendar";
 import TalentConfirmationForm from "../../components/inverse/TalentConfirmationForm";
 import FanInverseRequestForm from "../../components/inverse/FanInverseRequestForm";
-import { useGetUpcomingSessionsQuery } from "../../app/authApi";
+import {
+  useGetUpcomingSessionsQuery,
+  useGetUsersQuery,
+} from "../../app/authApi";
 import SearchTalents from "../../components/inverse/SearchTalents";
 const InversePage = () => {
+  const [selectedSearchuser, setSelectedSearchUser] = useState(null);
+  const {
+    data: usersData,
+    isLoading: isUsersLoading,
+    refetch: refetchUsers,
+  } = useGetUsersQuery();
+  console.log(usersData);
   const [isFeedbackShow, setIsFeedbackShow] = useState(false);
   const location = useLocation();
   const { selectedRequestId, selectedFanName } = location.state || {};
@@ -16,7 +26,7 @@ const InversePage = () => {
     isLoading,
     isError,
     error,
-  } = useGetUpcomingSessionsQuery();
+  } = useGetUpcomingSessionsQuery(selectedSearchuser);
   useEffect(() => {
     const hash = location.hash;
     if (hash) {
@@ -34,7 +44,12 @@ const InversePage = () => {
   return (
     <section className="w-full z-50 bg-gradient-to-br py-12 2xl:py-16 flex flex-col 2xl:gap-16 gap-12 px-4 sm:px-6 lg:px-8">
       <div className="2xl:gap-16 gap-12 px-4 container sm:px-6 lg:px-8 mt-10 lg:mt-16 2xl:mt-20">
-        <SearchTalents />
+        <SearchTalents
+          usersData={usersData}
+          isUsersLoading={isUsersLoading}
+          refetchUsers={refetchUsers}
+          setSelectedSearchUser={setSelectedSearchUser}
+        />
         <div className="flex flex-col 2xl:gap-16 gap-12">
           <div className="grid grid-cols-1 lg:grid-cols-4 gap-10 lg:gap-12 xl:gap-16 2xl:gap-20 items-stretch">
             <div className="lg:col-span-2 flex flex-col space-y-3 h-full">
@@ -116,6 +131,7 @@ const InversePage = () => {
                 isLoading={isLoading}
                 isError={isError}
                 error={error}
+                selectedSearchuser={selectedSearchuser}
               />
             </div>
           </div>

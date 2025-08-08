@@ -1,8 +1,13 @@
 import { useState, useEffect } from "react";
 import { useLocation } from "react-router-dom";
 import { FaSearch, FaTimes } from "react-icons/fa";
-import talents from "../../data/talentData";
-const SearchTalents = () => {
+
+const SearchTalents = ({
+  usersData,
+  isUsersLoading,
+  refetchUsers,
+  setSelectedSearchUser,
+}) => {
   const [searchValue, setSearchValue] = useState("");
   const [searchResults, setSearchResults] = useState([]);
   const [showResults, setShowResults] = useState(false);
@@ -11,7 +16,6 @@ const SearchTalents = () => {
   useEffect(() => {
     const hash = location.hash;
     if (hash) {
-      // Slight timeout ensures DOM is ready
       setTimeout(() => {
         const element = document.querySelector(hash);
         if (element) {
@@ -20,12 +24,20 @@ const SearchTalents = () => {
       }, 100);
     }
   }, [location]);
+
   const handleSearchChange = (e) => {
     const value = e.target.value;
+
     setSearchValue(value);
 
+    // Filter users with role "TALENT"
+    const filteredUsers = usersData?.users.filter(
+      (user) => user.role === "TALENT"
+    );
+
     if (value.trim()) {
-      const results = talents.filter((talent) =>
+      // Apply search filter to only "TALENT" users
+      const results = filteredUsers.filter((talent) =>
         talent.name.toLowerCase().includes(value.toLowerCase())
       );
       setSearchResults(results);
@@ -35,11 +47,14 @@ const SearchTalents = () => {
       setShowResults(false);
     }
   };
+
   const handleSelectTalent = (talent) => {
-    setSelectedTalent(talent);
-    setSearchValue("");
+    setSearchValue(talent.name);
+    setSearchResults([]);
     setShowResults(false);
+    setSelectedSearchUser(talent?._id);
   };
+
   return (
     <section className="flex justify-end items-center">
       <div className="lg:w-[25%] mb-3 relative">
@@ -50,13 +65,13 @@ const SearchTalents = () => {
               value={searchValue}
               onChange={handleSearchChange}
               onFocus={() => setShowResults(true)}
-              onBlur={() => setTimeout(() => setShowResults(false), 200)}
+              onBlur={() => setTimeout(() => setShowResults(false), 200)} // Adjusted delay
               placeholder="Search talents..."
               className="relative z-10 w-full h-14 sm:h-16 bg-transparent pl-5 pr-24 text-white placeholder-gray-400 focus:outline-none text-sm sm:text-base font-medium placeholder:font-normal"
             />
 
             {/* Search Icon */}
-            <div className="absolute right-3 top-1/2 -translate-y-1/2 flex items-center gap-2">
+            <div className="absolute right-3 top-1/2 -translate-y-1/2 flex items-center gap-2 z-20">
               {searchValue && (
                 <button
                   type="button"
@@ -75,11 +90,12 @@ const SearchTalents = () => {
             </div>
           </div>
 
+          {/* Search Results */}
           {showResults && searchResults.length > 0 && (
             <div className="absolute z-50 mt-2 w-full bg-gray-800 rounded-lg shadow-lg border border-gray-700 max-h-60 overflow-y-auto">
               {searchResults.map((talent) => (
                 <div
-                  key={talent.id}
+                  key={talent._id}
                   className="p-3 hover:bg-gray-700 cursor-pointer flex items-center gap-3"
                   onClick={() => handleSelectTalent(talent)}
                 >
@@ -95,6 +111,11 @@ const SearchTalents = () => {
                 </div>
               ))}
             </div>
+          )}
+
+          {/* If no results found */}
+          {showResults && searchResults.length === 0 && (
+            <div className="p-3 text-gray-400">No talents found</div>
           )}
         </div>
       </div>
