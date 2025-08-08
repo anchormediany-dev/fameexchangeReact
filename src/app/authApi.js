@@ -61,6 +61,14 @@ export const authApi = api.injectEndpoints({
         body: data,
       }),
     }),
+    // Contact Us
+    contactUs: builder.mutation({
+      query: (data) => ({
+        url: "/contact",
+        method: "POST",
+        body: data,
+      }),
+    }),
     // User Profile API's
     updateMyProfile: builder.mutation({
       query: (profileData) => ({
@@ -192,4 +200,6 @@ export const {
   useFanInverseRequestMutation,
   useTalentConfirmationRequestMutation,
   useGetAllFanRequestsQuery,
+  // contact us
+  useContactUsMutation,
 } = authApi;

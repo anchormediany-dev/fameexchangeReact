@@ -2,7 +2,8 @@ import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import mapImage from "../../assets/images/map-ui.png";
 import "./ContactUs.css";
-
+import { useContactUsMutation } from "../../app/authApi";
+import { toast } from "react-toastify";
 const ContactForm = () => {
   const [formData, setFormData] = useState({
     name: "",
@@ -13,7 +14,8 @@ const ContactForm = () => {
 
   const [isLoaded, setIsLoaded] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
-
+  const [contactUs, { isLoading, isError, error, isSuccess }] =
+    useContactUsMutation();
   useEffect(() => {
     setIsLoaded(true);
 
@@ -134,15 +136,24 @@ const ContactForm = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setIsSubmitting(true);
+    try {
+      const response = await contactUs(formData).unwrap();
+      toast.success(response?.message);
 
-    // Simulate API call
-    await new Promise((resolve) => setTimeout(resolve, 1500));
+      setFormData({ name: "", email: "", subject: "", message: "" });
+    } catch (err) {
+      console.error("Contact API error:", err);
 
-    console.log("Form submitted:", formData);
-    alert("Message sent successfully!");
-    setFormData({ name: "", email: "", subject: "", message: "" });
-    setIsSubmitting(false);
+      const msg =
+        err?.data?.message ||
+        err?.error ||
+        "Failed to send your message. Please try again.";
+
+      toast.error(msg, {
+        position: "top-right",
+        autoClose: 3000,
+      });
+    }
   };
 
   return (
