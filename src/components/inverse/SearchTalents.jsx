@@ -7,6 +7,7 @@ const SearchTalents = ({
   isUsersLoading,
   refetchUsers,
   setSelectedSearchUser,
+  setIsTalentName,
 }) => {
   const [searchValue, setSearchValue] = useState("");
   const [searchResults, setSearchResults] = useState([]);
@@ -50,6 +51,7 @@ const SearchTalents = ({
 
   const handleSelectTalent = (talent) => {
     setSearchValue(talent.name);
+    setIsTalentName(talent.name);
     setSearchResults([]);
     setShowResults(false);
     setSelectedSearchUser(talent?._id);
@@ -77,6 +79,7 @@ const SearchTalents = ({
                   type="button"
                   onClick={() => {
                     setSearchValue("");
+                    setIsTalentName("");
                     setSearchResults([]);
                   }}
                   className="p-2 text-gray-400 hover:text-white transition-all duration-200 rounded-xl hover:bg-white/10 active:scale-95 z-30"

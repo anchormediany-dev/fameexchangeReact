@@ -1,8 +1,8 @@
 import { useState, useEffect } from "react";
 import { useLocation } from "react-router-dom";
-const FanInverseRequestForm = () => {
+const FanInverseRequestForm = ({ isTalentName }) => {
   const [fanRequest, setFanRequest] = useState({
-    talentName: "",
+    talentName: isTalentName ? isTalentName : "",
     date: "",
     time: "",
     desiredLocation: "",
@@ -74,7 +74,8 @@ const FanInverseRequestForm = () => {
             </label>
             <input
               type="text"
-              value={fanRequest.talentName}
+              value={isTalentName ? isTalentName : fanRequest.talentName}
+              // readOnly
               onChange={(e) =>
                 handleFanRequestChange("talentName", e.target.value)
               }
