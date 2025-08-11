@@ -91,6 +91,14 @@ export const authApi = api.injectEndpoints({
       query: (id) => `/user/get/${id}`,
       providesTags: (result, error, id) => [{ type: "User", id }],
     }),
+    // Newsletter
+    newsletterSubscribe: builder.mutation({
+      query: (data) => ({
+        url: "/newsletter/subscribe",
+        method: "POST",
+        body: data,
+      }),
+    }),
     // Get events
     getEvents: builder.query({
       query: () => "/events",
@@ -216,6 +224,8 @@ export const {
   useGetAllFanRequestsQuery,
   // Talent confirmation
   useRescheduleTalentConfirmationMutation,
+  // newsletter
+  useNewsletterSubscribeMutation,
   // contact us
   useContactUsMutation,
 } = authApi;
