@@ -48,9 +48,11 @@ const LoginPage = () => {
       const decodedUser = jwtDecode(token); // decodedUser = { id, email, is_verified, ... }
       console.log(decodedUser);
       dispatch(setCredentials({ accessToken: token, user: decodedUser }));
+      const stored = JSON.parse(localStorage.getItem("user") || "null");
+      const isAdmin = stored?.isAdmin === true || stored?.role === "ADMIN";
       toast.success("Login successful!");
       setTimeout(() => {
-        navigate("/talent-profile");
+        navigate(isAdmin ? "/admin" : "/talent-profile", { replace: true });
       }, 500);
     } catch (error) {
       console.error("Login failed:", error);

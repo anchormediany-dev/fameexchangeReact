@@ -38,6 +38,10 @@ import VerifyId from "./components/VerifyId";
 import NetworthCalculator from "./components/NetworthCalculator";
 import GuestOnlyRoute from "./routes/GuestOnlyRoute";
 import EventCreateForm from "./pages/create_events/EventCreateForm";
+import AdminLayout from "./pages/admin/AdminLayout";
+import AdminHome from "./pages/admin/AdminHome";
+import AdminNewsletter from "./pages/admin/AdminNewsletter";
+import AdminContact from "./pages/admin/AdminContact";
 
 // Simple Black Header Component
 const SimpleHeader = () => {
@@ -156,6 +160,40 @@ export default function App() {
                 </MotionPageWrapper>
               }
             />
+          </Route>
+          <Route
+            path="admin/*"
+            // element={<Navigate to="/admin" replace />}
+          />
+
+          {/* Admin protected routes */}
+          <Route element={<ProtectedRoute /* allowRoles={['admin']} */ />}>
+            <Route path="admin" element={<AdminLayout />}>
+              <Route
+                index
+                element={
+                  <MotionPageWrapper>
+                    <AdminHome />
+                  </MotionPageWrapper>
+                }
+              />
+              <Route
+                path="newsletter"
+                element={
+                  <MotionPageWrapper>
+                    <AdminNewsletter />
+                  </MotionPageWrapper>
+                }
+              />
+              <Route
+                path="contact"
+                element={
+                  <MotionPageWrapper>
+                    <AdminContact />
+                  </MotionPageWrapper>
+                }
+              />
+            </Route>
           </Route>
           {/* Create event */}
           <Route element={<ProtectedRoute />}>
