@@ -2,50 +2,16 @@ import { useState } from "react";
 import { FiGlobe, FiPhone, FiExternalLink } from "react-icons/fi";
 import { IoLocationOutline } from "react-icons/io5";
 
-const EventsListings = () => {
-  const [eventsList] = useState([
-    {
-      id: 1,
-      name: "JAKE'S EXCHANGE LAUNCH PARTY",
-      location: "New York",
-      address: "166 W 46th St, NY 10036",
-      phone: "844-206-6006",
-      website: "hardrockhotelenwyork.com",
-      logo: "https://images.unsplash.com/photo-1531058020387-3be344556be6?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8M3x8ZXZlbnR8ZW58MHx8MHx8fDA%3D",
-      category: "networking",
-    },
-    {
-      id: 2,
-      name: "SUMMER MUSIC FESTIVAL",
-      location: "Brooklyn",
-      address: "123 Festival Ave, Brooklyn NY",
-      phone: "555-123-4567",
-      website: "summerfest.com",
-      logo: "https://images.unsplash.com/photo-1561489396-888724a1543d?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTZ8fGV2ZW50fGVufDB8fDB8fHww",
-      category: "music",
-    },
-    {
-      id: 3,
-      name: "TECH INNOVATION MEETUP",
-      location: "Manhattan",
-      address: "789 Tech St, Manhattan NY",
-      phone: "555-987-6543",
-      website: "techmeetup.com",
-      logo: "https://images.unsplash.com/photo-1560439514-4e9645039924?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MjV8fGV2ZW50fGVufDB8fDB8fHww",
-      category: "tech",
-    },
-    {
-      id: 4,
-      name: "ART GALLERY OPENING",
-      location: "SoHo",
-      address: "456 Art Street, SoHo NY",
-      phone: "555-456-7890",
-      website: "artgallery.com",
-      logo: "https://images.unsplash.com/photo-1472653816316-3ad6f10a6592?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MzN8fGV2ZW50fGVufDB8fDB8fHww",
-      category: "art",
-    },
-  ]);
-
+const EventsListings = ({
+  events,
+  isLoading,
+  isError,
+  error,
+  isFetching,
+  onRetry,
+}) => {
+  const fallbackLogo =
+    "https://images.unsplash.com/photo-1531058020387-3be344556be6?w=500&auto=format&fit=crop&q=60";
   return (
     <div className="bg-white/5 backdrop-blur-xl border border-white/10 rounded-2xl shadow-xl p-3 md:p-4">
       <h2
@@ -62,9 +28,9 @@ const EventsListings = () => {
 
       {/* Mobile Card View */}
       <div className="block sm:hidden space-y-4">
-        {eventsList.map((event, index) => (
+        {events.map((e, index) => (
           <div
-            key={event.id}
+            key={e.id || index}
             className="bg-white/5 rounded-xl p-4 hover:bg-white/10 transition-colors"
           >
             <div className="flex items-start space-x-3">
@@ -74,42 +40,42 @@ const EventsListings = () => {
               <div className="flex-1 space-y-2">
                 <div className="flex items-center space-x-3">
                   <img
-                    src={event.logo}
+                    src={e.logo || e.cover || e.images?.[0] || fallbackLogo}
                     alt="logo"
                     className="w-10 h-10 rounded-xl object-cover border-2 border-white/10"
                   />
                   <div>
                     <h4 className="font-semibold text-white text-sm">
-                      {event.name}
+                      {e.name}
                     </h4>
                     <span className="text-xs text-gray-400 capitalize">
-                      {event.category}
+                      {e.category}
                     </span>
                   </div>
                 </div>
                 <div className="flex items-center space-x-2">
                   <IoLocationOutline className="w-4 h-4 text-green-400" />
                   <span className="text-green-400 font-medium text-sm">
-                    {event.location}
+                    {e.location}
                   </span>
                 </div>
-                <p className="text-gray-300 text-sm">{event.address}</p>
+                <p className="text-gray-300 text-sm">{e.address}</p>
                 <div className="flex flex-wrap gap-2">
                   <a
-                    href={`tel:${event.phone}`}
+                    href={`tel:${e.phone}`}
                     className="flex items-center space-x-1 text-blue-400 text-sm"
                   >
                     <FiPhone className="w-3 h-3" />
-                    <span>{event.phone}</span>
+                    <span>{e.phone}</span>
                   </a>
                   <a
-                    href={`https://${event.website}`}
+                    href={`https://${e.website}`}
                     target="_blank"
                     rel="noopener noreferrer"
                     className="flex items-center space-x-1 text-blue-400 text-sm"
                   >
                     <FiGlobe className="w-3 h-3" />
-                    <span className="truncate">{event.website}</span>
+                    <span className="truncate">{e.website}</span>
                   </a>
                 </div>
               </div>
@@ -144,9 +110,9 @@ const EventsListings = () => {
             </tr>
           </thead>
           <tbody>
-            {eventsList.map((event, index) => (
+            {events.map((e, index) => (
               <tr
-                key={event.id}
+                key={e.id || index}
                 className="border-b border-white/5 hover:bg-white/5 transition-colors group"
               >
                 <td className="p-3">
@@ -158,7 +124,7 @@ const EventsListings = () => {
                   <div className="flex items-center space-x-3">
                     <div className="relative">
                       <img
-                        src={event.logo}
+                        src={e.logo || e.cover || e.images?.[0] || fallbackLogo}
                         alt="logo"
                         className="w-10 h-10 rounded-xl object-cover border-2 border-white/10 group-hover:border-[#a38b41]/30 transition-colors"
                       />
@@ -166,10 +132,10 @@ const EventsListings = () => {
                     </div>
                     <div>
                       <span className="font-semibold text-white text-sm block">
-                        {event.name}
+                        {e.name}
                       </span>
                       <span className="text-xs text-gray-400 capitalize">
-                        {event.category}
+                        {e.category}
                       </span>
                     </div>
                   </div>
@@ -178,32 +144,32 @@ const EventsListings = () => {
                   <div className="flex items-center space-x-2">
                     <IoLocationOutline className="w-4 h-4 text-green-400" />
                     <span className="text-green-400 font-medium text-sm">
-                      {event.location}
+                      {e.location}
                     </span>
                   </div>
                 </td>
                 <td className="p-3">
-                  <span className="text-gray-300 text-sm">{event.address}</span>
+                  <span className="text-gray-300 text-sm">{e.address}</span>
                 </td>
                 <td className="p-3">
                   <a
-                    href={`tel:${event.phone}`}
+                    href={`tel:${e.phone}`}
                     className="flex items-center space-x-1 text-blue-400 hover:text-blue-300 transition-colors group"
                   >
                     <FiPhone className="w-3 h-3" />
-                    <span className="text-sm">{event.phone}</span>
+                    <span className="text-sm">{e.phone}</span>
                   </a>
                 </td>
                 <td className="p-3">
                   <a
-                    href={`https://${event.website}`}
+                    href={`https://${e.website}`}
                     target="_blank"
                     rel="noopener noreferrer"
                     className="flex items-center space-x-1 text-blue-400 hover:text-blue-300 transition-colors group"
                   >
                     <FiGlobe className="w-3 h-3" />
                     <span className="truncate max-w-28 text-sm">
-                      {event.website}
+                      {e.website}
                     </span>
                     <FiExternalLink className="w-3 h-3 opacity-0 group-hover:opacity-100 transition-opacity" />
                   </a>
