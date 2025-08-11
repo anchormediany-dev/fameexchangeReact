@@ -4,6 +4,7 @@ import siteLogo from "../assets/images/site-logo.png";
 import googlePlay from "../assets/images/google-play.png";
 import appStore from "../assets/images/app-store.png";
 import { Link } from "react-router-dom";
+import Newsletter from "./Newsletter";
 
 const Footer = () => {
   // Animation variants
@@ -308,28 +309,8 @@ const Footer = () => {
               />
             </motion.div>
           </motion.div>
-
-          {/* Newsletter */}
           <motion.div variants={itemVariants}>
-            <motion.h3
-              className="footer_nav_title text-[#f2f2f2] mb-5"
-              variants={itemVariants}
-            >
-              NEWSLETTER
-            </motion.h3>
-            <motion.p
-              className="footer_paragraph mb-4 text-[#bfbfbf]"
-              variants={itemVariants}
-            >
-              Sign up today for tips and the latest news and information
-            </motion.p>
-            <motion.input
-              type="email"
-              placeholder="EMAIL ADDRESS"
-              className="w-full p-2 bg-transparent border-b border-white outline-none"
-              variants={inputVariants}
-              whileFocus="focus"
-            />
+            <Newsletter />
             <motion.div
               className="flex space-x-4 mt-8 justify-center md:justify-start"
               variants={containerVariants}
