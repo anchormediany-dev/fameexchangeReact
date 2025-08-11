@@ -43,6 +43,7 @@ import AdminHome from "./pages/admin/AdminHome";
 import AdminNewsletter from "./pages/admin/AdminNewsletter";
 import AdminContact from "./pages/admin/AdminContact";
 import OurTeam from "./pages/team/OurTeam";
+import CustomerReview from "./pages/customer_review/CustomerReview";
 
 // Simple Black Header Component
 const SimpleHeader = () => {
@@ -156,6 +157,15 @@ export default function App() {
             element={
               <MotionPageWrapper>
                 <OurTeam />
+              </MotionPageWrapper>
+            }
+          />
+          {/* Customer review*/}
+          <Route
+            path="reviews"
+            element={
+              <MotionPageWrapper>
+                <CustomerReview />
               </MotionPageWrapper>
             }
           />

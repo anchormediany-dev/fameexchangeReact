@@ -5,42 +5,11 @@ import { Autoplay } from "swiper/modules";
 import { FaStar } from "react-icons/fa";
 import "./CustomerReview.css";
 import "swiper/css";
-
+import { useGetReviewsQuery } from "../../app/authApi";
+import { Link } from "react-router-dom";
 const CustomerReviews = () => {
-  // Review data
-  const reviews = [
-    {
-      id: 1,
-      name: "JANET JACKSON",
-      text: "This was such a great experience I'm going to tell everyone I know I recommend The Fame Exchange",
-      rating: 5,
-    },
-    {
-      id: 2,
-      name: "HENRY ROLLINS",
-      text: "This was such a great experience I'm going to tell everyone I know I recommend The Fame Exchange",
-      rating: 5,
-    },
-    {
-      id: 3,
-      name: "CALVIN HARRIS",
-      text: "This was such a great experience I'm going to tell everyone I know I recommend The Fame Exchange",
-      rating: 5,
-    },
-    {
-      id: 4,
-      name: "DIANA ROSS",
-      text: "This was such a great experience I'm going to tell everyone I know I recommend The Fame Exchange",
-      rating: 5,
-    },
-    {
-      id: 5,
-      name: "DAVID GUETTA",
-      text: "This was such a great experience I'm going to tell everyone I know I recommend The Fame Exchange",
-      rating: 5,
-    },
-  ];
-
+  const { data, isLoading, isError, error, refetch, isFetching } =
+    useGetReviewsQuery();
   // Animation variants
   const containerVariants = {
     hidden: { opacity: 0 },
@@ -165,7 +134,11 @@ const CustomerReviews = () => {
       },
     },
   };
-
+  const reviews = Array.isArray(data?.data)
+    ? [...data.data]
+        .filter((r) => r?.status === "approved")
+        .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
+    : [];
   // Always show 3 specific reviews (can be first 3 or any 3 you choose)
   const displayedReviews = reviews.slice(0, 3);
 
@@ -263,7 +236,7 @@ const CustomerReviews = () => {
                       transition: { duration: 0.2 },
                     }}
                   >
-                    {review.name}
+                    {review?.customerName}
                   </motion.h3>
 
                   <motion.p
@@ -275,7 +248,7 @@ const CustomerReviews = () => {
                     }}
                     viewport={{ once: true }}
                   >
-                    {review.text}
+                    {review?.reviewDetail}
                   </motion.p>
 
                   <motion.div
@@ -284,7 +257,7 @@ const CustomerReviews = () => {
                     whileInView="visible"
                     viewport={{ once: true }}
                   >
-                    {Array(review.rating)
+                    {Array(review?.starsRating)
                       .fill()
                       .map((_, i) => (
                         <motion.div
@@ -305,14 +278,16 @@ const CustomerReviews = () => {
 
           {/* View All button */}
           <motion.div className="text-center mt-10" variants={buttonVariants}>
-            <motion.button
-              className="view-all-button"
-              variants={buttonVariants}
-              whileHover="hover"
-              whileTap="tap"
-            >
-              VIEW ALL
-            </motion.button>
+            <Link to="/reviews" state={{ reviews }}>
+              <motion.button
+                className="view-all-button"
+                variants={buttonVariants}
+                whileHover="hover"
+                whileTap="tap"
+              >
+                VIEW ALL
+              </motion.button>
+            </Link>
           </motion.div>
         </motion.div>
       </div>

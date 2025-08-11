@@ -186,6 +186,14 @@ export const authApi = api.injectEndpoints({
       }),
       providesTags: ["Team"],
     }),
+    // Customer reviews API
+    getReviews: builder.query({
+      query: () => ({
+        url: "/reviews/",
+        method: "GET",
+      }),
+      providesTags: ["Reviews"],
+    }),
     // friends API's
     deleteFriends: builder.mutation({
       query: (data) => ({
@@ -252,6 +260,8 @@ export const {
   useGetNewslettersQuery,
   // Our team
   useGetTeamQuery,
+  // Customer reviews
+  useGetReviewsQuery,
   // contact us
   useContactUsMutation,
   useGetContactsQuery,
