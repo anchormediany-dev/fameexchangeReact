@@ -114,7 +114,7 @@ const EventsPreferencesActions = () => {
               },
               {
                 key: "virtualByInverse",
-                label: "Virtual",
+                label: "Virtual By Inverse",
                 icon: FiVideo,
                 color: "text-purple-400",
                 bgColor: "hover:bg-purple-500/10",
@@ -161,7 +161,7 @@ const EventsPreferencesActions = () => {
               backgroundClip: "text",
             }}
           >
-            COMING TO SHOW?
+            COMING TO THE SHOW?
           </span>
         </h3>
         <a
@@ -170,7 +170,7 @@ const EventsPreferencesActions = () => {
           style={{ backgroundColor: "#a38b41" }}
         >
           <IoTicketOutline className="w-4 h-4" />
-          <span className="text-sm">BUY TICKETS</span>
+          <span className="text-sm">BUY YOUR TICKETS HERE NOW!</span>
           <FiExternalLink className="w-3 h-3" />
         </a>
       </div>
@@ -181,7 +181,7 @@ const EventsPreferencesActions = () => {
           className="text-sm font-bold mb-3 text-center"
           style={{ color: "#a38b41" }}
         >
-          Upload Logo
+          Upload Image
         </h3>
 
         {uploadedLogo ? (
@@ -217,7 +217,7 @@ const EventsPreferencesActions = () => {
           <label className="flex flex-col items-center justify-center w-full h-20 border-2 border-dashed border-gray-600 rounded-xl cursor-pointer hover:border-[#a38b41] transition-all duration-300 group">
             <FiUpload className="w-4 h-4 text-gray-400 group-hover:text-[#a38b41] mb-1 transition-colors" />
             <span className="text-xs text-gray-400 group-hover:text-[#a38b41] transition-colors text-center">
-              Logo/Flyer
+              Flyer Logo, Image of event
             </span>
             <input
               type="file"

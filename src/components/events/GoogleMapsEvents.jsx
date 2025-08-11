@@ -59,7 +59,9 @@ const GoogleMapsEvents = () => {
         <div className="absolute inset-0 bg-white/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
         <div className="relative flex items-center justify-center space-x-2">
           <FiPlus className="w-4 h-4 text-white" />
-          <span className="font-semibold text-sm text-white">LIST EVENT</span>
+          <span className="font-semibold text-sm text-white">
+            LIST & POST YOUR EVENT
+          </span>
         </div>
       </button>
 
@@ -168,7 +170,9 @@ const GoogleMapsEvents = () => {
         <div className="absolute inset-0 bg-white/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
         <div className="relative flex items-center justify-center space-x-2">
           <BsBuilding className="w-4 h-4 text-white" />
-          <span className="font-semibold text-sm text-white">SPONSOR</span>
+          <span className="font-semibold text-sm text-white">
+            SPONSOR A FUTURE
+          </span>
         </div>
       </button>
     </div>
