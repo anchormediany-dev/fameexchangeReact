@@ -19,6 +19,15 @@ const OurTeam = () => {
     ? data.data.filter((m) => m?.isVisible)
     : [];
 
+  const truncate = (text = "", max = 50) => {
+    if (!text) return "";
+    if (text.length <= max) return text;
+    const cut = text.slice(0, max);
+    const end = cut.lastIndexOf(" ");
+    const safe = end > 0 ? cut.slice(0, end) : text.slice(0, max - 1);
+    return safe.trimEnd() + "…"; // never over 50 chars
+  };
+
   return (
     <section className="py-12 2xl:py-16 bg-[#171717]">
       <div className="container">
@@ -98,10 +107,11 @@ const OurTeam = () => {
                     <h4 className="text-white custom-heading-seven">
                       {member.name}
                     </h4>
-                    <p className="text-white">
-                      {member.title /* maps to 'role' */}
+                    <p className="text-white">{member.title}</p>
+                    <p className="text-gray-400 text-sm mt-2">
+                      {" "}
+                      {truncate(member.bio, 80)}
                     </p>
-                    <p className="text-gray-400 text-sm mt-2">{member.bio}</p>
                   </div>
                 </div>
               </SwiperSlide>

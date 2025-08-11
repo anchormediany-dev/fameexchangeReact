@@ -142,6 +142,15 @@ const CustomerReviews = () => {
   // Always show 3 specific reviews (can be first 3 or any 3 you choose)
   const displayedReviews = reviews.slice(0, 3);
 
+  const truncate = (text = "", max = 50) => {
+    if (!text) return "";
+    if (text.length <= max) return text;
+    const cut = text.slice(0, max);
+    const end = cut.lastIndexOf(" ");
+    const safe = end > 0 ? cut.slice(0, end) : text.slice(0, max - 1);
+    return safe.trimEnd() + "…"; // never over 50 chars
+  };
+
   return (
     <motion.div
       className="bg-[#171717] py-12 2xl:py-16 px-4"
@@ -248,7 +257,7 @@ const CustomerReviews = () => {
                     }}
                     viewport={{ once: true }}
                   >
-                    {review?.reviewDetail}
+                    {truncate(review?.reviewDetail, 80)}
                   </motion.p>
 
                   <motion.div
