@@ -1,17 +1,16 @@
 import { useMemo, useState } from "react";
 import { FiChevronLeft, FiChevronRight } from "react-icons/fi";
 
-const colorFor = (cat = "") => {
-  const c = String(cat).toLowerCase();
-  if (c.includes("music")) return "bg-green-500";
-  if (c.includes("tech")) return "bg-green-500";
-  if (c.includes("network")) return "bg-green-500";
-  if (c.includes("art")) return "bg-green-500";
-  if (c.includes("food")) return "bg-green-500";
-  return "bg-green-500";
-};
+const colorFor = (cat = "") => "bg-green-500"; // your schema: green for all
 
-const EventsCalendar = ({ events = [] }) => {
+const sameDay = (a, b) =>
+  a &&
+  b &&
+  a.getFullYear() === b.getFullYear() &&
+  a.getMonth() === b.getMonth() &&
+  a.getDate() === b.getDate();
+
+const EventsCalendar = ({ events = [], selectedDate = null, onDateChange }) => {
   const [currentDate, setCurrentDate] = useState(new Date());
   const [selectedEvent, setSelectedEvent] = useState(null);
 
@@ -43,7 +42,7 @@ const EventsCalendar = ({ events = [] }) => {
   };
 
   const formatTime = (d) =>
-    d.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
+    new Date(d).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
 
   // Map events -> days for current month
   const eventsByDay = useMemo(() => {
@@ -61,13 +60,11 @@ const EventsCalendar = ({ events = [] }) => {
           name: e.name || e.title || "Event",
           time: formatTime(d),
           color: colorFor(e.category || e.type),
+          raw: d,
         });
       }
     });
-    // sort by time
-    Object.values(map).forEach((arr) =>
-      arr.sort((a, b) => (a.time > b.time ? 1 : -1))
-    );
+    Object.values(map).forEach((arr) => arr.sort((a, b) => a.raw - b.raw));
     return map;
   }, [events, currentDate]);
 
@@ -79,6 +76,30 @@ const EventsCalendar = ({ events = [] }) => {
     return days;
   };
 
+  const today = new Date();
+  const isToday = (d) =>
+    d &&
+    today.getFullYear() === currentDate.getFullYear() &&
+    today.getMonth() === currentDate.getMonth() &&
+    today.getDate() === d;
+
+  const handleDayClick = (day) => {
+    const clicked = new Date(
+      currentDate.getFullYear(),
+      currentDate.getMonth(),
+      day
+    );
+    // toggle: select if different, clear if same
+    if (selectedDate && sameDay(selectedDate, clicked)) {
+      onDateChange?.(null);
+      setSelectedEvent(null);
+    } else {
+      onDateChange?.(clicked);
+      const firstEvent = (eventsByDay[day] || [])[0] || null;
+      setSelectedEvent(firstEvent);
+    }
+  };
+
   return (
     <div className="lg:col-span-2 h-full">
       <div className="bg-white/5 backdrop-blur-xl border border-white/10 rounded-2xl shadow-xl p-3 md:p-4 h-full flex flex-col">
@@ -87,6 +108,7 @@ const EventsCalendar = ({ events = [] }) => {
           <button
             onClick={() => navigateMonth(-1)}
             className="w-6 h-6 sm:w-8 sm:h-8 bg-white/10 hover:bg-white/20 rounded-lg flex items-center justify-center transition-all duration-300 hover:scale-110"
+            aria-label="Previous month"
           >
             <FiChevronLeft className="w-3 h-3 sm:w-4 sm:h-4" />
           </button>
@@ -108,7 +130,11 @@ const EventsCalendar = ({ events = [] }) => {
                 <span
                   className={`inline-block w-2 h-2 rounded-full mr-2 ${selectedEvent.color}`}
                 />
-                {selectedEvent.name} · {selectedEvent.time}
+                {selectedEvent.name} ·{" "}
+                {new Date(selectedEvent.raw).toLocaleTimeString([], {
+                  hour: "2-digit",
+                  minute: "2-digit",
+                })}
               </p>
             )}
           </div>
@@ -116,105 +142,119 @@ const EventsCalendar = ({ events = [] }) => {
           <button
             onClick={() => navigateMonth(1)}
             className="w-6 h-6 sm:w-8 sm:h-8 bg-white/10 hover:bg-white/20 rounded-lg flex items-center justify-center transition-all duration-300 hover:scale-110"
+            aria-label="Next month"
           >
             <FiChevronRight className="w-3 h-3 sm:w-4 sm:h-4" />
           </button>
         </div>
 
-        {/* Grid */}
-        <div className="flex-1 flex flex-col">
-          <div className="grid grid-cols-7 gap-1 mb-2 sm:mb-3">
-            {dayNames.map((day) => (
-              <div
-                key={day}
-                className="text-center font-semibold p-1 sm:p-2 text-gray-300 text-xs"
-              >
-                {day}
-              </div>
-            ))}
-          </div>
+        {/* Week header */}
+        <div className="grid grid-cols-7 gap-1 mb-2 sm:mb-3">
+          {dayNames.map((day) => (
+            <div
+              key={day}
+              className="text-center font-semibold p-1 sm:p-2 text-gray-300 text-xs"
+            >
+              {day}
+            </div>
+          ))}
+        </div>
 
-          <div className="grid grid-cols-7 gap-1 flex-1">
-            {generateCalendarDays().map((day, idx) => {
-              const dayEvents = day ? eventsByDay[day] || [] : [];
-              const hasEvents = dayEvents.length > 0;
+        {/* Calendar grid */}
+        <div className="grid grid-cols-7 gap-1 flex-1">
+          {generateCalendarDays().map((day, idx) => {
+            const dayEvents = day ? eventsByDay[day] || [] : [];
+            const hasEvents = dayEvents.length > 0;
 
-              return (
-                <div key={idx} className="aspect-square">
-                  {day && (
-                    <div className="relative group w-full h-full">
-                      <button
-                        onClick={() => {
-                          if (hasEvents) setSelectedEvent(dayEvents[0]);
-                        }}
-                        title={
-                          hasEvents
-                            ? dayEvents
-                                .map((e) => `${e.name} • ${e.time}`)
-                                .join("\n")
-                            : ""
-                        }
-                        className={`w-full h-full flex flex-col items-center justify-start pt-1 text-xs font-medium rounded-lg transition-all duration-300 hover:scale-105 border ${
-                          hasEvents
-                            ? "bg-white/10 border-white/20 hover:border-[#a38b41]/40"
-                            : "border-white/5 hover:border-[#a38b41]/30"
-                        } text-gray-200`}
-                      >
-                        <span className="font-bold text-xs sm:text-sm">
-                          {day}
-                        </span>
+            const isSelected =
+              selectedDate &&
+              sameDay(
+                selectedDate,
+                new Date(
+                  currentDate.getFullYear(),
+                  currentDate.getMonth(),
+                  day || 1
+                )
+              );
 
-                        {/* small event dots */}
-                        {hasEvents && (
-                          <div className="mt-1 flex gap-1 px-1 w-full justify-center">
-                            {dayEvents.slice(0, 3).map((e) => (
-                              <span
-                                key={e.id + e.time}
-                                className={`w-2 h-2 rounded-full ${e.color}`}
-                              />
-                            ))}
-                            {dayEvents.length > 3 && (
-                              <span className="text-[10px] opacity-80">
-                                +{dayEvents.length - 3}
-                              </span>
-                            )}
-                          </div>
-                        )}
-                      </button>
+            const nativeTitle = hasEvents
+              ? dayEvents.map((e) => `${e.name} • ${e.time}`).join("\n")
+              : "";
 
-                      {/* Hover tooltip */}
+            return (
+              <div key={idx} className="aspect-square">
+                {day && (
+                  <div className="relative group w-full h-full">
+                    <button
+                      onClick={() => handleDayClick(day)}
+                      title={nativeTitle}
+                      aria-pressed={!!isSelected}
+                      className={[
+                        "w-full h-full flex flex-col items-center justify-start pt-1 text-xs font-medium rounded-lg transition-all duration-300 border",
+                        hasEvents
+                          ? "bg-white/10 border-white/20 hover:border-[#a38b41]/40"
+                          : "border-white/5 hover:border-[#a38b41]/30",
+                        isSelected
+                          ? "ring-2 ring-[#a38b41] bg-[#a38b41]/20"
+                          : "hover:scale-105",
+                        isToday(day)
+                          ? "outline outline-1 outline-[#a38b41]/60"
+                          : "",
+                        "text-gray-200",
+                      ].join(" ")}
+                    >
+                      <span className="font-bold text-xs sm:text-sm">
+                        {day}
+                      </span>
+
+                      {/* dots */}
                       {hasEvents && (
-                        <div className="pointer-events-none hidden group-hover:block absolute left-1/2 -translate-x-1/2 -top-2 -translate-y-full z-20">
-                          <div className="bg-[#a38b41] text-white text-xs rounded-md border border-white/10 shadow-xl p-2 min-w-44 max-w-64">
-                            <div className="font-semibold mb-1">
-                              {monthNames[currentDate.getMonth()].slice(0, 3)}{" "}
-                              {day}
-                            </div>
-                            <ul className="space-y-1">
-                              {dayEvents.map((e) => (
-                                <li
-                                  key={e.id + e.time}
-                                  className="flex items-center gap-2"
-                                >
-                                  <span
-                                    className={`w-2 h-2 rounded-full bg-green-500`}
-                                  />
-                                  <span className="truncate">{e.name}</span>
-                                  <span className="opacity-80 ml-auto">
-                                    {e.time}
-                                  </span>
-                                </li>
-                              ))}
-                            </ul>
-                          </div>
+                        <div className="mt-1 flex gap-1 px-1 w-full justify-center">
+                          {dayEvents.slice(0, 3).map((e) => (
+                            <span
+                              key={e.id + e.time}
+                              className={`w-2 h-2 rounded-full ${e.color}`}
+                            />
+                          ))}
+                          {dayEvents.length > 3 && (
+                            <span className="text-[10px] opacity-80">
+                              +{dayEvents.length - 3}
+                            </span>
+                          )}
                         </div>
                       )}
-                    </div>
-                  )}
-                </div>
-              );
-            })}
-          </div>
+                    </button>
+
+                    {/* Hover tooltip */}
+                    {hasEvents && (
+                      <div className="pointer-events-none hidden group-hover:block absolute left-1/2 -translate-x-1/2 -top-2 -translate-y-full z-20">
+                        <div className="bg-[#a38b41] text-white text-xs rounded-md border border-white/10 shadow-xl p-2 min-w-44 max-w-64">
+                          <div className="font-semibold mb-1">
+                            {monthNames[currentDate.getMonth()].slice(0, 3)}{" "}
+                            {day}
+                          </div>
+                          <ul className="space-y-1">
+                            {dayEvents.map((e) => (
+                              <li
+                                key={e.id + e.time}
+                                className="flex items-center gap-2"
+                              >
+                                <span className="w-2 h-2 rounded-full bg-green-500" />
+                                <span className="truncate">{e.name}</span>
+                                <span className="opacity-80 ml-auto">
+                                  {e.time}
+                                </span>
+                              </li>
+                            ))}
+                          </ul>
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                )}
+              </div>
+            );
+          })}
         </div>
       </div>
     </div>
