@@ -42,6 +42,7 @@ import AdminLayout from "./pages/admin/AdminLayout";
 import AdminHome from "./pages/admin/AdminHome";
 import AdminNewsletter from "./pages/admin/AdminNewsletter";
 import AdminContact from "./pages/admin/AdminContact";
+import OurTeam from "./pages/team/OurTeam";
 
 // Simple Black Header Component
 const SimpleHeader = () => {
@@ -149,7 +150,15 @@ export default function App() {
               </MotionPageWrapper>
             }
           />
-
+          {/* Teams */}
+          <Route
+            path="our-team"
+            element={
+              <MotionPageWrapper>
+                <OurTeam />
+              </MotionPageWrapper>
+            }
+          />
           {/* Talent Profile Page */}
           <Route element={<ProtectedRoute />}>
             <Route

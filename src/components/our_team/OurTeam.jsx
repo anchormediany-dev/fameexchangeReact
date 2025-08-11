@@ -3,42 +3,21 @@ import { Pagination, Autoplay } from "swiper/modules";
 import "swiper/css";
 import "swiper/css/pagination";
 import imageText from "../../assets/images/fame-exchange-image-text.png";
-import teamOneImage from "../../assets/images/team-1.png";
-import teamTwoImage from "../../assets/images/team-2.png";
-import teamThreeImage from "../../assets/images/team-3.png";
-import teamFourImage from "../../assets/images/team-4.png";
 import "./OurTeam.css";
+import { useGetTeamQuery } from "../../app/authApi";
+import { Link } from "react-router-dom";
+
+const FALLBACK_IMG =
+  "https://images.unsplash.com/photo-1527980965255-d3b416303d12?auto=format&fit=crop&w=1200&q=60";
+
 const OurTeam = () => {
-  const teamMembers = [
-    {
-      id: 1,
-      name: "DAVE ROMANO",
-      role: "FOUNDER/CEO",
-      image: teamOneImage,
-      bio: "Visionary entrepreneur leading the Fame Exchange with a mission to redefine celebrity value.",
-    },
-    {
-      id: 2,
-      name: "VICTOR RAMOS",
-      role: "Finance Manager",
-      image: teamTwoImage,
-      bio: "Experienced finance strategist ensuring sustainable growth and financial transparency.",
-    },
-    {
-      id: 3,
-      name: "CHRISTOPHER SHERILLO",
-      role: "Lead Entertainment Counsel",
-      image: teamThreeImage,
-      bio: "Legal expert in the entertainment industry, guiding partnerships and IP strategy.",
-    },
-    {
-      id: 4,
-      name: "EDWARD GRAUER",
-      role: "Operations Director",
-      image: teamFourImage,
-      bio: "Operations mastermind focused on efficiency, scalability, and seamless platform delivery.",
-    },
-  ];
+  const { data, isLoading, isError, error, refetch, isFetching } =
+    useGetTeamQuery();
+
+  // From API: [{ _id, name, title, bio, imageUrl, isVisible, ... }]
+  const teamMembers = Array.isArray(data?.data)
+    ? data.data.filter((m) => m?.isVisible)
+    : [];
 
   return (
     <section className="py-12 2xl:py-16 bg-[#171717]">
@@ -52,75 +31,94 @@ const OurTeam = () => {
           </h2>
           <div className="mt-2 w-full">
             <img
-              style={{
-                width: "-webkit-fill-available",
-              }}
+              style={{ width: "-webkit-fill-available" }}
               src={imageText}
               alt="Graphic Text"
             />
           </div>
         </div>
 
-        <Swiper
-          modules={[Pagination, Autoplay]}
-          spaceBetween={30}
-          slidesPerView={1}
-          pagination={{
-            clickable: true,
-            el: ".team-pagination",
-            bulletClass: "team-bullet",
-            bulletActiveClass: "team-bullet-active",
-          }}
-          autoplay={{
-            delay: 3000,
-            disableOnInteraction: false,
-          }}
-          breakpoints={{
-            640: {
-              slidesPerView: 2,
-              spaceBetween: 20,
-            },
-            1024: {
-              slidesPerView: 3,
-              spaceBetween: 30,
-            },
-            1280: {
-              slidesPerView: 4,
-              spaceBetween: 30,
-            },
-          }}
-          className="pb-12"
-        >
-          {teamMembers.map((member) => (
-            <SwiperSlide key={member.id}>
-              <div className=" rounded-lg overflow-hidden transition-transform duration-300 hover:scale-105 h-full flex flex-col">
-                <div className="h-64 overflow-hidden">
-                  <img
-                    src={member.image}
-                    alt={member.name}
-                    className="w-full h-full object-cover"
-                    loading="lazy"
-                  />
+        {/* Loading / Error states (kept minimal to preserve layout) */}
+        {isLoading ? (
+          <div className="text-center text-gray-300 py-10">Loading team…</div>
+        ) : isError ? (
+          <div className="flex items-center justify-between bg-red-500/10 border border-red-500/30 text-red-200 rounded-xl p-4">
+            <span className="text-sm">
+              {error?.data?.error ||
+                error?.data?.message ||
+                error?.error ||
+                "Failed to load team."}
+            </span>
+            <button
+              onClick={refetch}
+              disabled={isFetching}
+              className="px-3 py-1.5 rounded-lg bg-red-500/20 hover:bg-red-500/30 transition text-sm"
+            >
+              {isFetching ? "Retrying…" : "Retry"}
+            </button>
+          </div>
+        ) : teamMembers.length === 0 ? (
+          <div className="text-center text-gray-300 py-10">
+            No team members to display.
+          </div>
+        ) : (
+          <Swiper
+            modules={[Pagination, Autoplay]}
+            spaceBetween={30}
+            slidesPerView={1}
+            pagination={{
+              clickable: true,
+              el: ".team-pagination",
+              bulletClass: "team-bullet",
+              bulletActiveClass: "team-bullet-active",
+            }}
+            autoplay={{
+              delay: 3000,
+              disableOnInteraction: false,
+            }}
+            breakpoints={{
+              640: { slidesPerView: 2, spaceBetween: 20 },
+              1024: { slidesPerView: 3, spaceBetween: 30 },
+              1280: { slidesPerView: 4, spaceBetween: 30 },
+            }}
+            className="pb-12"
+          >
+            {teamMembers.map((member) => (
+              <SwiperSlide key={member._id || member.id}>
+                <div className=" rounded-lg overflow-hidden transition-transform duration-300 hover:scale-105 h-full flex flex-col">
+                  <div className="h-64 overflow-hidden">
+                    <img
+                      src={member.imageUrl || FALLBACK_IMG}
+                      alt={member.name || "Team member"}
+                      className="w-full h-full object-cover"
+                      loading="lazy"
+                    />
+                  </div>
+                  <div className="p-6 text-center">
+                    <h4 className="text-white custom-heading-seven">
+                      {member.name}
+                    </h4>
+                    <p className="text-white">
+                      {member.title /* maps to 'role' */}
+                    </p>
+                    <p className="text-gray-400 text-sm mt-2">{member.bio}</p>
+                  </div>
                 </div>
-                <div className="p-6 text-center">
-                  <h4 className="text-white custom-heading-seven">
-                    {member.name}
-                  </h4>
-                  <p className="text-white">{member.role}</p>
-                  <p className="text-gray-400 text-sm mt-2">{member.bio}</p>
-                </div>
-              </div>
-            </SwiperSlide>
-          ))}
-        </Swiper>
+              </SwiperSlide>
+            ))}
+          </Swiper>
+        )}
 
-        {/* Custom pagination container */}
+        {/* Custom pagination container (unchanged) */}
         {/* <div className="team-pagination flex justify-center mt-4 gap-2"></div> */}
       </div>{" "}
       <div className="flex justify-center">
-        <button className="custom-button-two" href="#">
-          VIEW ALL
-        </button>
+        <Link to="/our-team" state={{ teamMembers }}>
+          {" "}
+          <button className="custom-button-two" href="#">
+            VIEW ALL
+          </button>
+        </Link>
       </div>
     </section>
   );

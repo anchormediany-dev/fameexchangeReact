@@ -178,6 +178,14 @@ export const authApi = api.injectEndpoints({
         },
       }),
     }),
+    //  our team API's
+    getTeam: builder.query({
+      query: () => ({
+        url: "/team/",
+        method: "GET",
+      }),
+      providesTags: ["Team"],
+    }),
     // friends API's
     deleteFriends: builder.mutation({
       query: (data) => ({
@@ -242,6 +250,8 @@ export const {
   // newsletter
   useNewsletterSubscribeMutation,
   useGetNewslettersQuery,
+  // Our team
+  useGetTeamQuery,
   // contact us
   useContactUsMutation,
   useGetContactsQuery,
