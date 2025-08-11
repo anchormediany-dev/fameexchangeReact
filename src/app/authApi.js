@@ -69,6 +69,13 @@ export const authApi = api.injectEndpoints({
         body: data,
       }),
     }),
+    getContacts: builder.query({
+      query: () => ({
+        url: "/contact",
+        method: "GET",
+      }),
+      providesTags: ["Contacts"],
+    }),
     // User Profile API's
     updateMyProfile: builder.mutation({
       query: (profileData) => ({
@@ -237,4 +244,5 @@ export const {
   useGetNewslettersQuery,
   // contact us
   useContactUsMutation,
+  useGetContactsQuery,
 } = authApi;
