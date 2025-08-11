@@ -59,6 +59,10 @@ const UltraModernEventsPllatform = () => {
       return sameDay(created, eventsDate);
     });
   }, [events, eventsDate]);
+  const featuredEvents = useMemo(
+    () => events.filter((e) => e.isFeatured),
+    [events]
+  );
   return (
     <section className="w-full z-50 bg-gradient-to-br py-12 2xl:py-16 flex flex-col 2xl:gap-16 gap-12 px-4 sm:px-6 lg:px-8">
       <div className="2xl:gap-16 gap-12 px-4 container sm:px-6 lg:px-8 mt-10 lg:mt-16 2xl:mt-20">
@@ -82,7 +86,7 @@ const UltraModernEventsPllatform = () => {
             onRetry={refetch}
             eventsDate={eventsDate}
           />
-          <FeaturedEvents />
+          <FeaturedEvents events={featuredEvents} />
         </div>
       </div>
     </section>
