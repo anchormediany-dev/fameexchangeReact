@@ -98,6 +98,14 @@ export const authApi = api.injectEndpoints({
         method: "POST",
         body: data,
       }),
+      invalidatesTags: ["Newsletter"],
+    }),
+    getNewsletters: builder.query({
+      query: () => ({
+        url: "/newsletter/",
+        method: "GET",
+      }),
+      providesTags: ["Newsletter"],
     }),
     // Get events
     getEvents: builder.query({
@@ -226,6 +234,7 @@ export const {
   useRescheduleTalentConfirmationMutation,
   // newsletter
   useNewsletterSubscribeMutation,
+  useGetNewslettersQuery,
   // contact us
   useContactUsMutation,
 } = authApi;
