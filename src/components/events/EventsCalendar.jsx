@@ -1,51 +1,20 @@
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { FiChevronLeft, FiChevronRight } from "react-icons/fi";
-const EventsCalendar = () => {
-  const [currentDate, setCurrentDate] = useState(new Date(2024, 7));
-  const [calendarEvents] = useState([
-    {
-      date: 15,
-      name: "Jake's Exchange",
-      category: "networking",
-      color: "bg-blue-500",
-      lat: 40.7589,
-      lng: -73.9851,
-    },
-    {
-      date: 18,
-      name: "Summer Festival",
-      category: "music",
-      color: "bg-purple-500",
-      lat: 40.7831,
-      lng: -73.9712,
-    },
-    {
-      date: 22,
-      name: "Tech Meetup",
-      category: "tech",
-      color: "bg-green-500",
-      lat: 40.7505,
-      lng: -73.9934,
-    },
-    {
-      date: 25,
-      name: "Art Gallery",
-      category: "art",
-      color: "bg-pink-500",
-      lat: 40.7614,
-      lng: -73.9776,
-    },
-    {
-      date: 29,
-      name: "Food Festival",
-      category: "food",
-      color: "bg-orange-500",
-      lat: 40.7282,
-      lng: -74.0776,
-    },
-  ]);
 
-  const [selectedEvent, setSelectedEvent] = useState(calendarEvents[0]);
+const colorFor = (cat = "") => {
+  const c = String(cat).toLowerCase();
+  if (c.includes("music")) return "bg-green-500";
+  if (c.includes("tech")) return "bg-green-500";
+  if (c.includes("network")) return "bg-green-500";
+  if (c.includes("art")) return "bg-green-500";
+  if (c.includes("food")) return "bg-green-500";
+  return "bg-green-500";
+};
+
+const EventsCalendar = ({ events = [] }) => {
+  const [currentDate, setCurrentDate] = useState(new Date());
+  const [selectedEvent, setSelectedEvent] = useState(null);
+
   const monthNames = [
     "JANUARY",
     "FEBRUARY",
@@ -61,48 +30,59 @@ const EventsCalendar = () => {
     "DECEMBER",
   ];
   const dayNames = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
-  const getDaysInMonth = (date) => {
-    return new Date(date.getFullYear(), date.getMonth() + 1, 0).getDate();
+
+  const getDaysInMonth = (date) =>
+    new Date(date.getFullYear(), date.getMonth() + 1, 0).getDate();
+  const getFirstDayOfMonth = (date) =>
+    new Date(date.getFullYear(), date.getMonth(), 1).getDay();
+
+  const navigateMonth = (direction) => {
+    const d = new Date(currentDate);
+    d.setMonth(currentDate.getMonth() + direction);
+    setCurrentDate(d);
   };
 
-  const getFirstDayOfMonth = (date) => {
-    return new Date(date.getFullYear(), date.getMonth(), 1).getDay();
-  };
+  const formatTime = (d) =>
+    d.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
+
+  // Map events -> days for current month
+  const eventsByDay = useMemo(() => {
+    const map = {};
+    events.forEach((e) => {
+      if (!e?.datetime) return;
+      const d = new Date(e.datetime);
+      if (
+        d.getMonth() === currentDate.getMonth() &&
+        d.getFullYear() === currentDate.getFullYear()
+      ) {
+        const day = d.getDate();
+        (map[day] ||= []).push({
+          id: e.id,
+          name: e.name || e.title || "Event",
+          time: formatTime(d),
+          color: colorFor(e.category || e.type),
+        });
+      }
+    });
+    // sort by time
+    Object.values(map).forEach((arr) =>
+      arr.sort((a, b) => (a.time > b.time ? 1 : -1))
+    );
+    return map;
+  }, [events, currentDate]);
 
   const generateCalendarDays = () => {
     const daysInMonth = getDaysInMonth(currentDate);
     const firstDay = getFirstDayOfMonth(currentDate);
-    const days = [];
-
-    for (let i = 0; i < firstDay; i++) {
-      days.push(null);
-    }
-
-    for (let day = 1; day <= daysInMonth; day++) {
-      days.push(day);
-    }
-
+    const days = Array.from({ length: firstDay }, () => null);
+    for (let day = 1; day <= daysInMonth; day++) days.push(day);
     return days;
-  };
-
-  const navigateMonth = (direction) => {
-    const newDate = new Date(currentDate);
-    newDate.setMonth(currentDate.getMonth() + direction);
-    setCurrentDate(newDate);
-  };
-
-  const getEventForDate = (day) => {
-    return calendarEvents.find((event) => event.date === day);
-  };
-
-  const handleEventClick = (event) => {
-    setSelectedEvent(event);
   };
 
   return (
     <div className="lg:col-span-2 h-full">
       <div className="bg-white/5 backdrop-blur-xl border border-white/10 rounded-2xl shadow-xl p-3 md:p-4 h-full flex flex-col">
-        {/* Compact Calendar Header */}
+        {/* Header */}
         <div className="flex items-center justify-center space-x-2 sm:space-x-4 mb-4 sm:mb-6">
           <button
             onClick={() => navigateMonth(-1)}
@@ -127,8 +107,8 @@ const EventsCalendar = () => {
               <p className="text-xs sm:text-sm text-gray-400 mt-1">
                 <span
                   className={`inline-block w-2 h-2 rounded-full mr-2 ${selectedEvent.color}`}
-                ></span>
-                {selectedEvent.name}
+                />
+                {selectedEvent.name} · {selectedEvent.time}
               </p>
             )}
           </div>
@@ -141,7 +121,7 @@ const EventsCalendar = () => {
           </button>
         </div>
 
-        {/* Compact Calendar Grid */}
+        {/* Grid */}
         <div className="flex-1 flex flex-col">
           <div className="grid grid-cols-7 gap-1 mb-2 sm:mb-3">
             {dayNames.map((day) => (
@@ -149,43 +129,87 @@ const EventsCalendar = () => {
                 key={day}
                 className="text-center font-semibold p-1 sm:p-2 text-gray-300 text-xs"
               >
-                {day.slice(0, 3)}
+                {day}
               </div>
             ))}
           </div>
 
           <div className="grid grid-cols-7 gap-1 flex-1">
-            {generateCalendarDays().map((day, index) => {
-              const event = day ? getEventForDate(day) : null;
-              const isSelected =
-                selectedEvent && event && selectedEvent.date === event.date;
+            {generateCalendarDays().map((day, idx) => {
+              const dayEvents = day ? eventsByDay[day] || [] : [];
+              const hasEvents = dayEvents.length > 0;
+
               return (
-                <div key={index} className="aspect-square">
+                <div key={idx} className="aspect-square">
                   {day && (
-                    <button
-                      onClick={() => event && handleEventClick(event)}
-                      className={`w-full h-full flex flex-col items-center justify-center text-xs font-medium rounded-lg transition-all duration-300 hover:scale-105 relative ${
-                        event
-                          ? `${event.color} text-white shadow-md ${
-                              isSelected
-                                ? "ring-2 ring-white/70 ring-offset-2 ring-offset-gray-800 scale-110"
-                                : "hover:ring-2 hover:ring-white/50"
-                            }`
-                          : "hover:bg-white/10 text-gray-300 border border-white/5 hover:border-[#a38b41]/30"
-                      }`}
-                    >
-                      <span className="font-bold text-xs sm:text-sm">
-                        {day}
-                      </span>
-                      {event && (
-                        <span className="text-xs mt-1 truncate w-full px-1 hidden sm:block">
-                          {event.name.split(" ")[0]}
+                    <div className="relative group w-full h-full">
+                      <button
+                        onClick={() => {
+                          if (hasEvents) setSelectedEvent(dayEvents[0]);
+                        }}
+                        title={
+                          hasEvents
+                            ? dayEvents
+                                .map((e) => `${e.name} • ${e.time}`)
+                                .join("\n")
+                            : ""
+                        }
+                        className={`w-full h-full flex flex-col items-center justify-start pt-1 text-xs font-medium rounded-lg transition-all duration-300 hover:scale-105 border ${
+                          hasEvents
+                            ? "bg-white/10 border-white/20 hover:border-[#a38b41]/40"
+                            : "border-white/5 hover:border-[#a38b41]/30"
+                        } text-gray-200`}
+                      >
+                        <span className="font-bold text-xs sm:text-sm">
+                          {day}
                         </span>
+
+                        {/* small event dots */}
+                        {hasEvents && (
+                          <div className="mt-1 flex gap-1 px-1 w-full justify-center">
+                            {dayEvents.slice(0, 3).map((e) => (
+                              <span
+                                key={e.id + e.time}
+                                className={`w-2 h-2 rounded-full ${e.color}`}
+                              />
+                            ))}
+                            {dayEvents.length > 3 && (
+                              <span className="text-[10px] opacity-80">
+                                +{dayEvents.length - 3}
+                              </span>
+                            )}
+                          </div>
+                        )}
+                      </button>
+
+                      {/* Hover tooltip */}
+                      {hasEvents && (
+                        <div className="pointer-events-none hidden group-hover:block absolute left-1/2 -translate-x-1/2 -top-2 -translate-y-full z-20">
+                          <div className="bg-[#a38b41] text-white text-xs rounded-md border border-white/10 shadow-xl p-2 min-w-44 max-w-64">
+                            <div className="font-semibold mb-1">
+                              {monthNames[currentDate.getMonth()].slice(0, 3)}{" "}
+                              {day}
+                            </div>
+                            <ul className="space-y-1">
+                              {dayEvents.map((e) => (
+                                <li
+                                  key={e.id + e.time}
+                                  className="flex items-center gap-2"
+                                >
+                                  <span
+                                    className={`w-2 h-2 rounded-full bg-green-500`}
+                                  />
+                                  <span className="truncate">{e.name}</span>
+                                  <span className="opacity-80 ml-auto">
+                                    {e.time}
+                                  </span>
+                                </li>
+                              ))}
+                            </ul>
+                          </div>
+                        </div>
                       )}
-                      {isSelected && (
-                        <div className="absolute -top-1 -right-1 w-2 h-2 sm:w-3 sm:h-3 bg-yellow-400 rounded-full border-2 border-gray-800 animate-pulse"></div>
-                      )}
-                    </button>
+                    </div>
                   )}
                 </div>
               );
