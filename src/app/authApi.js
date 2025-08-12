@@ -119,6 +119,14 @@ export const authApi = api.injectEndpoints({
       query: () => "/events",
       providesTags: ["Events"],
     }),
+    createEvent: builder.mutation({
+      query: (formData) => ({
+        url: "/events",
+        method: "POST",
+        body: formData,
+      }),
+      invalidatesTags: ["Events"],
+    }),
     // Notifications
     getNotifications: builder.query({
       query: (userId) => `/notifications/${userId}`,
@@ -241,6 +249,7 @@ export const {
   useDeleteProfileImageMutation,
   // Events
   useGetEventsQuery,
+  useCreateEventMutation,
   // Friends API's
   useDeleteFriendsMutation,
   useGetAllFriendsQuery,
