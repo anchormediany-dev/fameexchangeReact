@@ -131,6 +131,14 @@ export const authApi = api.injectEndpoints({
       query: (id) => `/events/${id}`,
       providesTags: (result, error, id) => [{ type: "Events", id }],
     }),
+    setEventPreference: builder.mutation({
+      query: ({ eventId, preference }) => ({
+        url: `events/${eventId}/preference`,
+        method: "POST",
+        body: preference,
+      }),
+      invalidatesTags: ["Events"],
+    }),
     // events search
     searchEvents: builder.query({
       query: ({
@@ -283,6 +291,7 @@ export const {
   useGetEventByIdQuery,
   useSearchEventsQuery,
   useLazySearchEventsQuery,
+  useSetEventPreferenceMutation,
   // Friends API's
   useDeleteFriendsMutation,
   useGetAllFriendsQuery,

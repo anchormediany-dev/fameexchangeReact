@@ -7,22 +7,62 @@ import {
   FiExternalLink,
 } from "react-icons/fi";
 import { IoTicketOutline } from "react-icons/io5";
-
-const EventsPreferencesActions = () => {
+import { useSetEventPreferenceMutation } from "../../app/authApi";
+import { toast } from "react-toastify";
+const EventsPreferencesActions = ({ eventId }) => {
   const [attendanceOption, setAttendanceOption] = useState("interested");
   const [eventType, setEventType] = useState("liveInPerson");
   const [uploadedLogo, setUploadedLogo] = useState(null);
+  const [uploadedFile, setUploadedFile] = useState(null);
+  const [submitMsg, setSubmitMsg] = useState("");
+  const [submitErr, setSubmitErr] = useState("");
+  const [setPreference, { isLoading: isSubmitting }] =
+    useSetEventPreferenceMutation();
+
   const handleLogoUpload = (event) => {
     const file = event.target.files[0];
     if (file) {
+      setUploadedFile(file);
       const reader = new FileReader();
       reader.onload = (e) => {
-        setUploadedLogo({
-          url: e.target.result,
-          name: file.name,
-        });
+        setUploadedLogo({ url: e.target.result, name: file.name });
       };
       reader.readAsDataURL(file);
+      setSubmitMsg("");
+      setSubmitErr("");
+    }
+  };
+
+  const handleReset = () => {
+    setAttendanceOption("interested");
+    setEventType("liveInPerson");
+    setUploadedLogo(null);
+    setUploadedFile(null);
+    setSubmitMsg("");
+    setSubmitErr("");
+  };
+
+  const handleSubmit = async () => {
+    setSubmitMsg("");
+    setSubmitErr("");
+
+    const apiEventType = eventType === "liveInPerson" ? "live" : "virtual";
+    const apiPreference = attendanceOption; // "notInterested" | "interested" | "attending"
+
+    try {
+      const response = await setPreference({
+        eventId,
+        preference: {
+          prefrence_Type: apiPreference,
+          event_type: apiEventType,
+        },
+      }).unwrap();
+
+      toast.success(response?.message);
+    } catch (e) {
+      toast.error(
+        e?.data?.message || "Failed to save preferences. Please try again."
+      );
     }
   };
 
@@ -42,7 +82,7 @@ const EventsPreferencesActions = () => {
           </span>
         </h3>
 
-        {/* Compact Attendance */}
+        {/* Attendance */}
         <div className="mb-5">
           <h4 className="text-sm font-semibold mb-3 text-white/90 uppercase tracking-wide flex items-center">
             <span className="w-1.5 h-1.5 bg-gradient-to-r from-yellow-400 to-amber-500 rounded-full mr-2"></span>
@@ -51,7 +91,7 @@ const EventsPreferencesActions = () => {
           <div className="space-y-1.5">
             {[
               {
-                key: "notInterested",
+                key: "notinterested",
                 label: "Not Interested",
                 color: "text-red-400",
                 bgColor: "hover:bg-red-500/10",
@@ -78,7 +118,11 @@ const EventsPreferencesActions = () => {
                     type="radio"
                     name="attendance"
                     checked={attendanceOption === key}
-                    onChange={() => setAttendanceOption(key)}
+                    onChange={() => {
+                      setAttendanceOption(key);
+                      setSubmitMsg("");
+                      setSubmitErr("");
+                    }}
                     className="w-4 h-4 appearance-none border-2 border-gray-500 rounded-full checked:border-amber-500 checked:bg-amber-500 transition-all duration-200 relative"
                   />
                   {attendanceOption === key && (
@@ -97,7 +141,7 @@ const EventsPreferencesActions = () => {
           </div>
         </div>
 
-        {/* Compact Event Type */}
+        {/* Event Type */}
         <div className="mb-4">
           <h4 className="text-sm font-semibold mb-3 text-white/90 uppercase tracking-wide flex items-center">
             <span className="w-1.5 h-1.5 bg-gradient-to-r from-purple-400 to-blue-500 rounded-full mr-2"></span>
@@ -129,7 +173,11 @@ const EventsPreferencesActions = () => {
                     type="radio"
                     name="eventType"
                     checked={eventType === key}
-                    onChange={() => setEventType(key)}
+                    onChange={() => {
+                      setEventType(key);
+                      setSubmitMsg("");
+                      setSubmitErr("");
+                    }}
                     className="w-4 h-4 appearance-none border-2 border-gray-500 rounded-full checked:border-amber-500 checked:bg-amber-500 transition-all duration-200"
                   />
                   {eventType === key && (
@@ -148,9 +196,43 @@ const EventsPreferencesActions = () => {
             ))}
           </div>
         </div>
+
+        {/* Submit + Reset */}
+        <div className="mt-5 flex items-center gap-2">
+          <button
+            type="button"
+            onClick={handleSubmit}
+            disabled={isSubmitting || !eventId}
+            className={`w-full rounded-xl px-4 py-2.5 custom-button-two font-semibold text-black transition-all duration-300
+              ${
+                isSubmitting || !eventId
+                  ? "opacity-60 cursor-not-allowed"
+                  : "hover:scale-[1.02]"
+              }
+            `}
+            title={eventId ? "Submit Preferences" : "Open an event first"}
+          >
+            {isSubmitting ? "Saving…" : "Submit Preferences"}
+          </button>
+
+          <button
+            type="button"
+            onClick={handleReset}
+            disabled={isSubmitting}
+            className="px-3 py-2.5 rounded-xl border border-white/15 text-xs text-gray-300 hover:text-white hover:border-[#a38b41] hover:bg-white/5 transition-all"
+            title="Reset"
+          >
+            Reset
+          </button>
+        </div>
+
+        {submitMsg && (
+          <p className="mt-3 text-xs text-green-400">{submitMsg}</p>
+        )}
+        {submitErr && <p className="mt-3 text-xs text-red-400">{submitErr}</p>}
       </div>
 
-      {/* Compact Buy Tickets */}
+      {/* Buy Tickets */}
       <div className="bg-white/5 backdrop-blur-xl border border-white/10 rounded-2xl shadow-xl p-3 md:p-4">
         <h3 className="text-sm font-bold mb-2 text-center">
           <span
@@ -175,7 +257,7 @@ const EventsPreferencesActions = () => {
         </a>
       </div>
 
-      {/* Compact Upload */}
+      {/* Upload */}
       <div className="bg-white/5 backdrop-blur-xl border border-white/10 rounded-2xl shadow-xl p-3 md:p-4">
         <h3
           className="text-sm font-bold mb-3 text-center"
@@ -193,7 +275,12 @@ const EventsPreferencesActions = () => {
                 className="w-16 h-16 object-cover rounded-xl border-2 border-white/20 mb-2"
               />
               <button
-                onClick={() => setUploadedLogo(null)}
+                onClick={() => {
+                  setUploadedLogo(null);
+                  setUploadedFile(null);
+                  setSubmitMsg("");
+                  setSubmitErr("");
+                }}
                 className="absolute -top-1 -right-1 w-5 h-5 bg-red-500 rounded-full flex items-center justify-center text-white text-xs hover:bg-red-600 transition-colors"
               >
                 <FiX className="w-3 h-3" />
