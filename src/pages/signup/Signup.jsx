@@ -393,13 +393,13 @@ const Signup = () => {
                     id="terms"
                     checked={agreedTerms}
                     onChange={(e) => setAgreedTerms(e.target.checked)}
-                    className="m rounded bg-transparent border-[#F3BA18] text-[#F3BA18] focus:ring-[#F3BA18] h-5 w-5 flex-shrink-0"
+                    className="m rounded gredient-text h-5 w-5 flex-shrink-0"
                   />
                   <label htmlFor="terms" className="text-sm text-gray-300">
                     I agree to the{" "}
                     <Link
                       to="/terms-conditions"
-                      className="text-[#F3BA18] hover:underline"
+                      className="gredient-text hover:underline"
                       target="_blank"
                     >
                       Terms & Conditions
@@ -407,7 +407,7 @@ const Signup = () => {
                     and{" "}
                     <Link
                       to="/privacy-policy"
-                      className="text-[#F3BA18] hover:underline"
+                      className="gredient-text hover:underline"
                       target="_blank"
                     >
                       Privacy Policy
@@ -428,7 +428,7 @@ const Signup = () => {
                     !agreedTerms ||
                     isLoading
                   }
-                  className="w-full bg-gradient-to-r cursor-pointer from-[#F3BA18] to-[#FF9900] hover:from-[#FF9900] hover:to-[#F3BA18] text-white font-bold py-3 px-4 rounded-lg transition-all duration-300 disabled:opacity-80 disabled:cursor-not-allowed"
+                  className="w-full cursor-pointer custom-button-two text-white font-bold py-3 px-4 rounded-lg transition-all duration-300 disabled:opacity-80 disabled:cursor-not-allowed"
                 >
                   {isLoading ? "Signing Up..." : "Sign Up"}
                 </button>

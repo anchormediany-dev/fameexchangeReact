@@ -137,14 +137,14 @@ const LoginPage = () => {
                   <button
                     type="button"
                     onClick={() => setShowForgotPassword(true)}
-                    className="text-sm text-[#F3BA18] hover:underline transition duration-150 ease-in-out"
+                    className="text-sm gredient-text hover:underline transition duration-150 ease-in-out"
                   >
                     Forgot Password?
                   </button>
                   <button
                     type="button"
                     onClick={() => console.log("Handle forgot username")}
-                    className="text-sm text-[#F3BA18] hover:underline transition duration-150 ease-in-out"
+                    className="text-sm gredient-text hover:underline transition duration-150 ease-in-out"
                   >
                     Forgot Username?
                   </button>
@@ -161,7 +161,7 @@ const LoginPage = () => {
               <button
                 type="submit"
                 disabled={!isEmailValid || !isPasswordValid}
-                className="w-full bg-gradient-to-r cursor-pointer from-[#F3BA18] to-[#FF9900] hover:from-[#FF9900] hover:to-[#F3BA18] text-white font-bold py-3 px-4 rounded-lg transition-all duration-300 disabled:opacity-80 disabled:cursor-not-allowed"
+                className="w-full  cursor-pointer custom-button-two text-white font-bold py-3 px-4 rounded-lg transition-all duration-300 disabled:opacity-80 disabled:cursor-not-allowed"
               >
                 Log In
               </button>
@@ -194,7 +194,7 @@ const LoginPage = () => {
             {/* Signup Link */}
             <p className="text-gray-400 text-center mt-6 text-sm">
               Don’t have an account?{" "}
-              <Link to="/signup" className="text-[#F3BA18] hover:underline">
+              <Link to="/signup" className="gredient-text hover:underline">
                 Sign Up
               </Link>
             </p>

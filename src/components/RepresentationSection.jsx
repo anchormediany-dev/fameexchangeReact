@@ -199,7 +199,7 @@ const RepresentationSection = ({ onFormChange }) => {
                   <FaTimes size={14} />
                 </button>
               )}
-              <h3 className="text-[#F3BA18] text-sm font-semibold">
+              <h3 className="gredient-text text-sm font-semibold">
                 {rep.type
                   .split("_")
                   .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
@@ -258,7 +258,7 @@ const RepresentationSection = ({ onFormChange }) => {
               <button
                 type="button"
                 onClick={handleConfirm}
-                className="bg-[#F3BA18] text-black text-sm px-6 py-2 rounded-lg hover:bg-yellow-400 transition"
+                className="custom-button-two text-black text-sm px-6  rounded-lg transition"
               >
                 Confirm Representatives
               </button>
@@ -270,7 +270,7 @@ const RepresentationSection = ({ onFormChange }) => {
               <button
                 type="button"
                 onClick={() => setIsConfirmed(false)}
-                className="text-[#F3BA18] text-sm px-6 py-2 rounded-lg hover:underline transition"
+                className="gredient-text text-sm px-6 py-2 rounded-lg hover:underline transition"
               >
                 Edit Representatives
               </button>
