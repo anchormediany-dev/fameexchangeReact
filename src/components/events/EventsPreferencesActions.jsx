@@ -258,7 +258,7 @@ const EventsPreferencesActions = ({ eventId }) => {
       </div>
 
       {/* Upload */}
-      <div className="bg-white/5 backdrop-blur-xl border border-white/10 rounded-2xl shadow-xl p-3 md:p-4">
+      {/* <div className="bg-white/5 backdrop-blur-xl border border-white/10 rounded-2xl shadow-xl p-3 md:p-4">
         <h3
           className="text-sm font-bold mb-3 text-center"
           style={{ color: "#a38b41" }}
@@ -314,7 +314,7 @@ const EventsPreferencesActions = ({ eventId }) => {
             />
           </label>
         )}
-      </div>
+      </div> */}
     </div>
   );
 };
