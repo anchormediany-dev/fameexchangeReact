@@ -367,7 +367,7 @@ export default function EventCreateForm() {
                     name="is_featured"
                     checked={form.is_featured}
                     onChange={handleBoolean}
-                    className="rounded bg-transparent border-[#F3BA18] text-[#F3BA18] focus:ring-[#F3BA18] h-5 w-5"
+                    className="rounded  h-5 w-5"
                   />
                   <label
                     htmlFor="is_featured"
