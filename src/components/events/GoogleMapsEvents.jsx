@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { FiPlus, FiZoomIn, FiZoomOut, FiNavigation } from "react-icons/fi";
 import { BsBuilding, BsGoogle } from "react-icons/bs";
+import { Link } from "react-router-dom";
 
 const GoogleMapsEvents = () => {
   const [mapZoom, setMapZoom] = useState(12);
@@ -57,12 +58,15 @@ const GoogleMapsEvents = () => {
         style={{ backgroundColor: "#a38b41" }}
       >
         <div className="absolute inset-0 bg-white/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-        <div className="relative flex items-center justify-center space-x-2">
+        <Link
+          to="/add-event"
+          className="relative flex items-center justify-center space-x-2"
+        >
           <FiPlus className="w-4 h-4 text-white" />
           <span className="font-semibold text-sm text-white">
             LIST & POST YOUR EVENT
           </span>
-        </div>
+        </Link>
       </button>
 
       {/* Real Google Maps Integration - Flexible Height */}
