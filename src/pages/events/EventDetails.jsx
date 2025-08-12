@@ -1,6 +1,7 @@
 import { useParams, useNavigate } from "react-router-dom";
 import { FiCalendar, FiGlobe, FiPhone } from "react-icons/fi";
 import { useGetEventByIdQuery } from "../../app/authApi";
+import EventsPreferencesActions from "../../components/events/EventsPreferencesActions";
 
 const CDN_BASE = import.meta.env.VITE_API_IMAGE_BASE_URL || "";
 
@@ -182,7 +183,6 @@ export default function EventDetails() {
                     )}
                   </div>
                 )}
-
                 {event?.details && (
                   <div className="mb-6">
                     <h3 className="text-lg font-semibold mb-3">
@@ -193,7 +193,6 @@ export default function EventDetails() {
                     </p>
                   </div>
                 )}
-
                 {/* Location, Preference & Coordinates (text-only) */}
                 <div className="mb-2">
                   <h3 className="text-lg font-semibold mb-3">
@@ -225,12 +224,9 @@ export default function EventDetails() {
                       </span>
                     </div>
                   </div>
-                </div>
-              </div>
-
-              {/* Sidebar (no duplicates, no message organizer) */}
-              <aside className="space-y-6">
-                {/* <div className="bg-[#2d2d2d] border border-[#333333] rounded-xl p-5">
+                </div>{" "}
+                <aside className="space-y-6">
+                  {/* <div className="bg-[#2d2d2d] border border-[#333333] rounded-xl p-5">
                   <button
                     onClick={() =>
                       event?.website
@@ -251,63 +247,68 @@ export default function EventDetails() {
                   </p>
                 </div> */}
 
-                {(event?.website || event?.phone) && (
-                  <div className="bg-[#2d2d2d] border border-[#333333] rounded-xl p-5 text-gray-200">
-                    <h4 className="font-semibold mb-3 text-white">Links</h4>
-                    <ul className="space-y-2 text-sm">
-                      {event?.website && (
-                        <li className="flex items-center gap-2">
-                          <FiGlobe className="gredient-icon" />
-                          <a
-                            className="hover:underline"
-                            href={event.website}
-                            target="_blank"
-                            rel="noreferrer"
-                          >
-                            {new URL(event.website).hostname}
-                          </a>
-                        </li>
-                      )}
-                      {event?.phone && (
-                        <li className="flex items-center gap-2">
-                          <FiPhone className="gredient-icon" />
-                          <a
-                            className="hover:underline"
-                            href={`tel:${event.phone}`}
-                          >
-                            {event.phone}
-                          </a>
-                        </li>
-                      )}
-                    </ul>
-                  </div>
-                )}
-
-                {event?.userId && (
-                  <div className="bg-[#2d2d2d] border border-[#333333] rounded-xl p-5">
-                    <h4 className="font-semibold mb-4 text-white">Organizer</h4>
-                    <div className="flex items-center gap-4">
-                      <img
-                        className="w-14 h-14 rounded-full object-cover border border-[#333333]"
-                        src={
-                          resolveImage(event.userId.images?.[0]?.fileUrl) ||
-                          `https://api.dicebear.com/7.x/initials/svg?seed=${encodeURIComponent(
-                            event.userId.name || "User"
-                          )}`
-                        }
-                        alt="Organizer"
-                      />
-                      <div className="text-white">
-                        <p className="font-semibold">{event.userId.name}</p>
-                        <p className="text-xs text-gray-400">
-                          {event.userId.role}
-                        </p>
-                      </div>
+                  {(event?.website || event?.phone) && (
+                    <div className="bg-[#2d2d2d] border border-[#333333] rounded-xl p-5 text-gray-200">
+                      <h4 className="font-semibold mb-3 text-white">Links</h4>
+                      <ul className="space-y-2 text-sm">
+                        {event?.website && (
+                          <li className="flex items-center gap-2">
+                            <FiGlobe className="gredient-icon" />
+                            <a
+                              className="hover:underline"
+                              href={event.website}
+                              target="_blank"
+                              rel="noreferrer"
+                            >
+                              {new URL(event.website).hostname}
+                            </a>
+                          </li>
+                        )}
+                        {event?.phone && (
+                          <li className="flex items-center gap-2">
+                            <FiPhone className="gredient-icon" />
+                            <a
+                              className="hover:underline"
+                              href={`tel:${event.phone}`}
+                            >
+                              {event.phone}
+                            </a>
+                          </li>
+                        )}
+                      </ul>
                     </div>
-                    {/* no message button */}
-                  </div>
-                )}
-              </aside>
+                  )}
+
+                  {event?.userId && (
+                    <div className="bg-[#2d2d2d] border border-[#333333] rounded-xl p-5">
+                      <h4 className="font-semibold mb-4 text-white">
+                        Organizer
+                      </h4>
+                      <div className="flex items-center gap-4">
+                        <img
+                          className="w-14 h-14 rounded-full object-cover border border-[#333333]"
+                          src={
+                            resolveImage(event.userId.images?.[0]?.fileUrl) ||
+                            `https://api.dicebear.com/7.x/initials/svg?seed=${encodeURIComponent(
+                              event.userId.name || "User"
+                            )}`
+                          }
+                          alt="Organizer"
+                        />
+                        <div className="text-white">
+                          <p className="font-semibold">{event.userId.name}</p>
+                          <p className="text-xs text-gray-400">
+                            {event.userId.role}
+                          </p>
+                        </div>
+                      </div>
+                      {/* no message button */}
+                    </div>
+                  )}
+                </aside>
+              </div>
+              <EventsPreferencesActions />
+              {/* Sidebar (no duplicates, no message organizer) */}
             </div>
           </div>
         </div>

@@ -131,6 +131,32 @@ export const authApi = api.injectEndpoints({
       query: (id) => `/events/${id}`,
       providesTags: (result, error, id) => [{ type: "Events", id }],
     }),
+    // events search
+    searchEvents: builder.query({
+      query: ({
+        q,
+        featured,
+        status,
+        month,
+        year,
+        withinMonth,
+        page,
+        limit,
+      } = {}) => ({
+        url: "/events/search",
+        params: {
+          ...(q ? { q } : {}),
+          ...(featured !== undefined ? { featured } : {}),
+          ...(status ? { status } : {}),
+          ...(month ? { month } : {}),
+          ...(year ? { year } : {}),
+          ...(withinMonth !== undefined ? { withinMonth } : {}),
+          ...(page ? { page } : {}),
+          ...(limit ? { limit } : {}),
+        },
+      }),
+      providesTags: [{ type: "Events", id: "SEARCH" }],
+    }),
     // Notifications
     getNotifications: builder.query({
       query: (userId) => `/notifications/${userId}`,
@@ -255,6 +281,8 @@ export const {
   useGetEventsQuery,
   useCreateEventMutation,
   useGetEventByIdQuery,
+  useSearchEventsQuery,
+  useLazySearchEventsQuery,
   // Friends API's
   useDeleteFriendsMutation,
   useGetAllFriendsQuery,
