@@ -73,12 +73,12 @@ const UltraModernEventsPllatform = () => {
   // FULL search (only on Enter)
   const handleSearchSubmit = async (q) => {
     if (!q?.trim()) return;
-    const baseDate = eventsDate ? new Date(eventsDate) : new Date();
+    const now = new Date();
     const params = {
       q: q.trim(),
-      month: baseDate.getMonth() + 1,
+      month: now.getMonth() + 1,
       withinMonth: true,
-      year: baseDate.getFullYear(),
+      year: now.getFullYear(),
       featured: true,
       status: "active",
     };
