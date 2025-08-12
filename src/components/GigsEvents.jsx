@@ -1,5 +1,6 @@
 import styled from "styled-components";
 import { motion } from "framer-motion";
+import { truncate } from "../utils/truncate";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation, Pagination, Autoplay } from "swiper/modules";
 import "swiper/css";
@@ -351,7 +352,9 @@ const GigsEvents = () => {
                       </EventImageContainer>
                       <EventContent>
                         <EventTitle>{ev.title}</EventTitle>
-                        <EventDescription>{ev.details}</EventDescription>
+                        <EventDescription>
+                          {truncate(ev.details, 150)}
+                        </EventDescription>
                         <Link to={`/event-details/${ev._id}`}>
                           <ViewAllButton>View</ViewAllButton>
                         </Link>
