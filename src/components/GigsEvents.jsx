@@ -12,6 +12,25 @@ import hollywoodImage from "../assets/images/hollywood-sign-night_Fotor.jpg";
 import pop1 from "../assets/images/pop1.jpg";
 import pop2 from "../assets/images/pop2.jpg";
 import { Link } from "react-router-dom";
+import { useGetEventsQuery } from "../app/authApi";
+const CDN_BASE = import.meta.env.VITE_API_IMAGE_BASE_URL || "";
+const FALLBACK_COVER =
+  "https://images.unsplash.com/photo-1492684223066-81342ee5ff30?q=80&w=1600&auto=format&fit=crop";
+
+const resolveImage = (p) => {
+  if (!p) return "";
+  if (/^https?:|^data:/.test(p)) return p;
+  const normalized = p.replace(/\\/g, "/");
+  const base = CDN_BASE.replace(/\/$/, "");
+  const path = normalized.replace(/^\//, "");
+  return `${base}/${path}`;
+};
+
+const coverFor = (ev) =>
+  resolveImage(ev?.event_cover) ||
+  resolveImage(Array.isArray(ev?.event_images) ? ev.event_images[0] : "") ||
+  FALLBACK_COVER;
+
 const EventsSectionWrapper = styled.section`
   width: 100%;
   background-image: linear-gradient(rgba(0, 0, 0, 0.85), rgba(0, 0, 0, 0.85)),
@@ -248,6 +267,10 @@ const eventsData = [
 ];
 
 const GigsEvents = () => {
+  const { data, isLoading, isError } = useGetEventsQuery();
+  const events = Array.isArray(data?.data) ? data.data : [];
+  const hasEvents = events.length > 0;
+
   return (
     <motion.div
       initial={{ opacity: 0 }}
@@ -281,41 +304,63 @@ const GigsEvents = () => {
             viewport={{ once: true }}
             transition={{ duration: 0.6, delay: 0.4 }}
           >
-            <StyledSwiper
-              modules={[Navigation, Pagination, Autoplay]}
-              spaceBetween={80}
-              slidesPerView={1}
-              autoplay={{
-                delay: 5000,
-                disableOnInteraction: false,
-              }}
-              breakpoints={{
-                640: {
-                  slidesPerView: 2,
-                },
-                1024: {
-                  slidesPerView: 3,
-                },
-              }}
-            >
-              {eventsData.map((event) => (
-                <SwiperSlide key={event.id}>
-                  <EventCard>
-                    <EventImageContainer>
-                      <EventImage src={event.image} alt={event.title} />
-                    </EventImageContainer>
-                    <EventContent>
-                      <EventTitle>{event.title}</EventTitle>
-                      <EventDescription>{event.description}</EventDescription>
-                      <Link to="events">
-                        {" "}
-                        <ViewAllButton>View All</ViewAllButton>
-                      </Link>
-                    </EventContent>
-                  </EventCard>
-                </SwiperSlide>
-              ))}
-            </StyledSwiper>
+            {" "}
+            {isLoading ? (
+              <div
+                style={{
+                  textAlign: "center",
+                  color: "#a38b41",
+                  margin: "40px 0",
+                }}
+              >
+                Loading…
+              </div>
+            ) : !hasEvents || isError ? (
+              <div
+                style={{
+                  textAlign: "center",
+                  color: "#a38b41",
+                  margin: "40px 0",
+                }}
+              >
+                No events available.
+              </div>
+            ) : (
+              <StyledSwiper
+                modules={[Navigation, Pagination, Autoplay]}
+                spaceBetween={80}
+                slidesPerView={1}
+                autoplay={{
+                  delay: 5000,
+                  disableOnInteraction: false,
+                }}
+                breakpoints={{
+                  640: {
+                    slidesPerView: 2,
+                  },
+                  1024: {
+                    slidesPerView: 3,
+                  },
+                }}
+              >
+                {(isLoading ? [] : events).map((ev) => (
+                  <SwiperSlide key={ev._id}>
+                    <EventCard>
+                      <EventImageContainer>
+                        <EventImage src={coverFor(ev)} alt={ev.title} />
+                      </EventImageContainer>
+                      <EventContent>
+                        <EventTitle>{ev.title}</EventTitle>
+                        <EventDescription>{ev.details}</EventDescription>
+                        <Link to={`/event-details/${ev._id}`}>
+                          <ViewAllButton>View</ViewAllButton>
+                        </Link>
+                      </EventContent>
+                    </EventCard>
+                  </SwiperSlide>
+                ))}
+              </StyledSwiper>
+            )}
           </motion.div>
 
           <motion.div
@@ -324,15 +369,18 @@ const GigsEvents = () => {
             viewport={{ once: true }}
             transition={{ duration: 0.6, delay: 0.6 }}
           >
-            <div className="flex justify-center">
-              <motion.button
-                className="custom-button-two"
-                whileHover={{ scale: 1.02 }}
-                transition={{ duration: 0.2 }}
-              >
-                <Link to="/events"> VIEW ALL</Link>
-              </motion.button>
-            </div>
+            {!hasEvents ||
+              (!isError && (
+                <div className="flex justify-center">
+                  <motion.button
+                    className="custom-button-two"
+                    whileHover={{ scale: 1.02 }}
+                    transition={{ duration: 0.2 }}
+                  >
+                    <Link to="/events"> VIEW ALL</Link>
+                  </motion.button>
+                </div>
+              ))}
           </motion.div>
         </div>
       </EventsSectionWrapper>
