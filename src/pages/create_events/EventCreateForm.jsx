@@ -1,4 +1,5 @@
 import React, { useState, useMemo, useEffect, useRef } from "react";
+import { useNavigate } from "react-router-dom";
 import {
   FaCalendarAlt,
   FaMapMarkerAlt,
@@ -35,6 +36,7 @@ const DiscountCodeInput = ({ value, onChange, onRemove, index }) => (
 );
 
 export default function EventCreateForm() {
+  const navigate = useNavigate();
   const [createEvent, { isLoading, error }] = useCreateEventMutation();
   const [form, setForm] = useState({
     datetime: "",
@@ -186,6 +188,7 @@ export default function EventCreateForm() {
       setLogo(null);
       setEventCover(null);
       setEventImages([]);
+      setTimeout(() => navigate("/events"), 500);
     } catch (err) {
       toast.error(
         err?.data?.message ||
