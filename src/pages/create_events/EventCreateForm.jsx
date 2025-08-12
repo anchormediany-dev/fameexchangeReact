@@ -200,7 +200,7 @@ export default function EventCreateForm() {
   };
 
   const sectionTitleCls =
-    "text-lg font-semibold mb-4 col-span-full text-[#F3BA18]";
+    "text-lg font-semibold mb-4 col-span-full gredient-text";
 
   return (
     <MotionPageWrapper>
@@ -372,7 +372,7 @@ export default function EventCreateForm() {
                   <label
                     htmlFor="is_featured"
                     className={`text-sm ${
-                      form.is_featured ? "text-[#F3BA18]" : "text-gray-400"
+                      form.is_featured ? "gredient-text" : "text-gray-400"
                     }`}
                   >
                     Mark as Featured Event
@@ -568,7 +568,7 @@ export default function EventCreateForm() {
                   <button
                     type="button"
                     onClick={addDiscountCode}
-                    className="flex items-center gap-2 text-sm text-[#F3BA18] hover:underline"
+                    className="flex items-center gap-2 text-sm gredient-text hover:underline"
                   >
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
@@ -799,7 +799,7 @@ export default function EventCreateForm() {
                 <button
                   type="submit"
                   disabled={isLoading}
-                  className="px-8 py-3 bg-gradient-to-r from-[#F3BA18] to-[#FF9900] hover:from-[#FF9900] hover:to-[#F3BA18] text-black rounded-md font-medium hover:opacity-90 transition disabled:opacity-70 disabled:cursor-not-allowed"
+                  className="px-8 py-3 custom-button-two text-black rounded-md font-medium hover:opacity-90 transition disabled:opacity-70 disabled:cursor-not-allowed"
                 >
                   {isLoading ? "Adding..." : "Add Event"}
                 </button>
