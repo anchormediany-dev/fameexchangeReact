@@ -44,6 +44,7 @@ import AdminNewsletter from "./pages/admin/AdminNewsletter";
 import AdminContact from "./pages/admin/AdminContact";
 import OurTeam from "./pages/team/OurTeam";
 import CustomerReview from "./pages/customer_review/CustomerReview";
+import EventDetails from "./pages/events/EventDetails";
 
 // Simple Black Header Component
 const SimpleHeader = () => {
@@ -221,6 +222,16 @@ export default function App() {
               element={
                 <MotionPageWrapper>
                   <EventCreateForm />
+                </MotionPageWrapper>
+              }
+            />
+          </Route>
+          <Route element={<ProtectedRoute />}>
+            <Route
+              path="event-details/:id"
+              element={
+                <MotionPageWrapper>
+                  <EventDetails />
                 </MotionPageWrapper>
               }
             />

@@ -1,6 +1,6 @@
 import { FiGlobe, FiPhone, FiExternalLink } from "react-icons/fi";
 import { IoLocationOutline } from "react-icons/io5";
-
+import { useNavigate } from "react-router-dom";
 const EventsListings = ({
   events,
   isLoading,
@@ -24,7 +24,7 @@ const EventsListings = ({
       : "";
 
   const empty = !isLoading && !isError && (!events || events.length === 0);
-
+  const navigate = useNavigate();
   return (
     <div className="bg-white/5 backdrop-blur-xl border border-white/10 rounded-2xl shadow-xl p-3 md:p-4">
       {/* Heading + Selected date chip */}
@@ -74,7 +74,8 @@ const EventsListings = ({
           {events.map((e, index) => (
             <div
               key={e.id || index}
-              className="bg-white/5 rounded-xl p-4 hover:bg-white/10 transition-colors"
+              onClick={() => e.id && navigate(`/event-details/${e.id}`)}
+              className="bg-white/5 rounded-xl p-4 hover:bg-white/10 transition-colors cursor-pointer"
             >
               <div className="flex items-start space-x-3">
                 <span className="w-6 h-6 bg-[#a38b41] rounded-lg flex items-center justify-center text-xs font-bold text-white">
@@ -158,7 +159,8 @@ const EventsListings = ({
               {events.map((e, index) => (
                 <tr
                   key={e.id || index}
-                  className="border-b border-white/5 hover:bg-white/5 transition-colors group"
+                  onClick={() => e.id && navigate(`/event-details/${e.id}`)}
+                  className="border-b border-white/5 hover:bg-white/5 transition-colors group cursor-pointer"
                 >
                   <td className="p-3">
                     <span
