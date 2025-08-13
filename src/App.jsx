@@ -51,6 +51,7 @@ import ForgotPassword from "./components/ForgotPassword";
 import Verification from "./components/Verification";
 import ResetPassword from "./components/ResetPassword";
 import TalentProfileForFan from "./pages/talent_profile_fan/TalentProfileForFan";
+import TalentCompactList from "./pages/TalentsListForFan";
 
 // Simple Black Header Component
 const SimpleHeader = () => {
@@ -160,6 +161,22 @@ export default function App() {
           />
           <Route
             path="talent-profile-fan"
+            element={
+              <MotionPageWrapper>
+                <TalentProfileForFan />
+              </MotionPageWrapper>
+            }
+          />
+          <Route
+            path="all-talents"
+            element={
+              <MotionPageWrapper>
+                <TalentCompactList />
+              </MotionPageWrapper>
+            }
+          />
+          <Route
+            path="talent-profile/:id"
             element={
               <MotionPageWrapper>
                 <TalentProfileForFan />

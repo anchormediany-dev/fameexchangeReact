@@ -46,41 +46,44 @@ const TalentLinksFan = ({ userData: user }) => {
   ].filter(Boolean);
 
   return (
-    <div className="bg-[#1f1f1f] rounded-xl p-6">
-      <div className="flex items-center mb-6">
-        <FaExternalLinkAlt className="text-yellow-400 text-2xl mr-2" />
-        <h2 className="text-lg font-semibold text-white uppercase">
-          Talent Links
-        </h2>
-      </div>
-      <div className="space-y-4">
-        {socialLinks.length > 0 ? (
-          socialLinks.map((link, index) => (
-            <div
-              key={index}
-              className="flex justify-between items-center space-x-3 bg-[#2a2a2a] text-sm text-gray-300 p-4 rounded-md border border-gray-600 hover:bg-[#333] transition duration-200"
-            >
-              <div className="flex items-center space-x-4">
-                <span className="text-yellow-400">{link.icon}</span>
-                <span>{link.name}</span>
-              </div>
-              <a
-                href={link.url}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-blue-400 hover:text-blue-300 transition duration-200 whitespace-nowrap"
+    <section className="flex flex-col w-full justify-center">
+      {" "}
+      <div className="bg-[#1f1f1f] rounded-xl p-6 ">
+        <div className="flex items-center mb-6">
+          <FaExternalLinkAlt className="text-yellow-400 text-2xl mr-2" />
+          <h2 className="text-lg font-semibold text-white uppercase">
+            Talent Links
+          </h2>
+        </div>
+        <div className="space-y-4">
+          {socialLinks.length > 0 ? (
+            socialLinks.map((link, index) => (
+              <div
+                key={index}
+                className="flex justify-between items-center space-x-3 bg-[#2a2a2a] text-sm text-gray-300 p-4 rounded-md border border-gray-600 hover:bg-[#333] transition duration-200"
               >
-                Visit
-              </a>
-            </div>
-          ))
-        ) : (
-          <p className="text-gray-400 text-center py-4">
-            No social links added yet
-          </p>
-        )}
+                <div className="flex items-center space-x-4">
+                  <span className="text-yellow-400">{link.icon}</span>
+                  <span>{link.name}</span>
+                </div>
+                <a
+                  href={link.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-blue-400 hover:text-blue-300 transition duration-200 whitespace-nowrap"
+                >
+                  Visit
+                </a>
+              </div>
+            ))
+          ) : (
+            <p className="text-gray-400 text-center py-4">
+              No social links added yet
+            </p>
+          )}
+        </div>
       </div>
-    </div>
+    </section>
   );
 };
 

@@ -341,7 +341,10 @@ const TalentTokenTicker = () => {
           transition={{ delay: 0.2 }}
           className="custom-heading-two mb-8 text-center"
         >
-          Top Branded Talent Shares (BTS)
+          Top Branded Talent Shares (BTS){" "}
+          <Link className="custom-button-two flex " to="all-talents">
+            View Talent
+          </Link>
         </motion.h1>
 
         {/* Table Container */}
