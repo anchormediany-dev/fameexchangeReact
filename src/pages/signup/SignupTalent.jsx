@@ -15,7 +15,7 @@ import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { useDispatch } from "react-redux";
 import { setCredentials } from "../../features/auth/authSlice";
-const Signup = () => {
+const SignupTalent = () => {
   const [signup, { isLoading, error }] = useSignupMutation();
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -502,7 +502,7 @@ const Signup = () => {
   );
 };
 
-export default Signup;
+export default SignupTalent;
 
 // Talent options data (should be in a separate constants file or at the top of the component file)
 const talentOptions = [

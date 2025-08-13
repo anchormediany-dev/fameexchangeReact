@@ -8,6 +8,7 @@ import LoginModal from "./LoginModal";
 import SignupModal from "./SignupModal";
 import { useDispatch } from "react-redux";
 import { logout } from "../features/auth/authSlice";
+import { openSignupModal as openSignupModalAction } from "../features/auth/signupModalSlice";
 const navLinks = [
   { name: "Home", scrollTo: "home" },
   { name: "Top Talent", scrollTo: "top-talent" },
@@ -217,7 +218,7 @@ const Navbar = () => {
                     Login
                   </motion.button>
                   <motion.button
-                    onClick={openSignupModal}
+                    onClick={() => dispatch(openSignupModalAction())}
                     className="custom-button-two rounded-full !py-1"
                     whileHover={{ scale: 1.05 }}
                     whileTap={{ scale: 0.95 }}
@@ -305,7 +306,7 @@ const Navbar = () => {
                   </span>
                 </motion.button>
                 <motion.button
-                  onClick={openSignupModal}
+                  onClick={() => dispatch(openSignupModalAction())}
                   className="w-full text-left"
                   whileHover={{ x: 5 }}
                 >

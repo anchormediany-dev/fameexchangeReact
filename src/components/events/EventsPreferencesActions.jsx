@@ -9,7 +9,7 @@ import {
 import { IoTicketOutline } from "react-icons/io5";
 import { useSetEventPreferenceMutation } from "../../app/authApi";
 import { toast } from "react-toastify";
-const EventsPreferencesActions = ({ eventId }) => {
+const EventsPreferencesActions = ({ eventId, eventDetails }) => {
   const [attendanceOption, setAttendanceOption] = useState("interested");
   const [eventType, setEventType] = useState("liveInPerson");
   const [uploadedLogo, setUploadedLogo] = useState(null);

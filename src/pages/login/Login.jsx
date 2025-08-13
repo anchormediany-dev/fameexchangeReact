@@ -12,6 +12,7 @@ import { useSigninMutation } from "../../app/authApi";
 import { useDispatch } from "react-redux";
 import { toast } from "react-toastify";
 import { setCredentials } from "../../features/auth/authSlice";
+import { openSignupModal as openSignupModalAction } from "../../features/auth/signupModalSlice";
 const LoginPage = () => {
   const [formData, setFormData] = useState({ email: "", password: "" });
   const [touched, setTouched] = useState({ email: false, password: false });
@@ -194,9 +195,12 @@ const LoginPage = () => {
             {/* Signup Link */}
             <p className="text-gray-400 text-center mt-6 text-sm">
               Don’t have an account?{" "}
-              <Link to="/signup" className="gredient-text hover:underline">
+              <button
+                onClick={() => dispatch(openSignupModalAction())}
+                className="gredient-text hover:underline"
+              >
                 Sign Up
-              </Link>
+              </button>
             </p>
           </div>
 

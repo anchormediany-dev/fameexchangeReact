@@ -4,15 +4,16 @@ import MotionPageWrapper from "./MotionPageWrapper";
 // import VerifyId from "../components/VerifyId";
 import { useVerifyOtpMutation, useResendOtpMutation } from "../app/authApi";
 import { toast } from "react-toastify";
-
+import { useDispatch } from "react-redux";
+import { openSignupModal as openSignupModalAction } from "../features/auth/signupModalSlice";
 const SignupOtpVerification = () => {
+  const dispatch = useDispatch();
   const location = useLocation();
   const navigate = useNavigate();
   const email = location.state?.email || sessionStorage.getItem("signupEmail");
   useEffect(() => {
     if (!email) {
-      // Redirect if email is missing
-      navigate("/signup");
+      dispatch(openSignupModalAction());
     }
   }, [email, navigate]);
 

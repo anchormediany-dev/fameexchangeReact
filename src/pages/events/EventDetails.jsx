@@ -307,7 +307,7 @@ export default function EventDetails() {
                   )}
                 </aside>
               </div>
-              <EventsPreferencesActions eventId={event?._id} />
+              <EventsPreferencesActions eventDetails={event} eventId={event?._id} />
               {/* Sidebar (no duplicates, no message organizer) */}
             </div>
           </div>

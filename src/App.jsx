@@ -30,7 +30,6 @@ import TradingAccountPage from "./pages/trading_account/TradingAccountPage";
 import Home from "./pages/home/Home";
 import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
-import Signup from "./pages/signup/Signup";
 import TalentDashboard from "./pages/talent_dashboard/TalentDashboard";
 import TalentListing from "./pages/talent/TalentListing";
 import SignupOtpVerification from "./components/SignupOtpVerification";
@@ -45,6 +44,9 @@ import AdminContact from "./pages/admin/AdminContact";
 import OurTeam from "./pages/team/OurTeam";
 import CustomerReview from "./pages/customer_review/CustomerReview";
 import EventDetails from "./pages/events/EventDetails";
+import SignupTalent from "./pages/signup/SignupTalent";
+import SignupFan from "./pages/signup/SignupFan";
+import SignupModal from "./components/SignupModal";
 
 // Simple Black Header Component
 const SimpleHeader = () => {
@@ -256,11 +258,32 @@ export default function App() {
           />
           {/* Signup page Page */}
           <Route element={<GuestOnlyRoute />}>
-            <Route
+            {/* Role selector */}
+            {/* <Route
               path="signup"
               element={
                 <MotionPageWrapper>
-                  <Signup />
+                  <SignupModal />
+                </MotionPageWrapper>
+              }
+            /> */}
+
+            {/* Talent signup */}
+            <Route
+              path="signup/talent"
+              element={
+                <MotionPageWrapper>
+                  <SignupTalent role="TALENT" />
+                </MotionPageWrapper>
+              }
+            />
+
+            {/* Fan signup */}
+            <Route
+              path="signup/fan"
+              element={
+                <MotionPageWrapper>
+                  <SignupFan role="FAN" />
                 </MotionPageWrapper>
               }
             />
