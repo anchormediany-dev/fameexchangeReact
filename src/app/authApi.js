@@ -229,7 +229,9 @@ export const authApi = api.injectEndpoints({
       query: () => "/user/get-talent",
       providesTags: ["Talent"],
     }),
-
+    getTalentOverview: builder.query({
+      query: (id) => `/user/${id}/overview`,
+    }),
     //  our team API's
     getTeam: builder.query({
       query: () => ({
@@ -314,6 +316,7 @@ export const {
   useRescheduleTalentConfirmationMutation,
   // Get all talents
   useGetTalentQuery,
+  useGetTalentOverviewQuery,
   // newsletter
   useNewsletterSubscribeMutation,
   useGetNewslettersQuery,

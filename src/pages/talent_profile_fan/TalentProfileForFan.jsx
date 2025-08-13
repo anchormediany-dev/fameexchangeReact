@@ -11,20 +11,28 @@ import PortfolioDashboard from "../../components/PortfolioDashboard";
 import {
   useGetUserByIdQuery,
   useUpdateMyProfileMutation,
+  useGetTalentOverviewQuery,
 } from "../../app/authApi";
+import { useParams } from "react-router-dom";
 import FriendsFanSection from "../../components/talent_profile_fan/FriendsFanSection";
 import EventsFanSection from "../../components/talent_profile_fan/EventsFanSection";
 import TalentLinksFan from "../../components/talent_profile_fan/TalentLinksFan";
 
 const TalentProfileForFan = () => {
+  const { id } = useParams();
+  console.log(id, "here data");
+  const { data, isLoading, isError } = useGetTalentOverviewQuery(id, {
+    skip: !id,
+  });
+
   const userLocalData = JSON.parse(localStorage.getItem("user")); // replace "user" with your actual key
   const userId = userLocalData?.id;
   const [searchValue, setSearchValue] = useState("");
   const [isFocused, setIsFocused] = useState(false);
   const [updateMyProfile, { isLoading: isUpdating, error: isUpdatingError }] =
     useUpdateMyProfileMutation();
-  const { data: userData, isLoading, isError } = useGetUserByIdQuery(userId);
-  console.log(userData?.user?.name, "user data");
+  // const { data: userData, isLoading, isError } = useGetUserByIdQuery(userId);
+  // console.log(userData?.user?.name, "user data");
   const handleSearch = (e) => {
     e.preventDefault();
     if (searchValue.trim()) {
@@ -249,7 +257,7 @@ const TalentProfileForFan = () => {
           </div>
         </div>
       </div>
-      <ImageSwitch userData={userData} updateMyProfile={updateMyProfile} />
+      {/* <ImageSwitch userData={userData} updateMyProfile={updateMyProfile} /> */}
       <div className="bg-[#171717] text-white">
         <div className="container">
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
@@ -261,7 +269,7 @@ const TalentProfileForFan = () => {
 
       <div className="bg-[#171717] px-4 md:px-8 container text-white">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-          <TalentLinksFan userData={userData} />
+          {/* <TalentLinksFan userData={userData} /> */}
         </div>{" "}
       </div>
       <section className=" px-4 md:px-8 container mx-auto ">
