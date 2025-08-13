@@ -50,11 +50,28 @@ const LoginPage = () => {
       console.log(decodedUser);
       dispatch(setCredentials({ accessToken: token, user: decodedUser }));
       const stored = JSON.parse(localStorage.getItem("user") || "null");
-      const isAdmin = stored?.isAdmin === true || stored?.role === "ADMIN";
+      const role = String(decodedUser?.role || stored?.role || "")
+        .trim()
+        .toUpperCase();
+
+      // Optional isAdmin flag still respected
+      const isAdmin =
+        decodedUser?.isAdmin === true ||
+        stored?.isAdmin === true ||
+        role === "ADMIN";
+
+      // Route by role
+      const roleToPath = {
+        ADMIN: "/admin",
+        FAN: "/",
+        TALENT: "/talent-profile",
+      };
+      const nextPath = isAdmin
+        ? "/admin"
+        : roleToPath[role] || "/talent-profile";
+
       toast.success("Login successful!");
-      setTimeout(() => {
-        navigate(isAdmin ? "/admin" : "/talent-profile", { replace: true });
-      }, 500);
+      setTimeout(() => navigate(nextPath, { replace: true }), 500);
     } catch (error) {
       console.error("Login failed:", error);
       toast.error(error?.data?.message || "Login failed. Please try again.");
