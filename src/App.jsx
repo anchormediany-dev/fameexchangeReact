@@ -47,6 +47,9 @@ import EventDetails from "./pages/events/EventDetails";
 import SignupTalent from "./pages/signup/SignupTalent";
 import SignupFan from "./pages/signup/SignupFan";
 import SignupModal from "./components/SignupModal";
+import ForgotPassword from "./components/ForgotPassword";
+import Verification from "./components/Verification";
+import ResetPassword from "./components/ResetPassword";
 
 // Simple Black Header Component
 const SimpleHeader = () => {
@@ -151,6 +154,30 @@ export default function App() {
             element={
               <MotionPageWrapper>
                 <Home />
+              </MotionPageWrapper>
+            }
+          />
+          <Route
+            path="forgot-password"
+            element={
+              <MotionPageWrapper>
+                <ForgotPassword />
+              </MotionPageWrapper>
+            }
+          />
+          <Route
+            path="verify-reset-otp"
+            element={
+              <MotionPageWrapper>
+                <Verification />
+              </MotionPageWrapper>
+            }
+          />
+          <Route
+            path="reset-password"
+            element={
+              <MotionPageWrapper>
+                <ResetPassword />
               </MotionPageWrapper>
             }
           />

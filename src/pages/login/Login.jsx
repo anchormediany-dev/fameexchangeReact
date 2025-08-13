@@ -134,21 +134,13 @@ const LoginPage = () => {
                     )}
                   </button>
                 </div>
-                <div className="flex justify-between items-center mt-2">
-                  <button
-                    type="button"
-                    onClick={() => setShowForgotPassword(true)}
+                <div className="flex justify-end items-center mt-2">
+                  <Link
+                    to="/forgot-password"
                     className="text-sm gredient-text hover:underline transition duration-150 ease-in-out"
                   >
                     Forgot Password?
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() => console.log("Handle forgot username")}
-                    className="text-sm gredient-text hover:underline transition duration-150 ease-in-out"
-                  >
-                    Forgot Username?
-                  </button>
+                  </Link>
                 </div>
 
                 {touched.password && !isPasswordValid && (
