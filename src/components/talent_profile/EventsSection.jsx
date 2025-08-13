@@ -16,7 +16,10 @@ const EventsSection = () => {
         </h3>
       </div>
 
-      <div className="divide-y divide-gray-800">
+      <div
+        className="divide-y divide-gray-800
+          max-h-72 overflow-y-auto pr-1"
+      >
         {events.length > 0 ? (
           events.map((event) => (
             <div key={event.id} className="p-4 hover:bg-[#2c2c2c] transition">

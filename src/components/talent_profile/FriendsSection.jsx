@@ -804,13 +804,13 @@ const FriendsSection = () => {
       ) : (
         <>
           <div className="p-4">
-            <div className="grid grid-cols-2 sm:grid-cols-2 gap-3">
+            <div className="grid grid-cols-2 sm:grid-cols-2 gap-3 max-h-72 overflow-y-auto pr-1">
               {friends.length === 0 && !isFriendsLoading ? (
-                <div className="col-span-2 text-center text-gray-400">
+                <div className="col-span-2 text-center text-gray-400 ">
                   No friends found.
                 </div>
               ) : (
-                friends.slice(0, 8).map((friend) => (
+                friends.map((friend) => (
                   <div
                     key={friend.friendId}
                     className="relative group rounded-lg p-2 hover:bg-[#333333] transition"
