@@ -134,7 +134,7 @@ const EventsPreferencesActions = ({ eventId, eventDetails }) => {
                 <span
                   className={`text-sm font-medium ${color} group-hover:text-white transition-colors leading-tight`}
                 >
-                  {label}
+                  {label} ({eventDetails?.[key] ?? ""})
                 </span>
               </label>
             ))}
@@ -155,6 +155,7 @@ const EventsPreferencesActions = ({ eventId, eventDetails }) => {
                 icon: FiUsers,
                 color: "text-blue-400",
                 bgColor: "hover:bg-blue-500/10",
+                id: "live",
               },
               {
                 key: "virtualByInverse",
@@ -162,8 +163,9 @@ const EventsPreferencesActions = ({ eventId, eventDetails }) => {
                 icon: FiVideo,
                 color: "text-purple-400",
                 bgColor: "hover:bg-purple-500/10",
+                id: "virtual",
               },
-            ].map(({ key, label, icon: Icon, color, bgColor }) => (
+            ].map(({ id, key, label, icon: Icon, color, bgColor }) => (
               <label
                 key={key}
                 className={`flex items-center space-x-3 cursor-pointer group py-2 px-3 rounded-xl transition-all duration-300 border border-transparent hover:border-white/15 ${bgColor} hover:shadow-sm`}
@@ -190,7 +192,7 @@ const EventsPreferencesActions = ({ eventId, eventDetails }) => {
                   className={`w-4 h-4 ${color} group-hover:text-white transition-colors flex-shrink-0`}
                 />
                 <span className="text-sm font-medium text-gray-300 group-hover:text-white transition-colors leading-tight">
-                  {label}
+                  {label} ({eventDetails?.[id] ?? ""})
                 </span>
               </label>
             ))}

@@ -32,7 +32,6 @@ export default function EventDetails() {
   });
 
   const event = data?.data;
-
   const when =
     event?.datetime &&
     new Date(event.datetime).toLocaleString(undefined, {
@@ -307,7 +306,10 @@ export default function EventDetails() {
                   )}
                 </aside>
               </div>
-              <EventsPreferencesActions eventDetails={event} eventId={event?._id} />
+              <EventsPreferencesActions
+                eventDetails={event}
+                eventId={event?._id}
+              />
               {/* Sidebar (no duplicates, no message organizer) */}
             </div>
           </div>
