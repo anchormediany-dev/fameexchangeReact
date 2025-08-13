@@ -70,7 +70,7 @@ const CreateSession = () => {
   };
 
   return (
-    <section className="flex container flex-col gap-4">
+    <section className="flex container flex-col gap-4" id="create-session">
       {/* Header */}
       <div className="flex justify-between items-center">
         <div>
