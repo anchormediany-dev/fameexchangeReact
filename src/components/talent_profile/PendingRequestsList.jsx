@@ -123,16 +123,13 @@ const PendingRequestsList = () => {
       </section>
     );
   }
-
+  const scrollClass =
+    filteredRequests.length > 8 ? "max-h-[640px] overflow-y-auto pr-1" : "";
   return (
     <section className="w-full lg:w-[60%]">
       <AnimatePresence>
         {filteredRequests.length > 0 ? (
-          <div
-            className={`space-y-3 flex-1 ${
-              filteredRequests.length > 5 ? "overflow-y-auto pr-2" : ""
-            }`}
-          >
+          <div className={`space-y-3 flex-1 ${scrollClass}`}>
             {filteredRequests.map((request) => (
               <motion.div
                 key={request.id}
