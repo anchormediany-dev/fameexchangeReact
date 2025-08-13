@@ -8,11 +8,7 @@ import {
 } from "react-icons/fa";
 import ImageSwitch from "./ImageSwitchFan";
 import PortfolioDashboard from "../../components/PortfolioDashboard";
-import {
-  useGetUserByIdQuery,
-  useUpdateMyProfileMutation,
-  useGetTalentOverviewQuery,
-} from "../../app/authApi";
+import { useGetTalentOverviewQuery } from "../../app/authApi";
 import { useParams } from "react-router-dom";
 import FriendsFanSection from "../../components/talent_profile_fan/FriendsFanSection";
 import EventsFanSection from "../../components/talent_profile_fan/EventsFanSection";
@@ -25,14 +21,8 @@ const TalentProfileForFan = () => {
     skip: !id,
   });
 
-  const userLocalData = JSON.parse(localStorage.getItem("user")); // replace "user" with your actual key
-  const userId = userLocalData?.id;
   const [searchValue, setSearchValue] = useState("");
   const [isFocused, setIsFocused] = useState(false);
-  const [updateMyProfile, { isLoading: isUpdating, error: isUpdatingError }] =
-    useUpdateMyProfileMutation();
-  // const { data: userData, isLoading, isError } = useGetUserByIdQuery(userId);
-  // console.log(userData?.user?.name, "user data");
   const handleSearch = (e) => {
     e.preventDefault();
     if (searchValue.trim()) {
@@ -257,7 +247,7 @@ const TalentProfileForFan = () => {
           </div>
         </div>
       </div>
-      {/* <ImageSwitch userData={userData} updateMyProfile={updateMyProfile} /> */}
+      <ImageSwitch userData={data} />
       <div className="bg-[#171717] text-white">
         <div className="container">
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
@@ -269,7 +259,7 @@ const TalentProfileForFan = () => {
 
       <div className="bg-[#171717] px-4 md:px-8 container text-white">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-          {/* <TalentLinksFan userData={userData} /> */}
+          <TalentLinksFan userData={data} />
         </div>{" "}
       </div>
       <section className=" px-4 md:px-8 container mx-auto ">

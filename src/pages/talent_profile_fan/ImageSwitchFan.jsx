@@ -17,7 +17,8 @@ const actions = [
 ];
 const IMAGE_BASE_URL = import.meta.env.VITE_API_IMAGE_BASE_URL;
 
-const ImageSwitchFan = ({ userData, updateMyProfile }) => {
+const ImageSwitchFan = ({ userData }) => {
+  console.log(userData);
   const user = JSON.parse(localStorage.getItem("user"));
   const userId = user?.id;
   const [images, setImages] = useState([]);
@@ -27,14 +28,26 @@ const ImageSwitchFan = ({ userData, updateMyProfile }) => {
   const fileInputRef = useRef(null);
   const [isUploading, setIsUploading] = useState(false);
   const [bioText, setBioText] = useState("");
+  const IMAGE_BASE_URL = import.meta.env.VITE_API_IMAGE_BASE_URL;
 
+  const normalizePath = (p) => {
+    if (!p) return "";
+    const clean = p.replace(/\\/g, "/"); // windows -> url
+    return clean.startsWith("/") ? clean : `/${clean}`;
+  };
   useEffect(() => {
-    if (userData?.user?.images?.length) {
-      const backendImages = userData?.user?.images?.map(
-        (doc) => `${IMAGE_BASE_URL}${doc?.fileUrl?.replace(/\\/g, "/")}`
-      );
-      setImages(backendImages);
-    }
+    // support either { data: { profile } } or { user }
+    const profile =
+      userData?.data?.profile ?? userData?.user ?? userData?.profile ?? null;
+    const rawImages = Array.isArray(profile?.images) ? profile.images : [];
+
+    const urls = rawImages
+      .map((it) => (typeof it === "string" ? it : it?.fileUrl))
+      .filter(Boolean)
+      .map((path) => `${IMAGE_BASE_URL}${normalizePath(path)}`);
+
+    setImages(urls);
+    if (urls.length) setSelectedImage(0);
   }, [userData]);
 
   // Handle file selection
@@ -78,27 +91,6 @@ const ImageSwitchFan = ({ userData, updateMyProfile }) => {
       toast.error("Error uploading images");
     } finally {
       setIsUploading(false);
-    }
-  };
-
-  // Save images to backend
-  const saveImagesToBackend = async (imagesToSave) => {
-    try {
-      const formData = new FormData();
-
-      // Convert DataURLs to Blobs and add to FormData
-      imagesToSave.forEach((img, index) => {
-        if (img.startsWith("data:image")) {
-          const blob = dataURLtoBlob(img);
-          formData.append("images", blob, `image-${index}.png`);
-        }
-      });
-
-      const res = await updateMyProfile(formData).unwrap();
-      toast.success(res?.message || "Images saved successfully");
-    } catch (error) {
-      console.error("Failed to save images:", error);
-      toast.error("Failed to save images");
     }
   };
 
