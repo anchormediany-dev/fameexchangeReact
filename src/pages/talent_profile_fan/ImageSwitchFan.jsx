@@ -2,22 +2,10 @@ import { useState, useRef, useEffect } from "react";
 import { FaHeart, FaFileAlt, FaUpload } from "react-icons/fa";
 import { toast } from "react-toastify";
 import { useGetUserByIdQuery } from "../../app/authApi";
-
-const actions = [
-  {
-    label: "Sponsor Talent",
-    icon: FaHeart,
-    description: "Support this talent's career development",
-  },
-  {
-    label: "Inverse Request",
-    icon: FaFileAlt,
-    description: "Request this talent for your project",
-  },
-];
+import { useNavigate } from "react-router-dom";
 const IMAGE_BASE_URL = import.meta.env.VITE_API_IMAGE_BASE_URL;
-
 const ImageSwitchFan = ({ userData }) => {
+  const navigate = useNavigate();
   const biography = userData?.data?.profile?.biography;
   const talentName = userData?.data?.profile?.name;
   const user = JSON.parse(localStorage.getItem("user"));
@@ -30,7 +18,9 @@ const ImageSwitchFan = ({ userData }) => {
   const [isUploading, setIsUploading] = useState(false);
   const [bioText, setBioText] = useState("");
   const IMAGE_BASE_URL = import.meta.env.VITE_API_IMAGE_BASE_URL;
-
+  const handleInverseClick = () => {
+    navigate("/inverse#inverse-request-form");
+  };
   const normalizePath = (p) => {
     if (!p) return "";
     const clean = p.replace(/\\/g, "/"); // windows -> url
@@ -228,30 +218,47 @@ const ImageSwitchFan = ({ userData }) => {
         </div>
       </div>
 
-      {/* Action Cards - Third Column */}
       <div className="flex flex-col justify-center gap-5">
-        {actions.map(({ label, icon: Icon, description }) => (
-          <div
-            key={label}
-            className="bg-white/5 flex justify-center items-center backdrop-blur-xl border border-white/10 rounded-2xl shadow-xl p-4 md:p-6 hover:shadow-[#a38b41]/20 hover:border-[#a38b41]/50 transition-all h-full"
-          >
-            <div className="flex flex-col items-center text-center">
-              <div className="w-10 h-10 md:w-12 md:h-12 rounded-full bg-[#a38b41]/20 flex items-center justify-center mb-3">
-                <Icon className="text-[#a38b41] text-lg md:text-xl" />
-              </div>
-              <h3 className="text-lg font-semibold text-white mb-1">{label}</h3>
-              <p className="text-gray-300 text-xs md:text-sm mb-3">
-                {description}
-              </p>
-              <button
-                onClick={() => handleActionClick(label)}
-                className="w-full cursor-pointer bg-[#a38b41] hover:bg-[#8a7637] text-white font-medium py-2 rounded-lg transition-colors text-sm md:text-base"
-              >
-                {label}
-              </button>
+        {/* Sponsor talent */}
+        <div className="bg-white/5 flex justify-center items-center backdrop-blur-xl border border-white/10 rounded-2xl shadow-xl p-4 md:p-6 hover:shadow-[#a38b41]/20 hover:border-[#a38b41]/50 transition-all h-full">
+          <div className="flex flex-col items-center text-center">
+            <div className="w-10 h-10 md:w-12 md:h-12 rounded-full bg-[#a38b41]/20 flex items-center justify-center mb-3">
+              <FaHeart className="text-[#a38b41] text-lg md:text-xl" />
             </div>
+            <h3 className="text-lg font-semibold text-white mb-1">
+              Sponsor Talent
+            </h3>
+            <p className="text-gray-300 text-xs md:text-sm mb-3">
+              Support this talent's career development
+            </p>
+            <button
+              // onClick={() => handleActionClick(label)}
+              className="w-full cursor-pointer bg-[#a38b41] hover:bg-[#8a7637] text-white font-medium py-2 rounded-lg transition-colors text-sm md:text-base"
+            >
+              Sponsor Talent
+            </button>
           </div>
-        ))}
+        </div>
+        {/* Inverse Request */}
+        <div className="bg-white/5 flex justify-center items-center backdrop-blur-xl border border-white/10 rounded-2xl shadow-xl p-4 md:p-6 hover:shadow-[#a38b41]/20 hover:border-[#a38b41]/50 transition-all h-full">
+          <div className="flex flex-col items-center text-center">
+            <div className="w-10 h-10 md:w-12 md:h-12 rounded-full bg-[#a38b41]/20 flex items-center justify-center mb-3">
+              <FaFileAlt className="text-[#a38b41] text-lg md:text-xl" />
+            </div>
+            <h3 className="text-lg font-semibold text-white mb-1">
+              Inverse Request
+            </h3>
+            <p className="text-gray-300 text-xs md:text-sm mb-3">
+              Request this talent for your project
+            </p>
+            <button
+              onClick={handleInverseClick}
+              className="w-full cursor-pointer bg-[#a38b41] hover:bg-[#8a7637] text-white font-medium py-2 rounded-lg transition-colors text-sm md:text-base"
+            >
+              Inverse Request
+            </button>
+          </div>
+        </div>
       </div>
     </div>
   );

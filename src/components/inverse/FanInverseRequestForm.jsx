@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { useLocation } from "react-router-dom";
 import { useFanInverseRequestMutation } from "../../app/authApi";
 import { toast } from "react-toastify";
+import { animate } from "framer-motion";
 const FanInverseRequestForm = ({ isTalentName }) => {
   const [fanRequest, setFanRequest] = useState({
     talentName: isTalentName ? isTalentName : "",
@@ -16,17 +17,6 @@ const FanInverseRequestForm = ({ isTalentName }) => {
 
   const location = useLocation();
 
-  useEffect(() => {
-    const hash = location.hash;
-    if (hash) {
-      setTimeout(() => {
-        const element = document.querySelector(hash);
-        if (element) {
-          element.scrollIntoView({ behavior: "smooth", block: "start" });
-        }
-      }, 100);
-    }
-  }, [location]);
   const [sendFanRequest, { isLoading, isError, error }] =
     useFanInverseRequestMutation();
   // Handle fan request form changes
@@ -86,9 +76,54 @@ const FanInverseRequestForm = ({ isTalentName }) => {
   const handleCancel = () => {
     handleClear();
   };
+  useEffect(() => {
+    if (location.hash !== "#inverse-request-form") return;
+
+    let rafId;
+    let animControls;
+    let tries = 0;
+    const maxTries = 60; // ~1s (60 frames)
+
+    const go = () => {
+      const el = document.getElementById("inverse-request-form");
+      if (!el) {
+        if (tries++ < maxTries) rafId = requestAnimationFrame(go);
+        return;
+      }
+
+      const targetY = el.getBoundingClientRect().top + window.pageYOffset - 200; // 👈 100px offset
+      const startY = window.pageYOffset;
+
+      // Respect reduced motion
+      const prefersReducedMotion = window.matchMedia(
+        "(prefers-reduced-motion: reduce)"
+      ).matches;
+      if (prefersReducedMotion) {
+        window.scrollTo(0, targetY);
+        return;
+      }
+
+      // Framer Motion-powered smooth scroll
+      animControls = animate(startY, targetY, {
+        duration: 0.6,
+        ease: [0.22, 1, 0.36, 1], // expo-ish
+        onUpdate: (latest) => window.scrollTo(0, latest),
+      });
+    };
+
+    go();
+
+    return () => {
+      if (rafId) cancelAnimationFrame(rafId);
+      if (animControls) animControls.stop();
+    };
+  }, [location.hash]);
 
   return (
-    <div className="lg:col-span-2 flex flex-col space-y-3 h-full">
+    <div
+      className="lg:col-span-2 flex flex-col space-y-3 h-full"
+      id="inverse-request-form"
+    >
       {/* Fan Request Form section */}
       <div className="bg-white/5 backdrop-blur-xl border border-white/10 rounded-2xl p-3 md:p-4 flex-1">
         <h2 className="text-2xl font-bold text-primary2 mb-6 text-center">
