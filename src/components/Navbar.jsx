@@ -82,8 +82,9 @@ const Navbar = () => {
   };
 
   const openLoginModal = () => {
-    setIsLoginModalOpen(true);
-    setIsOpen(false);
+    // setIsLoginModalOpen(true);
+    // setIsOpen(false);
+    navigate("/login");
   };
   const closeLoginModal = () => setIsLoginModalOpen(false);
   const openSignupModal = () => {
