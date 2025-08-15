@@ -18,7 +18,6 @@ const actions = [
 const IMAGE_BASE_URL = import.meta.env.VITE_API_IMAGE_BASE_URL;
 
 const ImageSwitchFan = ({ userData }) => {
-  console.log(userData);
   const biography = userData?.data?.profile?.biography;
   const talentName = userData?.data?.profile?.name;
   const user = JSON.parse(localStorage.getItem("user"));
