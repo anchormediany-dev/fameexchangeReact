@@ -153,10 +153,10 @@ const TalentCompactList = ({ className = "" }) => {
               />
             ))}
           </div>
-          <div className="w-full flex justify-center mt-8">
+          {/* <div className="w-full flex justify-center mt-8">
             {" "}
             <button className="custom-button-two">Discover More</button>
-          </div>
+          </div> */}
         </>
       ) : (
         <div className="text-sm text-gray-400 py-6 text-center">

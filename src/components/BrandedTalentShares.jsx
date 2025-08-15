@@ -311,7 +311,7 @@ const TalentTokenTicker = () => {
       ],
     },
   ];
-
+  const isTalent = JSON.parse(localStorage.getItem("user"))?.role === "TALENT";
   return (
     <div
       ref={sectionRef}
@@ -334,19 +334,26 @@ const TalentTokenTicker = () => {
       </motion.div>
 
       <div className="container mt-10 lg:mt-16 2xl:mt-20 px-4 relative z-10">
-        <motion.h1
-          variants={fadeInUpVariant}
-          initial="hidden"
-          animate={controls}
-          transition={{ delay: 0.2 }}
-          className="custom-heading-two mb-8 text-center"
-        >
-          Top Branded Talent Shares (BTS){" "}
-          <Link className="custom-button-two flex " to="all-talents">
-            View Talent
-          </Link>
-        </motion.h1>
+        <div className="flex justify-between items-center w-full">
+          <motion.h1
+            variants={fadeInUpVariant}
+            initial="hidden"
+            animate={controls}
+            transition={{ delay: 0.2 }}
+            className="custom-heading-two mb-8 flex-grow text-center" // flex-grow ensures it takes available space
+          >
+            Top Branded Talent Shares (BTS)
+          </motion.h1>
 
+          {!isTalent && (
+            <Link
+              className="custom-button-two ml-4" // ml-4 adds margin to separate from heading
+              to="/all-talents"
+            >
+              View All Talents
+            </Link>
+          )}
+        </div>
         {/* Table Container */}
         <motion.div
           variants={fadeInUpVariant}
@@ -483,7 +490,7 @@ const TalentTokenTicker = () => {
                       </Link>
 
                       <Link
-                        to="/talent-profile"
+                        // to="/talent-profile"
                         className="flex justify-center"
                       >
                         <motion.button
