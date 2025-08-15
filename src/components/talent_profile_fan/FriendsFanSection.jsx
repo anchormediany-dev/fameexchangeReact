@@ -1,44 +1,25 @@
-
-import {
-  FaHeart,
-} from "react-icons/fa";
-import { toast } from "react-toastify";
-import {
-  useGetAllFriendsQuery,
-  useGetUsersQuery,
-} from "../../app/authApi";
-
-const FriendsFanSection = () => {
-  const {
-    data: friendsData,
-    isLoading: isFriendsLoading,
-    isError: isFriendsError,
-    error: friendsError,
-  } = useGetAllFriendsQuery();
-
-  const {
-    data: usersData,
-    isLoading: isUsersLoading,
-    refetch: refetchUsers,
-  } = useGetUsersQuery();
-
-  const friends = friendsData?.data || [];
-
+import { FaHeart } from "react-icons/fa";
+const FriendsFanSection = ({ userData }) => {
+  const friends = userData?.data?.friends || [];
   return (
     <div className="bg-[#1f1f1f] rounded-xl shadow-lg">
-      <div className="p-4 border-b border-gray-700 flex justify-between items-center"></div>
-
+      <div className="p-4 border-b border-gray-700 flex justify-between items-center">
+        {" "}
+        <h3 className="text-lg font-semibold text-white">
+          {userData?.data?.profile?.name}'s Friends ({friends.length})
+        </h3>
+      </div>
       <>
         <div className="p-4">
           <div className="grid grid-cols-2 sm:grid-cols-2 gap-3 max-h-72 overflow-y-auto pr-1">
-            {friends.length === 0 && !isFriendsLoading ? (
+            {friends.length === 0 ? (
               <div className="col-span-2 text-center text-gray-400 ">
                 No friends found.
               </div>
             ) : (
               friends.map((friend) => (
                 <div
-                  key={friend.friendId}
+                  key={friend._id}
                   className="relative group rounded-lg p-2 hover:bg-[#333333] transition"
                 >
                   <div className="max-w-full">
@@ -46,10 +27,10 @@ const FriendsFanSection = () => {
                       src={`https://ui-avatars.com/api/?name=${encodeURIComponent(
                         friend.friendName
                       )}&background=random`}
-                      alt={friend.friendName}
+                      alt={friend?.name}
                       className="rounded-full w-16 h-16 object-cover mx-auto mb-1"
                     />
-                    <p className="text-center">{friend.friendName}</p>
+                    <p className="text-center">{friend?.name}</p>
                   </div>
                 </div>
               ))

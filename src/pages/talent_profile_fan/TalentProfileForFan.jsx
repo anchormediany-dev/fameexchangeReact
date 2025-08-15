@@ -250,8 +250,8 @@ const TalentProfileForFan = () => {
       <div className="bg-[#171717] text-white">
         <div className="container">
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-            <FriendsFanSection />
-            <EventsFanSection />
+            <FriendsFanSection userData={data} />
+            <EventsFanSection userData={data} />
           </div>
         </div>
       </div>
