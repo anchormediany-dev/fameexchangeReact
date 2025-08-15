@@ -1,12 +1,7 @@
 import { FaCalendarAlt, FaRegCalendarAlt } from "react-icons/fa";
-import { useGetUserByIdQuery } from "../../app/authApi";
 
-const EventsFanSection = () => {
-  const user = JSON.parse(localStorage.getItem("user"));
-  const userId = user?.id;
-
-  const { data, isLoading, isError, error } = useGetUserByIdQuery(userId);
-  const events = data?.events || [];
+const EventsFanSection = ({ userData }) => {
+  const events = userData?.data?.events || [];
 
   return (
     <div className="lg:col-span-2 bg-[#1f1f1f] rounded-xl shadow-lg">
