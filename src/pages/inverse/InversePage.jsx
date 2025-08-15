@@ -12,6 +12,7 @@ import {
 import SearchTalents from "../../components/inverse/SearchTalents";
 const InversePage = () => {
   const userTalentData = JSON.parse(localStorage.getItem("user"));
+  const isTalent = JSON.parse(localStorage.getItem("user"))?.role === "TALENT";
   const [selectedSearchuser, setSelectedSearchUser] = useState("");
   const {
     data: usersData,
@@ -113,24 +114,27 @@ const InversePage = () => {
               </div>
             </div>
             <div className="lg:col-span-2 flex flex-col space-y-3 h-full">
-              <div className="bg-white/5 backdrop-blur-xl border border-white/10 rounded-2xl p-3 md:p-4">
-                <div>
-                  <h2 className="text-2xl font-bold uppercase text-white mb-6 text-center">
-                    Request your{" "}
-                    <span className="font-bold text-primary2">
-                      "Inverse Experience"
-                    </span>
-                  </h2>
-                  <a
-                    href="#tickets"
-                    className="max-w-[80%] mx-auto flex items-center justify-center space-x-2 p-3 rounded-xl transition-all duration-300 font-semibold hover:scale-105 text-white"
-                    style={{ backgroundColor: "#a38b41" }}
-                  >
-                    <span className="text-sm">Inverse Request</span>
-                    <FiExternalLink className="w-3 h-3" />
-                  </a>
+              {!isTalent && (
+                <div className="bg-white/5 backdrop-blur-xl border border-white/10 rounded-2xl p-3 md:p-4">
+                  <div>
+                    <h2 className="text-2xl font-bold uppercase text-white mb-6 text-center">
+                      Request your{" "}
+                      <span className="font-bold text-primary2">
+                        "Inverse Experience"
+                      </span>
+                    </h2>
+                    <a
+                      href="#inverse-request-form"
+                      className="max-w-[80%] mx-auto flex items-center justify-center space-x-2 p-3 rounded-xl transition-all duration-300 font-semibold hover:scale-105 text-white"
+                      style={{ backgroundColor: "#a38b41" }}
+                    >
+                      <span className="text-sm">Inverse Request</span>
+                      <FiExternalLink className="w-3 h-3" />
+                    </a>
+                  </div>
                 </div>
-              </div>
+              )}
+
               <TalentDatesCalendar
                 sessionsData={sessionsData}
                 isLoading={isLoading}
@@ -143,15 +147,18 @@ const InversePage = () => {
         </div>
         <div className="flex flex-col 2xl:gap-16 gap-12 mt-10 lg:mt-16 2xl:mt-20">
           <div className="grid grid-cols-1 lg:grid-cols-4 gap-10 lg:gap-12 xl:gap-16 2xl:gap-20 items-stretch">
-            <FanInverseRequestForm isTalentName={isTalentName} />
-            <TalentConfirmationForm
-              selectedFanName={selectedFanName}
-              selectedRequestId={selectedRequestId}
-              sessionsData={sessionsData}
-              isLoading={isLoading}
-              isError={isError}
-              error={error}
-            />
+            {!isTalent && <FanInverseRequestForm isTalentName={isTalentName} />}
+
+            {isTalent && (
+              <TalentConfirmationForm
+                selectedFanName={selectedFanName}
+                selectedRequestId={selectedRequestId}
+                sessionsData={sessionsData}
+                isLoading={isLoading}
+                isError={isError}
+                error={error}
+              />
+            )}
           </div>
         </div>
       </div>
