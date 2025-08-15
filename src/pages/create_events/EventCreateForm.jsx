@@ -13,6 +13,7 @@ import { IoClose } from "react-icons/io5";
 import MotionPageWrapper from "../../components/MotionPageWrapper";
 import { toast } from "react-toastify";
 import { useCreateEventMutation } from "../../app/authApi";
+import TalentMultiSelect from "../../components/TalentMultiSelect";
 
 const DiscountCodeInput = ({ value, onChange, onRemove, index }) => (
   <div className="relative">
@@ -57,6 +58,7 @@ export default function EventCreateForm() {
     discount_codes: [],
     event_coordinates: { lat: "", long: "" },
     prefrence: "interested",
+    talent: [],
   });
 
   // Files + previews
@@ -151,6 +153,7 @@ export default function EventCreateForm() {
       prefrence: form.prefrence,
       discount_codes: JSON.stringify(form.discount_codes || []),
       event_coordinates: JSON.stringify(form.event_coordinates || {}),
+      talent: JSON.stringify(form.talent || []),
     }).forEach(([k, v]) => fd.append(k, v));
 
     return fd;
@@ -184,6 +187,7 @@ export default function EventCreateForm() {
         discount_codes: [],
         event_coordinates: { lat: "", long: "" },
         prefrence: "interested",
+        talent: [],
       });
       setLogo(null);
       setEventCover(null);
@@ -358,7 +362,14 @@ export default function EventCreateForm() {
                     />
                   </div>
                 </div>
-
+                {/* Talent multi select */}
+                <div className="md:col-span-4">
+                  <TalentMultiSelect
+                    value={form.talent} // array of IDs
+                    onChange={(ids) => setForm((s) => ({ ...s, talent: ids }))}
+                    placeholder="Search and select talents..."
+                  />
+                </div>
                 {/* Featured */}
                 <div className="flex items-center space-x-3 col-span-full">
                   <input
