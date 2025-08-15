@@ -19,6 +19,8 @@ const IMAGE_BASE_URL = import.meta.env.VITE_API_IMAGE_BASE_URL;
 
 const ImageSwitchFan = ({ userData }) => {
   console.log(userData);
+  const biography = userData?.data?.profile?.biography;
+  const talentName = userData?.data?.profile?.name;
   const user = JSON.parse(localStorage.getItem("user"));
   const userId = user?.id;
   const [images, setImages] = useState([]);
@@ -210,7 +212,7 @@ const ImageSwitchFan = ({ userData }) => {
           <div className="space-y-4 flex-1">
             <div className="group relative flex-1 flex flex-col h-full">
               <label className="text-xl uppercase text-[#a38b41] mb-5 font-bold">
-                {userData?.user?.name}
+                {talentName}
               </label>
               <div className="flex justify-between items-center mb-2">
                 <label className="text-xs uppercase text-gray-400 font-semibold">
@@ -219,7 +221,7 @@ const ImageSwitchFan = ({ userData }) => {
               </div>
               <div className="flex-1 px-3 py-2 bg-white/5 text-white border border-white/10 rounded-lg overflow-hidden">
                 <pre className="text-sm whitespace-pre-wrap font-sans h-full">
-                  {userData?.user?.biography}
+                  {biography}
                 </pre>
               </div>
             </div>

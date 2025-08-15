@@ -20,7 +20,6 @@ const TalentProfileForFan = () => {
   const { data, isLoading, isError } = useGetTalentOverviewQuery(id, {
     skip: !id,
   });
-
   const [searchValue, setSearchValue] = useState("");
   const [isFocused, setIsFocused] = useState(false);
   const handleSearch = (e) => {
