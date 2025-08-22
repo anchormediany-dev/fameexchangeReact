@@ -218,7 +218,8 @@ const EventsCalendar = ({ events = [], selectedDate = null, onDateChange }) => {
                               dayEvents.length === 1 ? "event" : "events"
                             }`}
                           >
-                            {dayEvents.length} {dayEvents.length>1 ? "events":"event"} 
+                            {dayEvents.length}{" "}
+                            {dayEvents.length > 1 ? "events" : "event"}
                           </span>
                         </div>
                       )}
@@ -238,7 +239,7 @@ const EventsCalendar = ({ events = [], selectedDate = null, onDateChange }) => {
                                 key={e.id + e.time}
                                 className="flex items-center gap-2"
                               >
-                                <span className="w-2 h-2 rounded-full bg-green-500" />
+                                {/* <span className="w-2 h-2 rounded-full bg-green-500" /> */}
                                 <span className="truncate">{e.name}</span>
                                 <span className="opacity-80 ml-auto">
                                   {e.time}
