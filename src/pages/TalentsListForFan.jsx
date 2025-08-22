@@ -110,7 +110,7 @@ const TalentCompactList = ({ className = "" }) => {
         <input
           value={q}
           onChange={(e) => setQ(e.target.value)}
-          placeholder="Search talents by name or email..."
+          placeholder="Search talents"
           className="w-full h-9 pl-9 pr-8 rounded-lg bg-white/5 border border-white/10
                      focus:outline-none focus:ring-1 focus:ring-[#a38b41] text-sm text-white placeholder-white/50"
         />
