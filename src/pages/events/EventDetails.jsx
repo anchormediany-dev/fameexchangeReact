@@ -2,7 +2,6 @@ import { useParams, useNavigate } from "react-router-dom";
 import { FiCalendar, FiGlobe, FiPhone } from "react-icons/fi";
 import { useGetEventByIdQuery } from "../../app/authApi";
 import EventsPreferencesActions from "../../components/events/EventsPreferencesActions";
-
 const CDN_BASE = import.meta.env.VITE_API_IMAGE_BASE_URL || "";
 
 // Internet fallbacks
@@ -283,7 +282,7 @@ export default function EventDetails() {
                       <h4 className="font-semibold mb-4 text-white">
                         Talents Performing
                       </h4>
-                      <div className="flex items-center gap-4">
+                      {/* <div className="flex items-center gap-4">
                         <img
                           className="w-14 h-14 rounded-full object-cover border border-[#333333]"
                           src={
@@ -300,6 +299,31 @@ export default function EventDetails() {
                             {event.userId.role}
                           </p>
                         </div>
+                      </div> */}
+                      <div className="grid gap-3 grid-cols-1 sm:grid-cols-2  items-center">
+                        {event?.talent?.map((t, i) => (
+                          <div
+                            onClick={() =>
+                              t._id && navigate(`/talent-profile/${t._id}`)
+                            }
+                            className="flex gap-1 items-center"
+                            key={t._id ?? i}
+                          >
+                            <img
+                              className="w-8 h-8 rounded-full object-cover border border-[#333333]"
+                              src={
+                                resolveImage(
+                                  event.userId.images?.[0]?.fileUrl
+                                ) ||
+                                `https://api.dicebear.com/7.x/initials/svg?seed=${encodeURIComponent(
+                                  t?.name || "User"
+                                )}`
+                              }
+                              alt="Talents Performing"
+                            />
+                            <span>{t?.name}</span>
+                          </div>
+                        ))}
                       </div>
                       {/* no message button */}
                     </div>
