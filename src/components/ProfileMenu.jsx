@@ -2,7 +2,13 @@
 import React, { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
-import { FiUser, FiLogOut, FiHome, FiChevronDown } from "react-icons/fi";
+import {
+  FiUser,
+  FiLogOut,
+  FiHome,
+  // FiChevronDown
+} from "react-icons/fi";
+import { CiLogout } from "react-icons/ci";
 
 export default function ProfileMenu({
   user = { name: "User", avatarUrl: "" },
@@ -66,7 +72,7 @@ export default function ProfileMenu({
         onClick={toggle}
         aria-haspopup="menu"
         aria-expanded={open}
-        className="flex items-center gap-2 rounded-full bg-white/90 px-2.5 py-1 shadow-lg ring-1 ring-black/5 backdrop-blur-md transition hover:bg-white dark:bg-neutral-900/80 dark:ring-white/10"
+        className=""
         whileHover={{ scale: 1.02 }}
         whileTap={{ scale: 0.98 }}
       >
@@ -80,16 +86,16 @@ export default function ProfileMenu({
           <Initial name={user?.name} />
         )}
 
-        <span className="hidden md:block text-sm font-medium text-neutral-700 dark:text-neutral-200">
+        {/* <span className="hidden md:block text-sm font-medium text-neutral-700 dark:text-neutral-200">
           {user?.name || "User"}
-        </span>
+        </span> */}
 
         <motion.span
           animate={{ rotate: open ? 180 : 0 }}
           transition={{ type: "spring", stiffness: 300, damping: 20 }}
           className="text-neutral-500 dark:text-neutral-300"
         >
-          <FiChevronDown />
+          {/* <FiChevronDown /> */}
         </motion.span>
       </motion.button>
 
@@ -106,7 +112,7 @@ export default function ProfileMenu({
             className="absolute right-0 z-50 mt-2 w-64 rounded-2xl border border-white/20 bg-white/90 p-2 shadow-2xl backdrop-blur-xl ring-1 ring-black/5 dark:border-white/10 dark:bg-neutral-900/80"
           >
             {/* Header */}
-            <div className="mb-1 flex items-center gap-3 rounded-xl px-3 py-3">
+            <div className="mb-1 flex  items-center gap-3 rounded-xl px-3 py-3">
               {user?.avatarUrl ? (
                 <img
                   src={user.avatarUrl}
@@ -121,7 +127,7 @@ export default function ProfileMenu({
                   {user?.name || "User"}
                 </p>
                 {user?.email && (
-                  <p className="truncate text-xs text-neutral-500 dark:text-neutral-400">
+                  <p className="text-xs text-neutral-500 dark:text-neutral-400">
                     {user.email}
                   </p>
                 )}
@@ -137,17 +143,17 @@ export default function ProfileMenu({
                   <button
                     onClick={action}
                     className={[
-                      "group flex w-full items-center gap-3 rounded-xl px-3 py-2.5 text-left transition",
+                      "group flex w-full items-center justify-center gap-3 px-3 py-2.5 text-left transition",
                       danger
-                        ? "text-red-600 hover:bg-red-50 dark:text-red-400 dark:hover:bg-red-500/10"
+                        ? "text-gray-800 hover:bg-red-50  dark:hover:bg-red-500/10"
                         : "text-neutral-700 hover:bg-black/5 dark:text-neutral-200 dark:hover:bg-white/5",
                     ].join(" ")}
                   >
                     <span
                       className={[
-                        "grid h-4 w-4 place-items-center rounded-lg ring-1",
+                        "grid h-4 w-4 place-items-center",
                         danger
-                          ? "bg-red-500/10 ring-red-500/20 dark:bg-red-500/20"
+                          ? ""
                           : "bg-white/70 ring-black/5 dark:bg-neutral-800/80 dark:ring-white/10",
                       ].join(" ")}
                     >

@@ -194,7 +194,7 @@ const Navbar = () => {
               </motion.div>
             ))}
 
-            <div className="flex items-center gap-4 ml-4">
+            <div className="flex items-center gap-5 ml-4">
               <form onSubmit={handleSearch} className="relative w-44">
                 <input
                   type="text"
