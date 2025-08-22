@@ -1,13 +1,14 @@
 import { FaCalendarAlt, FaRegCalendarAlt } from "react-icons/fa";
 import { useGetUserByIdQuery } from "../../app/authApi";
-
+import { useNavigate } from "react-router-dom";
 const EventsSection = () => {
+  const navigate = useNavigate();
   const user = JSON.parse(localStorage.getItem("user"));
   const userId = user?.id;
 
   const { data, isLoading, isError, error } = useGetUserByIdQuery(userId);
   const events = data?.events || [];
-
+  console.log(events);
   return (
     <div className="lg:col-span-2 bg-[#1f1f1f] rounded-xl shadow-lg">
       <div className="p-4 border-b border-gray-700">
@@ -48,7 +49,13 @@ const EventsSection = () => {
                   <p className="text-sm text-gray-400 line-clamp-2">
                     {event?.details}
                   </p>
-                  <button className="text-yellow-400 text-xs cursor-pointer hover:underline">
+                  <button
+                    key={event?._id}
+                    onClick={() =>
+                      event?._id && navigate(`/event-details/${event?._id}`)
+                    }
+                    className="text-yellow-400 text-xs cursor-pointer"
+                  >
                     View details →
                   </button>
                 </div>

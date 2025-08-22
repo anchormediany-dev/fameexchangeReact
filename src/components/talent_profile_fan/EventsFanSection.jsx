@@ -1,6 +1,7 @@
 import { FaCalendarAlt, FaRegCalendarAlt } from "react-icons/fa";
-
+import { useNavigate } from "react-router-dom";
 const EventsFanSection = ({ userData }) => {
+  const navigate = useNavigate();
   const events = userData?.data?.events || [];
 
   return (
@@ -43,7 +44,13 @@ const EventsFanSection = ({ userData }) => {
                   <p className="text-sm text-gray-400 line-clamp-2">
                     {event?.details}
                   </p>
-                  <button className="text-yellow-400 text-xs cursor-pointer hover:underline">
+                  <button
+                    key={event?._id}
+                    onClick={() =>
+                      event?._id && navigate(`/event-details/${event?._id}`)
+                    }
+                    className="text-yellow-400 text-xs cursor-pointer"
+                  >
                     View details →
                   </button>
                 </div>
