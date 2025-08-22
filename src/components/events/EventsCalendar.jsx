@@ -208,19 +208,18 @@ const EventsCalendar = ({ events = [], selectedDate = null, onDateChange }) => {
                       </span>
 
                       {/* dots */}
+                      {/* count badge (replaces dots) */}
                       {hasEvents && (
-                        <div className="mt-1 flex gap-1 px-1 w-full justify-center">
-                          {dayEvents.slice(0, 3).map((e) => (
-                            <span
-                              key={e.id + e.time}
-                              className={`w-2 h-2 rounded-full ${e.color}`}
-                            />
-                          ))}
-                          {dayEvents.length > 3 && (
-                            <span className="text-[10px] opacity-80">
-                              +{dayEvents.length - 3}
-                            </span>
-                          )}
+                        <div className="mt-1 w-full flex justify-center">
+                          <span
+                            className="inline-flex items-center justify-center min-w-[1.5rem] h-5 px-1.5 rounded-full text-[10px] sm:text-[11px] font-semibold
+                                       bg-[#a38b41]/15 border border-[#a38b41]/40 text-[#f2e9c7]"
+                            aria-label={`${dayEvents.length} ${
+                              dayEvents.length === 1 ? "event" : "events"
+                            }`}
+                          >
+                            {dayEvents.length} {dayEvents.length>1 ? "events":"event"} 
+                          </span>
                         </div>
                       )}
                     </button>
