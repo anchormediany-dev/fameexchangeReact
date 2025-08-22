@@ -6,6 +6,7 @@ import {
   FiPlay,
   FiPause,
 } from "react-icons/fi";
+import { BiSolidDiscount } from "react-icons/bi";
 import { IoLocationOutline } from "react-icons/io5";
 import { BsPeople } from "react-icons/bs";
 import { useNavigate } from "react-router-dom";
@@ -95,9 +96,9 @@ const FeaturedEvents = ({ events = [] }) => {
             style={isAutoPlay ? { backgroundColor: ACCENT } : {}}
           >
             {isAutoPlay ? (
-              <FiPause className="w-3 h-3" />
+              <FiPause className="w-4 h-4" />
             ) : (
-              <FiPlay className="w-3 h-3" />
+              <FiPlay className="w-4 h-4" />
             )}
             <span>Auto</span>
           </button>
@@ -183,20 +184,21 @@ const FeaturedEvents = ({ events = [] }) => {
                                     Interested {ev.interested}
                                   </span> */}
                                     <span
-                                      className=""
+                                      className="flex gap-1 items-center"
                                       style={{ color: ACCENT }}
                                     >
-                                      Interested ({ev.interested}){/* (9) */}
+                                      <FiHeart className="w-4 h-4 mr-1" />{" "}
+                                      <span> Interested ({ev.interested})</span>
                                     </span>
                                   </div>
                                   <div className="flex items-center justify-between text-xs text-gray-400">
                                     <span className="flex items-center">
-                                      <BsPeople className="w-3 h-3 mr-1" />
+                                      <BsPeople className="w-4 h-4 mr-1" />
                                       {ev.metaLeft}
                                     </span>
-                                    <span className="flex items-center">
-                                      <FiHeart className="w-3 h-3 mr-1" />
-                                      {ev.metaRight}
+                                    <span className="flex gap-1 items-center">
+                                      <BiSolidDiscount className="w-4 h-4" />
+                                      <span> {ev.metaRight}</span>
                                     </span>
                                   </div>
                                 </div>
@@ -246,7 +248,7 @@ const FeaturedEvents = ({ events = [] }) => {
                 className={`transition-all duration-300 rounded-full ${
                   i === currentSlide
                     ? "w-8 h-3"
-                    : "w-3 h-3 bg-gray-600 hover:bg-gray-500"
+                    : "w-4 h-4 bg-gray-600 hover:bg-gray-500"
                 }`}
                 style={i === currentSlide ? { backgroundColor: ACCENT } : {}}
               />
