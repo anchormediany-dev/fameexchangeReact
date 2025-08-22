@@ -81,7 +81,7 @@ const FeaturedEvents = ({ events = [] }) => {
             backgroundClip: "text",
           }}
         >
-          Featured Events
+          All Events
         </h2>
 
         <div className="flex items-center justify-between sm:justify-end space-x-3">

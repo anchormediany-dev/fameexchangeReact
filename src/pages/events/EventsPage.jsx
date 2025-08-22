@@ -197,7 +197,7 @@ const UltraModernEventsPllatform = () => {
             eventsDate={eventsDate}
           />
 
-          <FeaturedEvents events={featuredEvents} />
+          <FeaturedEvents events={events} />
         </div>
       </div>
     </section>
