@@ -154,7 +154,7 @@ export default function ProfileMenu({
                         "grid h-4 w-4 place-items-center",
                         danger
                           ? ""
-                          : "bg-white/70 ring-black/5 dark:bg-neutral-800/80 dark:ring-white/10",
+                          : "bg-white/70  dark:bg-neutral-800/80 dark:ring-white/10",
                       ].join(" ")}
                     >
                       <Icon className="text-[18px]" />

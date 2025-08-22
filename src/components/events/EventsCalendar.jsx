@@ -210,7 +210,7 @@ const EventsCalendar = ({ events = [], selectedDate = null, onDateChange }) => {
                       {/* dots */}
                       {/* count badge (replaces dots) */}
                       {hasEvents && (
-                        <div className="mt-1 w-full flex justify-center">
+                        <div className="w-full flex justify-center mt-3">
                           <span
                             className="inline-flex items-center justify-center min-w-[1.5rem] h-5 px-1.5 rounded-full text-[10px] sm:text-[11px] font-semibold
                                        bg-[#a38b41]/15 border border-[#a38b41]/40 text-[#f2e9c7]"
