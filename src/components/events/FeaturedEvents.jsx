@@ -167,11 +167,15 @@ const FeaturedEvents = ({ events = [] }) => {
                                     <IoLocationOutline className="w-4 h-4 mr-1" />
                                     {ev.location}
                                   </span>
-                                  <span
+                                  {/* <span
                                     className="text-lg font-bold"
                                     style={{ color: ACCENT }}
                                   >
-                                    {ev.price}
+                                    Interested {ev.interested}
+                                  </span> */}
+                                  <span className="" style={{ color: ACCENT }}>
+                                    Interested {ev.interested}
+                                    {/* (9) */}
                                   </span>
                                 </div>
                                 <div className="flex items-center justify-between text-xs text-gray-400">

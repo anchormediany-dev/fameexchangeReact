@@ -63,7 +63,11 @@ const SearchEvents = ({
     (resultsLoading || resultsError || results.length > 0);
 
   return (
-    <section className="flex justify-end items-center">
+    <section className="flex justify-between items-center">
+      <h2 className="text-2xl font-bold uppercase text-white mb-6 text-center">
+        {/* Request your{" "} */}
+        <span className="font-bold text-primary2">All Events</span>
+      </h2>
       <div className="lg:w-[25%] mb-3">
         {/* WRAPPER to avoid clipping */}
         <div className="relative z-50">

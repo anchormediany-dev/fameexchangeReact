@@ -281,7 +281,7 @@ export default function EventDetails() {
                   {event?.userId && (
                     <div className="bg-[#2d2d2d] border border-[#333333] rounded-xl p-5">
                       <h4 className="font-semibold mb-4 text-white">
-                        Organizer
+                        Talents Performing
                       </h4>
                       <div className="flex items-center gap-4">
                         <img
@@ -292,7 +292,7 @@ export default function EventDetails() {
                               event.userId.name || "User"
                             )}`
                           }
-                          alt="Organizer"
+                          alt="Talents Performing"
                         />
                         <div className="text-white">
                           <p className="font-semibold">{event.userId.name}</p>
