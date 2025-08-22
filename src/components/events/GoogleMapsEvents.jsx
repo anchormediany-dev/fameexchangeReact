@@ -2,8 +2,9 @@ import { useState } from "react";
 import { FiPlus, FiZoomIn, FiZoomOut, FiNavigation } from "react-icons/fi";
 import { BsBuilding, BsGoogle } from "react-icons/bs";
 import { Link } from "react-router-dom";
-
+import { useRole } from "../../utils/roles/roleUtils";
 const GoogleMapsEvents = () => {
+  const { isAdmin, isTalent, isFan, kyc, hasAny } = useRole();
   const [mapZoom, setMapZoom] = useState(12);
   const [calendarEvents] = useState([
     {
@@ -53,21 +54,23 @@ const GoogleMapsEvents = () => {
   return (
     <div className="lg:col-span-1 flex flex-col space-y-3 h-full">
       {/* Small List & Post Event Button */}
-      <button
-        className="w-full group relative overflow-hidden rounded-xl p-3 transition-all duration-300 hover:scale-105 shadow-lg"
-        style={{ backgroundColor: "#a38b41" }}
-      >
-        <div className="absolute inset-0 bg-white/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-        <Link
-          to="/add-event"
-          className="relative flex items-center justify-center space-x-2"
+      {isAdmin && (
+        <button
+          className="w-full group relative overflow-hidden rounded-xl p-3 transition-all duration-300 hover:scale-105 shadow-lg"
+          style={{ backgroundColor: "#a38b41" }}
         >
-          <FiPlus className="w-4 h-4 text-white" />
-          <span className="font-semibold text-sm text-white">
-            LIST & POST YOUR EVENT
-          </span>
-        </Link>
-      </button>
+          <div className="absolute inset-0 bg-white/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+          <Link
+            to="/add-event"
+            className="relative flex items-center justify-center space-x-2"
+          >
+            <FiPlus className="w-4 h-4 text-white" />
+            <span className="font-semibold text-sm text-white">
+              LIST & POST YOUR EVENT
+            </span>
+          </Link>
+        </button>
+      )}
 
       {/* Real Google Maps Integration - Flexible Height */}
       <div className="bg-white/5 backdrop-blur-xl border border-white/10 rounded-2xl shadow-xl p-3 md:p-4 flex-1 flex flex-col">
