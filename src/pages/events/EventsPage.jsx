@@ -126,6 +126,7 @@ const UltraModernEventsPllatform = () => {
     type: e.event_type,
     status: e.status,
     category: e.category,
+    interested: e.prefrences.interested,
     location: e.location,
     address: e.address,
     phone: e.phone,
