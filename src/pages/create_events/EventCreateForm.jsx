@@ -1,4 +1,5 @@
 import React, { useState, useMemo, useEffect, useRef } from "react";
+import { FiUpload } from "react-icons/fi";
 import { useNavigate } from "react-router-dom";
 import {
   FaCalendarAlt,
@@ -647,30 +648,27 @@ export default function EventCreateForm() {
 
                 {/* Logo */}
                 <div>
-                  <label className="block text-white text-sm font-medium mb-2">
+                  {/* <label className="block text-white text-sm font-medium mb-2">
                     Event Logo
-                  </label>
+                  </label> */}
 
                   <div
                     onClick={() => logoInputRef.current?.click()}
-                    className="flex flex-col items-center justify-center w-full h-32 border-2 border-dashed border-[#333333] rounded-lg cursor-pointer hover:border-[#F3BA18] bg-[#2d2d2d]"
+                    // className="flex flex-col items-center justify-center w-full h-32 border-2 border-dashed border-[#333333] rounded-lg cursor-pointer hover:border-[#F3BA18] bg-[#2d2d2d]"
                   >
-                    <div className="flex flex-col items-center justify-center pt-5 pb-6">
-                      <FaImage className="w-8 h-8 mb-4 text-gray-400" />
-                      <p className="mb-2 text-sm text-gray-400">
-                        <span className="font-semibold">Click to upload</span>
-                      </p>
-                      <p className="text-xs text-gray-400">
-                        PNG, JPG (1:1 ratio)
-                      </p>
-                    </div>
-                    <input
-                      ref={logoInputRef}
-                      type="file"
-                      accept="image/*"
-                      onChange={(e) => setLogo(e.target.files?.[0] || null)}
-                      className="hidden"
-                    />
+                    <label className="flex flex-col items-center justify-center w-full h-20 border-2 border-dashed border-gray-600 rounded-xl cursor-pointer hover:border-[#a38b41] transition-all duration-300 group">
+                      <FiUpload className="w-4 h-4 text-gray-400 group-hover:text-[#a38b41] mb-1 transition-colors" />
+                      <span className="text-xs text-gray-400 group-hover:text-[#a38b41] transition-colors text-center">
+                        Event Logo
+                      </span>
+                      <input
+                        ref={logoInputRef}
+                        type="file"
+                        accept="image/*"
+                        onChange={(e) => setLogo(e.target.files?.[0] || null)}
+                        className="hidden"
+                      />{" "}
+                    </label>
                   </div>
 
                   {logoPreview && (
@@ -693,32 +691,30 @@ export default function EventCreateForm() {
 
                 {/* Event Cover */}
                 <div>
-                  <label className="block text-white text-sm font-medium mb-2">
+                  {/* <label className="block text-white text-sm font-medium mb-2">
                     Event Cover
-                  </label>
+                  </label> */}
 
                   <div
                     onClick={() => coverInputRef.current?.click()}
-                    className="flex flex-col items-center justify-center w-full h-32 border-2 border-dashed border-[#333333] rounded-lg cursor-pointer hover:border-[#F3BA18] bg-[#2d2d2d]"
+                    // className="flex flex-col items-center justify-center w-full h-32 border-2 border-dashed border-[#333333] rounded-lg cursor-pointer hover:border-[#F3BA18] bg-[#2d2d2d]"
                   >
-                    <div className="flex flex-col items-center justify-center pt-5 pb-6">
-                      <FaImage className="w-8 h-8 mb-4 text-gray-400" />
-                      <p className="mb-2 text-sm text-gray-400">
-                        <span className="font-semibold">Click to upload</span>
-                      </p>
-                      <p className="text-xs text-gray-400">
-                        PNG, JPG (16:9 ratio)
-                      </p>
-                    </div>
-                    <input
-                      ref={coverInputRef}
-                      type="file"
-                      accept="image/*"
-                      onChange={(e) =>
-                        setEventCover(e.target.files?.[0] || null)
-                      }
-                      className="hidden"
-                    />
+                    <label className="flex flex-col items-center justify-center w-full h-20 border-2 border-dashed border-gray-600 rounded-xl cursor-pointer hover:border-[#a38b41] transition-all duration-300 group">
+                      <FiUpload className="w-4 h-4 text-gray-400 group-hover:text-[#a38b41] mb-1 transition-colors" />
+                      <span className="text-xs text-gray-400 group-hover:text-[#a38b41] transition-colors text-center">
+                        Event Cover
+                      </span>
+
+                      <input
+                        ref={coverInputRef}
+                        type="file"
+                        accept="image/*"
+                        onChange={(e) =>
+                          setEventCover(e.target.files?.[0] || null)
+                        }
+                        className="hidden"
+                      />
+                    </label>
                   </div>
 
                   {coverPreview && (
@@ -741,15 +737,15 @@ export default function EventCreateForm() {
 
                 {/* Event Gallery */}
                 <div className="md:col-span-2">
-                  <label className="block text-white text-sm font-medium mb-2">
+                  {/* <label className="block text-white text-sm font-medium mb-2">
                     Event Gallery
-                  </label>
+                  </label> */}
 
                   <div
                     onClick={() => galleryInputRef.current?.click()}
-                    className="flex flex-col items-center justify-center w-full h-32 border-2 border-dashed border-[#333333] rounded-lg cursor-pointer hover:border-[#F3BA18] bg-[#2d2d2d]"
+                    // className="flex flex-col items-center justify-center w-full h-32 border-2 border-dashed border-[#333333] rounded-lg cursor-pointer hover:border-[#F3BA18] bg-[#2d2d2d]"
                   >
-                    <div className="flex flex-col items-center justify-center pt-5 pb-6">
+                    {/* <div className="flex flex-col items-center justify-center pt-5 pb-6">
                       <FaImage className="w-8 h-8 mb-4 text-gray-400" />
                       <p className="mb-2 text-sm text-gray-400">
                         <span className="font-semibold">Click to upload</span>
@@ -757,17 +753,24 @@ export default function EventCreateForm() {
                       <p className="text-xs text-gray-400">
                         PNG, JPG (up to 10 images)
                       </p>
-                    </div>
-                    <input
-                      ref={galleryInputRef}
-                      type="file"
-                      accept="image/*"
-                      multiple
-                      onChange={(e) =>
-                        setEventImages(Array.from(e.target.files || []))
-                      }
-                      className="hidden"
-                    />
+                    </div> */}
+                    <label className="flex flex-col items-center justify-center w-full h-20 border-2 border-dashed border-gray-600 rounded-xl cursor-pointer hover:border-[#a38b41] transition-all duration-300 group">
+                      <FiUpload className="w-4 h-4 text-gray-400 group-hover:text-[#a38b41] mb-1 transition-colors" />
+                      <span className="text-xs text-gray-400 group-hover:text-[#a38b41] transition-colors text-center">
+                        Event Gallery
+                      </span>
+
+                      <input
+                        ref={galleryInputRef}
+                        type="file"
+                        accept="image/*"
+                        multiple
+                        onChange={(e) =>
+                          setEventImages(Array.from(e.target.files || []))
+                        }
+                        className="hidden"
+                      />
+                    </label>
                   </div>
 
                   {imagePreviews?.length > 0 && (
