@@ -592,6 +592,7 @@ import {
   useDeleteFriendsMutation,
   useAddFriendMutation,
   useGetUsersQuery,
+  useGetTalentQuery,
 } from "../../app/authApi";
 
 const FriendsSection = () => {
@@ -606,13 +607,13 @@ const FriendsSection = () => {
     data: usersData,
     isLoading: isUsersLoading,
     refetch: refetchUsers,
-  } = useGetUsersQuery();
+  } = useGetTalentQuery();
 
   const [deleteFriends, { isLoading: isDeleting }] = useDeleteFriendsMutation();
   const [addFriend, { isLoading: isAdding }] = useAddFriendMutation();
 
   const friends = friendsData?.data || [];
-  const users = usersData?.users || [];
+  const users = usersData?.taleUsers || [];
 
   const [editingFriends, setEditingFriends] = useState(false);
   const [selected, setSelected] = useState([]);
