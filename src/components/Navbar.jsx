@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useMemo } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { FaBars, FaTimes, FaSearch } from "react-icons/fa";
@@ -9,6 +9,7 @@ import SignupModal from "./SignupModal";
 import { useDispatch } from "react-redux";
 import { logout } from "../features/auth/authSlice";
 import { openSignupModal as openSignupModalAction } from "../features/auth/signupModalSlice";
+import ProfileMenu from "./ProfileMenu";
 const navLinks = [
   { name: "Home", scrollTo: "home" },
   { name: "Top Talent", scrollTo: "top-talent" },
@@ -132,7 +133,25 @@ const Navbar = () => {
     window.addEventListener("scroll", handleScrollSpy);
     return () => window.removeEventListener("scroll", handleScrollSpy);
   }, [ignoreScroll, activeSection]);
+  const currentUser = useMemo(() => {
+    const name =
+      userLocalData?.fullName ||
+      userLocalData?.name ||
+      userLocalData?.username ||
+      (userLocalData?.firstName
+        ? `${userLocalData.firstName} ${userLocalData?.lastName || ""}`.trim()
+        : "User");
 
+    const email = userLocalData?.email || "";
+    const avatarUrl =
+      userLocalData?.avatarUrl ||
+      userLocalData?.avatar ||
+      userLocalData?.profilePicture ||
+      userLocalData?.image ||
+      "";
+
+    return { name, email, avatarUrl };
+  }, [userLocalData]);
   return (
     <>
       <nav className="fixed top-0 w-full z-50 bg-black shadow-lg font-medium text-sm">
@@ -198,7 +217,7 @@ const Navbar = () => {
               {userId ? (
                 <>
                   {" "}
-                  <motion.button
+                  {/* <motion.button
                     onClick={handleLogout}
                     className="custom-button-outline !py-1"
                     whileHover={{ scale: 1.05 }}
@@ -206,6 +225,8 @@ const Navbar = () => {
                   >
                     Logout
                   </motion.button>
+                </> */}
+                  <ProfileMenu user={currentUser} onLogout={handleLogout} />
                 </>
               ) : (
                 <>
