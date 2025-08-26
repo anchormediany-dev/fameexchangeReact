@@ -271,13 +271,13 @@ const Footer = () => {
                   </Link>
                 </motion.div>
               </motion.li>
-              <motion.li variants={linkVariants}>
+              {/* <motion.li variants={linkVariants}>
                 <motion.div variants={linkVariants} whileHover="hover">
                   <Link to="/help-support" className="hover:text-primary">
                     Help & Support
                   </Link>
                 </motion.div>
-              </motion.li>
+              </motion.li> */}
             </motion.ul>
           </motion.div>
 

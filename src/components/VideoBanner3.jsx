@@ -81,9 +81,9 @@ const VideoBanner = () => {
         <div className="text-center text-white max-w-5xl mx-auto">
           {/* Modern Badge */}
           <div className="inline-flex items-center px-4 py-2 mb-6 bg-gray-800/40 backdrop-blur-md rounded-full border border-gray-600/30 animate-fade-in-up shadow-xl">
-            <span className="w-2 h-2 bg-cyan-400 rounded-full mr-3 animate-pulse-glow" />
+            {/* <span className="w-2 h-2 bg-cyan-400 rounded-full mr-3 animate-pulse-glow" /> */}
             <span className="text-sm font-medium text-gray-200 tracking-wide">
-              NOW LIVE • FAME EXCHANGE
+              FAME EXCHANGE
             </span>
           </div>
 
@@ -156,7 +156,7 @@ const VideoBanner = () => {
       <div className="absolute bottom-0 right-0 w-12 h-12 sm:w-16 sm:h-16 border-r-2 border-b-2 border-gray-600/40" />
 
       {/* Enhanced Video Status Indicator */}
-      {isVideoPlaying && (
+      {/* {isVideoPlaying && (
         <section className="container mx-auto ">
           <div className="absolute  top-8 right-4 flex items-center px-4 py-2 bg-gray-800/60 backdrop-blur-md rounded-full border border-cyan-400/30 shadow-lg">
             <div className="w-2 h-2 bg-cyan-400 rounded-full mr-3 animate-pulse-glow" />
@@ -165,7 +165,7 @@ const VideoBanner = () => {
             </span>
           </div>
         </section>
-      )}
+      )} */}
 
       <style jsx>{`
         @keyframes fade-in-up {

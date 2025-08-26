@@ -466,14 +466,14 @@ export default function App() {
         />
 
         {/* Support and Help Pages */}
-        <Route
+        {/* <Route
           path="help-support"
           element={
             <MotionPageWrapper>
               <HelpSupport />
             </MotionPageWrapper>
           }
-        />
+        /> */}
         <Route
           path="faqs"
           element={
