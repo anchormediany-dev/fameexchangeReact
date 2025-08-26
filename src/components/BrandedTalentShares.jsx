@@ -490,7 +490,7 @@ const TalentTokenTicker = () => {
                       </Link>
 
                       <Link
-                        // to="/talent-profile"
+                        to="/talent-profile"
                         className="flex justify-center"
                       >
                         <motion.button
