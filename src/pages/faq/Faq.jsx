@@ -4,7 +4,7 @@ import { FaChevronDown } from "react-icons/fa";
 import Footer from "../../components/Footer";
 import Navbar from "../../components/Navbar";
 import faqItems from "../../data/faqData";
-
+import { useGetAllFaqsQuery } from "../../app/authApi";
 const FAQItem = ({ faq, index, isOpen, toggleOpen }) => {
   const questionVariants = {
     open: { color: "#CCCC00" },
@@ -51,7 +51,7 @@ const FAQItem = ({ faq, index, isOpen, toggleOpen }) => {
 
 const FAQ = () => {
   const [openIndex, setOpenIndex] = useState(null);
-
+  const { data, isLoading, error, isError } = useGetAllFaqsQuery();
   const toggleOpen = (index) => {
     setOpenIndex(openIndex === index ? null : index);
   };
@@ -67,17 +67,31 @@ const FAQ = () => {
           <h2 className="gredient-text text-center text-3xl sm:text-4xl lg:text-5xl font-bold">
             Frequently Asked Questions
           </h2>
-          <div className="max-w-2xl mx-auto">
-            {faqItems.map((faq, index) => (
-              <FAQItem
-                key={index}
-                faq={faq}
-                index={index}
-                isOpen={openIndex === index}
-                toggleOpen={toggleOpen}
-              />
-            ))}
-          </div>
+          {isError ? (
+            <div
+              style={{
+                textAlign: "center",
+                color: "#a38b41",
+                margin: "40px 0",
+              }}
+            >
+              {isError
+                ? "Failed to load FAQs. Please try again."
+                : "No frequently asked questions available."}
+            </div>
+          ) : (
+            <div className="max-w-2xl mx-auto">
+              {data?.data?.map((faq, index) => (
+                <FAQItem
+                  key={index}
+                  faq={faq}
+                  index={index}
+                  isOpen={openIndex === index}
+                  toggleOpen={toggleOpen}
+                />
+              ))}
+            </div>
+          )}
         </div>
       </div>
       <Footer />
