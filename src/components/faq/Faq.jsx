@@ -4,8 +4,10 @@ import { FiArrowRightCircle } from "react-icons/fi";
 import { useNavigate } from "react-router-dom";
 import faqImage from "../../assets/images/faq.png";
 import faqItems from "../../data/faqData";
-
+import { useGetAllFaqsQuery } from "../../app/authApi";
 const Faq = () => {
+  const { data, isLoading, isError, error } = useGetAllFaqsQuery();
+  console.log(data);
   const [openFaq, setOpenFaq] = useState(null);
   const navigate = useNavigate();
 
@@ -44,41 +46,82 @@ const Faq = () => {
           </div>
 
           {/* Right Section - FAQ Accordion */}
+          {/* Right Section - FAQ Accordion */}
           <div className="w-full xl:max-w-xl space-y-4">
-            {faqItems.slice(0, 4).map((faq, index) => (
+            {/* Loading */}
+            {isLoading && (
+              <>
+                {[...Array(4)].map((_, i) => (
+                  <div
+                    key={`skeleton-${i}`}
+                    style={{ border: borderStyle, borderRadius: 0 }}
+                    className="p-4"
+                  >
+                    <div className="animate-pulse">
+                      <div className="h-5 w-3/4 rounded bg-[rgba(163,139,65,0.3)] mb-3" />
+                      <div className="h-4 w-full rounded bg-[rgba(163,139,65,0.2)] mb-2" />
+                      <div className="h-4 w-5/6 rounded bg-[rgba(163,139,65,0.2)]" />
+                    </div>
+                  </div>
+                ))}
+              </>
+            )}
+
+            {/* Error or Empty */}
+            {!isLoading && (isError || data.data.length === 0) && (
               <div
-                key={index}
-                style={{ border: borderStyle, borderRadius: 0 }}
-                className="transition-all duration-300"
+                style={{
+                  textAlign: "center",
+                  color: "#a38b41",
+                  margin: "40px 0",
+                }}
               >
+                {isError
+                  ? "Failed to load FAQs. Please try again."
+                  : "No frequently asked questions available."}
+              </div>
+            )}
+
+            {/* Data */}
+            {!isLoading &&
+              !isError &&
+              data?.data?.slice(0, 4).map((faq, index) => (
                 <div
-                  className="flex justify-between items-center p-4 text-white cursor-pointer"
-                  onClick={() => toggleFaq(index)}
+                  key={index}
+                  style={{ border: borderStyle, borderRadius: 0 }}
+                  className="transition-all duration-300"
                 >
-                  <h3 className="text-base font-medium">{faq.question}</h3>
-                  {openFaq === index ? (
-                    <FaMinus className="text-yellow-400" />
-                  ) : (
-                    <FaPlus className="text-yellow-400" />
+                  <div
+                    className="flex justify-between items-center p-4 text-white cursor-pointer"
+                    onClick={() => toggleFaq(index)}
+                  >
+                    <h3 className="text-base font-medium">{faq.question}</h3>
+                    {openFaq === index ? (
+                      <FaMinus className="text-yellow-400" />
+                    ) : (
+                      <FaPlus className="text-yellow-400" />
+                    )}
+                  </div>
+
+                  {openFaq === index && (
+                    <div className="p-4 pt-0 text-white">
+                      <p className="text-sm md:text-base">{faq.answer}</p>
+                    </div>
                   )}
                 </div>
-
-                {openFaq === index && (
-                  <div className="p-4 pt-0 text-white">
-                    <p className="text-sm md:text-base">{faq.answer}</p>
-                  </div>
-                )}
-              </div>
-            ))}
+              ))}
 
             {/* View All Button */}
-            <button
-              onClick={() => navigate("/faq")}
-              className="mt-6 flex items-center cursor-pointer justify-self-center px-6 py-3 rounded-lg gradient-bg text-black font-semibold shadow-md hover:scale-105 transition-transform duration-200"
-            >
-              <span className="text-base">View All FAQs</span>
-              <FiArrowRightCircle className="ml-2 text-xl " />
-            </button>
+            {!isLoading && (
+              <button
+                onClick={() => navigate("/faq")}
+                className="mt-6 flex items-center cursor-pointer justify-self-center px-6 py-3 rounded-lg gradient-bg text-black font-semibold shadow-md hover:scale-105 transition-transform duration-200 disabled:opacity-60"
+                disabled={isLoading}
+              >
+                <span className="text-base">View All FAQs</span>
+                <FiArrowRightCircle className="ml-2 text-xl " />
+              </button>
+            )}
           </div>
         </section>
       </div>

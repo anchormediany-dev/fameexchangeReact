@@ -114,6 +114,10 @@ export const authApi = api.injectEndpoints({
       }),
       providesTags: ["Newsletter"],
     }),
+    // Get FAQ
+    getAllFaqs: builder.query({
+      query: () => "/faqs",
+    }),
     // Get events
     getEvents: builder.query({
       query: () => "/events",
@@ -293,6 +297,8 @@ export const {
   useUpdateMyProfileMutation,
   useGetUserByIdQuery,
   useDeleteProfileImageMutation,
+  // FAqs
+  useGetAllFaqsQuery,
   // Events
   useGetEventsQuery,
   useCreateEventMutation,
