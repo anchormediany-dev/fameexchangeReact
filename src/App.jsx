@@ -52,6 +52,7 @@ import Verification from "./components/Verification";
 import ResetPassword from "./components/ResetPassword";
 import TalentProfileForFan from "./pages/talent_profile_fan/TalentProfileForFan";
 import TalentCompactList from "./pages/TalentsListForFan";
+import AdminFaq from "./pages/admin/AdminFaq";
 
 // Simple Black Header Component
 const SimpleHeader = () => {
@@ -265,6 +266,14 @@ export default function App() {
                 element={
                   <MotionPageWrapper>
                     <AdminContact />
+                  </MotionPageWrapper>
+                }
+              />
+              <Route
+                path="faq"
+                element={
+                  <MotionPageWrapper>
+                    <AdminFaq />
                   </MotionPageWrapper>
                 }
               />

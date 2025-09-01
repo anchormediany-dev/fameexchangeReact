@@ -48,6 +48,18 @@ export default function AdminLayout() {
               >
                 Contact
               </NavLink>
+               <NavLink
+                to="/admin/faq"
+                className={({ isActive }) =>
+                  `px-3 py-2 rounded-md ${
+                    isActive
+                      ? "bg-white/10 text-white"
+                      : "text-gray-300 hover:bg-white/5"
+                  }`
+                }
+              >
+               Faq
+              </NavLink>
             </nav>
           </aside>
 

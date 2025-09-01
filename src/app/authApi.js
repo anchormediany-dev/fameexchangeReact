@@ -117,6 +117,37 @@ export const authApi = api.injectEndpoints({
     // Get FAQ
     getAllFaqs: builder.query({
       query: () => "/faqs",
+      providesTags: ["Faqs"],
+    }),
+    getFaqById: builder.query({
+      query: (id) => `/faqs/${id}`,
+      providesTags: (result, error, id) => [{ type: "Faqs", id }],
+    }),
+    createFaq: builder.mutation({
+      query: (body) => ({
+        url: "/faqs",
+        method: "POST",
+        body,
+      }),
+      invalidatesTags: ["Faqs"],
+    }),
+    updateFaq: builder.mutation({
+      query: ({ id, ...patch }) => ({
+        url: `/faqs/${id}`,
+        method: "PATCH",
+        body: patch,
+      }),
+      invalidatesTags: (result, error, { id }) => [
+        "Faqs",
+        { type: "Faqs", id },
+      ],
+    }),
+    deleteFaq: builder.mutation({
+      query: (id) => ({
+        url: `/faqs/${id}`,
+        method: "DELETE",
+      }),
+      invalidatesTags: ["Faqs"],
     }),
     // Get events
     getEvents: builder.query({
@@ -299,6 +330,10 @@ export const {
   useDeleteProfileImageMutation,
   // FAqs
   useGetAllFaqsQuery,
+  useGetFaqByIdQuery,
+  useCreateFaqMutation,
+  useUpdateFaqMutation,
+  useDeleteFaqMutation,
   // Events
   useGetEventsQuery,
   useCreateEventMutation,
