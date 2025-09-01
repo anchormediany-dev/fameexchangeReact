@@ -344,6 +344,7 @@
 
 // export default FutureMusicians;
 import { useState, useRef, useEffect } from "react";
+import { useGetTalentQuery } from "../../app/authApi";
 import {
   FaSearch,
   FaTimes,
@@ -360,21 +361,25 @@ import {
 import { motion, useInView, useAnimation } from "framer-motion";
 
 const FutureTalents = () => {
+  const { data, isLoading, error, isError } = useGetTalentQuery();
   const [searchValue, setSearchValue] = useState("");
   const [isFocused, setIsFocused] = useState(false);
-  const [selectedCategory, setSelectedCategory] = useState("Musicians");
+  const [selectedCategory, setSelectedCategory] = useState("All");
   const [showCategoryDropdown, setShowCategoryDropdown] = useState(false);
   const dropdownRef = useRef(null);
 
   const talentCategories = [
-    { name: "Musicians", icon: <FaMusic className="mr-2" /> },
+    { name: "All", icon: <FaRunning className="mr-2" /> },
     { name: "Athletes", icon: <FaRunning className="mr-2" /> },
     { name: "Actors", icon: <FaFilm className="mr-2" /> },
     { name: "Models", icon: <FaUserTie className="mr-2" /> },
+    { name: "Musicians", icon: <FaMusic className="mr-2" /> },
+    { name: "Band", icon: <FaMusic className="mr-2" /> },
     { name: "Entertainers", icon: <FaMicrophone className="mr-2" /> },
-    { name: "Influencers", icon: <FaInstagram className="mr-2" /> },
-    { name: "Dancers", icon: <FaChild className="mr-2" /> },
-    { name: "Comedians", icon: <FaLaughSquint className="mr-2" /> },
+    { name: "Brand Ambassador", icon: <FaMusic className="mr-2" /> },
+    { name: "Host", icon: <FaMusic className="mr-2" /> },
+    { name: "Social Media Rep", icon: <FaMusic className="mr-2" /> },
+    { name: "Spokesperson", icon: <FaMusic className="mr-2" /> },
   ];
 
   const talentData = {
