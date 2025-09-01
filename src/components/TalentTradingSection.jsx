@@ -3,8 +3,9 @@ import { useRef } from "react";
 import { GoArrowUpRight } from "react-icons/go";
 import talentTradingImage from "../assets/images/talent-trading-image.png";
 import imageText from "../assets/images/fame-exchange-image-text.png";
-
+import { useNavigate } from "react-router-dom";
 const TalentTradingSection = () => {
+  const navigate = useNavigate();
   const sectionRef = useRef(null);
   const isInView = useInView(sectionRef, { once: true, amount: 0.2 });
 
@@ -74,6 +75,7 @@ const TalentTradingSection = () => {
           </motion.p>
 
           <motion.button
+            onClick={() => navigate("/all-talents")}
             initial={{ opacity: 0, y: 20 }}
             animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
             transition={{ duration: 0.6, delay: 0.6 }}
