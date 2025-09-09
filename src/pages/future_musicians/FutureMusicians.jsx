@@ -343,7 +343,14 @@
 // };
 
 // export default FutureMusicians;
-import { useState, useRef, useEffect } from "react";
+import {
+  useEffect,
+  useMemo,
+  useReducer,
+  useRef,
+  useCallback,
+  useDeferredValue,
+} from "react";
 import { useGetTalentQuery } from "../../app/authApi";
 import {
   FaSearch,
@@ -355,338 +362,327 @@ import {
   FaUserTie,
   FaMicrophone,
   FaInstagram,
-  FaChild,
-  FaLaughSquint,
 } from "react-icons/fa";
-import { motion, useInView, useAnimation } from "framer-motion";
 
-const FutureTalents = () => {
-  const { data, isLoading, error, isError } = useGetTalentQuery();
-  const [searchValue, setSearchValue] = useState("");
-  const [isFocused, setIsFocused] = useState(false);
-  const [selectedCategory, setSelectedCategory] = useState("All");
-  const [showCategoryDropdown, setShowCategoryDropdown] = useState(false);
+// ---------- reducer & state ----------
+const initialState = {
+  search: "",
+  category: null, // null => show ALL by default (important!)
+  dropdownOpen: false,
+};
+
+function reducer(state, action) {
+  switch (action.type) {
+    case "SET_SEARCH":
+      return { ...state, search: action.payload };
+    case "CLEAR_SEARCH":
+      return { ...state, search: "" };
+    case "SET_CATEGORY":
+      return { ...state, category: action.payload, dropdownOpen: false };
+    case "TOGGLE_DROPDOWN":
+      return { ...state, dropdownOpen: !state.dropdownOpen };
+    case "CLOSE_DROPDOWN":
+      return { ...state, dropdownOpen: false };
+    default:
+      return state;
+  }
+}
+
+// ---------- helpers ----------
+const ICONS = {
+  Athlete: <FaRunning className="mr-2" />,
+  Actor: <FaFilm className="mr-2" />,
+  Model: <FaUserTie className="mr-2" />,
+  Musician: <FaMusic className="mr-2" />,
+  Band: <FaMusic className="mr-2" />,
+  Entertainer: <FaMicrophone className="mr-2" />,
+  "Brand Ambassador": <FaUserTie className="mr-2" />,
+  Host: <FaMicrophone className="mr-2" />,
+  "Social Media Rep": <FaInstagram className="mr-2" />,
+  Spokesperson: <FaMicrophone className="mr-2" />,
+};
+
+const normalize = (s) => (s || "").toString().trim().toLowerCase();
+
+const userCategories = (u) =>
+  Array.isArray(u?.talent)
+    ? u.talent.map((t) => t?.category).filter(Boolean)
+    : [];
+
+const firstImageUrl = (u) => {
+  if (u?.image) return u.image;
+  const arr = u?.images;
+  if (!Array.isArray(arr) || arr.length === 0) return null;
+
+  // common case: { fileUrl: "uploads/..." }
+  const withFile = arr.find((x) => x && typeof x === "object" && x.fileUrl);
+  if (withFile) return withFile.fileUrl;
+
+  // odd case in sample: object with numeric keys -> reconstruct string
+  const weird = arr.find(
+    (x) =>
+      x && typeof x === "object" && Object.keys(x).some((k) => /^\d+$/.test(k))
+  );
+  if (weird) {
+    const s = Object.keys(weird)
+      .filter((k) => /^\d+$/.test(k))
+      .sort((a, b) => Number(a) - Number(b))
+      .map((k) => weird[k])
+      .join("");
+    return s || null;
+  }
+  return null;
+};
+
+// ---------- component ----------
+export default function FutureTalents() {
+  const [{ search, category, dropdownOpen }, dispatch] = useReducer(
+    reducer,
+    initialState
+  );
+  const { data, isLoading, isError, error } = useGetTalentQuery();
+
   const dropdownRef = useRef(null);
+  const talents = Array.isArray(data?.taleUsers) ? data.taleUsers : [];
 
-  const talentCategories = [
-    { name: "All", icon: <FaRunning className="mr-2" /> },
-    { name: "Athletes", icon: <FaRunning className="mr-2" /> },
-    { name: "Actors", icon: <FaFilm className="mr-2" /> },
-    { name: "Models", icon: <FaUserTie className="mr-2" /> },
-    { name: "Musicians", icon: <FaMusic className="mr-2" /> },
-    { name: "Band", icon: <FaMusic className="mr-2" /> },
-    { name: "Entertainers", icon: <FaMicrophone className="mr-2" /> },
-    { name: "Brand Ambassador", icon: <FaMusic className="mr-2" /> },
-    { name: "Host", icon: <FaMusic className="mr-2" /> },
-    { name: "Social Media Rep", icon: <FaMusic className="mr-2" /> },
-    { name: "Spokesperson", icon: <FaMusic className="mr-2" /> },
-  ];
+  // unique categories from API (stable & sorted)
+  const categories = useMemo(() => {
+    const set = new Set();
+    for (const u of talents) {
+      for (const c of userCategories(u)) set.add(c);
+    }
+    return Array.from(set).sort((a, b) => a.localeCompare(b));
+  }, [talents]);
 
-  const talentData = {
-    Musicians: [
-      {
-        name: "APEX",
-        fullName: "Digital Artist",
-        talentName: "John Doe",
-        socialCalculation: 20000,
-        trading: "Active",
-        sponsored: "Yes",
-        image:
-          "https://images.pexels.com/photos/774909/pexels-photo-774909.jpeg?auto=compress&cs=tinysrgb&w=600",
-      },
-      {
-        name: "NOVA",
-        fullName: "Pop Sensation",
-        talentName: "Jane Smith",
-        socialCalculation: 150000,
-        trading: "Active",
-        sponsored: "No",
-        image:
-          "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=100&h=100&fit=crop&crop=face",
-      },
-      {
-        name: "ECHO",
-        fullName: "Indie Musician",
-        talentName: "Emily Carter",
-        socialCalculation: 8000,
-        trading: "Inactive",
-        sponsored: "No",
-        image:
-          "https://plus.unsplash.com/premium_photo-1690407617542-2f210cf20d7e?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MXx8cGVyc29ufGVufDB8fDB8fHww",
-      },
-    ],
-    Athletes: [
-      {
-        name: "BOLT",
-        fullName: "Track Sprinter",
-        talentName: "Usain Johnson",
-        socialCalculation: 45000,
-        trading: "Active",
-        sponsored: "Yes",
-        image:
-          "https://images.unsplash.com/photo-1560272564-c83b66b1ad12?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8YXRobGV0ZXxlbnwwfHwwfHx8MA%3D%3D",
-      },
-      {
-        name: "SWISH",
-        fullName: "Basketball Player",
-        talentName: "Michael Jordan Jr.",
-        socialCalculation: 120000,
-        trading: "Active",
-        sponsored: "Yes",
-        image:
-          "https://images.unsplash.com/photo-1546519638-68e109498ffc?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8M3x8YmFza2V0YmFsbHxlbnwwfHwwfHx8MA%3D%3D",
-      },
-    ],
-    Actors: [
-      {
-        name: "STAR",
-        fullName: "Film Actor",
-        talentName: "Leonardo Parker",
-        socialCalculation: 75000,
-        trading: "Active",
-        sponsored: "Yes",
-        image:
-          "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NHx8YWN0b3J8ZW58MHx8MHx8fDA%3D",
-      },
-      {
-        name: "DRAMA",
-        fullName: "Theater Actor",
-        talentName: "Sarah Williams",
-        socialCalculation: 32000,
-        trading: "Inactive",
-        sponsored: "No",
-        image:
-          "https://images.unsplash.com/photo-1519699047748-de8e457a634e?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Nnx8YWN0cmVzc3xlbnwwfHwwfHx8MA%3D%3D",
-      },
-    ],
-    // Add similar data for other categories...
-    Models: [
-      {
-        name: "POSE",
-        fullName: "Fashion Model",
-        talentName: "Alex Morgan",
-        socialCalculation: 85000,
-        trading: "Active",
-        sponsored: "Yes",
-        image:
-          "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTB8fG1vZGVsfGVufDB8fDB8fHww",
-      },
-    ],
-    Entertainers: [
-      {
-        name: "MAGIC",
-        fullName: "Stage Magician",
-        talentName: "David Copper",
-        socialCalculation: 42000,
-        trading: "Active",
-        sponsored: "No",
-        image:
-          "https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTJ8fG1hZ2ljaWFufGVufDB8fDB8fHww",
-      },
-    ],
-  };
-
-  const handleSearch = (e) => {
-    e.preventDefault();
-  };
-
-  const clearSearch = () => setSearchValue("");
-
-  const handleCategoryChange = (cat) => {
-    setSelectedCategory(cat);
-    setShowCategoryDropdown(false);
-  };
-
+  // click-outside to close dropdown
   useEffect(() => {
-    const handleClickOutside = (e) => {
-      if (dropdownRef.current && !dropdownRef.current.contains(e.target)) {
-        setShowCategoryDropdown(false);
+    const onDocClick = (e) => {
+      if (!dropdownRef.current) return;
+      if (!dropdownRef.current.contains(e.target)) {
+        dispatch({ type: "CLOSE_DROPDOWN" });
       }
     };
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => document.removeEventListener("mousedown", handleClickOutside);
+    document.addEventListener("mousedown", onDocClick);
+    return () => document.removeEventListener("mousedown", onDocClick);
   }, []);
 
-  const sectionRef = useRef(null);
-  const isInView = useInView(sectionRef, { once: true, amount: 0.1 });
-  const controls = useAnimation();
+  // handlers
+  const onSearchChange = useCallback((e) => {
+    dispatch({ type: "SET_SEARCH", payload: e.target.value });
+  }, []);
+  const clearSearch = useCallback(() => dispatch({ type: "CLEAR_SEARCH" }), []);
+  const toggleDropdown = useCallback(
+    () => dispatch({ type: "TOGGLE_DROPDOWN" }),
+    []
+  );
+  const selectCategory = useCallback(
+    (c) => dispatch({ type: "SET_CATEGORY", payload: c }),
+    []
+  );
 
-  useEffect(() => {
-    if (isInView) controls.start("visible");
-  }, [isInView, controls]);
+  // useDeferredValue to keep UI responsive while typing
+  const deferredSearch = useDeferredValue(search);
 
-  const fadeInUpVariant = {
-    hidden: { opacity: 0, y: 20 },
-    visible: { opacity: 1, y: 0, transition: { duration: 0.6 } },
-  };
+  // predicates
+  const matchesCategory = useCallback(
+    (u) => {
+      if (!category) return true; // show all by default
+      const cats = userCategories(u).map(normalize);
+      return cats.includes(normalize(category));
+    },
+    [category]
+  );
 
-  const tableRowVariant = {
-    hidden: { opacity: 0, x: -20 },
-    visible: (i) => ({
-      opacity: 1,
-      x: 0,
-      transition: { duration: 0.6, delay: 0.2 + i * 0.1 },
-    }),
-  };
+  const matchesSearch = useCallback(
+    (u) => {
+      const q = normalize(deferredSearch);
+      if (!q) return true;
 
-  const filteredTalents =
-    talentData[selectedCategory]?.filter((talent) =>
-      [talent.name, talent.fullName, talent.talentName]
-        .join(" ")
-        .toLowerCase()
-        .includes(searchValue.toLowerCase())
-    ) || [];
+      const hay = [
+        u?.name,
+        u?.email,
+        u?.token_brand_name,
+        u?.token_name,
+        ...userCategories(u),
+      ]
+        .filter(Boolean)
+        .join(" ");
+
+      return normalize(hay).includes(q);
+    },
+    [deferredSearch]
+  );
+
+  // filtered list
+  const filtered = useMemo(
+    () => talents.filter(matchesCategory).filter(matchesSearch),
+    [talents, matchesCategory, matchesSearch]
+  );
 
   return (
-    <section className="bg-[#171717] min-h-screen text-white px-4 sm:px-6 lg:px-8 mt-10 lg:mt-16 2xl:mt-20 ">
-      <div className="py-12 2xl:py-16 container mx-auto" ref={sectionRef}>
-        {/* Category + Search */}
+    <section className="bg-[#171717] min-h-screen text-white px-4 sm:px-6 lg:px-8 mt-10 lg:mt-16 2xl:mt-20">
+      <div className="py-12 2xl:py-16 container mx-auto">
+        {/* Top controls */}
         <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-6 mb-10">
-          {/* Category Dropdown */}
+          {/* Category (derived) */}
           <div className="relative w-full md:w-auto" ref={dropdownRef}>
             <button
-              onClick={() => setShowCategoryDropdown(!showCategoryDropdown)}
-              className="flex items-center justify-between w-full md:w-60 px-4 py-3 rounded-lg bg-[#2d2d2d] border border-gray-600 text-white"
+              onClick={toggleDropdown}
+              className="flex items-center justify-between w-full md:w-64 px-4 py-3 rounded-lg bg-[#2d2d2d] border border-gray-600 text-white"
             >
               <span className="flex items-center">
-                {
-                  talentCategories.find((c) => c.name === selectedCategory)
-                    ?.icon
-                }
-                {selectedCategory}
+                {category
+                  ? ICONS[category] ?? <FaUserTie className="mr-2" />
+                  : null}
+                {category || "All categories"}
               </span>
               <FaChevronDown
                 className={`ml-2 transition-transform ${
-                  showCategoryDropdown ? "rotate-180" : ""
+                  dropdownOpen ? "rotate-180" : ""
                 }`}
               />
             </button>
-            {showCategoryDropdown && (
-              <div className="absolute z-50 mt-2 bg-[#2d2d2d] rounded-md w-full md:w-60 border border-gray-700 overflow-hidden">
-                {talentCategories.map((cat) => (
+
+            {dropdownOpen && (
+              <div className="absolute z-50 mt-2 bg-[#2d2d2d] rounded-md w-full md:w-64 border border-gray-700 overflow-hidden max-h-80 overflow-y-auto">
+                {/* “All” – show everything */}
+                <div
+                  onClick={() => selectCategory(null)}
+                  className={`px-4 py-2 cursor-pointer hover:bg-[#3a3a3a] ${
+                    !category ? "text-yellow-400" : ""
+                  }`}
+                >
+                  All categories
+                </div>
+
+                {categories.map((cat) => (
                   <div
-                    key={cat.name}
-                    onClick={() => handleCategoryChange(cat.name)}
+                    key={cat}
+                    onClick={() => selectCategory(cat)}
                     className={`flex items-center gap-2 px-4 py-2 cursor-pointer hover:bg-[#3a3a3a] ${
-                      selectedCategory === cat.name ? "text-yellow-400" : ""
+                      category === cat ? "text-yellow-400" : ""
                     }`}
                   >
-                    {cat.icon}
-                    {cat.name}
+                    {ICONS[cat] ?? <FaUserTie className="mr-2" />}
+                    {cat}
                   </div>
                 ))}
               </div>
             )}
           </div>
 
-          {/* Search Bar */}
-          <form
-            onSubmit={handleSearch}
-            className="relative w-full md:w-[40%] lg:w-[30%]"
-          >
+          {/* Search */}
+          <div className="relative w-full md:w-[40%] lg:w-[30%]">
             <input
-              value={searchValue}
-              onChange={(e) => setSearchValue(e.target.value)}
-              onFocus={() => setIsFocused(true)}
-              onBlur={() => setIsFocused(false)}
-              placeholder={`Search ${selectedCategory.toLowerCase()}...`}
+              value={search}
+              onChange={onSearchChange}
+              placeholder={`Search talents...`}
               className="w-full px-4 py-3 rounded-lg bg-[#2d2d2d] border border-gray-600 placeholder-gray-400 text-white"
             />
-            {searchValue && (
+            {search && (
               <FaTimes
                 className="absolute right-10 top-3 text-gray-400 cursor-pointer"
                 onClick={clearSearch}
               />
             )}
-            <button type="submit">
-              <FaSearch className="absolute right-3 top-3 text-gray-400" />
-            </button>
-          </form>
+            <FaSearch className="absolute right-3 top-3 text-gray-400" />
+          </div>
         </div>
 
-        {/* Title */}
-        <motion.div
-          variants={fadeInUpVariant}
-          initial="hidden"
-          animate={controls}
-          className="text-center mb-6"
-        >
-          <h2 className="text-4xl font-bold text-yellow-400 uppercase">
-            Future {selectedCategory}
+        {/* Heading */}
+        <div className="text-center mb-6">
+          <h2 className="text-3xl font-bold text-yellow-400 uppercase">
+            {category ? `${category} Talents` : "All Talents"}
           </h2>
           <p className="text-gray-400 mt-2">
-            Discover and support rising {selectedCategory.toLowerCase()}!
+            {isLoading
+              ? "Loading talents…"
+              : isError
+              ? error?.data?.message ||
+                error?.error ||
+                "Failed to load talents."
+              : `
+         
+              `}
           </p>
-        </motion.div>
+        </div>
 
         {/* Table */}
         <div className="overflow-x-auto rounded-xl border border-gray-700 shadow-xl">
           <div className="grid grid-cols-5 text-sm font-semibold bg-[#2d2d2d] text-gray-300 py-4 px-6">
-            <div>TALENT TOKEN NAME</div>
-            <div className="text-center">TALENT NAME</div>
-            <div className="text-center">SOCIAL CALCULATION</div>
-            <div className="text-center">TRADING</div>
-            <div className="text-center">SPONSORED</div>
+            <div>TALENT</div>
+            <div className="text-center">EMAIL</div>
+            <div className="text-center">TOKEN BRAND</div>
+            <div className="text-center">CATEGORIES</div>
+            <div className="text-center">CREATED</div>
           </div>
 
-          {filteredTalents.map((talent, i) => (
-            <motion.div
-              key={i}
-              custom={i}
-              variants={tableRowVariant}
-              initial="hidden"
-              animate={controls}
-              className="grid grid-cols-5 items-center py-4 px-6 border-t border-gray-700 hover:bg-[#1f1f1f] transition"
-            >
-              <div className="flex items-center gap-4">
-                <img
-                  src={talent.image}
-                  alt={talent.name}
-                  className="w-10 h-10 rounded-full object-cover border border-gray-600"
-                />
-                <div>
-                  <div className="font-bold">{talent.name}</div>
-                  <div className="text-xs text-gray-400">{talent.fullName}</div>
-                </div>
-              </div>
-              <div className="text-center">{talent.talentName}</div>
-              <div className="text-center font-semibold text-white">
-                {talent.socialCalculation.toLocaleString()}
-              </div>
-              <div className="text-center">
-                <span
-                  className={`px-3 py-1 rounded-full text-xs font-semibold ${
-                    talent.trading === "Active"
-                      ? "bg-green-600/20 text-green-400 border border-green-500/40"
-                      : "bg-red-600/20 text-red-400 border border-red-500/40"
-                  }`}
-                >
-                  {talent.trading}
-                </span>
-              </div>
-              <div className="text-center">
-                <span
-                  className={`px-3 py-1 rounded-full text-xs font-semibold ${
-                    talent.sponsored === "Yes"
-                      ? "bg-yellow-400/20 text-yellow-300 border border-yellow-500/40"
-                      : "bg-gray-500/20 text-gray-300 border border-gray-500/40"
-                  }`}
-                >
-                  {talent.sponsored}
-                </span>
-              </div>
-            </motion.div>
-          ))}
-
-          {filteredTalents.length === 0 && (
-            <div className="text-center py-8 text-gray-500">
-              No matching {selectedCategory.toLowerCase()} found.
+          {isLoading ? (
+            <div className="py-8 text-center text-gray-400">Loading…</div>
+          ) : isError ? (
+            <div className="py-8 text-center text-red-300">
+              {error?.data?.message || error?.error || "Something went wrong."}
             </div>
+          ) : filtered.length === 0 ? (
+            <div className="py-8 text-center text-gray-500">
+              No matching talents found.
+            </div>
+          ) : (
+            filtered.map((u) => {
+              const img = firstImageUrl(u);
+              const cats = userCategories(u);
+              const created = u?.createdAt ? new Date(u.createdAt) : null;
+              return (
+                <div
+                  key={u._id}
+                  className="grid grid-cols-5 items-center py-4 px-6 border-t border-gray-700 hover:bg-[#1f1f1f] transition"
+                >
+                  {/* TALENT */}
+                  <div className="flex items-center gap-4">
+                    {img ? (
+                      <img
+                        src={img}
+                        alt={u.name}
+                        className="w-10 h-10 rounded-full object-cover border border-gray-600"
+                      />
+                    ) : (
+                      <div className="w-10 h-10 rounded-full bg-[#2d2d2d] border border-gray-600 flex items-center justify-center text-sm">
+                        {u?.name?.[0]?.toUpperCase() || "?"}
+                      </div>
+                    )}
+                    <div>
+                      <div className="font-bold">{u?.name || "—"}</div>
+                      <div className="text-xs text-gray-400">
+                        {u?.role || "—"}
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* EMAIL */}
+                  <div className="text-center text-gray-200 text-sm break-all">
+                    {u?.email || "—"}
+                  </div>
+
+                  {/* TOKEN BRAND */}
+                  <div className="text-center text-white text-sm">
+                    {u?.token_brand_name || u?.token_name || "—"}
+                  </div>
+
+                  {/* CATEGORIES */}
+                  <div className="text-center text-gray-200 text-sm">
+                    {cats.length ? cats.join(", ") : "—"}
+                  </div>
+
+                  {/* CREATED */}
+                  <div className="text-center text-gray-300 text-sm">
+                    {created ? created.toLocaleDateString() : "—"}
+                  </div>
+                </div>
+              );
+            })
           )}
         </div>
       </div>
     </section>
   );
-};
-
-export default FutureTalents;
+}
