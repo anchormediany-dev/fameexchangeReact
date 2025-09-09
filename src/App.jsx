@@ -302,7 +302,7 @@ export default function App() {
           </Route>
           {/* future_musicians Page */}
           <Route
-            path="future-musicians"
+            path="future"
             element={
               <MotionPageWrapper>
                 <FutureMusicians />
