@@ -2,13 +2,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
-import {
-  FiUser,
-  FiLogOut,
-  FiHome,
-  // FiChevronDown
-} from "react-icons/fi";
-import { CiLogout } from "react-icons/ci";
+import { FiLogOut } from "react-icons/fi";
 
 export default function ProfileMenu({
   user = { name: "User", avatarUrl: "" },
@@ -22,7 +16,6 @@ export default function ProfileMenu({
   const toggle = () => setOpen((o) => !o);
   const close = () => setOpen(false);
 
-  // Close on outside click / Esc
   useEffect(() => {
     const onDown = (e) => {
       if (
@@ -78,25 +71,18 @@ export default function ProfileMenu({
       >
         {user?.avatarUrl ? (
           <img
-            src={user.avatarUrl}
+            src={user?.avatarUrl}
             alt={user?.name || "User"}
             className="h-4 w-4 rounded-full object-cover ring-2 ring-white/60 dark:ring-white/10"
           />
         ) : (
           <Initial name={user?.name} />
         )}
-
-        {/* <span className="hidden md:block text-sm font-medium text-neutral-700 dark:text-neutral-200">
-          {user?.name || "User"}
-        </span> */}
-
         <motion.span
           animate={{ rotate: open ? 180 : 0 }}
           transition={{ type: "spring", stiffness: 300, damping: 20 }}
           className="text-neutral-500 dark:text-neutral-300"
-        >
-          {/* <FiChevronDown /> */}
-        </motion.span>
+        />
       </motion.button>
 
       {/* Dropdown */}
@@ -112,23 +98,29 @@ export default function ProfileMenu({
             className="absolute right-0 z-50 mt-2 w-64 rounded-2xl border border-white/20 bg-white/90 p-2 shadow-2xl backdrop-blur-xl ring-1 ring-black/5 dark:border-white/10 dark:bg-neutral-900/80"
           >
             {/* Header */}
-            <div className="mb-1 flex  items-center gap-3 rounded-xl px-3 py-3">
+            <div className="mb-1 flex items-center gap-3 rounded-xl px-3 py-3">
               {user?.avatarUrl ? (
                 <img
-                  src={user.avatarUrl}
+                  src={user?.avatarUrl}
                   alt={user?.name || "User"}
                   className="h-10 w-10 rounded-full object-cover ring-2 ring-white/60 dark:ring-white/10"
                 />
               ) : (
                 <Initial name={user?.name} />
               )}
-              <div className="min-w-0">
+
+              {/* Text block can shrink & wrap */}
+              <div className="min-w-0 flex-1">
                 <p className="truncate text-sm font-semibold text-neutral-800 dark:text-neutral-100">
                   {user?.name || "User"}
                 </p>
+
                 {user?.email && (
-                  <p className="text-xs text-neutral-500 dark:text-neutral-400">
-                    {user.email}
+                  <p
+                    className="text-xs font-light text-neutral-500 dark:text-neutral-400 whitespace-normal break-words select-text leading-snug"
+                    title={user?.email}
+                  >
+                    {user?.email}
                   </p>
                 )}
               </div>
@@ -145,7 +137,7 @@ export default function ProfileMenu({
                     className={[
                       "group flex w-full items-center justify-center gap-3 px-3 py-2.5 text-left transition",
                       danger
-                        ? "text-gray-800 hover:bg-red-50  dark:hover:bg-red-500/10"
+                        ? "text-gray-800 hover:bg-red-50 dark:hover:bg-red-500/10"
                         : "text-neutral-700 hover:bg-black/5 dark:text-neutral-200 dark:hover:bg-white/5",
                     ].join(" ")}
                   >
@@ -154,7 +146,7 @@ export default function ProfileMenu({
                         "grid h-4 w-4 place-items-center",
                         danger
                           ? ""
-                          : "bg-white/70  dark:bg-neutral-800/80 dark:ring-white/10",
+                          : "bg-white/70 dark:bg-neutral-800/80 dark:ring-white/10",
                       ].join(" ")}
                     >
                       <Icon className="text-[18px]" />
