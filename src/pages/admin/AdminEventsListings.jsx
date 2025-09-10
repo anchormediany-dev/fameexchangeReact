@@ -9,6 +9,8 @@ import {
 } from "../../app/authApi";
 import { toast } from "react-toastify";
 
+import ConfirmDialog from "../../utils/ConfirmDialog";
+
 const API_BASE = (import.meta.env?.VITE_API_URL || "").replace(/\/$/, "");
 const fallbackLogo =
   "https://images.unsplash.com/photo-1531058020387-3be344556be6?w=500&auto=format&fit=crop&q=60";
@@ -33,29 +35,43 @@ const AdminEventsListings = () => {
   const navigate = useNavigate();
   const { data, isLoading, isFetching, isError, error, refetch } =
     useGetAdminEventsQuery();
-  const [deleteEvent] = useDeleteEventMutation();
+  const [deleteEvent, { isLoading: isDeleting }] = useDeleteEventMutation();
+
   const [pendingId, setPendingId] = useState(null);
+
+  // 🔒 confirmation modal state
+  const [confirmOpen, setConfirmOpen] = useState(false);
+  const [target, setTarget] = useState(null);
 
   const events = data?.data || data?.events?.data || [];
   const empty = !events || events.length === 0;
 
-  const handleDelete = async (ev, eventId, title) => {
-    // ev.stopPropagation();
-    // if (!eventId) return;
+  const askDelete = (ev, event) => {
+    ev?.stopPropagation?.();
+    setTarget(event);
+    setConfirmOpen(true);
+  };
 
-    // const ok = window.confirm(`Delete event "${title || "Untitled"}"?`);
-    // if (!ok) return;
+  const closeConfirm = () => {
+    if (isDeleting) return;
+    setConfirmOpen(false);
+    setTarget(null);
+  };
+
+  const doDelete = async () => {
+    if (!target?._id) return;
+    const id = target._id;
 
     try {
-      setPendingId(eventId);
-      await deleteEvent(eventId).unwrap();
+      setPendingId(id);
+      await deleteEvent(id).unwrap();
       toast.success("Event deleted");
-      // quick refresh for UX (also covered by invalidatesTags)
-      refetch();
+      refetch(); // stay in sync
     } catch (err) {
       toast.error(err?.data?.message || err?.error || "Failed to delete");
     } finally {
       setPendingId(null);
+      closeConfirm();
     }
   };
 
@@ -206,9 +222,8 @@ const AdminEventsListings = () => {
                         </span>
                       </div>
                     </div>
-                    {/* Delete btn (mobile) */}
                     <button
-                      onClick={(ev) => handleDelete(ev, e?._id, e?.title)}
+                      onClick={(ev) => askDelete(ev, e)}
                       className="shrink-0 px-2 py-1 rounded-lg bg-red-500/20 text-red-200 hover:bg-red-500/30 transition flex items-center gap-1"
                     >
                       <FiTrash2 className="w-4 h-4" />
@@ -381,7 +396,7 @@ const AdminEventsListings = () => {
                   {/* Actions */}
                   <td className="p-3" onClick={(ev) => ev.stopPropagation()}>
                     <button
-                      onClick={(ev) => handleDelete(ev, e?._id, e?.title)}
+                      onClick={(ev) => askDelete(ev, e)}
                       disabled={pendingId === e?._id}
                       className="px-2 py-1 rounded-lg bg-red-500/20 text-red-200 hover:bg-red-500/30 transition flex items-center gap-1 disabled:opacity-60"
                       title="Delete event"
@@ -398,6 +413,25 @@ const AdminEventsListings = () => {
           </table>
         </div>
       )}
+
+      {/* ✅ Confirmation dialog */}
+      <ConfirmDialog
+        open={confirmOpen}
+        onClose={closeConfirm}
+        onConfirm={doDelete}
+        pending={isDeleting}
+        variant="danger"
+        title="Delete this event?"
+        // description={
+        //   target
+        //     ? `You’re about to delete “${
+        //         target.title || "Untitled Event"
+        //       }”. This action cannot be undone.`
+        //     : ""
+        // }
+        confirmLabel={isDeleting ? "Deleting…" : "Delete"}
+        cancelLabel="Cancel"
+      />
     </div>
   );
 };
