@@ -1,4 +1,3 @@
-// src/pages/admin/AdminFaq.jsx
 import React, { useEffect, useMemo, useState } from "react";
 import { useForm } from "react-hook-form";
 import { motion } from "framer-motion";
@@ -10,6 +9,7 @@ import {
   useDeleteFaqMutation,
 } from "../../app/authApi";
 import { FiRefreshCcw, FiEdit2, FiTrash2, FiX, FiSave } from "react-icons/fi";
+import ConfirmDialog from "../../utils/ConfirmDialog";
 
 export default function AdminFaq() {
   const { data, isLoading, isError, error, refetch, isFetching } =
@@ -34,12 +34,18 @@ export default function AdminFaq() {
 
   const [editingId, setEditingId] = useState(null);
 
+  // 🔒 confirm modal state
+  const [confirmOpen, setConfirmOpen] = useState(false);
+  const [target, setTarget] = useState(null);
+
   const onSubmit = async (form) => {
     try {
       if (editingId) {
         await updateFaq({ id: editingId, ...form }).unwrap();
+        toast.success("FAQ updated.");
       } else {
         await createFaq(form).unwrap();
+        toast.success("FAQ created.");
       }
       reset({ question: "", answer: "" });
       setEditingId(null);
@@ -60,58 +66,29 @@ export default function AdminFaq() {
     setEditingId(null);
   };
 
-  const onDelete = (id) => {
-    toast(
-      ({ closeToast }) => (
-        <div className="text-sm">
-          <p className="text-white/90">
-            Delete this FAQ? This cannot be undone.
-          </p>
-          <div className="mt-3 flex items-center gap-2">
-            <button
-              onClick={() => {
-                closeToast();
-                toast.promise(deleteFaq(id).unwrap(), {
-                  pending: "Deleting…",
-                  success: {
-                    render({ data }) {
-                      return data?.message || "FAQ deleted successfully.";
-                    },
-                  },
-                  error: {
-                    render({ data }) {
-                      return (
-                        data?.data?.message ||
-                        data?.message ||
-                        data?.error ||
-                        "Failed to delete FAQ."
-                      );
-                    },
-                  },
-                });
-              }}
-              className="px-3 py-1.5 rounded-md bg-red-500/90 text-white hover:bg-red-500"
-            >
-              Delete
-            </button>
+  // 🧾 open confirm for delete
+  const askDelete = (row) => {
+    setTarget(row);
+    setConfirmOpen(true);
+  };
 
-            <button
-              onClick={closeToast}
-              className="px-3 py-1.5 rounded-md bg-white/20 text-white hover:bg-white/30"
-            >
-              Cancel
-            </button>
-          </div>
-        </div>
-      ),
-      {
-        autoClose: false,
-        closeOnClick: false,
-        draggable: false,
-        pauseOnHover: false,
-        position: "top-center",
-      }
-    );
+  const closeConfirm = () => {
+    if (isDeleting) return;
+    setConfirmOpen(false);
+    setTarget(null);
+  };
+
+  const doDelete = async () => {
+    if (!target?._id) return;
+    try {
+      await deleteFaq(target._id).unwrap();
+      toast.success("FAQ deleted.");
+      closeConfirm();
+    } catch (e) {
+      toast.error(
+        e?.data?.message || e?.error || e?.message || "Failed to delete FAQ."
+      );
+    }
   };
 
   const saving = isCreating || isUpdating || isSubmitting;
@@ -154,7 +131,6 @@ export default function AdminFaq() {
         </motion.button>
       </div>
 
-      {/* Create / Update Card */}
       <div className="bg-white/5 border border-white/10 rounded-xl p-4">
         <div className="flex items-center justify-between mb-3">
           <div className="text-white font-semibold">
@@ -210,7 +186,6 @@ export default function AdminFaq() {
             )}
           </div>
 
-          {/* Save / Update buttons */}
           <div className="flex items-center gap-3">
             <motion.button
               type="submit"
@@ -266,12 +241,6 @@ export default function AdminFaq() {
                 <th className="text-left p-3 text-gray-300 font-semibold text-sm">
                   Answer
                 </th>
-                {/* <th className="text-left p-3 text-gray-300 font-semibold text-sm">
-                  Date
-                </th>
-                <th className="text-left p-3 text-gray-300 font-semibold text-sm">
-                  Time
-                </th> */}
                 <th className="text-left p-3 text-gray-300 font-semibold text-sm">
                   Actions
                 </th>
@@ -297,12 +266,6 @@ export default function AdminFaq() {
                       <div className="h-5 w-64 bg-white/10 animate-pulse rounded" />
                     </td>
                     <td className="p-3">
-                      <div className="h-5 w-24 bg-white/10 animate-pulse rounded" />
-                    </td>
-                    <td className="p-3">
-                      <div className="h-5 w-20 bg-white/10 animate-pulse rounded" />
-                    </td>
-                    <td className="p-3">
                       <div className="h-8 w-28 bg-white/10 animate-pulse rounded" />
                     </td>
                   </tr>
@@ -311,7 +274,7 @@ export default function AdminFaq() {
             ) : isError ? (
               <tbody>
                 <tr>
-                  <td colSpan={6} className="p-6 text-center text-red-300">
+                  <td colSpan={4} className="p-6 text-center text-red-300">
                     {error?.data?.error ||
                       error?.data?.message ||
                       error?.error ||
@@ -322,7 +285,7 @@ export default function AdminFaq() {
             ) : rows.length === 0 ? (
               <tbody>
                 <tr>
-                  <td colSpan={6} className="p-6 text-center text-gray-300">
+                  <td colSpan={4} className="p-6 text-center text-gray-300">
                     No FAQs yet.
                   </td>
                 </tr>
@@ -330,9 +293,6 @@ export default function AdminFaq() {
             ) : (
               <tbody>
                 {rows.map((r, idx) => {
-                  const d = r.createdAt ? new Date(r.createdAt) : null;
-                  const date = d ? d.toLocaleDateString() : "—";
-                  const time = d ? d.toLocaleTimeString() : "—";
                   const shortAnswer =
                     r.answer && r.answer.length > 140
                       ? r.answer.slice(0, 140) + "…"
@@ -352,8 +312,6 @@ export default function AdminFaq() {
                       <td className="p-3 text-gray-300 text-sm">
                         {shortAnswer}
                       </td>
-                      {/* <td className="p-3 text-gray-300 text-sm">{date}</td>
-                      <td className="p-3 text-gray-300 text-sm">{time}</td> */}
                       <td className="p-3">
                         <div className="flex items-center gap-2">
                           <button
@@ -367,13 +325,15 @@ export default function AdminFaq() {
                           </button>
                           <button
                             type="button"
-                            onClick={() => onDelete(r._id)}
+                            onClick={() => askDelete(r)} // 👈 open confirm modal
                             disabled={isDeleting}
                             className="inline-flex items-center gap-1 text-xs px-3 py-1.5 rounded-md bg-red-500/20 text-red-200 hover:bg-red-500/30 transition disabled:opacity-60"
                             title="Delete"
                           >
                             <FiTrash2 className="h-3.5 w-3.5" />
-                            {isDeleting ? "Deleting…" : "Delete"}
+                            {isDeleting && target?._id === r._id
+                              ? "Deleting…"
+                              : "Delete"}
                           </button>
                         </div>
                       </td>
@@ -385,6 +345,22 @@ export default function AdminFaq() {
           </table>
         </div>
       </div>
+
+      <ConfirmDialog
+        open={confirmOpen}
+        onClose={closeConfirm}
+        onConfirm={doDelete}
+        pending={isDeleting}
+        variant="danger"
+        title="Delete this FAQ?"
+        // description={
+        //   target
+        //     ? `You’re about to delete “${
+        //         target.question || "this FAQ"
+        //       }”. This action cannot be undone.`
+        //     : ""
+        // }
+      />
     </div>
   );
 }

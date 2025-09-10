@@ -118,7 +118,7 @@ export default function AdminLayout() {
                   }`
                 }
               >
-                Faq
+                FAQ's
               </NavLink>
             </nav>
           </aside>
