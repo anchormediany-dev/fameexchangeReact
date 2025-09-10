@@ -277,18 +277,26 @@ export default function App() {
                   </MotionPageWrapper>
                 }
               />
+              <Route
+                path="add-event"
+                element={
+                  <MotionPageWrapper>
+                    <EventCreateForm />
+                  </MotionPageWrapper>
+                }
+              />
             </Route>
           </Route>
           {/* Create event */}
           <Route element={<ProtectedRoute />}>
-            <Route
+            {/* <Route
               path="add-event"
               element={
                 <MotionPageWrapper>
                   <EventCreateForm />
                 </MotionPageWrapper>
               }
-            />
+            /> */}
           </Route>
           <Route element={<ProtectedRoute />}>
             <Route

@@ -1,15 +1,16 @@
-import React, { useState, useMemo, useEffect } from "react";
+import React, { useState, useMemo, useEffect, useRef } from "react";
 import { FiUpload } from "react-icons/fi";
+import { useNavigate } from "react-router-dom";
 import {
   FaCalendarAlt,
   FaMapMarkerAlt,
   FaLink,
   FaPhone,
+  FaImage,
   FaDollarSign,
   FaPercent,
 } from "react-icons/fa";
 import { IoClose } from "react-icons/io5";
-import { useNavigate } from "react-router-dom";
 import MotionPageWrapper from "../../components/MotionPageWrapper";
 import { toast } from "react-toastify";
 import { useCreateEventMutation } from "../../app/authApi";
@@ -38,8 +39,7 @@ const DiscountCodeInput = ({ value, onChange, onRemove, index }) => (
 
 export default function EventCreateForm() {
   const navigate = useNavigate();
-  const [createEvent, { isLoading }] = useCreateEventMutation();
-
+  const [createEvent, { isLoading, error }] = useCreateEventMutation();
   const [form, setForm] = useState({
     datetime: "",
     title: "",
@@ -66,7 +66,9 @@ export default function EventCreateForm() {
   const [logo, setLogo] = useState(null);
   const [eventCover, setEventCover] = useState(null);
   const [eventImages, setEventImages] = useState([]);
-
+  const logoInputRef = useRef(null);
+  const coverInputRef = useRef(null);
+  const galleryInputRef = useRef(null);
   const logoPreview = useMemo(
     () => (logo ? URL.createObjectURL(logo) : ""),
     [logo]
@@ -106,8 +108,8 @@ export default function EventCreateForm() {
       ...s,
       event_coordinates:
         key === "lat"
-          ? { ...s.event_coordinates, lat: v === "" ? "" : Number(v) }
-          : { ...s.event_coordinates, long: v === "" ? "" : Number(v) },
+          ? { ...s.event_coordinates, lat: Number(v) }
+          : { ...s.event_coordinates, long: Number(v) },
     }));
 
   const handleArrayChange = (idx, v) =>
@@ -126,38 +128,12 @@ export default function EventCreateForm() {
       discount_codes: s.discount_codes.filter((_, i) => i !== idx),
     }));
 
-  // ---- File input handlers (fix first-attempt issue) ----
-  const resetInput = (input) => {
-    try {
-      // Allow re-selecting the same file(s)
-      input.value = "";
-    } catch {}
-  };
-
-  const handleLogoChange = (e) => {
-    const file = e.target.files?.[0] || null;
-    setLogo(file);
-    resetInput(e.target);
-  };
-
-  const handleCoverChange = (e) => {
-    const file = e.target.files?.[0] || null;
-    setEventCover(file);
-    resetInput(e.target);
-  };
-
-  const handleGalleryChange = (e) => {
-    const files = Array.from(e.target.files || []);
-    setEventImages(files);
-    resetInput(e.target);
-  };
-
   const buildFormData = () => {
     const fd = new FormData();
 
     if (logo) fd.append("logo", logo);
     if (eventCover) fd.append("event_cover", eventCover);
-    eventImages.forEach((f) => fd.append("event_images", f)); // same key
+    eventImages.forEach((f) => fd.append("event_images", f)); // same key for all images
 
     Object.entries({
       datetime: form.datetime,
@@ -172,7 +148,7 @@ export default function EventCreateForm() {
       phone: form.phone,
       website: form.website,
       organizername: form.organizername,
-      is_featured: String(form.is_featured),
+      is_featured: String(form.is_featured), // ← stringify boolean
       regular_price: String(form.regular_price ?? ""),
       discount_percent: String(form.discount_percent ?? ""),
       prefrence: form.prefrence,
@@ -186,17 +162,13 @@ export default function EventCreateForm() {
 
   const onSubmit = async (e) => {
     e.preventDefault();
+
     try {
       const formData = buildFormData();
+      const response = await createEvent(formData).unwrap();
 
-      // Debug (optional): verify fields
-      // for (const [k, v] of formData.entries()) {
-      //   console.log(k, v instanceof File ? `${v.name} (${v.type}, ${v.size})` : v);
-      // }
-
-      await createEvent(formData).unwrap();
       toast.success("Event created successfully!");
-
+      // Reset form after successful submission
       setForm({
         datetime: "",
         title: "",
@@ -237,7 +209,7 @@ export default function EventCreateForm() {
 
   return (
     <MotionPageWrapper>
-      <div className="flex relative overflow-hidden">
+      <div className="flex mt-10 lg:mt-16 2xl:mt-20 py-12 2xl:py-16 relative bg-[#171717] overflow-hidden">
         <div className="w-full container flex flex-col z-10">
           <div className="bg-[#222222] p-8 rounded-xl border border-[#333333]">
             <h2 className="text-white custom-heading-two mb-8">
@@ -391,16 +363,14 @@ export default function EventCreateForm() {
                     />
                   </div>
                 </div>
-
                 {/* Talent multi select */}
                 <div className="md:col-span-4">
                   <TalentMultiSelect
-                    value={form.talent}
+                    value={form.talent} // array of IDs
                     onChange={(ids) => setForm((s) => ({ ...s, talent: ids }))}
                     placeholder="Search and select talents..."
                   />
                 </div>
-
                 {/* Featured */}
                 <div className="flex items-center space-x-3 col-span-full">
                   <input
@@ -409,7 +379,7 @@ export default function EventCreateForm() {
                     name="is_featured"
                     checked={form.is_featured}
                     onChange={handleBoolean}
-                    className="rounded h-5 w-5"
+                    className="rounded  h-5 w-5"
                   />
                   <label
                     htmlFor="is_featured"
@@ -678,22 +648,28 @@ export default function EventCreateForm() {
 
                 {/* Logo */}
                 <div>
-                  <label
-                    htmlFor="eventLogoInput"
-                    className="flex flex-col items-center justify-center w-full h-20 border-2 border-dashed border-gray-600 rounded-xl cursor-pointer hover:border-[#a38b41] transition-all duration-300 group"
+                  {/* <label className="block text-white text-sm font-medium mb-2">
+                    Event Logo
+                  </label> */}
+
+                  <div
+                    onClick={() => logoInputRef.current?.click()}
+                    // className="flex flex-col items-center justify-center w-full h-32 border-2 border-dashed border-[#333333] rounded-lg cursor-pointer hover:border-[#F3BA18] bg-[#2d2d2d]"
                   >
-                    <FiUpload className="w-4 h-4 text-gray-400 group-hover:text-[#a38b41] mb-1 transition-colors" />
-                    <span className="text-xs text-gray-400 group-hover:text-[#a38b41] transition-colors text-center">
-                      Event Logo
-                    </span>
-                  </label>
-                  <input
-                    id="eventLogoInput"
-                    type="file"
-                    accept="image/*"
-                    onChange={handleLogoChange}
-                    className="sr-only"
-                  />
+                    <label className="flex flex-col items-center justify-center w-full h-20 border-2 border-dashed border-gray-600 rounded-xl cursor-pointer hover:border-[#a38b41] transition-all duration-300 group">
+                      <FiUpload className="w-4 h-4 text-gray-400 group-hover:text-[#a38b41] mb-1 transition-colors" />
+                      <span className="text-xs text-gray-400 group-hover:text-[#a38b41] transition-colors text-center">
+                        Event Logo
+                      </span>
+                      <input
+                        ref={logoInputRef}
+                        type="file"
+                        accept="image/*"
+                        onChange={(e) => setLogo(e.target.files?.[0] || null)}
+                        className="hidden"
+                      />{" "}
+                    </label>
+                  </div>
 
                   {logoPreview && (
                     <div className="mt-2 flex items-center gap-2">
@@ -715,22 +691,31 @@ export default function EventCreateForm() {
 
                 {/* Event Cover */}
                 <div>
-                  <label
-                    htmlFor="eventCoverInput"
-                    className="flex flex-col items-center justify-center w-full h-20 border-2 border-dashed border-gray-600 rounded-xl cursor-pointer hover:border-[#a38b41] transition-all duration-300 group"
+                  {/* <label className="block text-white text-sm font-medium mb-2">
+                    Event Cover
+                  </label> */}
+
+                  <div
+                    onClick={() => coverInputRef.current?.click()}
+                    // className="flex flex-col items-center justify-center w-full h-32 border-2 border-dashed border-[#333333] rounded-lg cursor-pointer hover:border-[#F3BA18] bg-[#2d2d2d]"
                   >
-                    <FiUpload className="w-4 h-4 text-gray-400 group-hover:text-[#a38b41] mb-1 transition-colors" />
-                    <span className="text-xs text-gray-400 group-hover:text-[#a38b41] transition-colors text-center">
-                      Event Cover
-                    </span>
-                  </label>
-                  <input
-                    id="eventCoverInput"
-                    type="file"
-                    accept="image/*"
-                    onChange={handleCoverChange}
-                    className="sr-only"
-                  />
+                    <label className="flex flex-col items-center justify-center w-full h-20 border-2 border-dashed border-gray-600 rounded-xl cursor-pointer hover:border-[#a38b41] transition-all duration-300 group">
+                      <FiUpload className="w-4 h-4 text-gray-400 group-hover:text-[#a38b41] mb-1 transition-colors" />
+                      <span className="text-xs text-gray-400 group-hover:text-[#a38b41] transition-colors text-center">
+                        Event Cover
+                      </span>
+
+                      <input
+                        ref={coverInputRef}
+                        type="file"
+                        accept="image/*"
+                        onChange={(e) =>
+                          setEventCover(e.target.files?.[0] || null)
+                        }
+                        className="hidden"
+                      />
+                    </label>
+                  </div>
 
                   {coverPreview && (
                     <div className="mt-2 flex items-center gap-2">
@@ -752,23 +737,41 @@ export default function EventCreateForm() {
 
                 {/* Event Gallery */}
                 <div className="md:col-span-2">
-                  <label
-                    htmlFor="eventGalleryInput"
-                    className="flex flex-col items-center justify-center w-full h-20 border-2 border-dashed border-gray-600 rounded-xl cursor-pointer hover:border-[#a38b41] transition-all duration-300 group"
+                  {/* <label className="block text-white text-sm font-medium mb-2">
+                    Event Gallery
+                  </label> */}
+
+                  <div
+                    onClick={() => galleryInputRef.current?.click()}
+                    // className="flex flex-col items-center justify-center w-full h-32 border-2 border-dashed border-[#333333] rounded-lg cursor-pointer hover:border-[#F3BA18] bg-[#2d2d2d]"
                   >
-                    <FiUpload className="w-4 h-4 text-gray-400 group-hover:text-[#a38b41] mb-1 transition-colors" />
-                    <span className="text-xs text-gray-400 group-hover:text-[#a38b41] transition-colors text-center">
-                      Event Gallery
-                    </span>
-                  </label>
-                  <input
-                    id="eventGalleryInput"
-                    type="file"
-                    accept="image/*"
-                    multiple
-                    onChange={handleGalleryChange}
-                    className="sr-only"
-                  />
+                    {/* <div className="flex flex-col items-center justify-center pt-5 pb-6">
+                      <FaImage className="w-8 h-8 mb-4 text-gray-400" />
+                      <p className="mb-2 text-sm text-gray-400">
+                        <span className="font-semibold">Click to upload</span>
+                      </p>
+                      <p className="text-xs text-gray-400">
+                        PNG, JPG (up to 10 images)
+                      </p>
+                    </div> */}
+                    <label className="flex flex-col items-center justify-center w-full h-20 border-2 border-dashed border-gray-600 rounded-xl cursor-pointer hover:border-[#a38b41] transition-all duration-300 group">
+                      <FiUpload className="w-4 h-4 text-gray-400 group-hover:text-[#a38b41] mb-1 transition-colors" />
+                      <span className="text-xs text-gray-400 group-hover:text-[#a38b41] transition-colors text-center">
+                        Event Gallery
+                      </span>
+
+                      <input
+                        ref={galleryInputRef}
+                        type="file"
+                        accept="image/*"
+                        multiple
+                        onChange={(e) =>
+                          setEventImages(Array.from(e.target.files || []))
+                        }
+                        className="hidden"
+                      />
+                    </label>
+                  </div>
 
                   {imagePreviews?.length > 0 && (
                     <div className="mt-2">
@@ -783,8 +786,8 @@ export default function EventCreateForm() {
                             <button
                               type="button"
                               onClick={() =>
-                                setEventImages((prev) =>
-                                  prev.filter((_, idx) => idx !== i)
+                                setEventImages(
+                                  eventImages.filter((_, idx) => idx !== i)
                                 )
                               }
                               className="absolute -top-2 -right-2 bg-red-500 text-white rounded-full w-5 h-5 flex items-center justify-center text-xs"

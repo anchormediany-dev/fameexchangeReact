@@ -48,7 +48,7 @@ export default function AdminLayout() {
               >
                 Contact
               </NavLink>
-               <NavLink
+              <NavLink
                 to="/admin/faq"
                 className={({ isActive }) =>
                   `px-3 py-2 rounded-md ${
@@ -58,7 +58,19 @@ export default function AdminLayout() {
                   }`
                 }
               >
-               Faq
+                Faq
+              </NavLink>
+              <NavLink
+                to="/admin/add-event"
+                className={({ isActive }) =>
+                  `px-3 py-2 rounded-md ${
+                    isActive
+                      ? "bg-white/10 text-white"
+                      : "text-gray-300 hover:bg-white/5"
+                  }`
+                }
+              >
+                Add Event
               </NavLink>
             </nav>
           </aside>
