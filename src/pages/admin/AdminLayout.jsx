@@ -24,6 +24,31 @@ export default function AdminLayout() {
               >
                 Dashboard
               </NavLink>
+
+              <NavLink
+                to="/admin/events"
+                className={({ isActive }) =>
+                  `px-3 py-2 rounded-md ${
+                    isActive
+                      ? "bg-white/10 text-white"
+                      : "text-gray-300 hover:bg-white/5"
+                  }`
+                }
+              >
+                Event
+              </NavLink>
+              <NavLink
+                to="/admin/inverse"
+                className={({ isActive }) =>
+                  `px-3 py-2 rounded-md ${
+                    isActive
+                      ? "bg-white/10 text-white"
+                      : "text-gray-300 hover:bg-white/5"
+                  }`
+                }
+              >
+                Inverse
+              </NavLink>
               <NavLink
                 to="/admin/newsletter"
                 className={({ isActive }) =>
@@ -59,19 +84,6 @@ export default function AdminLayout() {
                 }
               >
                 Faq
-              </NavLink>
-
-              <NavLink
-                to="/admin/events"
-                className={({ isActive }) =>
-                  `px-3 py-2 rounded-md ${
-                    isActive
-                      ? "bg-white/10 text-white"
-                      : "text-gray-300 hover:bg-white/5"
-                  }`
-                }
-              >
-                Event
               </NavLink>
             </nav>
           </aside>

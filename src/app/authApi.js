@@ -231,7 +231,9 @@ export const authApi = api.injectEndpoints({
       query: () => "/fan-request/get-all",
       providesTags: ["FanRequests"],
     }),
-
+    getAllFanRequestsForAdmin: builder.query({
+      query: () => "/fan-request",
+    }),
     talentConfirmationRequest: builder.mutation({
       query: (data) => ({
         url: "/talent-confirmation/",
@@ -364,6 +366,7 @@ export const {
   useFanInverseRequestMutation,
   useTalentConfirmationRequestMutation,
   useGetAllFanRequestsQuery,
+  useGetAllFanRequestsForAdminQuery,
   // Talent confirmation
   useRescheduleTalentConfirmationMutation,
   // Get all talents
