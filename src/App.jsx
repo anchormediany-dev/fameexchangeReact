@@ -56,6 +56,7 @@ import AdminFaq from "./pages/admin/AdminFaq";
 import AdminEventsListings from "./pages/admin/AdminEventsListings";
 import AdminInverse from "./pages/admin/AdminInverse";
 import AdminUsers from "./pages/admin/AdminUsers";
+import AdminReviews from "./pages/admin/reviews/AdminReviews";
 
 // Simple Black Header Component
 const SimpleHeader = () => {
@@ -269,6 +270,14 @@ export default function App() {
                 element={
                   <MotionPageWrapper>
                     <AdminContact />
+                  </MotionPageWrapper>
+                }
+              />
+              <Route
+                path="reviews"
+                element={
+                  <MotionPageWrapper>
+                    <AdminReviews />
                   </MotionPageWrapper>
                 }
               />

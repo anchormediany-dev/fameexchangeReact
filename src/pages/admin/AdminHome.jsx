@@ -1,7 +1,7 @@
 // pages/AdminDashboard.jsx
 import React, { useMemo, useState } from "react";
 import { useGetAdminDashboardQuery } from "../../app/authApi";
-
+import { useNavigate } from "react-router-dom";
 const API_BASE = (import.meta.env?.VITE_API_URL || "").replace(/\/$/, "");
 
 const toAbsolute = (pathOrUrl) => {
@@ -30,12 +30,15 @@ const Section = ({ title, right }) => (
   </div>
 );
 
-const StatCard = ({ label, value, sub }) => (
-  <div className="bg-white/5 border border-white/10 rounded-2xl p-4 hover:bg-white/10 transition-colors">
+const StatCard = ({ label, value, onClick }) => (
+  <button
+    type="button"
+    onClick={onClick}
+    className="bg-white/5 border border-white/10 rounded-2xl p-4 hover:bg-white/10 transition-colors cursor-pointer w-full text-left focus:outline-none focus:ring-2 focus:ring-white/30"
+  >
     <div className="text-sm text-gray-300">{label}</div>
     <div className="text-2xl font-bold text-white mt-1">{value}</div>
-    {sub ? <div className="text-xs text-gray-400 mt-1">{sub}</div> : null}
-  </div>
+  </button>
 );
 
 const SkeletonStat = () => (
@@ -110,7 +113,7 @@ const Avatar = ({
 const AdminDashboard = () => {
   const { data, isLoading, isFetching, isError, error, refetch } =
     useGetAdminDashboardQuery();
-
+  const navigate = useNavigate();
   // response envelope: { success, data: {...} }
   const payload = data?.data || {};
   const users = payload?.users || [];
@@ -214,112 +217,14 @@ const AdminDashboard = () => {
             <StatCard
               label="Total Users"
               value={totalUsers}
-              sub={`${activeCount} active / ${inactiveCount} inactive`}
+              onClick={() => navigate("/admin/users")}
             />
-            <StatCard label="Talent" value={talents} />
-            <StatCard label="Fans" value={fans} />
-            <StatCard label="Total Events" value={totalEvents} />
+            <StatCard
+              label="Total Events"
+              value={totalEvents}
+              onClick={() => navigate("/admin/events")}
+            />
           </>
-        )}
-      </div>
-
-      {/* Users snapshot */}
-      <Section title="Users" />
-      <div className="overflow-x-auto mb-6">
-        {isBusy ? (
-          <table className="w-full">
-            <thead>
-              <tr className="border-b border-white/10">
-                {["Name", "Email", "Role", "Active", "Joined"].map((h) => (
-                  <th
-                    key={h}
-                    className="text-left p-3 text-gray-300 font-semibold text-sm"
-                  >
-                    {h}
-                  </th>
-                ))}
-              </tr>
-            </thead>
-            <tbody>
-              {[...Array(5)].map((_, i) => (
-                <tr key={i} className="border-b border-white/5">
-                  {[...Array(5)].map((__, j) => (
-                    <td key={j} className="p-3">
-                      <div className="h-4 w-full max-w-[180px] bg-white/10 rounded animate-pulse" />
-                    </td>
-                  ))}
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        ) : users.length === 0 ? (
-          <div className="text-center text-gray-300 py-6">No users found.</div>
-        ) : (
-          <table className="w-full">
-            <thead>
-              <tr className="border-b border-white/10">
-                <th className="text-left p-3 text-gray-300 font-semibold text-sm">
-                  Name
-                </th>
-                <th className="text-left p-3 text-gray-300 font-semibold text-sm">
-                  Email
-                </th>
-                <th className="text-left p-3 text-gray-300 font-semibold text-sm">
-                  Role
-                </th>
-                <th className="text-left p-3 text-gray-300 font-semibold text-sm">
-                  Active
-                </th>
-                <th className="text-left p-3 text-gray-300 font-semibold text-sm">
-                  Joined
-                </th>
-              </tr>
-            </thead>
-            <tbody>
-              {users.slice(0, 8).map((u) => {
-                const raw = u?.images?.[0]?.fileUrl;
-                const avatarSrc = raw ? toAbsolute(raw) : "";
-                const displayName = u?.full_name || u?.name || u?.email || "—";
-                return (
-                  <tr
-                    key={u?._id}
-                    className="border-b border-white/5 hover:bg-white/5 transition-colors"
-                  >
-                    <td className="p-3">
-                      <div className="flex items-center gap-3">
-                        <Avatar src={avatarSrc} name={displayName} size="md" />
-                        <span className="text-white text-sm font-medium">
-                          {displayName}
-                        </span>
-                      </div>
-                    </td>
-                    <td className="p-3">
-                      <span className="text-gray-300 text-sm">
-                        {u?.email || "—"}
-                      </span>
-                    </td>
-                    <td className="p-3">
-                      <Chip>{u?.role || "—"}</Chip>
-                    </td>
-                    <td className="p-3">
-                      <span
-                        className={`text-sm ${
-                          u?.is_active ? "text-green-400" : "text-red-400"
-                        }`}
-                      >
-                        {u?.is_active ? "Active" : "Inactive"}
-                      </span>
-                    </td>
-                    <td className="p-3">
-                      <span className="text-gray-300 text-sm">
-                        {formatDate(u?.createdAt || u?.created_at)}
-                      </span>
-                    </td>
-                  </tr>
-                );
-              })}
-            </tbody>
-          </table>
         )}
       </div>
 
@@ -443,8 +348,8 @@ const AdminDashboard = () => {
                 <th className="text-left p-3 text-gray-300 font-semibold text-sm">
                   Time
                 </th>
-                 <th className="text-left p-3 text-gray-300 font-semibold text-sm">
-               Length
+                <th className="text-left p-3 text-gray-300 font-semibold text-sm">
+                  Length
                 </th>
                 <th className="text-left p-3 text-gray-300 font-semibold text-sm">
                   Access Type

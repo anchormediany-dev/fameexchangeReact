@@ -61,6 +61,18 @@ export default function AdminLayout() {
                 Inverse
               </NavLink>
               <NavLink
+                to="/admin/reviews"
+                className={({ isActive }) =>
+                  `px-3 py-2 rounded-md ${
+                    isActive
+                      ? "bg-white/10 text-white"
+                      : "text-gray-300 hover:bg-white/5"
+                  }`
+                }
+              >
+                Add Reviews
+              </NavLink>
+              <NavLink
                 to="/admin/newsletter"
                 className={({ isActive }) =>
                   `px-3 py-2 rounded-md ${

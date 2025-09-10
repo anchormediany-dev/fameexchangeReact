@@ -305,6 +305,16 @@ export const authApi = api.injectEndpoints({
       }),
       providesTags: ["Reviews"],
     }),
+
+    createReview: builder.mutation({
+      query: (body) => ({
+        url: "/reviews",
+        method: "POST",
+        body,
+      }),
+      invalidatesTags: ["Reviews"],
+    }),
+
     // friends API's
     deleteFriends: builder.mutation({
       query: (data) => ({
@@ -394,6 +404,7 @@ export const {
   useGetTeamQuery,
   // Customer reviews
   useGetReviewsQuery,
+  useCreateReviewMutation,
   // contact us
   useContactUsMutation,
   useGetContactsQuery,
