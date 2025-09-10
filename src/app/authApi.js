@@ -314,6 +314,10 @@ export const authApi = api.injectEndpoints({
       }),
       invalidatesTags: ["Reviews"],
     }),
+    deleteReview: builder.mutation({
+      query: (id) => ({ url: `/reviews/${id}`, method: "DELETE" }),
+      invalidatesTags: ["Reviews"],
+    }),
 
     // friends API's
     deleteFriends: builder.mutation({
@@ -405,6 +409,7 @@ export const {
   // Customer reviews
   useGetReviewsQuery,
   useCreateReviewMutation,
+  useDeleteReviewMutation,
   // contact us
   useContactUsMutation,
   useGetContactsQuery,

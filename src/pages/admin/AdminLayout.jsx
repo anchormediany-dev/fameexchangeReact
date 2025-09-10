@@ -70,7 +70,7 @@ export default function AdminLayout() {
                   }`
                 }
               >
-                Add Reviews
+                Customer Reviews
               </NavLink>
               <NavLink
                 to="/admin/newsletter"

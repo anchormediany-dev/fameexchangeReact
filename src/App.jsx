@@ -57,6 +57,7 @@ import AdminEventsListings from "./pages/admin/AdminEventsListings";
 import AdminInverse from "./pages/admin/AdminInverse";
 import AdminUsers from "./pages/admin/AdminUsers";
 import AdminReviews from "./pages/admin/reviews/AdminReviews";
+import AddAdminReviews from "./pages/admin/reviews/AddAdminReviews";
 
 // Simple Black Header Component
 const SimpleHeader = () => {
@@ -310,6 +311,14 @@ export default function App() {
                 element={
                   <MotionPageWrapper>
                     <EventCreateForm />
+                  </MotionPageWrapper>
+                }
+              />
+              <Route
+                path="add-review"
+                element={
+                  <MotionPageWrapper>
+                    <AddAdminReviews />
                   </MotionPageWrapper>
                 }
               />

@@ -1,10 +1,11 @@
 import React, { useState } from "react";
 import { useCreateReviewMutation } from "../../../app/authApi";
 import { toast } from "react-toastify";
-
+import { useNavigate } from "react-router-dom";
 const statuses = ["approved", "pending", "rejected"];
 
 const AddAdminReviews = () => {
+  const navigate = useNavigate();
   const [form, setForm] = useState({
     customerName: "",
     starsRating: "",
@@ -55,6 +56,7 @@ const AddAdminReviews = () => {
       }).unwrap();
 
       toast.success("Review submitted!");
+      navigate("/admin/reviews");
       setForm({
         customerName: "",
         starsRating: "",
