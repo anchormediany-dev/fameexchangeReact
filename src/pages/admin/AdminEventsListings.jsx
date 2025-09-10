@@ -1,20 +1,21 @@
-import React from "react";
-import { FiGlobe, FiPhone, FiExternalLink } from "react-icons/fi";
+// components/admin/AdminEventsListings.jsx
+import React, { useState } from "react";
+import { FiGlobe, FiPhone, FiExternalLink, FiTrash2 } from "react-icons/fi";
 import { IoLocationOutline } from "react-icons/io5";
 import { useNavigate } from "react-router-dom";
-import { useGetAdminEventsQuery } from "../../app/authApi";
+import {
+  useGetAdminEventsQuery,
+  useDeleteEventMutation,
+} from "../../app/authApi";
+import { toast } from "react-toastify";
 
 const API_BASE = (import.meta.env?.VITE_API_URL || "").replace(/\/$/, "");
 const fallbackLogo =
   "https://images.unsplash.com/photo-1531058020387-3be344556be6?w=500&auto=format&fit=crop&q=60";
 
-// Ensure we open valid links even if API returns domain only
-const normalizeUrl = (u) => {
-  if (!u) return "#";
-  return /^https?:\/\//i.test(u) ? u : `https://${u}`;
-};
+const normalizeUrl = (u) =>
+  !u ? "#" : /^https?:\/\//i.test(u) ? u : `https://${u}`;
 
-// Join relative "uploads/events/..." paths to your API base
 const toAbsolute = (p) => {
   if (!p) return "";
   if (/^https?:\/\//i.test(p)) return p;
@@ -22,7 +23,6 @@ const toAbsolute = (p) => {
   return p.startsWith("/") ? `${API_BASE}${p}` : `${API_BASE}/${p}`;
 };
 
-// Pick best available image for a row/card
 const getThumb = (e) =>
   toAbsolute(e.logo) ||
   toAbsolute(e.event_cover) ||
@@ -30,15 +30,34 @@ const getThumb = (e) =>
   fallbackLogo;
 
 const AdminEventsListings = () => {
+  const navigate = useNavigate();
   const { data, isLoading, isFetching, isError, error, refetch } =
     useGetAdminEventsQuery();
+  const [deleteEvent] = useDeleteEventMutation();
+  const [pendingId, setPendingId] = useState(null);
 
-  // Your API shape: { success, data: [ ... ] }
-  // (keep a fallback for older shape just in case)
   const events = data?.data || data?.events?.data || [];
   const empty = !events || events.length === 0;
 
-  const navigate = useNavigate();
+  const handleDelete = async (ev, eventId, title) => {
+    // ev.stopPropagation();
+    // if (!eventId) return;
+
+    // const ok = window.confirm(`Delete event "${title || "Untitled"}"?`);
+    // if (!ok) return;
+
+    try {
+      setPendingId(eventId);
+      await deleteEvent(eventId).unwrap();
+      toast.success("Event deleted");
+      // quick refresh for UX (also covered by invalidatesTags)
+      refetch();
+    } catch (err) {
+      toast.error(err?.data?.message || err?.error || "Failed to delete");
+    } finally {
+      setPendingId(null);
+    }
+  };
 
   return (
     <div className="bg-white/5 backdrop-blur-xl border border-white/10 rounded-2xl shadow-xl p-3 md:p-4">
@@ -65,7 +84,6 @@ const AdminEventsListings = () => {
       {/* Loading */}
       {(isLoading || isFetching) && (
         <div className="space-y-3">
-          {/* Mobile skeleton */}
           <div className="block sm:hidden space-y-3">
             {[...Array(3)].map((_, i) => (
               <div
@@ -89,8 +107,6 @@ const AdminEventsListings = () => {
               </div>
             ))}
           </div>
-
-          {/* Desktop skeleton */}
           <div className="hidden sm:block">
             <div className="w-full overflow-x-auto">
               <table className="w-full">
@@ -103,6 +119,7 @@ const AdminEventsListings = () => {
                       "Address",
                       "Phone",
                       "Website",
+                      "Actions",
                     ].map((h) => (
                       <th
                         key={h}
@@ -116,7 +133,7 @@ const AdminEventsListings = () => {
                 <tbody>
                   {[...Array(5)].map((_, i) => (
                     <tr key={`d-skel-${i}`} className="border-b border-white/5">
-                      {[...Array(6)].map((__, j) => (
+                      {[...Array(7)].map((__, j) => (
                         <td key={j} className="p-3">
                           <div className="h-4 w-full max-w-[180px] bg-white/10 rounded animate-pulse" />
                         </td>
@@ -172,21 +189,33 @@ const AdminEventsListings = () => {
                   {index + 1}
                 </span>
                 <div className="flex-1 space-y-2">
-                  <div className="flex items-center space-x-3">
-                    <img
-                      src={getThumb(e)}
-                      alt={e?.title || "event"}
-                      className="w-10 h-10 rounded-xl object-cover border-2 border-white/10"
-                      onError={(ev) => (ev.currentTarget.src = fallbackLogo)}
-                    />
-                    <div>
-                      <h4 className="font-semibold text-white text-sm">
-                        {e?.title || "Untitled Event"}
-                      </h4>
-                      <span className="text-xs text-gray-400 capitalize">
-                        {e?.category || "—"}
-                      </span>
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center space-x-3">
+                      <img
+                        src={getThumb(e)}
+                        alt={e?.title || "event"}
+                        className="w-10 h-10 rounded-xl object-cover border-2 border-white/10"
+                        onError={(ev) => (ev.currentTarget.src = fallbackLogo)}
+                      />
+                      <div>
+                        <h4 className="font-semibold text-white text-sm">
+                          {e?.title || "Untitled Event"}
+                        </h4>
+                        <span className="text-xs text-gray-400 capitalize">
+                          {e?.category || "—"}
+                        </span>
+                      </div>
                     </div>
+                    {/* Delete btn (mobile) */}
+                    <button
+                      onClick={(ev) => handleDelete(ev, e?._id, e?.title)}
+                      className="shrink-0 px-2 py-1 rounded-lg bg-red-500/20 text-red-200 hover:bg-red-500/30 transition flex items-center gap-1"
+                    >
+                      <FiTrash2 className="w-4 h-4" />
+                      <span className="text-xs">
+                        {pendingId === e?._id ? "Deleting..." : "Delete"}
+                      </span>
+                    </button>
                   </div>
 
                   <div className="flex items-center space-x-2">
@@ -253,6 +282,9 @@ const AdminEventsListings = () => {
                 </th>
                 <th className="text-left p-3 text-gray-300 font-semibold text-sm">
                   Website
+                </th>
+                <th className="text-left p-3 text-gray-300 font-semibold text-sm">
+                  Actions
                 </th>
               </tr>
             </thead>
@@ -344,6 +376,21 @@ const AdminEventsListings = () => {
                     ) : (
                       <span className="text-gray-400 text-sm">—</span>
                     )}
+                  </td>
+
+                  {/* Actions */}
+                  <td className="p-3" onClick={(ev) => ev.stopPropagation()}>
+                    <button
+                      onClick={(ev) => handleDelete(ev, e?._id, e?.title)}
+                      disabled={pendingId === e?._id}
+                      className="px-2 py-1 rounded-lg bg-red-500/20 text-red-200 hover:bg-red-500/30 transition flex items-center gap-1 disabled:opacity-60"
+                      title="Delete event"
+                    >
+                      <FiTrash2 className="w-4 h-4" />
+                      <span className="text-xs">
+                        {pendingId === e?._id ? "Deleting..." : "Delete"}
+                      </span>
+                    </button>
                   </td>
                 </tr>
               ))}
