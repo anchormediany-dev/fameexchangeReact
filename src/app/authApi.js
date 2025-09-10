@@ -105,6 +105,10 @@ export const authApi = api.injectEndpoints({
       }),
       invalidatesTags: ["Users"],
     }),
+    getAdminDashboard: builder.query({
+      query: () => "/user/admin-dashboard",
+      providesTags: ["AdminDashboard"],
+    }),
     // Newsletter
     newsletterSubscribe: builder.mutation({
       query: (data) => ({
@@ -368,6 +372,7 @@ export const {
   useAddFriendMutation,
   useGetUsersQuery,
   useDeleteUserMutation,
+  useGetAdminDashboardQuery,
 
   // Notifications
   useGetNotificationsQuery,
