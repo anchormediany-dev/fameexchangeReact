@@ -58,6 +58,8 @@ import AdminInverse from "./pages/admin/AdminInverse";
 import AdminUsers from "./pages/admin/AdminUsers";
 import AdminReviews from "./pages/admin/reviews/AdminReviews";
 import AddAdminReviews from "./pages/admin/reviews/AddAdminReviews";
+import AdminTeams from "./pages/admin/teams/AdminTeams";
+import AddAdminTeam from "./pages/admin/teams/AddAdminTeam";
 
 // Simple Black Header Component
 const SimpleHeader = () => {
@@ -319,6 +321,22 @@ export default function App() {
                 element={
                   <MotionPageWrapper>
                     <AddAdminReviews />
+                  </MotionPageWrapper>
+                }
+              />
+              <Route
+                path="teams"
+                element={
+                  <MotionPageWrapper>
+                    <AdminTeams />
+                  </MotionPageWrapper>
+                }
+              />
+              <Route
+                path="add-team"
+                element={
+                  <MotionPageWrapper>
+                    <AddAdminTeam />
                   </MotionPageWrapper>
                 }
               />

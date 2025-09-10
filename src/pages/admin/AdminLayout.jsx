@@ -73,6 +73,18 @@ export default function AdminLayout() {
                 Customer Reviews
               </NavLink>
               <NavLink
+                to="/admin/teams"
+                className={({ isActive }) =>
+                  `px-3 py-2 rounded-md ${
+                    isActive
+                      ? "bg-white/10 text-white"
+                      : "text-gray-300 hover:bg-white/5"
+                  }`
+                }
+              >
+                Teams
+              </NavLink>
+              <NavLink
                 to="/admin/newsletter"
                 className={({ isActive }) =>
                   `px-3 py-2 rounded-md ${

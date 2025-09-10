@@ -297,6 +297,21 @@ export const authApi = api.injectEndpoints({
       }),
       providesTags: ["Team"],
     }),
+    createTeam: builder.mutation({
+      query: (formData) => ({
+        url: "/team/",
+        method: "POST",
+        body: formData,
+      }),
+      invalidatesTags: ["Team"],
+    }),
+    deleteTeam: builder.mutation({
+      query: (id) => ({
+        url: `/team/${id}`,
+        method: "DELETE",
+      }),
+      invalidatesTags: ["Team"],
+    }),
     // Customer reviews API
     getReviews: builder.query({
       query: () => ({
@@ -406,6 +421,8 @@ export const {
   useGetNewslettersQuery,
   // Our team
   useGetTeamQuery,
+  useCreateTeamMutation,
+  useDeleteTeamMutation,
   // Customer reviews
   useGetReviewsQuery,
   useCreateReviewMutation,
