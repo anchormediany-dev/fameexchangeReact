@@ -213,15 +213,15 @@ const AdminReviews = () => {
         pending={isDeleting}
         variant="danger"
         title="Delete review?"
-        description={
-          target
-            ? `You’re about to delete the review by ${
-                target.customerName || "Anonymous"
-              }. This action cannot be undone.`
-            : ""
-        }
+        // description={
+        //   target
+        //     ? `You’re about to delete the review by ${
+        //         target.customerName || "Anonymous"
+        //       }. This action cannot be undone.`
+        //     : ""
+        // }
       >
-        {target?.reviewDetail}
+        {/* {target?.reviewDetail} */}
       </ConfirmDialog>
     </div>
   );
