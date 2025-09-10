@@ -98,6 +98,13 @@ export const authApi = api.injectEndpoints({
       query: (id) => `/user/get/${id}`,
       providesTags: (result, error, id) => [{ type: "User", id }],
     }),
+    deleteUser: builder.mutation({
+      query: (id) => ({
+        url: `/user/delete/${id}`,
+        method: "DELETE",
+      }),
+      invalidatesTags: ["Users"],
+    }),
     // Newsletter
     newsletterSubscribe: builder.mutation({
       query: (data) => ({
@@ -319,6 +326,7 @@ export const authApi = api.injectEndpoints({
 
     getUsers: builder.query({
       query: () => "/user/getusers",
+      providesTags: ["Users"],
     }),
   }),
 });
@@ -359,6 +367,8 @@ export const {
   useGetAllFriendsQuery,
   useAddFriendMutation,
   useGetUsersQuery,
+  useDeleteUserMutation,
+
   // Notifications
   useGetNotificationsQuery,
   // Confirmed talent requests

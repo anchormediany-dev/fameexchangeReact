@@ -55,6 +55,7 @@ import TalentCompactList from "./pages/TalentsListForFan";
 import AdminFaq from "./pages/admin/AdminFaq";
 import AdminEventsListings from "./pages/admin/AdminEventsListings";
 import AdminInverse from "./pages/admin/AdminInverse";
+import AdminUsers from "./pages/admin/AdminUsers";
 
 // Simple Black Header Component
 const SimpleHeader = () => {
@@ -284,6 +285,14 @@ export default function App() {
                 element={
                   <MotionPageWrapper>
                     <AdminInverse />
+                  </MotionPageWrapper>
+                }
+              />
+              <Route
+                path="users"
+                element={
+                  <MotionPageWrapper>
+                    <AdminUsers />
                   </MotionPageWrapper>
                 }
               />

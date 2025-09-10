@@ -24,7 +24,18 @@ export default function AdminLayout() {
               >
                 Dashboard
               </NavLink>
-
+              <NavLink
+                to="/admin/users"
+                className={({ isActive }) =>
+                  `px-3 py-2 rounded-md ${
+                    isActive
+                      ? "bg-white/10 text-white"
+                      : "text-gray-300 hover:bg-white/5"
+                  }`
+                }
+              >
+                Users
+              </NavLink>
               <NavLink
                 to="/admin/events"
                 className={({ isActive }) =>
@@ -35,7 +46,7 @@ export default function AdminLayout() {
                   }`
                 }
               >
-                Event
+                Events
               </NavLink>
               <NavLink
                 to="/admin/inverse"
