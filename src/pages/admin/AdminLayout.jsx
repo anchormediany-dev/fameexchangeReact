@@ -60,8 +60,9 @@ export default function AdminLayout() {
               >
                 Faq
               </NavLink>
+
               <NavLink
-                to="/admin/add-event"
+                to="/admin/events"
                 className={({ isActive }) =>
                   `px-3 py-2 rounded-md ${
                     isActive
@@ -70,7 +71,7 @@ export default function AdminLayout() {
                   }`
                 }
               >
-                Add Event
+                Event
               </NavLink>
             </nav>
           </aside>

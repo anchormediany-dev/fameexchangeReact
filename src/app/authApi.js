@@ -154,6 +154,9 @@ export const authApi = api.injectEndpoints({
       query: () => "/events",
       providesTags: ["Events"],
     }),
+    getAdminEvents: builder.query({
+      query: () => "/events",
+    }),
     createEvent: builder.mutation({
       query: (formData) => ({
         url: "/events",
@@ -336,6 +339,7 @@ export const {
   useDeleteFaqMutation,
   // Events
   useGetEventsQuery,
+  useGetAdminEventsQuery,
   useCreateEventMutation,
   useGetEventByIdQuery,
   useSearchEventsQuery,

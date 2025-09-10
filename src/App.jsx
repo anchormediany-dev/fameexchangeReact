@@ -53,6 +53,7 @@ import ResetPassword from "./components/ResetPassword";
 import TalentProfileForFan from "./pages/talent_profile_fan/TalentProfileForFan";
 import TalentCompactList from "./pages/TalentsListForFan";
 import AdminFaq from "./pages/admin/AdminFaq";
+import AdminEventsListings from "./pages/admin/AdminEventsListings";
 
 // Simple Black Header Component
 const SimpleHeader = () => {
@@ -282,6 +283,14 @@ export default function App() {
                 element={
                   <MotionPageWrapper>
                     <EventCreateForm />
+                  </MotionPageWrapper>
+                }
+              />
+              <Route
+                path="events"
+                element={
+                  <MotionPageWrapper>
+                    <AdminEventsListings />
                   </MotionPageWrapper>
                 }
               />
