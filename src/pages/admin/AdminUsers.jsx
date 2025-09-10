@@ -3,6 +3,8 @@ import React, { useEffect, useMemo, useState } from "react";
 import { FiTrash2 } from "react-icons/fi";
 import { useGetUsersQuery, useDeleteUserMutation } from "../../app/authApi";
 
+import ConfirmDialog from "../../utils/ConfirmDialog";
+
 const fallbackAvatar =
   "https://images.unsplash.com/photo-1502685104226-ee32379fefbe?w=200&auto=format&fit=crop&q=60";
 
@@ -45,13 +47,17 @@ const UserRowAvatar = ({ src, name }) => (
 const AdminUsers = () => {
   const { data, isLoading, isFetching, isError, error, refetch } =
     useGetUsersQuery();
-  const [deleteUser] = useDeleteUserMutation();
+  const [deleteUser, { isLoading: isDeleting }] = useDeleteUserMutation();
 
   // Local copy so UI feels instant on delete
   const [usersLocal, setUsersLocal] = useState([]);
   const [activeTab, setActiveTab] = useState("TALENT"); // default tab
   const [pendingId, setPendingId] = useState(null);
   const [deleteError, setDeleteError] = useState(null);
+
+  // 🔒 confirmation modal state
+  const [confirmOpen, setConfirmOpen] = useState(false);
+  const [target, setTarget] = useState(null);
 
   useEffect(() => {
     if (data?.users) setUsersLocal(data.users);
@@ -69,31 +75,41 @@ const AdminUsers = () => {
   const current = activeTab === "TALENT" ? talents : fans;
   const empty = !current || current.length === 0;
 
-  const removeUser = async (e, id) => {
-    e.stopPropagation?.();
-    if (!id) return;
-
+  // Open confirm dialog
+  const askDelete = (e, user) => {
+    e?.stopPropagation?.();
+    setTarget(user);
+    setConfirmOpen(true);
     setDeleteError(null);
-    setPendingId(id);
+  };
 
-    // Optimistic: remove from local list immediately
-    setUsersLocal((prev) => prev.filter((u) => u._id !== id));
+  const closeConfirm = () => {
+    if (isDeleting) return;
+    setConfirmOpen(false);
+    setTarget(null);
+  };
+
+  // Perform delete after confirmation
+  const doDelete = async () => {
+    if (!target?._id) return;
+    const id = target._id;
+
+    setPendingId(id);
+    setDeleteError(null);
 
     try {
       await deleteUser(id).unwrap();
-      // Also refetch to stay perfectly in sync with server
+      // Optimistic local removal
+      setUsersLocal((prev) => prev.filter((u) => u._id !== id));
+      // Optional full sync:
       refetch();
     } catch (err) {
-      // Revert UI on failure (optional: you can also refetch)
-      setUsersLocal((prev) => {
-        const serverUsers = data?.users || [];
-        return serverUsers; // snap back to server copy
-      });
       setDeleteError(
         err?.data?.message || err?.error || "Failed to delete user"
       );
     } finally {
       setPendingId(null);
+      closeConfirm();
     }
   };
 
@@ -276,7 +292,7 @@ const AdminUsers = () => {
                     </div>
 
                     <button
-                      onClick={(e) => removeUser(e, u?._id)}
+                      onClick={(e) => askDelete(e, u)}
                       disabled={pendingId === u?._id}
                       className="shrink-0 px-2 py-1 rounded-lg bg-red-500/20 text-red-200 hover:bg-red-500/30 transition flex items-center gap-1 disabled:opacity-60"
                     >
@@ -376,7 +392,7 @@ const AdminUsers = () => {
 
                   <td className="p-3">
                     <button
-                      onClick={(e) => removeUser(e, u?._id)}
+                      onClick={(e) => askDelete(e, u)}
                       disabled={pendingId === u?._id}
                       className="px-2 py-1 rounded-lg bg-red-500/20 text-red-200 hover:bg-red-500/30 transition flex items-center gap-1 disabled:opacity-60"
                       title="Remove user"
@@ -393,6 +409,25 @@ const AdminUsers = () => {
           </table>
         </div>
       )}
+
+      {/* ✅ Confirmation dialog */}
+      <ConfirmDialog
+        open={confirmOpen}
+        onClose={closeConfirm}
+        onConfirm={doDelete}
+        pending={isDeleting}
+        variant="danger"
+        title="Delete this user?"
+        // description={
+        //   target
+        //     ? `You’re about to delete “${
+        //         target.name || target.email || "this user"
+        //       }”. This action cannot be undone.`
+        //     : ""
+        // }
+        confirmLabel={isDeleting ? "Deleting…" : "Delete"}
+        cancelLabel="Cancel"
+      />
     </div>
   );
 };
