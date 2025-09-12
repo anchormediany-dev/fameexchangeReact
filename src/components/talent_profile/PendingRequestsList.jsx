@@ -30,11 +30,15 @@ const PendingRequestsList = () => {
 
   const [confirmTalentRequest, { isLoading: isConfirming }] =
     useTalentConfirmationRequestMutation();
-
+  const userLocalData = JSON.parse(localStorage.getItem("user")); 
+  const isRoleTalent = userLocalData?.role === "TALENT";
+  const isRoleFan = userLocalData?.role === "FAN";
+  const isRoleAdmin = userLocalData?.role === "ADMIN";
+  const roleId = userLocalData?.id;
   const handleReschedule = (request) => {
     const selectedFanName = request?.fanName || "Unknown Fan";
     const selectedRequestId = request?.id;
-    navigate("/inverse#reschedule-section", {
+    navigate(`/inverse/${roleId}#reschedule-section`, {
       state: { selectedRequestId, selectedFanName },
     });
   };

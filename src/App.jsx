@@ -458,6 +458,14 @@ export default function App() {
           </Route>
           {/* Inverse Page */}
           <Route
+            path="inverse/:id"
+            element={
+              <MotionPageWrapper>
+                <InversePage />
+              </MotionPageWrapper>
+            }
+          />
+          <Route
             path="inverse"
             element={
               <MotionPageWrapper>
