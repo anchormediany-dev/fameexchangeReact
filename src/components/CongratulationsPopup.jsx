@@ -62,7 +62,7 @@ const CongratulationsPopup = ({ onClose }) => {
             className="bg-gray heading-500-23 text-center hover:bg-primary hover:text-white w-full hover:scale-105 text-primary  px-6 py-3 rounded-md transition-all duration-300 group cursor-pointer"
           >
             {/* Go To Dashboard */}
-            Go To Login
+            Go To Profile
           </button>
         </motion.div>
       </motion.div>
