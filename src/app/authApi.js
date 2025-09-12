@@ -38,6 +38,13 @@ export const authApi = api.injectEndpoints({
         body: data,
       }),
     }),
+    getNetworth: builder.query({
+      query: () => ({
+        url: "/networth/",
+        method: "GET",
+      }),
+      providesTags: ["Networth"],
+    }),
     resendOtp: builder.mutation({
       query: (data) => ({
         url: "/auth/resend-otp",
@@ -371,6 +378,7 @@ export const {
   useVerifyIdMutation,
   useResendOtpMutation,
   useNetworthCalculateMutation,
+  useGetNetworthQuery,
   useForgetPasswordMutation,
   useResetPasswordMutation,
   // Sessions

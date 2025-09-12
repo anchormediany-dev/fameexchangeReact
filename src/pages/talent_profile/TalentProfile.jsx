@@ -5,15 +5,19 @@ import {
   FaChartLine,
   FaWallet,
   FaTimes,
+  FaCoins,
+  FaSpinner,
 } from "react-icons/fa";
 import ImageSwitch from "./ImageSwitch";
-
+import { useNavigate } from "react-router-dom";
 import PortfolioDashboard from "../../components/PortfolioDashboard";
 import CreateSession from "../../components/talent/create_session/CreateSession";
 import PendingRequests from "../../components/talent/create_session/PendingRequests";
 import {
   useGetUserByIdQuery,
   useUpdateMyProfileMutation,
+  useNetworthCalculateMutation,
+  useGetNetworthQuery,
 } from "../../app/authApi";
 import EventsSection from "../../components/talent_profile/EventsSection";
 import FriendsSection from "../../components/talent_profile/FriendsSection";
@@ -21,9 +25,69 @@ import Notifications from "../../components/talent_profile/Notifications";
 import TalentLinks from "../../components/talent_profile/TalentLinks";
 import ConfirmedRequestsCalendar from "../../components/talent_profile/ConfirmedRequestsCalendar";
 import PendingRequestsList from "../../components/talent_profile/PendingRequestsList";
+import { toast } from "react-toastify";
+import CalculatingNetworthPopup from "../../components/CalculatingNetworthPopup";
 const TalentProfile = () => {
-  const userLocalData = JSON.parse(localStorage.getItem("user")); // replace "user" with your actual key
+  const userLocalData = JSON.parse(localStorage.getItem("user"));
   const userId = userLocalData?.id;
+  const navigate = useNavigate();
+  const {
+    data,
+    isLoading: isLoadingGetNetworth,
+    isError: isErrorGetNetworth,
+    refetch,
+  } = useGetNetworthQuery();
+  const [saveNetworth, { isLoading: isSavingNetworth }] =
+    useNetworthCalculateMutation();
+  const [statusMsg, setStatusMsg] = useState("");
+  const [builtPayload, setBuiltPayload] = useState(null);
+  const buildPayloadFromGet = (root) => {
+    // root is either { success, data: {...} } or already the inner data
+    const d = root?.data ?? root; // normalize
+    const sm = d?.socialMedia || {};
+
+    return {
+      fullName: d?.fullName || "",
+      tokenBrandName: d?.tokenBrand?.brandName || "",
+      tokenName: d?.tokenBrand?.tokenName || "",
+      youtube: sm?.youtube?.url || "",
+      twitter: sm?.twitter?.url || "",
+      instagram: sm?.instagram?.url || "",
+      facebook: sm?.facebook?.url || "",
+      tiktok: sm?.tiktok?.url || "",
+      snapchat: sm?.snapchat?.url || "",
+    };
+  };
+  const handleGetNetworthAndSave = async () => {
+    try {
+      setStatusMsg("Calculating networth…");
+      const res = await refetch();
+      const source = res?.data ?? data;
+      if (!source?.data) {
+        throw new Error(
+          res?.error?.data?.message ||
+            res?.error?.error ||
+            "No networth data returned"
+        );
+      }
+
+      const payload = buildPayloadFromGet(source);
+      setBuiltPayload(payload);
+
+      setStatusMsg("Saving networth…");
+      const saved = await saveNetworth(payload).unwrap();
+      setStatusMsg("Networth saved successfully.");
+      console.log("Saved networth:", saved);
+      toast.success("Networth ReCalculated Successfully");
+    } catch (err) {
+      toast.error("Error while Recalculating networth", err);
+      setStatusMsg(
+        typeof err === "string"
+          ? err
+          : err?.data?.message || err?.message || "Failed to save networth."
+      );
+    }
+  };
   const [searchValue, setSearchValue] = useState("");
   const [isFocused, setIsFocused] = useState(false);
   const [updateMyProfile, { isLoading: isUpdating, error: isUpdatingError }] =
@@ -168,31 +232,25 @@ const TalentProfile = () => {
 
           {/* Ultra Modern Action Buttons */}
           <div className="flex-1 grid grid-cols-1 sm:grid-cols-3 gap-4 xl:gap-6">
-            {/* Recalculate Button */}
+            {/* Get & Save Networth */}
             <button
-              onClick={handleRecalculate}
-              className="group relative overflow-hidden h-14 sm:h-16 bg-white/5 hover:bg-white/10 border border-white/10 hover:border-[#a38b41]/30 rounded-2xl transition-all duration-500 hover:shadow-2xl hover:shadow-[#a38b41]/15 hover:-translate-y-1 active:scale-95"
+              onClick={handleGetNetworthAndSave}
+              disabled={isLoadingGetNetworth || isSavingNetworth}
+              className="group relative overflow-hidden h-14 sm:h-16 bg-white/5 hover:bg-white/10 border border-white/10 hover:border-[#a38b41]/30 rounded-2xl transition-all duration-500 hover:shadow-2xl hover:shadow-[#a38b41]/15 hover:-translate-y-1 active:scale-95 disabled:opacity-60 disabled:cursor-not-allowed"
             >
-              {/* Animated background */}
               <div className="absolute inset-0 bg-gradient-to-br from-[#a38b41]/5 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-
-              <div className="relative  cursor-pointer z-10 flex items-center justify-center gap-3 h-full px-3 sm:px-6">
-                {/* Icon Container */}
+              <div className="relative cursor-pointer z-10 flex items-center justify-center gap-3 h-full px-3 sm:px-6">
                 <div className="relative">
                   <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-xl bg-gradient-to-br from-[#a38b41]/20 to-[#a38b41]/5 border border-[#a38b41]/20 flex items-center justify-center group-hover:scale-110 group-hover:rotate-3 transition-all duration-500">
                     <FaCalculator className="text-[#a38b41] text-sm sm:text-base" />
                   </div>
-                  {/* Glow effect */}
                   <div className="absolute inset-0 w-9 h-9 sm:w-10 sm:h-10 rounded-xl bg-[#a38b41]/20 opacity-0 group-hover:opacity-100 blur-lg transition-opacity duration-500" />
                 </div>
 
-                {/* Title */}
-                <h3 className="text-white text-sm md:text-base font-medium   group-hover:text-[#a38b41] transition-colors duration-300 leading-tight">
+                <h3 className="text-white text-sm md:text-base font-medium group-hover:text-[#a38b41] transition-colors duration-300 leading-tight">
                   Recalculate Value
                 </h3>
               </div>
-
-              {/* Border glow effect */}
               <div className="absolute inset-0 rounded-2xl bg-gradient-to-br from-[#a38b41]/20 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 -z-10 blur-sm" />
             </button>
 
@@ -263,7 +321,6 @@ const TalentProfile = () => {
           </div>
         </div>
       </div>
-
       {/* <PendingRequests /> */}
       <div className="container mx-auto flex flex-col lg:flex-row gap-6 px-4 py-8 h-full min-h-[400px]">
         <ConfirmedRequestsCalendar />
@@ -280,7 +337,8 @@ const TalentProfile = () => {
         <div className="rounded-xl p-6 bg-[#1f1f1f]">
           <PortfolioDashboard />
         </div>
-      </section>
+      </section>{" "}
+      {isSavingNetworth && <CalculatingNetworthPopup />}
     </section>
   );
 };
