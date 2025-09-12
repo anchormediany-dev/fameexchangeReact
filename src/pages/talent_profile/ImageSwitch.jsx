@@ -385,28 +385,7 @@ const ImageUploadSwitcher = ({ userData, updateMyProfile }) => {
         ))} */}
         {/* Static Actions (no map) */}
         <div className="flex flex-col justify-center gap-5">
-          {/* Sponsor Talent */}
-          <div className="bg-white/5 flex justify-center items-center backdrop-blur-xl border border-white/10 rounded-2xl shadow-xl p-4 md:p-6 hover:shadow-[#a38b41]/20 hover:border-[#a38b41]/50 transition-all h-full">
-            <div className="flex flex-col items-center text-center">
-              <div className="w-10 h-10 md:w-12 md:h-12 rounded-full bg-[#a38b41]/20 flex items-center justify-center mb-3">
-                <FaHeart className="text-[#a38b41] text-lg md:text-xl" />
-              </div>
-              <h3 className="text-lg font-semibold text-white mb-1">
-                Sponsor Talent
-              </h3>
-              <p className="text-gray-300 text-xs md:text-sm mb-3">
-                Support this talent&apos;s career development
-              </p>
-              <button
-                type="button"
-                onClick={() => handleActionClick("Sponsor Talent")}
-                className="w-full cursor-pointer bg-[#a38b41] hover:bg-[#8a7637] text-white font-medium py-2 rounded-lg transition-colors text-sm md:text-base"
-                aria-label="Sponsor Talent"
-              >
-                Sponsor Talent
-              </button>
-            </div>
-          </div>
+        
 
           {/* Manage Availability */}
           <div className="bg-white/5 flex justify-center items-center backdrop-blur-xl border border-white/10 rounded-2xl shadow-xl p-4 md:p-6 hover:shadow-[#a38b41]/20 hover:border-[#a38b41]/50 transition-all h-full">

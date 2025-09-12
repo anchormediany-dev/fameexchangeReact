@@ -36,7 +36,15 @@ const TalentLinksFan = ({ userData }) => {
                   <span className="text-yellow-400">
                     <FaYoutube />
                   </span>
-                  <span>Youtube</span>
+                  <span>Youtube:</span>
+                  <a
+                    href={userData?.data?.profile?.social_youtube}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-blue-400 hover:text-blue-300 transition duration-200 whitespace-nowrap"
+                  >
+                    {userData?.data?.profile?.social_youtube}
+                  </a>
                 </div>
                 <a
                   href={userData?.data?.profile?.social_youtube}
@@ -54,6 +62,14 @@ const TalentLinksFan = ({ userData }) => {
                     <FaFacebook />
                   </span>
                   <span>Facebook</span>
+                  <a
+                    href={userData?.data?.profile?.social_facebook}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-blue-400 hover:text-blue-300 transition duration-200 whitespace-nowrap"
+                  >
+                    {userData?.data?.profile?.social_facebook}
+                  </a>
                 </div>
                 <a
                   href={userData?.data?.profile?.social_facebook}
@@ -70,7 +86,15 @@ const TalentLinksFan = ({ userData }) => {
                   <span className="text-yellow-400">
                     <FaInstagram />
                   </span>
-                  <span>Instagram</span>
+                  <span>Instagram</span>{" "}
+                  <a
+                    href={userData?.data?.profile?.social_insta}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-blue-400 hover:text-blue-300 transition duration-200 whitespace-nowrap"
+                  >
+                    {userData?.data?.profile?.social_insta}
+                  </a>
                 </div>
                 <a
                   href={userData?.data?.profile?.social_insta}
@@ -87,7 +111,15 @@ const TalentLinksFan = ({ userData }) => {
                   <span className="text-yellow-400">
                     <FaTiktok />
                   </span>
-                  <span>Tiktok</span>
+                  <span>Tiktok</span>{" "}
+                  <a
+                    href={userData?.data?.profile?.social_tiktok}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-blue-400 hover:text-blue-300 transition duration-200 whitespace-nowrap"
+                  >
+                    {userData?.data?.profile?.social_tiktok}
+                  </a>
                 </div>
                 <a
                   href={userData?.data?.profile?.social_tiktok}
@@ -104,7 +136,15 @@ const TalentLinksFan = ({ userData }) => {
                   <span className="text-yellow-400">
                     <FaSnapchatGhost />
                   </span>
-                  <span>Snapchat</span>
+                  <span>Snapchat</span>{" "}
+                  <a
+                    href={userData?.data?.profile?.social_snap}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-blue-400 hover:text-blue-300 transition duration-200 whitespace-nowrap"
+                  >
+                    {userData?.data?.profile?.social_snap}
+                  </a>
                 </div>
                 <a
                   href={userData?.data?.profile?.social_snap}
@@ -122,6 +162,14 @@ const TalentLinksFan = ({ userData }) => {
                     <FaYoutube />
                   </span>
                   <span>Twitter</span>
+                  <a
+                    href={userData?.data?.profile?.social_twitter}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-blue-400 hover:text-blue-300 transition duration-200 whitespace-nowrap"
+                  >
+                    {userData?.data?.profile?.social_twitter}
+                  </a>
                 </div>
                 <a
                   href={userData?.data?.profile?.social_twitter}

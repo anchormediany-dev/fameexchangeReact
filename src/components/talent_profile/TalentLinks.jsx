@@ -54,18 +54,26 @@ const TalentLinks = ({ userData: user }) => {
         </h2>
       </div>
       <div className="space-y-4">
-        {socialLinks.length > 0 ? (
-          socialLinks.map((link, index) => (
+        {socialLinks?.length > 0 ? (
+          socialLinks?.map((link, index) => (
             <div
               key={index}
               className="flex justify-between items-center space-x-3 bg-[#2a2a2a] text-sm text-gray-300 p-4 rounded-md border border-gray-600 hover:bg-[#333] transition duration-200"
             >
               <div className="flex items-center space-x-4">
-                <span className="text-yellow-400">{link.icon}</span>
-                <span>{link.name}</span>
+                <span className="text-yellow-400">{link?.icon}</span>
+                <span>{link?.name}:</span>
+                <a
+                  href={link?.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-blue-400 hover:text-blue-300 transition duration-200 whitespace-nowrap"
+                >
+                  {link?.url}
+                </a>
               </div>
               <a
-                href={link.url}
+                href={link?.url}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="text-blue-400 hover:text-blue-300 transition duration-200 whitespace-nowrap"
