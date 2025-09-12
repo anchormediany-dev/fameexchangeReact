@@ -437,14 +437,16 @@ export default function App() {
               </MotionPageWrapper>
             }
           />
-          <Route
-            path="networth-calculator"
-            element={
-              <MotionPageWrapper>
-                <NetworthCalculator />
-              </MotionPageWrapper>
-            }
-          />
+          <Route element={<ProtectedRoute />}>
+            <Route
+              path="networth-calculator"
+              element={
+                <MotionPageWrapper>
+                  <NetworthCalculator />
+                </MotionPageWrapper>
+              }
+            />
+          </Route>
           {/* Login page Page */}
           <Route element={<GuestOnlyRoute />}>
             <Route
