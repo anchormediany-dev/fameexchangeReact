@@ -160,34 +160,6 @@ const TalentProfileForFan = () => {
 
           {/* Ultra Modern Action Buttons */}
           <div className="flex-1 grid grid-cols-1 sm:grid-cols-3 gap-4 xl:gap-6">
-            {/* Recalculate Button */}
-            <button
-              onClick={handleRecalculate}
-              className="group relative overflow-hidden h-14 sm:h-16 bg-white/5 hover:bg-white/10 border border-white/10 hover:border-[#a38b41]/30 rounded-2xl transition-all duration-500 hover:shadow-2xl hover:shadow-[#a38b41]/15 hover:-translate-y-1 active:scale-95"
-            >
-              {/* Animated background */}
-              <div className="absolute inset-0 bg-gradient-to-br from-[#a38b41]/5 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-
-              <div className="relative  cursor-pointer z-10 flex items-center justify-center gap-3 h-full px-3 sm:px-6">
-                {/* Icon Container */}
-                <div className="relative">
-                  <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-xl bg-gradient-to-br from-[#a38b41]/20 to-[#a38b41]/5 border border-[#a38b41]/20 flex items-center justify-center group-hover:scale-110 group-hover:rotate-3 transition-all duration-500">
-                    <FaCalculator className="text-[#a38b41] text-sm sm:text-base" />
-                  </div>
-                  {/* Glow effect */}
-                  <div className="absolute inset-0 w-9 h-9 sm:w-10 sm:h-10 rounded-xl bg-[#a38b41]/20 opacity-0 group-hover:opacity-100 blur-lg transition-opacity duration-500" />
-                </div>
-
-                {/* Title */}
-                <h3 className="text-white text-sm md:text-base font-medium   group-hover:text-[#a38b41] transition-colors duration-300 leading-tight">
-                  Recalculate Value
-                </h3>
-              </div>
-
-              {/* Border glow effect */}
-              <div className="absolute inset-0 rounded-2xl bg-gradient-to-br from-[#a38b41]/20 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 -z-10 blur-sm" />
-            </button>
-
             {/* Trading Chart Button */}
             <button
               onClick={handleTradingChart}
