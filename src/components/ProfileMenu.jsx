@@ -1,8 +1,8 @@
 // components/ProfileMenu.jsx
 import React, { useEffect, useRef, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
-import { FiLogOut } from "react-icons/fi";
+import { FiLink, FiLogOut } from "react-icons/fi";
 
 export default function ProfileMenu({
   user = { name: "User", avatarUrl: "" },
@@ -12,6 +12,11 @@ export default function ProfileMenu({
   const [open, setOpen] = useState(false);
   const btnRef = useRef(null);
   const panelRef = useRef(null);
+  const userLocalData = JSON.parse(localStorage.getItem("user")); // replace "user" with your actual key
+  const isRoleTalent = userLocalData?.role === "TALENT";
+  const isRoleFan = userLocalData?.role === "FAN";
+  const isRoleAdmin = userLocalData?.role === "ADMIN";
+  const roleId = userLocalData?.id;
 
   const toggle = () => setOpen((o) => !o);
   const close = () => setOpen(false);
@@ -127,7 +132,36 @@ export default function ProfileMenu({
             </div>
 
             <div className="my-1 h-px bg-gradient-to-r from-transparent via-black/10 to-transparent dark:via-white/10" />
-
+            {isRoleTalent && (
+              <Link
+                to={`/talent/${roleId}`}
+                className="flex gap-3 justify-center items-center"
+              >
+                {" "}
+                <FiLink className="text-[18px]" />
+                <span className="text-sm font-medium">Open Profile</span>
+              </Link>
+            )}
+            {isRoleAdmin && (
+              <Link
+                to={`/admin`}
+                className="flex gap-3 justify-center items-center"
+              >
+                {" "}
+                <FiLink className="text-[18px]" />
+                <span className="text-sm font-medium">Open Admin</span>
+              </Link>
+            )}
+            {/* {isRoleFan && (
+              <Link
+                to={`/talent/${roleId}`}
+                className="flex gap-3 justify-center items-center"
+              >
+                {" "}
+                <FiLink className="text-[18px]" />
+                <span className="text-sm font-medium">Open Profile</span>
+              </Link>
+            )} */}
             {/* Items */}
             <ul className="space-y-1">
               {items.map(({ label, icon: Icon, action, danger }) => (

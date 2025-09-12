@@ -236,7 +236,7 @@ export default function App() {
           {/* Talent Profile Page */}
           <Route element={<ProtectedRoute />}>
             <Route
-              path="talent-profile"
+              path="talent/:id"
               element={
                 <MotionPageWrapper>
                   <TalentProfile />

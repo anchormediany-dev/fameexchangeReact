@@ -64,7 +64,7 @@ const LoginPage = () => {
       const roleToPath = {
         ADMIN: "/admin",
         FAN: "/",
-        TALENT: "/talent-profile",
+        TALENT: `/talent/${decodedUser?.id}`,
       };
       const nextPath = isAdmin
         ? "/admin"
