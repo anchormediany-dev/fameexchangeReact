@@ -46,10 +46,14 @@ const VerifyId = () => {
       toast.success(
         response?.message || "ID verification submitted successfully."
       );
-      navigate("/networth-calculator");
+      setTimeout(() => {
+        navigate("/networth-calculator");
+      }, 500);
     } catch (error) {
       console.error("Upload failed:", error);
-      toast.error(error?.data?.error || "Failed to upload ID.");
+      toast.error(
+        error?.data?.message || error?.message || "Failed to upload ID."
+      );
     }
   };
 
