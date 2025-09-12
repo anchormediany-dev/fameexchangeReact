@@ -27,6 +27,7 @@ import ConfirmedRequestsCalendar from "../../components/talent_profile/Confirmed
 import PendingRequestsList from "../../components/talent_profile/PendingRequestsList";
 import { toast } from "react-toastify";
 import CalculatingNetworthPopup from "../../components/CalculatingNetworthPopup";
+import CalculatingNetworthPopupUser from "./CalculatingNetworthPopupUser";
 const TalentProfile = () => {
   const userLocalData = JSON.parse(localStorage.getItem("user"));
   const userId = userLocalData?.id;
@@ -41,9 +42,11 @@ const TalentProfile = () => {
     useNetworthCalculateMutation();
   const [statusMsg, setStatusMsg] = useState("");
   const [builtPayload, setBuiltPayload] = useState(null);
+  const [showNetworthPopup, setShowNetworthPopup] = useState(false);
+  const [networthResult, setNetworthResult] = useState(null);
+  const [networthError, setNetworthError] = useState(null);
   const buildPayloadFromGet = (root) => {
-    // root is either { success, data: {...} } or already the inner data
-    const d = root?.data ?? root; // normalize
+    const d = root?.data ?? root;
     const sm = d?.socialMedia || {};
 
     return {
@@ -61,6 +64,10 @@ const TalentProfile = () => {
   const handleGetNetworthAndSave = async () => {
     try {
       setStatusMsg("Calculating networth…");
+      setStatusMsg("Calculating networth…");
+      setShowNetworthPopup(true);
+      setNetworthResult(null);
+      setNetworthError(null);
       const res = await refetch();
       const source = res?.data ?? data;
       if (!source?.data) {
@@ -79,6 +86,7 @@ const TalentProfile = () => {
       setStatusMsg("Networth saved successfully.");
       console.log("Saved networth:", saved);
       toast.success("Networth ReCalculated Successfully");
+      setNetworthResult(saved?.data ?? saved);
     } catch (err) {
       toast.error("Error while Recalculating networth", err);
       setStatusMsg(
@@ -86,6 +94,8 @@ const TalentProfile = () => {
           ? err
           : err?.data?.message || err?.message || "Failed to save networth."
       );
+      setNetworthError(err);
+      setShowNetworthPopup(true);
     }
   };
   const [searchValue, setSearchValue] = useState("");
@@ -338,7 +348,14 @@ const TalentProfile = () => {
           <PortfolioDashboard />
         </div>
       </section>{" "}
-      {isSavingNetworth && <CalculatingNetworthPopup />}
+      {/* {isSavingNetworth && <CalculatingNetworthPopup />} */}
+      <CalculatingNetworthPopupUser
+        open={showNetworthPopup}
+        loading={isLoadingGetNetworth || isSavingNetworth}
+        data={networthResult}
+        error={networthError}
+        onClose={() => setShowNetworthPopup(false)}
+      />
     </section>
   );
 };
