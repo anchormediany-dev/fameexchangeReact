@@ -6,7 +6,7 @@ import imageText from "../../assets/images/fame-exchange-image-text.png";
 import "./OurTeam.css";
 import { useGetTeamQuery } from "../../app/authApi";
 import { Link } from "react-router-dom";
-
+import { imgSrc } from "../../utils/imgSrc";
 const FALLBACK_IMG =
   "https://images.unsplash.com/photo-1527980965255-d3b416303d12?auto=format&fit=crop&w=1200&q=60";
 
@@ -97,7 +97,7 @@ const OurTeam = () => {
                 <div className=" rounded-lg overflow-hidden transition-transform duration-300 hover:scale-105 h-full flex flex-col">
                   <div className="h-64 overflow-hidden">
                     <img
-                      src={member.imageUrl || FALLBACK_IMG}
+                      src={imgSrc(member.imageUrl, FALLBACK_IMG)}
                       alt={member.name || "Team member"}
                       className="w-full h-full object-cover"
                       loading="lazy"

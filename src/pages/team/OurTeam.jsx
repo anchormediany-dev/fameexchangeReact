@@ -1,7 +1,7 @@
 // pages/team/OurTeam.jsx
 import { useLocation } from "react-router-dom";
 import imageText from "../../assets/images/fame-exchange-image-text.png";
-
+import { imgSrc } from "../../utils/imgSrc";
 const FALLBACK_IMG =
   "https://images.unsplash.com/photo-1527980965255-d3b416303d12?auto=format&fit=crop&w=1200&q=60";
 
@@ -49,7 +49,7 @@ const OurTeam = ({ teamMembers: propTeamMembers }) => {
               >
                 <div className="h-64 overflow-hidden">
                   <img
-                    src={member.imageUrl || member.image || FALLBACK_IMG}
+                    src={imgSrc(member.imageUrl, FALLBACK_IMG)}
                     alt={member.name || "Team member"}
                     className="w-full h-full object-cover"
                     loading="lazy"
