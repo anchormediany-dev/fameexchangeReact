@@ -60,6 +60,7 @@ import AdminReviews from "./pages/admin/reviews/AdminReviews";
 import AddAdminReviews from "./pages/admin/reviews/AddAdminReviews";
 import AdminTeams from "./pages/admin/teams/AdminTeams";
 import AddAdminTeam from "./pages/admin/teams/AddAdminTeam";
+import UpdateProfile from "./pages/UpdateProfile";
 
 // Simple Black Header Component
 const SimpleHeader = () => {
@@ -240,6 +241,16 @@ export default function App() {
               element={
                 <MotionPageWrapper>
                   <TalentProfile />
+                </MotionPageWrapper>
+              }
+            />
+          </Route>
+          <Route element={<ProtectedRoute />}>
+            <Route
+              path="update-profile/:id"
+              element={
+                <MotionPageWrapper>
+                  <UpdateProfile />
                 </MotionPageWrapper>
               }
             />

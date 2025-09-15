@@ -2,7 +2,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
-import { FiLink, FiLogOut } from "react-icons/fi";
+import { FiEdit, FiLink, FiLogOut } from "react-icons/fi";
 
 export default function ProfileMenu({
   user = { name: "User", avatarUrl: "" },
@@ -133,13 +133,34 @@ export default function ProfileMenu({
 
             <div className="my-1 h-px bg-gradient-to-r from-transparent via-black/10 to-transparent dark:via-white/10" />
             {isRoleTalent && (
+              <>
+                {" "}
+                <Link
+                  to={`/talent/${roleId}`}
+                  className="flex gap-3 justify-center items-center"
+                >
+                  {" "}
+                  <FiLink className="text-[18px]" />
+                  <span className="text-sm font-medium">Open Profile</span>
+                </Link>
+                <Link
+                  to={`/update-profile/${roleId}`}
+                  className="flex gap-3 justify-center items-center"
+                >
+                  {" "}
+                  <FiEdit className="text-[18px]" />
+                  <span className="text-sm font-medium">Update Profile</span>
+                </Link>
+              </>
+            )}
+            {isRoleFan && (
               <Link
-                to={`/talent/${roleId}`}
+                to={`/update-profile/${roleId}`}
                 className="flex gap-3 justify-center items-center"
               >
                 {" "}
-                <FiLink className="text-[18px]" />
-                <span className="text-sm font-medium">Open Profile</span>
+                <FiEdit className="text-[18px]" />
+                <span className="text-sm font-medium">Update Profile</span>
               </Link>
             )}
             {isRoleAdmin && (
