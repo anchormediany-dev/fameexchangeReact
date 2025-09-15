@@ -656,7 +656,7 @@ export default function UpdateProfile() {
 
               {/* Actions */}
               <section className="bg-[#1b1b1b] border border-[#2c2c2c] rounded-2xl p-4 flex items-center justify-end gap-3">
-                <button
+                {/* <button
                   type="button"
                   onClick={() => {
                     reset();
@@ -671,14 +671,16 @@ export default function UpdateProfile() {
                   disabled={disabled || (!isDirty && !hasPendingUploads)}
                 >
                   Reset
-                </button>
+                </button> */}
                 <button
                   type="button"
                   onClick={handleSubmit(onSubmit)}
-                  className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-[#F3BA18] text-black font-semibold hover:brightness-110 disabled:opacity-60"
+                  className=" gap-2 px-4 py-2 rounded-lg custom-button-two font-semibold hover:brightness-110 disabled:opacity-60"
                   disabled={disabled || (!isDirty && !hasPendingUploads)}
                 >
-                  <FaSave className="w-4 h-4" /> Save Changes
+                  <div className="flex gap-3 items-center">
+                    <FaSave className="w-4 h-4" /> <span>Save Changes</span>
+                  </div>
                 </button>
               </section>
             </form>

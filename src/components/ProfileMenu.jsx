@@ -133,7 +133,7 @@ export default function ProfileMenu({
 
             <div className="my-1 h-px bg-gradient-to-r from-transparent via-black/10 to-transparent dark:via-white/10" />
             {isRoleTalent && (
-              <>
+              <div className="flex flex-col gap-3">
                 {" "}
                 <Link
                   to={`/talent/${roleId}`}
@@ -151,7 +151,7 @@ export default function ProfileMenu({
                   <FiEdit className="text-[18px]" />
                   <span className="text-sm font-medium">Update Profile</span>
                 </Link>
-              </>
+              </div>
             )}
             {isRoleFan && (
               <Link
