@@ -1,13 +1,18 @@
 import { FaCalendarAlt, FaRegCalendarAlt } from "react-icons/fa";
-import { useGetUserByIdQuery } from "../../app/authApi";
+import {
+  useGetUserByIdQuery,
+  useGetTalentOverviewQuery,
+} from "../../app/authApi";
 import { useNavigate } from "react-router-dom";
 const EventsSection = () => {
   const navigate = useNavigate();
   const user = JSON.parse(localStorage.getItem("user"));
-  const userId = user?.id;
+  const id = user?.id;
 
-  const { data, isLoading, isError, error } = useGetUserByIdQuery(userId);
-  const events = data?.events || [];
+  const { data, isLoading, isError } = useGetTalentOverviewQuery(id, {
+    skip: !id,
+  });
+  const events = data?.data?.events || [];
   console.log(events);
   return (
     <div className="lg:col-span-2 bg-[#1f1f1f] rounded-xl shadow-lg">
