@@ -77,6 +77,18 @@ const NetworthCalculator = () => {
     try {
       const response = await saveNetworth(formData).unwrap();
       console.log("Networth saved successfully:", response);
+      const netWorth =
+        response?.data?.netWorth ??
+        response?.data?.data?.netWorth ??
+        response?.netWorth ??
+        null;
+
+      if (netWorth !== null && netWorth !== undefined) {
+        localStorage.setItem("netWorth", String(netWorth));
+        console.log("netWorth:", netWorth);
+      } else {
+        console.log("netWorth not found in response");
+      }
 
       navigate("/", {
         state: {

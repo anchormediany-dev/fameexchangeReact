@@ -1,9 +1,17 @@
-import { useSelector } from "react-redux";
+import { useEffect, useState } from "react";
 import { Navigate, Outlet } from "react-router-dom";
 
-const GuestOnlyRoute = () => {
-  const accessToken = useSelector((state) => state.auth.accessToken);
-  return accessToken ? <Navigate to="/talent-profile" replace /> : <Outlet />;
-};
+const getAccessToken = () => localStorage.getItem("accessToken");
 
-export default GuestOnlyRoute;
+export default function GuestOnlyRoute() {
+  const [token, setToken] = useState(getAccessToken);
+  useEffect(() => {
+    const onStorage = (e) => {
+      if (e.key === "accessToken") setToken(getAccessToken());
+    };
+    window.addEventListener("storage", onStorage);
+    return () => window.removeEventListener("storage", onStorage);
+  }, []);
+
+  return token ? <Navigate to="/talent-profile" replace /> : <Outlet />;
+}

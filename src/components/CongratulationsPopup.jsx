@@ -21,12 +21,16 @@ const CongratulationsPopup = ({ onClose }) => {
   const navigate = useNavigate();
 
   const handleGoToDashboard = () => {
+    localStorage.removeItem("accessToken");
+    localStorage.removeItem("netWorth");
+    localStorage.removeItem("user");
+
     onClose?.();
     setTimeout(() => {
       navigate("/login");
-    }, 300);
+    }, 3000);
   };
-
+  const savedNetWorth = localStorage.getItem("netWorth");
   return (
     <AnimatePresence>
       <motion.div
@@ -51,7 +55,7 @@ const CongratulationsPopup = ({ onClose }) => {
           <p className="heading-400-20 text-gray-300 mb-2">
             We've Checked Out Your Network And Are Glad To Award You With
           </p>
-          <p className="heading-500-30 text-white mb-4">100000</p>
+          <p className="heading-500-30 text-white mb-4">{savedNetWorth}</p>
           <p className="heading-400-20 text-gray-300 mb-6">
             Get The Word Out There And Share Your Coin With The World By
             Clicking The Share Button In Your Dashboard!
