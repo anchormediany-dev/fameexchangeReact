@@ -450,7 +450,18 @@ export default function UpdateProfile() {
                   />
                 </div>
               </section>
-
+              {/* Talent (TALENT only) */}
+              {isTalent && (
+                <section className="bg-[#1b1b1b] border border-[#2c2c2c] rounded-2xl p-6">
+                  <div className="flex items-center gap-2 mb-4">
+                    <HiBadgeCheck className="w-5 h-5 text-white/70" />
+                    <h3 className="text-white font-semibold">Talent</h3>
+                  </div>
+                  <div className="fx-scroll-menu">
+                    <TalentDropdown onFormChange={handleTalentChange} />
+                  </div>
+                </section>
+              )}
               {/* Connected Accounts */}
               <section className="bg-[#1b1b1b] border border-[#2c2c2c] rounded-2xl p-6">
                 <div className="flex items-center gap-2 mb-4">
@@ -642,19 +653,6 @@ export default function UpdateProfile() {
                   </p>
                 )}
               </section>
-
-              {/* Talent (TALENT only) */}
-              {isTalent && (
-                <section className="bg-[#1b1b1b] border border-[#2c2c2c] rounded-2xl p-6">
-                  <div className="flex items-center gap-2 mb-4">
-                    <HiBadgeCheck className="w-5 h-5 text-white/70" />
-                    <h3 className="text-white font-semibold">Talent</h3>
-                  </div>
-                  <div className="fx-scroll-menu">
-                    <TalentDropdown onFormChange={handleTalentChange} />
-                  </div>
-                </section>
-              )}
 
               {/* Actions */}
               <section className="bg-[#1b1b1b] border border-[#2c2c2c] rounded-2xl p-4 flex items-center justify-end gap-3">
