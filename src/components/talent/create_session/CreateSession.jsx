@@ -4,8 +4,14 @@ import { Calendar, momentLocalizer } from "react-big-calendar";
 import "react-big-calendar/lib/css/react-big-calendar.css";
 import { useCreateSessionMutation } from "../../../app/authApi";
 import { toast } from "react-toastify";
+const ANCHORAGE_CANONICAL = "America/Anchorage";
+const DEFAULT_TZ = moment.tz.zone("US/Alaska")
+  ? "US/Alaska"
+  : ANCHORAGE_CANONICAL;
 
-const timeZones = moment.tz.names();
+const allZones = moment.tz.names();
+const timeZones = [DEFAULT_TZ, ...allZones.filter((z) => z !== DEFAULT_TZ)];
+
 const localizer = momentLocalizer(moment);
 
 const CreateSession = () => {
@@ -21,9 +27,8 @@ const CreateSession = () => {
       sessionLength: 30,
       price: "50",
       bufferTime: 15,
-      timeZone: moment.tz.guess(),
+      timeZone: DEFAULT_TZ,
       accessType: "online",
-      // isActive: false,
       sessionDate: "",
       sessionTime: "",
     },
@@ -41,12 +46,11 @@ const CreateSession = () => {
         sessionTime: data.sessionTime,
       };
 
-      const result = await createSession(sessionData).unwrap();
+      await createSession(sessionData).unwrap();
 
       toast.success("Session created successfully!");
       reset();
     } catch (err) {
-      // Handle RTK Query error
       const errorMessage =
         error?.data?.message ||
         err?.data?.message ||
@@ -56,13 +60,10 @@ const CreateSession = () => {
     }
   };
 
-  // Get today's date in YYYY-MM-DD format
   const today = new Date().toISOString().split("T")[0];
 
-  // Validate date is today or in the future
   const validateFutureDate = (dateString) => {
     if (!dateString) return "Session date is required";
-
     const todayObj = new Date();
     todayObj.setHours(0, 0, 0, 0);
     const selectedDate = new Date(dateString);
@@ -145,9 +146,7 @@ const CreateSession = () => {
               </label>
               <input
                 type="date"
-                {...register("sessionDate", {
-                  validate: validateFutureDate,
-                })}
+                {...register("sessionDate", { validate: validateFutureDate })}
                 min={today}
                 className="w-full bg-[#2d2d2d] gredient-border text-white rounded-lg py-3 px-4"
               />
@@ -207,14 +206,12 @@ const CreateSession = () => {
             <div>
               <label className="block text-sm text-white mb-2">Time Zone</label>
               <select
-                {...register("timeZone", {
-                  required: "Time zone is required",
-                })}
+                {...register("timeZone", { required: "Time zone is required" })}
                 className="w-full bg-[#2d2d2d] gredient-border text-white rounded-lg py-3 px-4"
               >
                 {timeZones.map((zone) => (
                   <option key={zone} value={zone}>
-                    {zone}
+                    {zone === DEFAULT_TZ ? `${zone} (default)` : zone}
                   </option>
                 ))}
               </select>
