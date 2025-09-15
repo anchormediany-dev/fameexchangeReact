@@ -1,6 +1,7 @@
+// src/pages/UpdateProfile.jsx
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
-import { Link, useNavigate } from "react-router-dom";
+import { Link /*, useNavigate*/ } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { toast } from "react-toastify";
 import MotionPageWrapper from "../components/MotionPageWrapper";
@@ -11,6 +12,7 @@ import { imgSrc } from "../utils/imgSrc";
 import {
   useGetUserByIdQuery,
   useUpdateMyProfileMutation,
+  useDeleteProfileImageMutation,
 } from "../app/authApi";
 import { setCredentials } from "../features/auth/authSlice";
 import { HiBadgeCheck } from "react-icons/hi";
@@ -22,6 +24,8 @@ import {
   FaUserCog,
   FaLink,
   FaImages,
+  FaTrash,
+  FaTimes,
 } from "react-icons/fa";
 
 const talentOptions = [
@@ -64,19 +68,25 @@ const talentOptions = [
 
 export default function UpdateProfile() {
   const dispatch = useDispatch();
-  const navigate = useNavigate();
   const userId = useSelector((s) => s?.auth?.user?.id);
 
-  const { data: userResp, isFetching } = useGetUserByIdQuery(userId, {
+  // get user + expose refetch so UI updates after uploads/deletes
+  const {
+    data: userResp,
+    isFetching,
+    refetch,
+  } = useGetUserByIdQuery(userId, {
     skip: !userId,
   });
   const user = userResp?.user;
 
   const [updateMyProfile, { isLoading: isSaving }] =
     useUpdateMyProfileMutation();
+  const [deleteProfileImage, { isLoading: isDeleting }] =
+    useDeleteProfileImageMutation();
 
-  const [newImages, setNewImages] = useState([]);
-  const [previews, setPreviews] = useState([]);
+  const [newImages, setNewImages] = useState([]); // File[]
+  const [previews, setPreviews] = useState([]); // object URLs
 
   const {
     register,
@@ -97,12 +107,13 @@ export default function UpdateProfile() {
       rep_type: "",
       representation: [],
       talent: [],
-      images: [],
+      images: "", // hidden field to track dirtiness when files change
     },
   });
 
   const roleFromAPI = user?.role || "FAN";
   const isTalent = roleFromAPI === "TALENT";
+
   useEffect(() => {
     if (!user) return;
     const repTypeSeed =
@@ -120,12 +131,17 @@ export default function UpdateProfile() {
       rep_type: repTypeSeed,
       representation: user?.representation || [],
       talent: user?.talent || [],
-      images: [],
+      images: "",
     });
+    // clear local uploads
+    newImages.forEach(
+      (_, i) => previews[i] && URL.revokeObjectURL(previews[i])
+    );
     setNewImages([]);
     setPreviews([]);
   }, [user, reset]);
 
+  // ---------- Talent & Representation ----------
   const handleTalentChange = (data) => {
     const formatted = (data?.talents || []).map((val) => {
       const opt = talentOptions.find((o) => o.value === val);
@@ -147,36 +163,77 @@ export default function UpdateProfile() {
     });
   };
 
+  // ---------- Images ----------
   const handleImagesChange = (e) => {
-    const files = Array.from(e.target.files || []);
-    setNewImages(files);
-    setValue("images", files, { shouldDirty: true });
+    const files = Array.from(e.target.files || []).filter((f) =>
+      f.type.startsWith("image/")
+    );
+    if (files.length === 0) return;
 
-    // generate previews
     const urls = files.map((f) => URL.createObjectURL(f));
-    // cleanup old urls
+    // cleanup old
     previews.forEach((u) => URL.revokeObjectURL(u));
+
+    setNewImages(files);
     setPreviews(urls);
+
+    // mark form dirty via a hidden registered field
+    setValue("images", files.map((f) => f.name).join(","), {
+      shouldDirty: true,
+    });
   };
 
+  const handleRemoveNewImage = (index) => {
+    const files = [...newImages];
+    const urls = [...previews];
+    files.splice(index, 1);
+    const removed = urls.splice(index, 1)[0];
+    if (removed) URL.revokeObjectURL(removed);
+
+    setNewImages(files);
+    setPreviews(urls);
+
+    // keep RHF dirty if any files remain, else clear
+    setValue("images", files.map((f) => f.name).join(","), {
+      shouldDirty: true,
+    });
+  };
+
+  const handleRemoveExistingImage = async (imageDoc) => {
+    try {
+      await deleteProfileImage(imageDoc?._id).unwrap();
+      toast.success("Image deleted.");
+      await refetch(); // refresh the “Existing” section
+    } catch (err) {
+      toast.error(err?.data?.message || "Failed to delete image");
+    }
+  };
+
+  // ---------- Build payload ----------
   const buildFormData = (vals) => {
     const fd = new FormData();
     if (vals?.name) fd.append("name", vals.name);
     if (vals?.password) fd.append("password", vals.password);
     fd.append("biography", vals?.biography || "");
     fd.append("is_active", String(!!vals?.is_active));
+
+    // from GET
     fd.append("usertype", roleFromAPI || "any");
     fd.append("datetime", new Date().toISOString());
     fd.append("google_login_id", user?.google_login_id || "");
     fd.append("is_login_google", String(!!user?.is_login_google));
     fd.append("is_login_facebook", String(!!user?.is_login_facebook));
     fd.append("facebook_login_id", user?.facebook_login_id || "");
+
+    // social links are read-only; send what backend has
     fd.append("social_youtube", user?.social_youtube || "");
     fd.append("social_twitter", user?.social_twitter || "");
     fd.append("social_tiktok", user?.social_tiktok || "");
     fd.append("social_facebook", user?.social_facebook || "");
     fd.append("social_insta", user?.social_insta || "");
     fd.append("social_snap", user?.social_snap || "");
+
+    // tokens & worth
     fd.append("token_brand_name", vals?.token_brand_name || "");
     fd.append("token_name", vals?.token_name || "");
     if (
@@ -186,6 +243,8 @@ export default function UpdateProfile() {
     ) {
       fd.append("networth", String(vals.networth));
     }
+
+    // representation
     fd.append("is_rep_have", String(!!vals?.is_rep_have));
     fd.append("rep_type", vals?.rep_type || "");
     fd.append(
@@ -194,12 +253,15 @@ export default function UpdateProfile() {
         Array.isArray(vals?.representation) ? vals.representation : []
       )
     );
+
+    // talent only if role is TALENT
     if (isTalent) {
       fd.append("talent", JSON.stringify(vals?.talent || []));
     }
-    (newImages || []).forEach((file) => {
-      fd.append("images", file);
-    });
+
+    // NEW uploads
+    // if your backend prefers images[], switch key to "images[]"
+    newImages.forEach((file) => fd.append("images", file));
 
     return fd;
   };
@@ -209,25 +271,29 @@ export default function UpdateProfile() {
       const formData = buildFormData(values);
       const res = await updateMyProfile(formData).unwrap();
 
-      if (res?.user || res?.token) {
-        const cur = {
-          id: res?.user?._id || userId,
-          email: res?.user?.email || user?.email,
-          is_verified: res?.user?.is_verified ?? user?.is_verified,
-          KYC_Verified: res?.user?.KYC_Verified ?? user?.KYC_Verified,
-        };
-        dispatch(
-          setCredentials({ accessToken: res?.token || null, user: cur })
-        );
-      }
+      // if (res?.user || res?.token) {
+      //   const cur = {
+      //     id: res?.user?._id || userId,
+      //     email: res?.user?.email || user?.email,
+      //     is_verified: res?.user?.is_verified ?? user?.is_verified,
+      //     KYC_Verified: res?.user?.KYC_Verified ?? user?.KYC_Verified,
+      //   };
+      //   dispatch(
+      //     setCredentials({ accessToken: res?.token || null, user: cur })
+      //   );
+      // }
 
       toast.success("Profile updated successfully.");
-      reset({ ...values, images: [] });
-      setNewImages([]);
-      previews.forEach((u) => URL.revokeObjectURL(u));
-      setPreviews([]);
 
-      // navigate("/profile");
+      // clear local uploads + refresh gallery
+      newImages.forEach(
+        (_, i) => previews[i] && URL.revokeObjectURL(previews[i])
+      );
+      setNewImages([]);
+      setPreviews([]);
+      setValue("images", "", { shouldDirty: false });
+
+      await refetch();
     } catch (err) {
       toast.error(
         err?.data?.message || err?.error || "Failed to update profile."
@@ -235,18 +301,17 @@ export default function UpdateProfile() {
     }
   };
 
-  const disabled = isFetching || isSaving;
+  const hasPendingUploads = newImages.length > 0;
+  const disabled = isFetching || isSaving || isDeleting;
 
   return (
     <MotionPageWrapper>
+      {/* dropdown scrollbar styles */}
       <style>{`
         .fx-scroll-menu .react-select__menu-list,
         .fx-scroll-menu [role="listbox"],
         .fx-scroll-menu .dropdown-menu,
-        .fx-scroll-menu .menu {
-          max-height: 16rem;
-          overflow-y: auto;
-        }
+        .fx-scroll-menu .menu { max-height: 16rem; overflow-y: auto; }
         .fx-scroll-menu ::-webkit-scrollbar { width: 8px; }
         .fx-scroll-menu ::-webkit-scrollbar-thumb { background: #4b5563; border-radius: 8px; }
         .fx-scroll-menu { scrollbar-width: thin; scrollbar-color: #4b5563 transparent; }
@@ -255,6 +320,7 @@ export default function UpdateProfile() {
       <div className="flex mt-10 lg:mt-16 2xl:mt-20 py-12 2xl:py-16 relative bg-[#171717] overflow-hidden">
         <div className="w-full container flex flex-col-reverse lg:flex-row gap-8 z-10">
           <div className="lg:w-[70%]">
+            {/* Header */}
             <div className="bg-gradient-to-r from-[#1f1f1f] to-[#2a2a2a] border border-[#333] rounded-2xl p-6 mb-6 shadow">
               <div className="flex items-center gap-3">
                 <FaUserAlt className="w-5 h-5 text-white/80" />
@@ -266,13 +332,15 @@ export default function UpdateProfile() {
                   <b>{roleFromAPI}</b>
                 </span>
               </div>
-              {isDirty && (
+              {(isDirty || hasPendingUploads) && (
                 <div className="mt-3 flex items-center gap-2 text-xs text-amber-300">
                   <FaInfoCircle className="w-4 h-4" />
                   You have unsaved changes.
                 </div>
               )}
             </div>
+
+            {/* FORM (manual submit only) */}
             <form
               onSubmit={(e) => e.preventDefault()}
               onKeyDown={(e) => {
@@ -281,6 +349,9 @@ export default function UpdateProfile() {
               }}
               className="space-y-8"
             >
+              {/* hidden registered field so images changes toggle isDirty */}
+              <input type="hidden" {...register("images")} />
+
               {/* Basic Info */}
               <section className="bg-[#1b1b1b] border border-[#2c2c2c] rounded-2xl p-6">
                 <div className="flex items-center gap-2 mb-4">
@@ -305,7 +376,7 @@ export default function UpdateProfile() {
                   </div>
                   <div>
                     <label className="block text-white/90 text-sm mb-2">
-                      Password (leave blank to keep)
+                      Password
                     </label>
                     <input
                       type="password"
@@ -345,7 +416,7 @@ export default function UpdateProfile() {
                 </div>
               </section>
 
-              {/* Representation — right after Basic Info */}
+              {/* Representation */}
               <section className="bg-[#1b1b1b] border border-[#2c2c2c] rounded-2xl p-6">
                 <div className="flex items-center gap-2 mb-4">
                   <FaShieldAlt className="w-5 h-5 text-white/70" />
@@ -373,8 +444,6 @@ export default function UpdateProfile() {
                     />
                   </div>
                 </div>
-
-                {/* scrollable menus */}
                 <div className="mt-4 fx-scroll-menu">
                   <RepresentationSection
                     onFormChange={handleRepresentationChange}
@@ -382,7 +451,7 @@ export default function UpdateProfile() {
                 </div>
               </section>
 
-              {/* Connected Accounts (read-only from GET) */}
+              {/* Connected Accounts */}
               <section className="bg-[#1b1b1b] border border-[#2c2c2c] rounded-2xl p-6">
                 <div className="flex items-center gap-2 mb-4">
                   <FaLink className="w-5 h-5 text-white/70" />
@@ -418,13 +487,11 @@ export default function UpdateProfile() {
                 </div>
               </section>
 
-              {/* Social Links — READ-ONLY */}
+              {/* Social Links (read-only) */}
               <section className="bg-[#141414] border border-[#242424] rounded-2xl p-6">
                 <div className="flex items-center gap-2 mb-4">
                   <FaLink className="w-5 h-5 text-white/70" />
-                  <h3 className="text-white font-semibold">
-                    Social Links (Read-only)
-                  </h3>
+                  <h3 className="text-white font-semibold">Social Links</h3>
                 </div>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-3 text-sm">
                   {[
@@ -455,19 +522,16 @@ export default function UpdateProfile() {
                     </div>
                   ))}
                 </div>
-                <p className="mt-3 text-xs text-white/50">
-                  Social links are managed elsewhere and cannot be edited here.
-                </p>
               </section>
 
-              {/* Images — multiple upload */}
+              {/* Images */}
               <section className="bg-[#1b1b1b] border border-[#2c2c2c] rounded-2xl p-6">
                 <div className="flex items-center gap-2 mb-4">
                   <FaImages className="w-5 h-5 text-white/70" />
                   <h3 className="text-white font-semibold">Images</h3>
                 </div>
 
-                {/* existing images */}
+                {/* Existing */}
                 <div className="mb-4">
                   <p className="text-xs text-white/60 mb-2">Existing</p>
                   {Array.isArray(user?.images) && user.images.length > 0 ? (
@@ -475,7 +539,7 @@ export default function UpdateProfile() {
                       {user.images.map((img) => (
                         <div
                           key={img?._id}
-                          className="relative aspect-square rounded-lg overflow-hidden border border-[#2a2a2a] bg-[#111]"
+                          className="relative aspect-square rounded-lg overflow-hidden border border-[#2a2a2a] bg-[#111] group"
                         >
                           <img
                             src={imgSrc(img?.fileUrl)}
@@ -483,6 +547,14 @@ export default function UpdateProfile() {
                             className="w-full h-full object-cover"
                             loading="lazy"
                           />
+                          <button
+                            type="button"
+                            onClick={() => handleRemoveExistingImage(img)}
+                            className="absolute top-1 right-1 bg-red-600/90 hover:bg-red-700 text-white p-1.5 rounded-full opacity-0 group-hover:opacity-100 transition"
+                            title="Remove"
+                          >
+                            <FaTrash size={12} />
+                          </button>
                         </div>
                       ))}
                     </div>
@@ -493,7 +565,7 @@ export default function UpdateProfile() {
                   )}
                 </div>
 
-                {/* new uploads */}
+                {/* New uploads */}
                 <div className="mt-2">
                   <label className="block text-white/90 text-sm mb-2">
                     Add Images
@@ -514,13 +586,21 @@ export default function UpdateProfile() {
                         {previews.map((src, i) => (
                           <div
                             key={i}
-                            className="relative aspect-square rounded-lg overflow-hidden border border-[#2a2a2a] bg-[#111]"
+                            className="relative aspect-square rounded-lg overflow-hidden border border-[#2a2a2a] bg-[#111] group"
                           >
                             <img
                               src={src}
                               alt={`preview-${i}`}
                               className="w-full h-full object-cover"
                             />
+                            <button
+                              type="button"
+                              onClick={() => handleRemoveNewImage(i)}
+                              className="absolute top-1 right-1 bg-black/60 hover:bg-black/80 text-white p-1.5 rounded-full opacity-100 transition"
+                              title="Remove"
+                            >
+                              <FaTimes size={12} />
+                            </button>
                           </div>
                         ))}
                       </div>
@@ -570,32 +650,27 @@ export default function UpdateProfile() {
                     <HiBadgeCheck className="w-5 h-5 text-white/70" />
                     <h3 className="text-white font-semibold">Talent</h3>
                   </div>
-                  {/* scrollable */}
                   <div className="fx-scroll-menu">
                     <TalentDropdown onFormChange={handleTalentChange} />
                   </div>
                 </section>
               )}
 
-              {/* Actions — inside the form */}
+              {/* Actions */}
               <section className="bg-[#1b1b1b] border border-[#2c2c2c] rounded-2xl p-4 flex items-center justify-end gap-3">
-                {/* <span
-                  className={`text-xs ${
-                    isDirty ? "text-amber-300" : "text-white/60"
-                  } mr-auto`}
-                >
-                  {isDirty ? "You have unsaved changes." : "All changes saved."}
-                </span> */}
                 <button
                   type="button"
                   onClick={() => {
                     reset();
+                    newImages.forEach(
+                      (_, i) => previews[i] && URL.revokeObjectURL(previews[i])
+                    );
                     setNewImages([]);
-                    previews.forEach((u) => URL.revokeObjectURL(u));
                     setPreviews([]);
+                    setValue("images", "", { shouldDirty: false });
                   }}
                   className="px-4 py-2 rounded-lg border border-[#333] text-white/85 hover:bg-[#232323]"
-                  disabled={disabled || !isDirty}
+                  disabled={disabled || (!isDirty && !hasPendingUploads)}
                 >
                   Reset
                 </button>
@@ -603,7 +678,7 @@ export default function UpdateProfile() {
                   type="button"
                   onClick={handleSubmit(onSubmit)}
                   className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-[#F3BA18] text-black font-semibold hover:brightness-110 disabled:opacity-60"
-                  disabled={disabled || !isDirty}
+                  disabled={disabled || (!isDirty && !hasPendingUploads)}
                 >
                   <FaSave className="w-4 h-4" /> Save Changes
                 </button>
