@@ -12,7 +12,7 @@ export default function ProfileMenu({
   const [open, setOpen] = useState(false);
   const btnRef = useRef(null);
   const panelRef = useRef(null);
-  const userLocalData = JSON.parse(localStorage.getItem("user")); // replace "user" with your actual key
+  const userLocalData = JSON.parse(localStorage.getItem("user")); 
   const isRoleTalent = userLocalData?.role === "TALENT";
   const isRoleFan = userLocalData?.role === "FAN";
   const isRoleAdmin = userLocalData?.role === "ADMIN";

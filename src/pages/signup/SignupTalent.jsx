@@ -125,7 +125,7 @@ const SignupTalent = () => {
         KYC_Verified: false,
       };
       dispatch(setCredentials({ accessToken: response.token, user }));
-
+      localStorage.setItem("userRole", "TALENT");
       setSignupResponse(response);
       toast.success(response?.emailVerification || "Signup successful!");
       sessionStorage.setItem("signupEmail", formData.email);

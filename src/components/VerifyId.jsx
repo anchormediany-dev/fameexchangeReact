@@ -11,7 +11,8 @@ const VerifyId = () => {
   const [isHovering, setIsHovering] = useState(false);
   const navigate = useNavigate();
   const [verifyId, { isLoading }] = useVerifyIdMutation();
-
+  const role = localStorage.getItem("userRole");
+  const isFan = role;
   const handleImageUpload = (event) => {
     const file = event.target.files[0];
     if (file) {
@@ -39,7 +40,7 @@ const VerifyId = () => {
     }
 
     const formData = new FormData();
-    formData.append("images", imageFile); // Key must match your backend
+    formData.append("images", imageFile);
 
     try {
       const response = await verifyId(formData).unwrap();
@@ -47,7 +48,9 @@ const VerifyId = () => {
         response?.message || "ID verification submitted successfully."
       );
       setTimeout(() => {
-        navigate("/networth-calculator");
+        const role = (localStorage.getItem("userRole") || "").toUpperCase();
+        const dest = role === "TALENT" ? "/networth-calculator" : "/";
+        navigate(dest, { state: { role }, replace: true });
       }, 500);
     } catch (error) {
       console.error("Upload failed:", error);

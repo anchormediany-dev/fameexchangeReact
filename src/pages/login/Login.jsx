@@ -69,7 +69,7 @@ const LoginPage = () => {
       const nextPath = isAdmin
         ? "/admin"
         : roleToPath[role] || "/talent-profile";
-
+      localStorage.removeItem("userRole");
       toast.success("Login successful!");
       setTimeout(() => navigate(nextPath, { replace: true }), 500);
     } catch (error) {

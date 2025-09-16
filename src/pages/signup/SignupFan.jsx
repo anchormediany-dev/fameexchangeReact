@@ -85,7 +85,7 @@ const SignupFan = () => {
         KYC_Verified: false,
       };
       dispatch(setCredentials({ accessToken: response.token, user }));
-
+      localStorage.setItem("userRole", "FAN");
       toast.success(response?.emailVerification || "Signup successful!");
       sessionStorage.setItem("signupEmail", formData.email);
 
