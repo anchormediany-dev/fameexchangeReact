@@ -61,6 +61,7 @@ import AddAdminReviews from "./pages/admin/reviews/AddAdminReviews";
 import AdminTeams from "./pages/admin/teams/AdminTeams";
 import AddAdminTeam from "./pages/admin/teams/AddAdminTeam";
 import UpdateProfile from "./pages/UpdateProfile";
+import FanProfile from "./pages/fan/FanProfile";
 
 // Simple Black Header Component
 const SimpleHeader = () => {
@@ -241,6 +242,17 @@ export default function App() {
               element={
                 <MotionPageWrapper>
                   <TalentProfile />
+                </MotionPageWrapper>
+              }
+            />
+          </Route>
+          {/* Fan Profile Page */}
+          <Route element={<ProtectedRoute />}>
+            <Route
+              path="fan/:id"
+              element={
+                <MotionPageWrapper>
+                  <FanProfile />
                 </MotionPageWrapper>
               }
             />

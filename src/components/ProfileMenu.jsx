@@ -154,14 +154,25 @@ export default function ProfileMenu({
               </div>
             )}
             {isRoleFan && (
-              <Link
-                to={`/update-profile/${roleId}`}
-                className="flex gap-3 justify-center items-center"
-              >
+              <div className="flex flex-col gap-3">
                 {" "}
-                <FiEdit className="text-[18px]" />
-                <span className="text-sm font-medium">Update Profile</span>
-              </Link>
+                <Link
+                  to={`/fan/${roleId}`}
+                  className="flex gap-3 justify-center items-center"
+                >
+                  {" "}
+                  <FiLink className="text-[18px]" />
+                  <span className="text-sm font-medium">View Profile</span>
+                </Link>
+                <Link
+                  to={`/update-profile/${roleId}`}
+                  className="flex gap-3 justify-center items-center"
+                >
+                  {" "}
+                  <FiEdit className="text-[18px]" />
+                  <span className="text-sm font-medium">Update Profile</span>
+                </Link>
+              </div>
             )}
             {isRoleAdmin && (
               <Link
