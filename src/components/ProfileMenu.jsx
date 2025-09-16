@@ -141,7 +141,7 @@ export default function ProfileMenu({
                 >
                   {" "}
                   <FiLink className="text-[18px]" />
-                  <span className="text-sm font-medium">Open Profile</span>
+                  <span className="text-sm font-medium">View Profile</span>
                 </Link>
                 <Link
                   to={`/update-profile/${roleId}`}
