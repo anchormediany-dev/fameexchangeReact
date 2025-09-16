@@ -13,5 +13,6 @@ export default function GuestOnlyRoute() {
     return () => window.removeEventListener("storage", onStorage);
   }, []);
 
-  return token ? <Navigate to="/talent-profile" replace /> : <Outlet />;
+  // return token ? <Navigate to="/talent-profile" replace /> : <Outlet />;
+  return token ? <Navigate to="/" replace /> : <Outlet />;
 }
