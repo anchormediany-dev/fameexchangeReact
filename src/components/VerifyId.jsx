@@ -11,14 +11,18 @@ const VerifyId = () => {
   const [isHovering, setIsHovering] = useState(false);
   const navigate = useNavigate();
   const [verifyId, { isLoading }] = useVerifyIdMutation();
-
+  const userLocalData = JSON.parse(localStorage.getItem("user"));
+  const isRoleTalent = userLocalData?.role === "TALENT";
+  const isRoleFan = userLocalData?.role === "FAN";
+  const isRoleAdmin = userLocalData?.role === "ADMIN";
+  const roleId = userLocalData?.id;
   const handleImageUpload = (event) => {
     const file = event.target.files[0];
     if (file) {
-      setImageFile(file); // Store file for FormData
+      setImageFile(file);
       const reader = new FileReader();
       reader.onloadend = () => {
-        setSelectedImage(reader.result); // For preview only
+        setSelectedImage(reader.result);
       };
       reader.readAsDataURL(file);
     }
@@ -47,7 +51,12 @@ const VerifyId = () => {
         response?.message || "ID verification submitted successfully."
       );
       setTimeout(() => {
-        navigate("/networth-calculator");
+        {
+          isRoleFan && navigate("/");
+        }
+        {
+          isRoleTalent && navigate("/networth-calculator");
+        }
       }, 500);
     } catch (error) {
       console.error("Upload failed:", error);
