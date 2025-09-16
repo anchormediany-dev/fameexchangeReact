@@ -170,7 +170,7 @@ export default function ProfileMenu({
               >
                 {" "}
                 <FiLink className="text-[18px]" />
-                <span className="text-sm font-medium">Open Admin</span>
+                <span className="text-sm font-medium">Admin Dashboard</span>
               </Link>
             )}
             {/* {isRoleFan && (
