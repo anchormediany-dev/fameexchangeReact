@@ -81,11 +81,13 @@ const SignupFan = () => {
       const user = {
         id: response.userId,
         email: signupData.email,
+        name: signupData.name,
+        role: signupData.role,
+        isAdmin: false,
         is_verified: false,
         KYC_Verified: false,
       };
       dispatch(setCredentials({ accessToken: response.token, user }));
-      localStorage.setItem("userRole", "FAN");
       toast.success(response?.emailVerification || "Signup successful!");
       sessionStorage.setItem("signupEmail", formData.email);
 
