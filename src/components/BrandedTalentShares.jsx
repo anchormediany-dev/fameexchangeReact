@@ -3,7 +3,17 @@ import { useEffect, useRef } from "react";
 import * as d3 from "d3";
 import imageText from "../assets/images/fame-exchange-image-text.png";
 import { Link } from "react-router-dom";
-const TalentTokenTicker = () => {
+import { imgSrc } from "../utils/imgSrc";
+const TalentTokenTicker = ({
+  talent,
+  isLoading,
+  isError,
+  error,
+  onRefresh,
+}) => {
+  if (isLoading) return <div>Loading…</div>;
+  if (isError)
+    return <div className="text-red-600">{String(error?.data || error)}</div>;
   const sectionRef = useRef(null);
   const isInView = useInView(sectionRef, { once: true, amount: 0.1 });
   const controls = useAnimation();
@@ -312,6 +322,7 @@ const TalentTokenTicker = () => {
     },
   ];
   const isTalent = JSON.parse(localStorage.getItem("user"))?.role === "TALENT";
+  const talentWorthData = talent?.concate?.talentTokenData;
   return (
     <div
       ref={sectionRef}
@@ -364,8 +375,9 @@ const TalentTokenTicker = () => {
         >
           <div className="min-w-[1000px] bg-gradient-to-br from-[#1a1a1a]/90 to-[#252525]/90 backdrop-blur-xl rounded-3xl border border-gray-600/30 overflow-hidden shadow-2xl">
             {/* Table Header */}
-            <div className="grid grid-cols-9 gap-2 md:gap-4 py-5 px-6 bg-gradient-to-r from-[#2d2d2d] via-[#353535] to-[#2d2d2d] text-sm text-gray-200 font-bold border-b border-gray-500/40 backdrop-blur-sm">
+            <div className="grid grid-cols-10 gap-2 md:gap-4 py-5 px-6 bg-gradient-to-r from-[#2d2d2d] via-[#353535] to-[#2d2d2d] text-sm text-gray-200 font-bold border-b border-gray-500/40 backdrop-blur-sm">
               <div className="col-span-2 text-left">TALENT TOKEN</div>
+              <div className="text-center">BTS Worth</div>
               <div className="text-center">COMPRISED VALUE</div>
               <div className="text-center">AVAILABLE TOKENS</div>
               <div className="text-center">COST PER TOKEN</div>
@@ -377,10 +389,10 @@ const TalentTokenTicker = () => {
 
             {/* Table Body */}
             <div className="divide-y divide-gray-700/30">
-              {talentTokenData.map((token, index) => (
+              {(talent ?? []).slice(0, 20)?.map((token, index) => (
                 <motion.div
-                  key={index}
-                  custom={index}
+                  key={token?._id || index}
+                  custom={token?._id || index}
                   variants={tableRowVariant}
                   initial="hidden"
                   animate={controls}
@@ -389,7 +401,7 @@ const TalentTokenTicker = () => {
                     scale: 1.01,
                     transition: { duration: 0.3 },
                   }}
-                  className="grid grid-cols-9 gap-2 md:gap-4 items-center py-5 px-6 hover:shadow-lg transition-all duration-300 cursor-pointer group"
+                  className="grid grid-cols-10 gap-2 md:gap-4 items-center py-5 px-6 hover:shadow-lg transition-all duration-300 cursor-pointer group"
                 >
                   {/* Talent Token Image + Name */}
                   <Link
@@ -403,35 +415,38 @@ const TalentTokenTicker = () => {
                       className="relative"
                     >
                       <img
-                        src={token.image}
-                        alt={token.fullName}
+                        src={imgSrc(token?.images?.[0]?.fileUrl)}
+                        alt={token?.name}
                         className="w-12 h-12 md:w-16 md:h-16 rounded-full object-cover border-2 border-gray-600 group-hover:border-gray-400 transition-all duration-300 shadow-lg"
                       />
                       <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent rounded-full"></div>
                     </motion.div>
                     <div className="min-w-0">
                       <div className="text-sm md:text-base font-bold text-white group-hover:text-gray-200 transition-colors duration-300 truncate">
-                        {token.name}
+                        {token?.name || "_"}
                       </div>
-                      {/* <div className="text-xs text-gray-400 group-hover:text-gray-300 transition-colors duration-300 truncate">
-                        {token.name}
-                      </div> */}
+                      <div className="text-xs text-gray-400 group-hover:text-gray-300 transition-colors duration-300 truncate">
+                        {token?.token_name || "_"}
+                      </div>
                     </div>
                     {/* </div> */}
                   </Link>
+                  <div className="text-center text-xs md:text-sm font-medium text-gray-200 group-hover:text-white transition-colors duration-300">
+                    {token?.networth || "_"}
+                  </div>
                   {/* Comprised Value */}
                   <div className="text-center text-xs md:text-sm font-medium text-gray-200 group-hover:text-white transition-colors duration-300">
-                    {token.comprisedValue}
+                    _
                   </div>
 
                   {/* Available Talent Tokens */}
                   <div className="text-center text-xs md:text-sm text-gray-200 group-hover:text-white transition-colors duration-300">
-                    {token.availableTokens}
+                    _
                   </div>
 
                   {/* Cost per Talent Token */}
                   <div className="text-center text-xs md:text-sm font-semibold text-gray-100 group-hover:text-white transition-colors duration-300">
-                    {token.costPerToken}
+                    _
                   </div>
 
                   {/* Change */}
@@ -442,12 +457,12 @@ const TalentTokenTicker = () => {
                         : "text-[#e3495d] group-hover:text-red-300"
                     }`}
                   >
-                    {token.change}
+                    _
                   </div>
 
                   {/* Volume */}
                   <div className="text-center text-xs md:text-sm text-gray-200 group-hover:text-white transition-colors duration-300">
-                    {token.volume}
+                    _
                   </div>
 
                   {/* Chart Column */}
@@ -460,13 +475,14 @@ const TalentTokenTicker = () => {
                       whileHover={{ scale: 1.08 }}
                       className="w-24 h-12 md:w-28 md:h-14  rounded-xl p-2  flex items-center justify-center"
                     >
-                      <D3Chart
+                      {/* <D3Chart
                         data={token.graphData}
                         color={token.isPositive ? "#1fbaa1" : "#e3495d"}
                         width={112}
                         height={56}
                         index={index}
-                      />
+                      /> */}
+                      _
                     </motion.div>
                   </div>
                   <motion.div
@@ -490,7 +506,7 @@ const TalentTokenTicker = () => {
                       </Link>
 
                       <Link
-                        to="/talent-profile"
+                        to={`/talent-profile/${token?._id}`}
                         className="flex justify-center"
                       >
                         <motion.button

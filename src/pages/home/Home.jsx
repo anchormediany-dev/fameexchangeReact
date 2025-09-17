@@ -17,7 +17,11 @@ import Faq from "../../components/faq/Faq";
 import CustomerReview from "../../components/customer_review/CustomerReview";
 import VideoBanner3 from "../../components/VideoBanner3";
 import CelebMerchandiseHero from "../../components/CelebMerchandiseHero";
+import { useGetTalentQuery } from "../../app/authApi";
 const Home = () => {
+  const { data, isLoading, isError, error, refetch, isFetching } =
+    useGetTalentQuery();
+
   const location = useLocation();
   const [isCalculatingNetworthOpen, setIsCalculatingNetworthOpen] =
     useState(false);
@@ -44,7 +48,13 @@ const Home = () => {
     <div>
       <VideoBanner3 />
       <TalentTradingSection />
-      <BrandedTalentShares />
+      <BrandedTalentShares
+        talent={data?.taleUsers ?? []}
+        isLoading={isLoading || isFetching}
+        isError={isError}
+        error={error}
+        onRefresh={refetch}
+      />
       <DownloadApp />
       <MeetAndGreet />
       <Podcast />
