@@ -106,7 +106,7 @@ const EventsCalendar = ({
   };
 
   return (
-    <div className="w-full" style={{ height }}>
+    <div className="w-full">
       <div className="bg-white/5 backdrop-blur-xl border border-white/10 rounded-2xl shadow-xl p-3 md:p-4 h-full flex flex-col min-h-0">
         {/* Header */}
         <div className="flex items-center justify-center space-x-2 sm:space-x-4 mb-4 sm:mb-6 shrink-0">
@@ -218,7 +218,7 @@ const EventsCalendar = ({
                         </span>
 
                         {hasEvents && (
-                          <div className="w-full flex justify-center mt-3">
+                          <div className="w-full flex justify-center mt-3 sm:block hidden">
                             <span
                               className="inline-flex items-center justify-center min-w-[1.5rem] h-5 px-1.5 rounded-full text-[10px] sm:text-[11px] font-semibold
                                          bg-[#a38b41]/15 border border-[#a38b41]/40 text-[#f2e9c7]"

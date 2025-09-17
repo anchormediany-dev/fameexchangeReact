@@ -96,7 +96,7 @@ function FitToMarkers({ positions }) {
 export default function GoogleMapsEvents({
   allTalentsEvents,
   filteredEventsByCalendar,
-  height = 500,
+  height = 650,
   fallbackCenter = [24.8607, 67.0011],
   tileUrl = "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
   attribution = '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
@@ -131,7 +131,7 @@ export default function GoogleMapsEvents({
   const showLabels = zoom >= computedMin;
 
   return (
-    <div className="w-full rounded-xl overflow-hidden" style={{ height }}>
+    <div className="w-full rounded-xl overflow-hidden h-[400px] lg:h-[650px]">
       <MapContainer
         className="w-full h-full"
         center={positions[0] || fallbackCenter}
