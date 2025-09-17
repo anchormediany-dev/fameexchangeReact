@@ -66,7 +66,7 @@ const SearchEvents = ({
     <section className="flex justify-between items-center">
       <h2 className="text-2xl font-bold uppercase text-white mb-6 text-center">
         {/* Request your{" "} */}
-        <span className="font-bold text-primary2">All Events</span>
+        {/* <span className="font-bold text-primary2">All Events</span> */}
       </h2>
       <div className="lg:w-[25%] mb-3">
         {/* WRAPPER to avoid clipping */}

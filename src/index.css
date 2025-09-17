@@ -1032,3 +1032,12 @@ ol.custom-golden-list > li::marker {
   color: #e2cb68; /* your theme's golden color */
   font-weight: 600;
 }
+.leaflet-tooltip.event-label {
+  background: rgba(17, 24, 39, 0.9);
+  color: #fff;
+  border: none;
+  padding: 2px 6px;
+  border-radius: 4px;
+  font-size: 12px;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.25);
+}

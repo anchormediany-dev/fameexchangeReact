@@ -179,13 +179,14 @@ const UltraModernEventsPllatform = () => {
         />
 
         <div className="flex flex-col 2xl:gap-16 gap-12">
-          {/* Base content stays independent of search */}
-          <div className="grid grid-cols-1 lg:grid-cols-4 gap-10 items-stretch">
+          <div className="grid grid-cols-1 xl:grid-cols-2 gap-10 items-stretch">
             <GoogleMapsEvents
+              height={650}
               allTalentsEvents={events}
               filteredEventsByCalendar={filteredEvents}
             />
             <EventsCalendar
+              height={650}
               events={events}
               selectedDate={eventsDate}
               onDateChange={setEventsDate}
