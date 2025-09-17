@@ -423,30 +423,30 @@ const TalentTokenTicker = ({
                     </motion.div>
                     <div className="min-w-0">
                       <div className="text-sm md:text-base font-bold text-white group-hover:text-gray-200 transition-colors duration-300 truncate">
-                        {token?.name || "_"}
+                        {token?.name || "___"}
                       </div>
                       <div className="text-xs text-gray-400 group-hover:text-gray-300 transition-colors duration-300 truncate">
-                        {token?.token_name || "_"}
+                        {token?.token_name || "___"}
                       </div>
                     </div>
                     {/* </div> */}
                   </Link>
                   <div className="text-center text-xs md:text-sm font-medium text-gray-200 group-hover:text-white transition-colors duration-300">
-                    {token?.networth || "_"}
+                    {token?.networth || "___"}
                   </div>
                   {/* Comprised Value */}
                   <div className="text-center text-xs md:text-sm font-medium text-gray-200 group-hover:text-white transition-colors duration-300">
-                    _
+                    ___
                   </div>
 
                   {/* Available Talent Tokens */}
                   <div className="text-center text-xs md:text-sm text-gray-200 group-hover:text-white transition-colors duration-300">
-                    _
+                    ___
                   </div>
 
                   {/* Cost per Talent Token */}
                   <div className="text-center text-xs md:text-sm font-semibold text-gray-100 group-hover:text-white transition-colors duration-300">
-                    _
+                    ___
                   </div>
 
                   {/* Change */}
@@ -457,12 +457,12 @@ const TalentTokenTicker = ({
                         : "text-[#e3495d] group-hover:text-red-300"
                     }`}
                   >
-                    _
+                    ___
                   </div>
 
                   {/* Volume */}
                   <div className="text-center text-xs md:text-sm text-gray-200 group-hover:text-white transition-colors duration-300">
-                    _
+                    ___
                   </div>
 
                   {/* Chart Column */}
@@ -482,7 +482,7 @@ const TalentTokenTicker = ({
                         height={56}
                         index={index}
                       /> */}
-                      _
+                      ___
                     </motion.div>
                   </div>
                   <motion.div
