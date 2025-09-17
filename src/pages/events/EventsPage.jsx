@@ -49,6 +49,7 @@ const UltraModernEventsPllatform = () => {
   const searchEvents = searchRaw.map((e) => ({
     id: e._id,
     name: e.title,
+    title: e.title,
     details: e.details,
     type: e.event_type,
     status: e.status,
@@ -122,6 +123,7 @@ const UltraModernEventsPllatform = () => {
   const events = raw.map((e) => ({
     id: e._id,
     name: e.title,
+    title: e.title,
     details: e.details,
     type: e.event_type,
     status: e.status,

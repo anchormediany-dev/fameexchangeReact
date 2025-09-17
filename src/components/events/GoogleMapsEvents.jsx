@@ -77,6 +77,7 @@ export default function GoogleMapsEvents({
     [allTalentsEvents]
   );
   const events = normalizedFiltered.length ? normalizedFiltered : normalizedAll;
+  console.log(events, "events here");
 
   const positions = useMemo(
     () => events.map((ev) => [ev.lat, ev.lng]),
@@ -99,7 +100,7 @@ export default function GoogleMapsEvents({
           <Marker key={ev.id} position={[ev.lat, ev.lng]}>
             <Popup>
               <div style={{ maxWidth: 240 }}>
-                <strong>{ev.title || "Untitled Event"}</strong>
+                <strong>{ev.title}</strong>
                 {ev.address && (
                   <div style={{ fontSize: 12, marginTop: 4 }}>{ev.address}</div>
                 )}
