@@ -192,7 +192,6 @@ const UltraModernEventsPllatform = () => {
             />
             {/* <EventsPreferencesActions /> */}
           </div>
-
           <EventsListings
             events={filteredEvents}
             isLoading={isLoading}

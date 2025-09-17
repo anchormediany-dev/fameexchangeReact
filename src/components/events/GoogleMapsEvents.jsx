@@ -68,16 +68,19 @@ export default function GoogleMapsEvents({
   tileUrl = "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
   attribution = '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
 }) {
+ 
   const normalizedFiltered = useMemo(
     () => normalizeEvents(filteredEventsByCalendar),
     [filteredEventsByCalendar]
   );
+
   const normalizedAll = useMemo(
     () => normalizeEvents(allTalentsEvents),
     [allTalentsEvents]
   );
+ 
   const events = normalizedFiltered.length ? normalizedFiltered : normalizedAll;
-  console.log(events, "events here");
+ 
 
   const positions = useMemo(
     () => events.map((ev) => [ev.lat, ev.lng]),
