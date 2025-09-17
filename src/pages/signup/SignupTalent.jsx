@@ -123,6 +123,9 @@ const SignupTalent = () => {
         email: signupData.email,
         is_verified: false,
         KYC_Verified: false,
+        name: signupData.name,
+        role: signupData.role,
+        isAdmin: false,
       };
       dispatch(setCredentials({ accessToken: response.token, user }));
 
