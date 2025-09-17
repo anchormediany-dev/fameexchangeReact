@@ -3,20 +3,12 @@ import { Pagination, Navigation, Autoplay } from "swiper/modules";
 import { motion, useInView } from "framer-motion";
 import { useRef } from "react";
 import { useGetTalentQuery } from "../app/authApi";
-import meet1 from "../assets/images/meet-1.png";
-import meet2 from "../assets/images/meet-2.png";
-import meet3 from "../assets/images/meet-3.png";
-import meet4 from "../assets/images/meet-4.png";
-import meet5 from "../assets/images/meet-5.png";
 import { imgSrc } from "../utils/imgSrc";
 import "swiper/css";
 import "swiper/css/pagination";
 import "swiper/css/navigation";
 import styles from "../styles/MeetAndGreet.module.css";
 import { Link } from "react-router-dom";
-
-const fallbackImages = [meet1, meet2, meet3, meet4, meet5];
-
 const MeetAndGreet = () => {
   const sectionRef = useRef(null);
   const isInView = useInView(sectionRef, { once: true, amount: 0.2 });
@@ -171,10 +163,7 @@ const MeetAndGreet = () => {
                   const primary =
                     talentData?.images?.find?.((x) => x?.fileUrl)?.fileUrl ||
                     null;
-                  const src = primary
-                    ? imgSrc(primary)
-                    : fallbackImages[index % fallbackImages.length];
-
+                  const src = primary && imgSrc(primary);
                   return (
                     <SwiperSlide key={talentData?._id || index}>
                       <motion.div
@@ -195,8 +184,6 @@ const MeetAndGreet = () => {
                           loading="lazy"
                           onError={(e) => {
                             e.currentTarget.onerror = null;
-                            e.currentTarget.src =
-                              fallbackImages[index % fallbackImages.length];
                           }}
                         />
                         {/* Hover caption (kept for future content) */}
