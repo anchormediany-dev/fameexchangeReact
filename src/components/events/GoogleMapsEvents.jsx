@@ -1,9 +1,7 @@
-import React, { useEffect, useMemo } from "react";
+import React, { useMemo, useEffect } from "react";
 import { MapContainer, TileLayer, Marker, Popup, useMap } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
 import L from "leaflet";
-
-// fix default icons for bundlers
 delete L.Icon.Default.prototype._getIconUrl;
 L.Icon.Default.mergeOptions({
   iconRetinaUrl:
@@ -12,18 +10,15 @@ L.Icon.Default.mergeOptions({
   shadowUrl: "https://unpkg.com/leaflet@1.9.4/dist/images/marker-shadow.png",
 });
 
-function isValidCoord(lat, lng) {
-  return (
-    Number.isFinite(lat) &&
-    Number.isFinite(lng) &&
-    lat >= -90 &&
-    lat <= 90 &&
-    lng >= -180 &&
-    lng <= 180
-  );
-}
+const isValidCoord = (lat, lng) =>
+  Number.isFinite(lat) &&
+  Number.isFinite(lng) &&
+  lat >= -90 &&
+  lat <= 90 &&
+  lng >= -180 &&
+  lng <= 180;
 
-function normalizeEvents(input) {
+const normalizeEvents = (input) => {
   const list = Array.isArray(input)
     ? input
     : Array.isArray(input?.data)
@@ -32,27 +27,25 @@ function normalizeEvents(input) {
 
   return list
     .map((e) => {
-      const coords =
-        e?.event_coordinates || e?.eventCoordinates || e?.coordinates || {};
-
-      const title =
-        typeof e?.title === "string" && e.title.trim() ? e.title.trim() : "";
-      const lat = parseFloat(coords.lat);
-      const lng = parseFloat(coords.long ?? coords.lng);
+      // Support both e.coordinates.{lat,long|lng} and top-level e.{lat,lng}
+      const c = e?.coordinates || {};
+      const lat = parseFloat(c.lat ?? e?.lat);
+      const lng = parseFloat(c.long ?? c.lng ?? e?.lng);
       if (!isValidCoord(lat, lng)) return null;
 
+      const title = (e?.title || "").toString().trim();
       return {
-        id: e?._id || e?.id || crypto?.randomUUID?.() || String(Math.random()),
+        id: e?._id || e?.id || `${lat},${lng},${title}`,
+        title,
         address: e?.address || e?.location || "",
         datetime: e?.datetime || "",
         website: e?.website || "",
         lat,
         lng,
-        title,
       };
     })
     .filter(Boolean);
-}
+};
 
 function FitToMarkers({ positions }) {
   const map = useMap();
@@ -61,35 +54,34 @@ function FitToMarkers({ positions }) {
     if (positions.length === 1) {
       map.setView(positions[0], 12, { animate: true });
     } else {
-      const bounds = L.latLngBounds(positions);
-      map.fitBounds(bounds, { padding: [40, 40] });
+      map.fitBounds(L.latLngBounds(positions), { padding: [40, 40] });
     }
   }, [positions, map]);
   return null;
 }
 
 export default function GoogleMapsEvents({
-  events,
+  allTalentsEvents,
+  filteredEventsByCalendar,
   height = 500,
   fallbackCenter = [24.8607, 67.0011],
   tileUrl = "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
   attribution = '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
 }) {
-  // LOG INPUT whenever it changes
-  useEffect(() => {
-    console.log("events prop ->", events);
-  }, [events]);
+  const normalizedFiltered = useMemo(
+    () => normalizeEvents(filteredEventsByCalendar),
+    [filteredEventsByCalendar]
+  );
+  const normalizedAll = useMemo(
+    () => normalizeEvents(allTalentsEvents),
+    [allTalentsEvents]
+  );
+  const events = normalizedFiltered.length ? normalizedFiltered : normalizedAll;
 
-  const normalized = useMemo(() => normalizeEvents(events), [events]);
-  useEffect(() => {
-    console.log("normalized ->", normalized);
-  }, [normalized]);
-  // LOG OUTPUT whenever it changes
-  useEffect(() => {
-    console.log("normalized ->", normalized);
-  }, [normalized]);
-
-  const positions = normalized.map((ev) => [ev.lat, ev.lng]);
+  const positions = useMemo(
+    () => events.map((ev) => [ev.lat, ev.lng]),
+    [events]
+  );
 
   return (
     <div
@@ -101,14 +93,13 @@ export default function GoogleMapsEvents({
         style={{ height: "100%", width: "100%" }}
       >
         <TileLayer url={tileUrl} attribution={attribution} />
-
         <FitToMarkers positions={positions} />
 
-        {normalized.map((ev) => (
+        {events.map((ev) => (
           <Marker key={ev.id} position={[ev.lat, ev.lng]}>
             <Popup>
               <div style={{ maxWidth: 240 }}>
-                <strong>{ev.title}</strong>
+                <strong>{ev.title || "Untitled Event"}</strong>
                 {ev.address && (
                   <div style={{ fontSize: 12, marginTop: 4 }}>{ev.address}</div>
                 )}
@@ -129,9 +120,9 @@ export default function GoogleMapsEvents({
           </Marker>
         ))}
 
-        {!normalized.length && (
+        {!events.length && (
           <Marker position={fallbackCenter}>
-            <Popup>No valid event coordinates found.</Popup>
+            <Popup>No events with valid coordinates to show.</Popup>
           </Marker>
         )}
       </MapContainer>
