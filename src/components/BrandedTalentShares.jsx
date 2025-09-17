@@ -406,7 +406,7 @@ const TalentTokenTicker = ({
                   {/* Talent Token Image + Name */}
                   <Link
                     className="col-span-2 flex items-center gap-3 md:gap-4"
-                    to="talent-profile"
+                    to={`/talent-profile/${token?._id}`}
                   >
                     {/* <div > */}
                     <motion.div

@@ -18,10 +18,18 @@ import CustomerReview from "../../components/customer_review/CustomerReview";
 import VideoBanner3 from "../../components/VideoBanner3";
 import CelebMerchandiseHero from "../../components/CelebMerchandiseHero";
 import { useGetTalentQuery } from "../../app/authApi";
+import React, { useMemo } from "react";
 const Home = () => {
   const { data, isLoading, isError, error, refetch, isFetching } =
     useGetTalentQuery();
-
+  const sortedTalent = React.useMemo(() => {
+    const users = data?.taleUsers ?? [];
+    const toNum = (v) =>
+      v === 0 || v ? Number(String(v).replace(/,/g, "")) : 0;
+    return [...users]
+      .map((u) => ({ ...u, _net: toNum(u.networth) }))
+      .sort((a, b) => b._net - a._net);
+  }, [data]);
   const location = useLocation();
   const [isCalculatingNetworthOpen, setIsCalculatingNetworthOpen] =
     useState(false);
@@ -49,7 +57,7 @@ const Home = () => {
       <VideoBanner3 />
       <TalentTradingSection />
       <BrandedTalentShares
-        talent={data?.taleUsers ?? []}
+        talent={sortedTalent ?? []}
         isLoading={isLoading || isFetching}
         isError={isError}
         error={error}
