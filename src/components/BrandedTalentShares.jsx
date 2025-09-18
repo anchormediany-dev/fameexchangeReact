@@ -408,13 +408,10 @@ const TalentTokenTicker = ({
                       scale: 1.01,
                       transition: { duration: 0.3 },
                     }}
-                    className="grid grid-cols-10 gap-2 md:gap-4 items-center py-5 px-6 hover:shadow-lg transition-all duration-300 cursor-pointer group"
+                    className="grid grid-cols-10 gap-2 md:gap-4 items-center py-5 px-6 hover:shadow-lg transition-all duration-300 group"
                   >
                     {/* Talent Token Image + Name */}
-                    <Link
-                      className="col-span-2 flex items-center gap-3 md:gap-4"
-                      to={`/talent-profile/${token?._id}`}
-                    >
+                    <div className="col-span-2 flex items-center gap-3 md:gap-4">
                       {/* <div > */}
                       <motion.div
                         whileHover={{ scale: 1.1, rotate: 3 }}
@@ -429,15 +426,18 @@ const TalentTokenTicker = ({
                         <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent rounded-full"></div>
                       </motion.div>
                       <div className="min-w-0">
-                        <div className="text-sm md:text-base font-bold text-white group-hover:text-gray-200 transition-colors duration-300 truncate">
+                        <Link
+                          to={`/talent-profile/${token?._id}`}
+                          className="text-sm md:text-base cursor-pointer font-bold text-white group-hover:text-gray-200 transition-colors duration-300 truncate"
+                        >
                           {token?.name || "___"}
-                        </div>
+                        </Link>
                         <div className="text-xs text-gray-400 group-hover:text-gray-300 transition-colors duration-300 truncate">
                           {token?.token_name || "___"}
                         </div>
                       </div>
                       {/* </div> */}
-                    </Link>
+                    </div>
                     <div className="text-center text-xs md:text-sm font-medium text-gray-200 group-hover:text-white transition-colors duration-300">
                       {token?.networth || "___"}
                     </div>
