@@ -19,11 +19,9 @@ const FeaturedEvents = ({ events = [] }) => {
   const [currentSlide, setCurrentSlide] = useState(0);
   const [isAutoPlay, setIsAutoPlay] = useState(true);
   const [slidesPerView, setSlidesPerView] = useState(3);
-
-  // Build cards from parent events (only featured)
-  // inside FeaturedEvents
+  const featured = events.filter((e) => e?.isFeatured === true);
   const cards = useMemo(() => {
-    return events.map((e) => ({
+    return featured?.map((e) => ({
       id: e.id,
       title: e.name,
       interested: e.interested,
@@ -84,7 +82,7 @@ const FeaturedEvents = ({ events = [] }) => {
             backgroundClip: "text",
           }}
         >
-          All Events
+          Featured Events
         </h2>
 
         <div className="flex items-center justify-between sm:justify-end space-x-3">
