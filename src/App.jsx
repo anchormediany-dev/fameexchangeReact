@@ -62,6 +62,7 @@ import AdminTeams from "./pages/admin/teams/AdminTeams";
 import AddAdminTeam from "./pages/admin/teams/AddAdminTeam";
 import UpdateProfile from "./pages/UpdateProfile";
 import FanProfile from "./pages/fan/FanProfile";
+import ContactPage from "./pages/contact/ContactPage";
 
 // Simple Black Header Component
 const SimpleHeader = () => {
@@ -529,6 +530,14 @@ export default function App() {
             element={
               <MotionPageWrapper>
                 <EventsPage />
+              </MotionPageWrapper>
+            }
+          />
+          <Route
+            path="contact-us"
+            element={
+              <MotionPageWrapper>
+                <ContactPage />
               </MotionPageWrapper>
             }
           />

@@ -22,7 +22,7 @@ const navLinks = [
   // { name: "Advertising", scrollTo: "advertising" },
   { name: "Events", path: "/events", isRoute: true },
   { name: "About Us", path: "/about-us", isRoute: true },
-  { name: "Contact us", scrollTo: "contact_us" },
+  { name: "Contact us", path: "/contact-us", isRoute: true },
 ];
 
 const history = { scrollTarget: null };
