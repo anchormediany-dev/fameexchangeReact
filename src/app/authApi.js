@@ -169,8 +169,16 @@ export const authApi = api.injectEndpoints({
     }),
     // Get events
     getEvents: builder.query({
-      query: () => "/events",
-      providesTags: ["Events"],
+      query: (params) => {
+        const qs = new URLSearchParams(
+          Object.fromEntries(
+            Object.entries(params || {}).filter(
+              ([_, v]) => v !== undefined && v !== null && v !== ""
+            )
+          )
+        ).toString();
+        return `/events${qs ? `?${qs}` : ""}`;
+      },
     }),
     deleteEvent: builder.mutation({
       query: (id) => ({

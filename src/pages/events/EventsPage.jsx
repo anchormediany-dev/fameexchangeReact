@@ -1,7 +1,6 @@
 import FeaturedEvents from "../../components/events/FeaturedEvents";
 import EventsListings from "../../components/events/EventsListings";
 import GoogleMapsEvents from "../../components/events/GoogleMapsEvents";
-import EventsPreferencesActions from "../../components/events/EventsPreferencesActions";
 import EventsCalendar from "../../components/events/EventsCalendar";
 import SearchEvents from "../../components/events/SearchEvents";
 import { useGetEventsQuery, useLazySearchEventsQuery } from "../../app/authApi";
@@ -15,17 +14,84 @@ const sameDay = (a, b) =>
   a.getMonth() === b.getMonth() &&
   a.getDate() === b.getDate();
 
+const resolveImage = (p) => {
+  if (!p) return "";
+  if (/^https?:\/\//i.test(p)) return p;
+  return `${CDN_BASE}${String(p).replace(/\\/g, "/").replace(/^\/+/, "")}`;
+};
+
+function PaginationControls({
+  page,
+  totalPages,
+  hasPrev,
+  hasNext,
+  onPrev,
+  onNext,
+  onGo,
+  busy,
+  selectedDate,
+}) {
+  if (!totalPages || totalPages <= 1) return null;
+  const pages = Array.from({ length: totalPages }, (_, i) => i + 1);
+  return !selectedDate ? (
+    <div className="flex flex-wrap items-center gap-2 justify-center mt-6">
+      <button
+        disabled={!hasPrev || busy}
+        onClick={onPrev}
+        className="px-3 py-1 rounded border text-sm disabled:opacity-50"
+      >
+        Prev
+      </button>
+      <div className="flex flex-wrap gap-1">
+        {pages.map((p) => (
+          <button
+            key={p}
+            disabled={busy}
+            onClick={() => onGo(p)}
+            className={`px-3 py-1 rounded border text-sm ${
+              p === page ? "bg-black text-white" : "hover:bg-gray-100"
+            }`}
+          >
+            {p}
+          </button>
+        ))}
+      </div>
+      <button
+        disabled={!hasNext || busy}
+        onClick={onNext}
+        className="px-3 py-1 rounded border text-sm disabled:opacity-50"
+      >
+        Next
+      </button>
+    </div>
+  ) : (
+    <></>
+  );
+}
+
+/* ---------- main ---------- */
 const UltraModernEventsPllatform = () => {
-  // Base list (unchanged)
-  const { data, isLoading, isError, error, isFetching, refetch } =
-    useGetEventsQuery();
+  /* Base list pagination (ONLY here) */
+  const [page, setPage] = useState(1);
+  const [limit] = useState(10); // adjust if needed
+  const baseParams = { page, limit, sort: "-createdAt", status: "active" };
+
+  const {
+    data: baseResp,
+    isLoading,
+    isError,
+    error,
+    isFetching,
+    refetch,
+  } = useGetEventsQuery(baseParams);
+
   const [eventsDate, setEventsDate] = useState(null);
 
-  // Search (separate from base list)
+  /* Search (NO pagination) */
   const [
     triggerSearch,
     {
-      data: searchData,
+      data: searchResp,
       isFetching: isSearchFetching,
       isError: isSearchError,
       error: searchError,
@@ -34,19 +100,8 @@ const UltraModernEventsPllatform = () => {
 
   const [searchActive, setSearchActive] = useState(false);
   const [lastQuery, setLastQuery] = useState("");
-  const [lastParams, setLastParams] = useState(null);
-  const [searchMeta, setSearchMeta] = useState(null);
 
-  const resolveImage = (p) => {
-    if (!p) return "";
-    if (/^https?:\/\//i.test(p)) return p;
-    const cleaned = String(p).replace(/\\/g, "/").replace(/^\/+/, "");
-    return `${CDN_BASE}${cleaned}`;
-  };
-
-  // Map search results (for dropdown)
-  const searchRaw = Array.isArray(searchData?.data) ? searchData.data : [];
-  const searchEvents = searchRaw.map((e) => ({
+  const mapEvent = (e) => ({
     id: e._id,
     name: e.title,
     title: e.title,
@@ -54,6 +109,7 @@ const UltraModernEventsPllatform = () => {
     type: e.event_type,
     status: e.status,
     category: e.category,
+    interested: e?.prefrences?.interested ?? 0,
     location: e.location,
     address: e.address,
     phone: e.phone,
@@ -69,89 +125,24 @@ const UltraModernEventsPllatform = () => {
     logo: resolveImage(e.logo),
     cover: resolveImage(e.event_cover) || resolveImage(e.event_images?.[0]),
     images: (e.event_images || []).map(resolveImage),
-  }));
+  });
 
-  // FULL search (only on Enter)
-  const handleSearchSubmit = async (q) => {
-    if (!q?.trim()) return;
-    const now = new Date();
-    const params = {
-      q: q.trim(),
-      month: now.getMonth() + 1,
-      withinMonth: true,
-      year: now.getFullYear(),
-      featured: true,
-      status: "active",
-    };
-    setSearchActive(true);
-    setLastQuery(q.trim());
-    setLastParams(params);
-    const res = await triggerSearch(params);
-    try {
-      const payload = await res.unwrap();
-      setSearchMeta({
-        month: payload?.month ?? null,
-        year: payload?.year ?? null,
-        total:
-          payload?.total ??
-          (Array.isArray(payload?.data) ? payload.data.length : 0),
-      });
-    } catch {
-      // handled by RTK state
-    }
+  /* Base list mapping */
+  const rawBase = Array.isArray(baseResp?.data) ? baseResp.data : [];
+  const events = rawBase.map(mapEvent);
+  const baseMeta = baseResp?.meta || {
+    page: 1,
+    totalPages: 1,
+    hasPrevPage: false,
+    hasNextPage: false,
   };
-
-  const handleSearchClear = () => {
-    setSearchActive(false);
-    setLastQuery("");
-    setLastParams(null);
-    setSearchMeta(null);
-  };
-
-  useEffect(() => {
-    if (searchActive && searchData) {
-      setSearchMeta({
-        month: searchData?.month ?? null,
-        year: searchData?.year ?? null,
-        total: searchData?.total ?? searchEvents.length,
-      });
-    }
-  }, [searchActive, searchData, searchEvents.length]);
-
-  // ---- Base list mapping (unchanged) ----
-  const raw = Array.isArray(data?.data) ? data.data : [];
-  const events = raw.map((e) => ({
-    id: e._id,
-    name: e.title,
-    title: e.title,
-    details: e.details,
-    type: e.event_type,
-    status: e.status,
-    category: e.category,
-    interested: e.prefrences.interested,
-    location: e.location,
-    address: e.address,
-    phone: e.phone,
-    website: e.website,
-    datetime: e.datetime,
-    createdAt: e.createdAt,
-    coordinates: e.event_coordinates || null,
-    isFeatured: !!e.is_featured,
-    regularPrice: e.regular_price,
-    discountPercent: e.discount_percent,
-    discountCodes: e.discount_codes || [],
-    preference: e.prefrence,
-    logo: resolveImage(e.logo),
-    cover: resolveImage(e.event_cover),
-    images: (e.event_images || []).map(resolveImage),
-  }));
 
   const filteredEvents = useMemo(() => {
     if (!eventsDate) return events;
     return events.filter((ev) => {
       if (!ev.datetime) return false;
-      const created = new Date(ev.datetime);
-      return sameDay(created, eventsDate);
+      const d = new Date(ev.datetime);
+      return sameDay(d, eventsDate);
     });
   }, [events, eventsDate]);
 
@@ -160,15 +151,45 @@ const UltraModernEventsPllatform = () => {
     [events]
   );
 
+  /* Search mapping (no pagination) */
+  const searchRaw = Array.isArray(searchResp?.data) ? searchResp.data : [];
+  const searchEvents = searchRaw.map(mapEvent);
+
+  /* Search handlers (no page/limit) */
+  const handleSearchSubmit = async (q) => {
+    if (!q?.trim()) return;
+    setSearchActive(true);
+    setLastQuery(q.trim());
+
+    const now = new Date();
+    await triggerSearch({
+      q: q.trim(),
+      month: now.getMonth() + 1,
+      withinMonth: true,
+      year: now.getFullYear(),
+      featured: true,
+      status: "active",
+      sort: "-createdAt",
+      // ❌ no page/limit here
+    });
+  };
+
+  const handleSearchClear = () => {
+    setSearchActive(false);
+    setLastQuery("");
+  };
+
+  /* Base pagination actions */
+  const goBasePage = (p) => setPage(p);
+
   return (
     <section className="w-full z-50 bg-gradient-to-br py-12 2xl:py-16 flex flex-col 2xl:gap-16 gap-12 px-4 sm:px-6 lg:px-8">
       <div className="2xl:gap-16 gap-12 px-4 container sm:px-6 lg:px-8 mt-10 lg:mt-16 2xl:mt-20">
-        {/* Search with dropdown results (Enter only) */}
         <SearchEvents
           onSearch={handleSearchSubmit}
           onClear={handleSearchClear}
           isSearching={isSearchFetching}
-          isActive={searchActive} // keeps dropdown open after submit
+          isActive={searchActive}
           results={searchEvents}
           resultsLoading={isSearchFetching}
           resultsError={
@@ -181,27 +202,46 @@ const UltraModernEventsPllatform = () => {
         <div className="flex flex-col 2xl:gap-16 gap-12">
           <div className="grid grid-cols-1 xl:grid-cols-2 gap-10 items-stretch">
             <GoogleMapsEvents
-              allTalentsEvents={events}
-              filteredEventsByCalendar={filteredEvents}
+              allTalentsEvents={searchActive ? searchEvents : events}
+              filteredEventsByCalendar={
+                searchActive ? searchEvents : filteredEvents
+              }
             />
             <EventsCalendar
-              events={events}
+              events={searchActive ? searchEvents : events}
               selectedDate={eventsDate}
               onDateChange={setEventsDate}
             />
-            {/* <EventsPreferencesActions /> */}
           </div>
+
           <EventsListings
-            events={filteredEvents}
-            isLoading={isLoading}
-            isError={isError}
-            error={error}
-            isFetching={isFetching}
-            onRetry={refetch}
+            events={searchActive ? searchEvents : filteredEvents}
+            isLoading={searchActive ? false : isLoading}
+            isError={searchActive ? isSearchError : isError}
+            error={searchActive ? searchError : error}
+            isFetching={searchActive ? isSearchFetching : isFetching}
+            onRetry={
+              searchActive ? () => handleSearchSubmit(lastQuery) : refetch
+            }
             eventsDate={eventsDate}
           />
 
-          <FeaturedEvents events={events} />
+          {/* ✅ Base pagination ONLY (hidden during search) */}
+          {!searchActive && (
+            <PaginationControls
+              page={baseMeta.page || page}
+              totalPages={baseMeta.totalPages || 1}
+              hasPrev={!!baseMeta.hasPrevPage}
+              hasNext={!!baseMeta.hasNextPage}
+              onPrev={() => goBasePage((baseMeta.page || page) - 1)}
+              onNext={() => goBasePage((baseMeta.page || page) + 1)}
+              onGo={(p) => goBasePage(p)}
+              busy={isFetching}
+              selectedDate={eventsDate}
+            />
+          )}
+
+          <FeaturedEvents events={searchActive ? searchEvents : events} />
         </div>
       </div>
     </section>
