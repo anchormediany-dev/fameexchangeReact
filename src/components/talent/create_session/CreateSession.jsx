@@ -29,6 +29,7 @@ const CreateSession = () => {
       bufferTime: 15,
       timeZone: DEFAULT_TZ,
       accessType: "online",
+      where: "",
       sessionDate: "",
       sessionTime: "",
     },
@@ -42,6 +43,7 @@ const CreateSession = () => {
         bufferTime: data.bufferTime,
         timeZone: data.timeZone,
         accessType: data.accessType,
+        where: data.where,
         sessionDate: data.sessionDate,
         sessionTime: data.sessionTime,
       };
@@ -223,7 +225,7 @@ const CreateSession = () => {
             </div>
 
             {/* Access Type */}
-            <div className="col-span-1 md:col-span-2">
+            <div className="col-span-1">
               <label className="block text-sm text-white mb-2">
                 Access Type
               </label>
@@ -247,6 +249,24 @@ const CreateSession = () => {
               {errors.accessType && (
                 <p className="text-red-500 text-xs mt-1">
                   {errors.accessType.message}
+                </p>
+              )}
+            </div>
+            {/* Meeting Location */}
+            <div>
+              <label className="block text-sm text-white mb-2">
+                Meeting Location
+              </label>
+              <input
+                type="text"
+                {...register("where", {
+                  required: "Meeting Location is required",
+                })}
+                className="w-full bg-[#2d2d2d] gredient-border text-white rounded-lg py-3 px-4 placeholder-gray-400"
+              />
+              {errors.where && (
+                <p className="text-red-500 text-xs mt-1">
+                  {errors.where.message}
                 </p>
               )}
             </div>
