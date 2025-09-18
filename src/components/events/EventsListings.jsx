@@ -74,8 +74,7 @@ const EventsListings = ({
           {events.map((e, index) => (
             <div
               key={e.id || index}
-              onClick={() => e.id && navigate(`/event-details/${e.id}`)}
-              className="bg-white/5 rounded-xl p-4 hover:bg-white/10 transition-colors cursor-pointer"
+              className="bg-white/5 rounded-xl p-4 hover:bg-white/10 transition-colors"
             >
               <div className="flex items-start space-x-3">
                 <span className="w-6 h-6 bg-[#a38b41] rounded-lg flex items-center justify-center text-xs font-bold text-white">
@@ -89,7 +88,12 @@ const EventsListings = ({
                       className="w-10 h-10 rounded-xl object-cover border-2 border-white/10"
                     />
                     <div>
-                      <h4 className="font-semibold text-white text-sm">
+                      <h4
+                        onClick={() =>
+                          e.id && navigate(`/event-details/${e.id}`)
+                        }
+                        className="font-semibold text-white text-sm cursor-pointer underline"
+                      >
                         {e.name}
                       </h4>
                       <span className="text-xs text-gray-400 capitalize">
@@ -105,13 +109,10 @@ const EventsListings = ({
                   </div>
                   <p className="text-gray-300 text-sm">{e.address}</p>
                   <div className="flex flex-wrap gap-2">
-                    <a
-                      href={`tel:${e.phone}`}
-                      className="flex items-center space-x-1 text-blue-400 text-sm"
-                    >
+                    <div className="flex items-center space-x-1 text-blue-400 text-sm">
                       <FiPhone className="w-3 h-3" />
-                      <span>{e.phone}</span>
-                    </a>
+                      <a href={`tel:${e.phone}`}>{e.phone}</a>
+                    </div>
                     <a
                       href={`https://${e.website}`}
                       target="_blank"
@@ -159,8 +160,7 @@ const EventsListings = ({
               {events.map((e, index) => (
                 <tr
                   key={e.id || index}
-                  onClick={() => e.id && navigate(`/event-details/${e.id}`)}
-                  className="border-b border-white/5 hover:bg-white/5 transition-colors group cursor-pointer"
+                  className="border-b border-white/5 hover:bg-white/5 transition-colors group"
                 >
                   <td className="p-3">
                     <span
@@ -183,7 +183,12 @@ const EventsListings = ({
                         <div className="absolute inset-0 bg-gradient-to-t from-[#a38b41]/20 to-transparent rounded-xl opacity-0 group-hover:opacity-100 transition-opacity"></div>
                       </div>
                       <div>
-                        <span className="font-semibold text-white text-sm block">
+                        <span
+                          onClick={() =>
+                            e.id && navigate(`/event-details/${e.id}`)
+                          }
+                          className="font-semibold text-white text-sm block cursor-pointer underline"
+                        >
                           {e.name}
                         </span>
                         <span className="text-xs text-gray-400 capitalize">
@@ -204,13 +209,12 @@ const EventsListings = ({
                     <span className="text-gray-300 text-sm">{e.address}</span>
                   </td>
                   <td className="p-3">
-                    <a
-                      href={`tel:${e.phone}`}
-                      className="flex items-center space-x-1 text-blue-400 hover:text-blue-300 transition-colors group"
-                    >
+                    <div className="flex items-center space-x-1 text-blue-400 hover:text-blue-300 transition-colors group">
                       <FiPhone className="w-3 h-3" />
-                      <span className="text-sm">{e.phone}</span>
-                    </a>
+                      <a href={`tel:${e.phone}`} className="text-sm">
+                        {e.phone}
+                      </a>
+                    </div>
                   </td>
                   <td className="p-3">
                     <a
