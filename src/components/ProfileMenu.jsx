@@ -12,7 +12,7 @@ export default function ProfileMenu({
   const [open, setOpen] = useState(false);
   const btnRef = useRef(null);
   const panelRef = useRef(null);
-  const userLocalData = JSON.parse(localStorage.getItem("user")); 
+  const userLocalData = JSON.parse(localStorage.getItem("user"));
   const isRoleTalent = userLocalData?.role === "TALENT";
   const isRoleFan = userLocalData?.role === "FAN";
   const isRoleAdmin = userLocalData?.role === "ADMIN";
@@ -63,7 +63,7 @@ export default function ProfileMenu({
   };
 
   return (
-    <div className="relative">
+    <div className="relative text-black">
       {/* Trigger */}
       <motion.button
         ref={btnRef}
@@ -201,9 +201,9 @@ export default function ProfileMenu({
                   <button
                     onClick={action}
                     className={[
-                      "group flex w-full items-center justify-center gap-3 px-3 py-2.5 text-left transition",
+                      "group flex w-full cursor-pointer items-center justify-center gap-3 px-3 py-2.5 text-left transition",
                       danger
-                        ? "text-gray-800 hover:bg-red-50 dark:hover:bg-red-500/10"
+                        ? "text-gray-800  dark:hover:bg-red-500/10"
                         : "text-neutral-700 hover:bg-black/5 dark:text-neutral-200 dark:hover:bg-white/5",
                     ].join(" ")}
                   >
