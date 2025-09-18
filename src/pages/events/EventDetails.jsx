@@ -303,9 +303,6 @@ export default function EventDetails() {
                       <div className="grid gap-3 grid-cols-1 sm:grid-cols-2  items-center">
                         {event?.talent?.map((t, i) => (
                           <div
-                            onClick={() =>
-                              t._id && navigate(`/talent-profile/${t._id}`)
-                            }
                             className="flex gap-1 items-center"
                             key={t._id ?? i}
                           >
@@ -321,7 +318,14 @@ export default function EventDetails() {
                               }
                               alt="Talents Performing"
                             />
-                            <span>{t?.name}</span>
+                            <button
+                              className="underline cursor-pointer"
+                              onClick={() =>
+                                t._id && navigate(`/talent-profile/${t._id}`)
+                              }
+                            >
+                              {t?.name}
+                            </button>
                           </div>
                         ))}
                       </div>
