@@ -266,7 +266,7 @@ export const authApi = api.injectEndpoints({
         method: "POST",
         body: data,
       }),
-      invalidatesTags: ["FanRequests"],
+      invalidatesTags: ["FanRequests", "ConfirmedTalentRequests"],
     }),
     // Sessions
     createSession: builder.mutation({
