@@ -21,7 +21,6 @@ import TalentProfile from "./pages/talent_profile/TalentProfile";
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import siteLogo from "./assets/images/site-logo.png";
-import BrandedTalentShares from "./pages/branded_talent_shares/BrandedTalentShares";
 // import MeetGreetPage from "./pages/meet_greet/MeetGreetPage";
 import InversePage from "./pages/inverse/InversePage";
 import EventsPage from "./pages/events/EventsPage";
@@ -63,6 +62,7 @@ import AddAdminTeam from "./pages/admin/teams/AddAdminTeam";
 import UpdateProfile from "./pages/UpdateProfile";
 import FanProfile from "./pages/fan/FanProfile";
 import ContactPage from "./pages/contact/ContactPage";
+import BrandedTalentSharesPage from "./pages/branded_talent_shares/BrandedTalentSharesPage";
 
 // Simple Black Header Component
 const SimpleHeader = () => {
@@ -554,7 +554,7 @@ export default function App() {
             path="branded-tokens-shares"
             element={
               <MotionPageWrapper>
-                <BrandedTalentShares />
+                <BrandedTalentSharesPage />
               </MotionPageWrapper>
             }
           />

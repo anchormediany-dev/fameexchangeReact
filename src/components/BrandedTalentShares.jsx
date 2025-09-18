@@ -10,6 +10,7 @@ const TalentTokenTicker = ({
   isError,
   error,
   onRefresh,
+  viewAll,
 }) => {
   if (isLoading) return <div>Loading…</div>;
   if (isError)
@@ -388,161 +389,166 @@ const TalentTokenTicker = ({
             </div>
 
             {/* Table Body */}
-            <div className="divide-y divide-gray-700/30">
-              {(talent ?? []).slice(0, 20)?.map((token, index) => (
-                <motion.div
-                  key={token?._id || index}
-                  custom={token?._id || index}
-                  variants={tableRowVariant}
-                  initial="hidden"
-                  animate={controls}
-                  whileHover={{
-                    backgroundColor: "rgba(255,255,255,0.08)",
-                    scale: 1.01,
-                    transition: { duration: 0.3 },
-                  }}
-                  className="grid grid-cols-10 gap-2 md:gap-4 items-center py-5 px-6 hover:shadow-lg transition-all duration-300 cursor-pointer group"
-                >
-                  {/* Talent Token Image + Name */}
-                  <Link
-                    className="col-span-2 flex items-center gap-3 md:gap-4"
-                    to={`/talent-profile/${token?._id}`}
+            <div className="divide-y divide-gray-700/30 h-[500px] overflow-y-auto">
+              {(talent ?? [])
+                .slice(0, viewAll ? 20 : talent.length)
+                .map((token, index) => (
+                  <motion.div
+                    key={token?._id || index}
+                    custom={token?._id || index}
+                    variants={tableRowVariant}
+                    initial="hidden"
+                    animate={controls}
+                    whileHover={{
+                      backgroundColor: "rgba(255,255,255,0.08)",
+                      scale: 1.01,
+                      transition: { duration: 0.3 },
+                    }}
+                    className="grid grid-cols-10 gap-2 md:gap-4 items-center py-5 px-6 hover:shadow-lg transition-all duration-300 cursor-pointer group"
                   >
-                    {/* <div > */}
-                    <motion.div
-                      whileHover={{ scale: 1.1, rotate: 3 }}
-                      transition={{ duration: 0.3 }}
-                      className="relative"
+                    {/* Talent Token Image + Name */}
+                    <Link
+                      className="col-span-2 flex items-center gap-3 md:gap-4"
+                      to={`/talent-profile/${token?._id}`}
                     >
-                      <img
-                        src={imgSrc(token?.images?.[0]?.fileUrl)}
-                        alt={token?.name}
-                        className="w-12 h-12 md:w-16 md:h-16 rounded-full object-cover border-2 border-gray-600 group-hover:border-gray-400 transition-all duration-300 shadow-lg"
-                      />
-                      <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent rounded-full"></div>
-                    </motion.div>
-                    <div className="min-w-0">
-                      <div className="text-sm md:text-base font-bold text-white group-hover:text-gray-200 transition-colors duration-300 truncate">
-                        {token?.name || "___"}
+                      {/* <div > */}
+                      <motion.div
+                        whileHover={{ scale: 1.1, rotate: 3 }}
+                        transition={{ duration: 0.3 }}
+                        className="relative"
+                      >
+                        <img
+                          src={imgSrc(token?.images?.[0]?.fileUrl)}
+                          alt={token?.name}
+                          className="w-12 h-12 md:w-16 md:h-16 rounded-full object-cover border-2 border-gray-600 group-hover:border-gray-400 transition-all duration-300 shadow-lg"
+                        />
+                        <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent rounded-full"></div>
+                      </motion.div>
+                      <div className="min-w-0">
+                        <div className="text-sm md:text-base font-bold text-white group-hover:text-gray-200 transition-colors duration-300 truncate">
+                          {token?.name || "___"}
+                        </div>
+                        <div className="text-xs text-gray-400 group-hover:text-gray-300 transition-colors duration-300 truncate">
+                          {token?.token_name || "___"}
+                        </div>
                       </div>
-                      <div className="text-xs text-gray-400 group-hover:text-gray-300 transition-colors duration-300 truncate">
-                        {token?.token_name || "___"}
-                      </div>
+                      {/* </div> */}
+                    </Link>
+                    <div className="text-center text-xs md:text-sm font-medium text-gray-200 group-hover:text-white transition-colors duration-300">
+                      {token?.networth || "___"}
                     </div>
-                    {/* </div> */}
-                  </Link>
-                  <div className="text-center text-xs md:text-sm font-medium text-gray-200 group-hover:text-white transition-colors duration-300">
-                    {token?.networth || "___"}
-                  </div>
-                  {/* Comprised Value */}
-                  <div className="text-center text-xs md:text-sm font-medium text-gray-200 group-hover:text-white transition-colors duration-300">
-                    ___
-                  </div>
+                    {/* Comprised Value */}
+                    <div className="text-center text-xs md:text-sm font-medium text-gray-200 group-hover:text-white transition-colors duration-300">
+                      ___
+                    </div>
 
-                  {/* Available Talent Tokens */}
-                  <div className="text-center text-xs md:text-sm text-gray-200 group-hover:text-white transition-colors duration-300">
-                    ___
-                  </div>
+                    {/* Available Talent Tokens */}
+                    <div className="text-center text-xs md:text-sm text-gray-200 group-hover:text-white transition-colors duration-300">
+                      ___
+                    </div>
 
-                  {/* Cost per Talent Token */}
-                  <div className="text-center text-xs md:text-sm font-semibold text-gray-100 group-hover:text-white transition-colors duration-300">
-                    ___
-                  </div>
+                    {/* Cost per Talent Token */}
+                    <div className="text-center text-xs md:text-sm font-semibold text-gray-100 group-hover:text-white transition-colors duration-300">
+                      ___
+                    </div>
 
-                  {/* Change */}
-                  <div
-                    className={`text-center text-xs md:text-sm font-bold transition-all duration-300 ${
-                      token.isPositive
-                        ? "text-[#1fbaa1] group-hover:text-emerald-300"
-                        : "text-[#e3495d] group-hover:text-red-300"
-                    }`}
-                  >
-                    ___
-                  </div>
-
-                  {/* Volume */}
-                  <div className="text-center text-xs md:text-sm text-gray-200 group-hover:text-white transition-colors duration-300">
-                    ___
-                  </div>
-
-                  {/* Chart Column */}
-                  <div className="flex justify-center">
-                    <motion.div
-                      custom={index}
-                      variants={chartVariant}
-                      initial="hidden"
-                      animate={controls}
-                      whileHover={{ scale: 1.08 }}
-                      className="w-24 h-12 md:w-28 md:h-14  rounded-xl p-2  flex items-center justify-center"
+                    {/* Change */}
+                    <div
+                      className={`text-center text-xs md:text-sm font-bold transition-all duration-300 ${
+                        token.isPositive
+                          ? "text-[#1fbaa1] group-hover:text-emerald-300"
+                          : "text-[#e3495d] group-hover:text-red-300"
+                      }`}
                     >
-                      {/* <D3Chart
+                      ___
+                    </div>
+
+                    {/* Volume */}
+                    <div className="text-center text-xs md:text-sm text-gray-200 group-hover:text-white transition-colors duration-300">
+                      ___
+                    </div>
+
+                    {/* Chart Column */}
+                    <div className="flex justify-center">
+                      <motion.div
+                        custom={index}
+                        variants={chartVariant}
+                        initial="hidden"
+                        animate={controls}
+                        whileHover={{ scale: 1.08 }}
+                        className="w-24 h-12 md:w-28 md:h-14  rounded-xl p-2  flex items-center justify-center"
+                      >
+                        {/* <D3Chart
                         data={token.graphData}
                         color={token.isPositive ? "#1fbaa1" : "#e3495d"}
                         width={112}
                         height={56}
                         index={index}
                       /> */}
-                      ___
-                    </motion.div>
-                  </div>
-                  <motion.div
-                    initial={{ opacity: 0 }}
-                    whileInView={{ opacity: 1 }}
-                    viewport={{ once: true }}
-                    transition={{ duration: 0.6, delay: 0.6 }}
-                  >
-                    <div className="flex flex-col gap-3">
-                      <Link
-                        to="/trading-account"
-                        className="flex justify-center"
-                      >
-                        <motion.button
-                          className="custom-button-two"
-                          whileHover={{ scale: 1.02 }}
-                          transition={{ duration: 0.2 }}
-                        >
-                          TRADE
-                        </motion.button>
-                      </Link>
-
-                      <Link
-                        to={`/talent-profile/${token?._id}`}
-                        className="flex justify-center"
-                      >
-                        <motion.button
-                          className="underline cursor-pointer"
-                          whileHover={{ scale: 1.02 }}
-                          transition={{ duration: 0.2 }}
-                        >
-                          View Profile
-                        </motion.button>
-                      </Link>
+                        ___
+                      </motion.div>
                     </div>
+                    <motion.div
+                      initial={{ opacity: 0 }}
+                      whileInView={{ opacity: 1 }}
+                      viewport={{ once: true }}
+                      transition={{ duration: 0.6, delay: 0.6 }}
+                    >
+                      <div className="flex flex-col gap-3">
+                        <Link
+                          to="/trading-account"
+                          className="flex justify-center"
+                        >
+                          <motion.button
+                            className="custom-button-two"
+                            whileHover={{ scale: 1.02 }}
+                            transition={{ duration: 0.2 }}
+                          >
+                            TRADE
+                          </motion.button>
+                        </Link>
+
+                        <Link
+                          to={`/talent-profile/${token?._id}`}
+                          className="flex justify-center"
+                        >
+                          <motion.button
+                            className="underline cursor-pointer"
+                            whileHover={{ scale: 1.02 }}
+                            transition={{ duration: 0.2 }}
+                          >
+                            View Profile
+                          </motion.button>
+                        </Link>
+                      </div>
+                    </motion.div>
                   </motion.div>
-                </motion.div>
-              ))}
+                ))}
             </div>
           </div>
         </motion.div>
-        <motion.div
-          initial={{ opacity: 0 }}
-          whileInView={{ opacity: 1 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.6, delay: 0.6 }}
-        >
-          <Link
-            to="/branded-tokens-shares"
-            className="flex justify-center mt-10"
+        {viewAll && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            whileInView={{ opacity: 1 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6, delay: 0.6 }}
           >
-            <motion.button
-              className="custom-button-two"
-              whileHover={{ scale: 1.02 }}
-              transition={{ duration: 0.2 }}
+            <Link
+              to="/branded-tokens-shares"
+              className="flex justify-center mt-10"
             >
-              DISCOVER MORE
-            </motion.button>
-          </Link>
-        </motion.div>
+              <motion.button
+                className="custom-button-two"
+                whileHover={{ scale: 1.02 }}
+                transition={{ duration: 0.2 }}
+              >
+                DISCOVER MORE
+              </motion.button>
+            </Link>
+          </motion.div>
+        )}
+
         {/* Modern Floating Background Elements */}
         <div className="fixed inset-0 pointer-events-none overflow-hidden -z-0">
           <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-emerald-500/3 rounded-full blur-3xl animate-pulse"></div>

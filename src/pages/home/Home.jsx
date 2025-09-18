@@ -62,6 +62,7 @@ const Home = () => {
         isError={isError}
         error={error}
         onRefresh={refetch}
+        viewAll={true}
       />
       <DownloadApp />
       <MeetAndGreet />
