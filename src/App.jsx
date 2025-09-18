@@ -385,16 +385,16 @@ export default function App() {
               }
             /> */}
           </Route>
-          <Route element={<ProtectedRoute />}>
-            <Route
-              path="event-details/:id"
-              element={
-                <MotionPageWrapper>
-                  <EventDetails />
-                </MotionPageWrapper>
-              }
-            />
-          </Route>
+
+          <Route
+            path="event-details/:id"
+            element={
+              <MotionPageWrapper>
+                <EventDetails />
+              </MotionPageWrapper>
+            }
+          />
+
           {/* future_musicians Page */}
           <Route
             path="future"
