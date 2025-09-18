@@ -3,6 +3,10 @@ import { FiCalendar, FiGlobe, FiPhone } from "react-icons/fi";
 import { useGetEventByIdQuery } from "../../app/authApi";
 import EventsPreferencesActions from "../../components/events/EventsPreferencesActions";
 import { useAuth } from "../../utils/auth/useAuth";
+import { Swiper, SwiperSlide } from "swiper/react";
+import { Autoplay, EffectFade } from "swiper/modules";
+import "swiper/css";
+import "swiper/css/effect-fade";
 const CDN_BASE = import.meta.env.VITE_API_IMAGE_BASE_URL || "";
 
 // Internet fallbacks
@@ -57,8 +61,6 @@ export default function EventDetails() {
     ) ||
     resolveImage(event?.userId?.images?.[0]?.fileUrl) ||
     FALLBACK_COVER;
-
-  // ✅ Logo fallback chain (always show something)
   const logo =
     resolveImage(event?.logo) ||
     resolveImage(event?.userId?.images?.[0]?.fileUrl) ||
@@ -66,11 +68,36 @@ export default function EventDetails() {
       event?.userId?.name || event?.title || "Event"
     )}` ||
     FALLBACK_LOGO_PLACEHOLDER;
-
   const pref = event?.prefrence ?? event?.preference ?? "—";
   const lat = event?.event_coordinates?.lat ?? "—";
   const lng = event?.event_coordinates?.long ?? "—";
+  const carouselImages = [];
+  if (event?.event_cover) {
+    carouselImages.push(resolveImage(event.event_cover));
+  }
+  if (Array.isArray(event?.event_images)) {
+    event.event_images.forEach((img) => {
+      const resolvedImg = resolveImage(img);
+      if (resolvedImg && !carouselImages.includes(resolvedImg)) {
+        carouselImages.push(resolvedImg);
+      }
+    });
+  }
 
+  // Add user images if available
+  if (Array.isArray(event?.userId?.images)) {
+    event.userId.images.forEach((img) => {
+      const resolvedImg = resolveImage(img?.fileUrl);
+      if (resolvedImg && !carouselImages.includes(resolvedImg)) {
+        carouselImages.push(resolvedImg);
+      }
+    });
+  }
+
+  // If no images found, use fallback
+  if (carouselImages.length === 0) {
+    carouselImages.push(FALLBACK_COVER);
+  }
   if (isLoading) {
     return (
       <div className="min-h-screen bg-[#171717] text-gray-300 p-8">
@@ -99,13 +126,33 @@ export default function EventDetails() {
 
   return (
     <div className="bg-[#171717] min-h-screen mt-20 text-white">
-      {/* Hero with COVER + overlay + LOGO + Title + Date */}
-      <div
-        className="h-72 md:h-96 w-full bg-cover bg-center relative"
-        style={{ backgroundImage: `url(${cover})`, backgroundColor: "#222222" }}
-      >
-        <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/40 to-transparent" />
-        <div className="absolute bottom-4 left-4 right-4 md:left-8 md:right-8 flex items-center gap-4">
+      {/* Hero with CAROUSEL + overlay + LOGO + Title + Date */}
+      <div className="h-72 md:h-96 w-full relative bg-[#222222]">
+        <Swiper
+          modules={[Autoplay, EffectFade]}
+          spaceBetween={0}
+          slidesPerView={1}
+          autoplay={{
+            delay: 2000,
+            disableOnInteraction: false,
+            pauseOnMouseEnter: true,
+          }}
+          effect="fade"
+          speed={1000}
+          className="h-full w-full"
+        >
+          {carouselImages.map((image, index) => (
+            <SwiperSlide key={index}>
+              <div
+                className="h-full w-full bg-cover bg-center"
+                style={{ backgroundImage: `url(${image})` }}
+              />
+            </SwiperSlide>
+          ))}
+        </Swiper>
+
+        <div className="absolute  inset-0 bg-gradient-to-t from-black/70 via-black/40 to-transparent" />
+        <div className="absolute z-1 bg-gradient-to-t bottom-4 left-4 right-4 md:left-8 md:right-8 flex items-center gap-4 ">
           <img
             src={logo}
             alt="logo"
