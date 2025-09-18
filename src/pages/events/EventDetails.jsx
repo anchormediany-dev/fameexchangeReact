@@ -7,6 +7,7 @@ import { Swiper, SwiperSlide } from "swiper/react";
 import { Autoplay, EffectFade } from "swiper/modules";
 import "swiper/css";
 import "swiper/css/effect-fade";
+import "swiper/css/scrollbar";
 const CDN_BASE = import.meta.env.VITE_API_IMAGE_BASE_URL || "";
 
 // Internet fallbacks
@@ -126,12 +127,12 @@ export default function EventDetails() {
 
   return (
     <div className="bg-[#171717] min-h-screen mt-20 text-white">
-      {/* Hero with CAROUSEL + overlay + LOGO + Title + Date */}
       <div className="h-72 md:h-96 w-full relative bg-[#222222]">
         <Swiper
           modules={[Autoplay, EffectFade]}
           spaceBetween={0}
           slidesPerView={1}
+          scrollbar={{ draggable: true }}
           autoplay={{
             delay: 2000,
             disableOnInteraction: false,
