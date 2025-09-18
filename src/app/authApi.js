@@ -168,6 +168,9 @@ export const authApi = api.injectEndpoints({
       invalidatesTags: ["Faqs"],
     }),
     // Get events
+    getFeaturedEvents: builder.query({
+      query: () => "/events/featured-upcoming",
+    }),
     getEvents: builder.query({
       query: (params) => {
         const qs = new URLSearchParams(
@@ -404,6 +407,7 @@ export const {
   useDeleteFaqMutation,
   // Events
   useGetEventsQuery,
+  useGetFeaturedEventsQuery,
   useDeleteEventMutation,
   useGetAdminEventsQuery,
   useCreateEventMutation,
