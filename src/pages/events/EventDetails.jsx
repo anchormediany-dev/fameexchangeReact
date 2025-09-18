@@ -2,6 +2,7 @@ import { useParams, useNavigate } from "react-router-dom";
 import { FiCalendar, FiGlobe, FiPhone } from "react-icons/fi";
 import { useGetEventByIdQuery } from "../../app/authApi";
 import EventsPreferencesActions from "../../components/events/EventsPreferencesActions";
+import { useAuth } from "../../utils/auth/useAuth";
 const CDN_BASE = import.meta.env.VITE_API_IMAGE_BASE_URL || "";
 
 // Internet fallbacks
@@ -24,6 +25,7 @@ const currency = (n) =>
     : "";
 
 export default function EventDetails() {
+  const { isAuthenticated, user } = useAuth();
   const { id } = useParams();
   const navigate = useNavigate();
   const { data, isLoading, isError, error } = useGetEventByIdQuery(id, {
@@ -146,7 +148,11 @@ export default function EventDetails() {
               )}
             </div>
 
-            <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            <div
+              className={`grid grid-cols-1  ${
+                isAuthenticated ? "lg:grid-cols-3" : "lg:grid-cols-2"
+              } gap-8`}
+            >
               {/* Main column */}
               <div className="lg:col-span-2">
                 {(event?.regular_price || hasDiscount) && (
@@ -193,9 +199,7 @@ export default function EventDetails() {
                 )}
                 {/* Location, Preference & Coordinates (text-only) */}
                 <div className="mb-2">
-                  <h3 className="text-lg font-semibold mb-3">
-                    Location & Coordinates
-                  </h3>
+                  <h3 className="text-lg font-semibold mb-3">Location</h3>
                   <div className="rounded-xl border border-[#333333] bg-[#2d2d2d] p-4 text-sm text-gray-200 space-y-2">
                     <div>
                       <span className="text-gray-400">Location: </span>
@@ -215,12 +219,6 @@ export default function EventDetails() {
                         <span className="text-white">{pref}</span>
                       </div>
                     )}
-                    <div>
-                      <span className="text-gray-400">Coordinates: </span>
-                      <span className="text-white">
-                        lat: {String(lat)}, long: {String(lng)}
-                      </span>
-                    </div>
                   </div>
                 </div>{" "}
                 <aside className="space-y-6">
@@ -334,10 +332,13 @@ export default function EventDetails() {
                   )}
                 </aside>
               </div>
-              <EventsPreferencesActions
-                eventDetails={event}
-                eventId={event?._id}
-              />
+              {isAuthenticated && (
+                <EventsPreferencesActions
+                  eventDetails={event}
+                  eventId={event?._id}
+                />
+              )}
+
               {/* Sidebar (no duplicates, no message organizer) */}
             </div>
           </div>
