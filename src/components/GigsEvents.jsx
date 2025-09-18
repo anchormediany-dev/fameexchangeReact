@@ -125,10 +125,11 @@ const GigsEvents = () => {
   const navigate = useNavigate();
   const { data, isLoading, isError } = useGetEventsQuery();
   const events = Array.isArray(data?.data) ? data.data : [];
-  const hasEvents = events.length > 0;
+  const featuredEvents = events.filter((event) => event?.is_featured === true);
+  const hasEvents = featuredEvents.length > 0;
 
   const cards = useMemo(() => {
-    return events.map((e) => {
+    return featuredEvents?.map((e) => {
       const when =
         e?.datetime ||
         e?.start_time ||

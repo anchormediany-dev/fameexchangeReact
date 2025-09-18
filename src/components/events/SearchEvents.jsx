@@ -64,6 +64,17 @@ const SearchEvents = ({
 
   return (
     <section className="flex justify-between items-center">
+      <h2
+        className="text-xl font-bold"
+        style={{
+          background: `linear-gradient(to right, #d4c374)`,
+          WebkitBackgroundClip: "text",
+          WebkitTextFillColor: "transparent",
+          backgroundClip: "text",
+        }}
+      >
+        Events
+      </h2>
       <h2 className="text-2xl font-bold uppercase text-white mb-6 text-center">
         {/* Request your{" "} */}
         {/* <span className="font-bold text-primary2">All Events</span> */}
