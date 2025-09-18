@@ -11,16 +11,16 @@ import { logout } from "../features/auth/authSlice";
 import { openSignupModal as openSignupModalAction } from "../features/auth/signupModalSlice";
 import ProfileMenu from "./ProfileMenu";
 const navLinks = [
-  { name: "Home", scrollTo: "home" },
-  { name: "Top Talent", scrollTo: "top-talent" },
+  { name: "Home", path: "/", isRoute: true },
+  { name: "Top Talent", path: "/branded-tokens-shares", isRoute: true },
   { name: "Trading Chart", scrollTo: "trading-chart" },
-  { name: "Inverse", scrollTo: "inverse" },
-  { name: "Futures", scrollTo: "futures" },
+  { name: "Inverse", path: "/inverse", isRoute: true },
+  { name: "Futures", path: "/future", isRoute: true },
   // { name: "Stocks", scrollTo: "stocks" },
   // { name: "Brands", scrollTo: "brands" },
   // { name: "Meet & Greet", scrollTo: "meet_greet" },
   // { name: "Advertising", scrollTo: "advertising" },
-  { name: "Events", scrollTo: "events" },
+  { name: "Events", path: "/events", isRoute: true },
   { name: "About Us", path: "/about-us", isRoute: true },
   { name: "Contact us", scrollTo: "contact_us" },
 ];
@@ -39,6 +39,18 @@ const Navbar = () => {
   const [ignoreScroll, setIgnoreScroll] = useState(false);
   const location = useLocation();
   const navigate = useNavigate();
+  const getActiveLink = () => {
+    const routeLink = navLinks.find(
+      (link) => link.isRoute && link.path === location.pathname
+    );
+
+    if (routeLink) {
+      return routeLink.path;
+    }
+    return activeSection;
+  };
+
+  const activeLink = getActiveLink();
   const handleLogout = () => {
     dispatch(logout());
     navigate("/login"); // or your login/homepage
@@ -178,13 +190,17 @@ const Navbar = () => {
               >
                 <span
                   onClick={() => handleNavClick(link)}
-                  className={`cursor-pointer text-white text-sm gredient-text-two  transition-colors duration-300 ${
-                    activeSection === link.scrollTo ? "gredient-text" : ""
+                  className={`cursor-pointer text-white text-sm gredient-text-two transition-colors duration-300 ${
+                    (link.isRoute && link.path === activeLink) ||
+                    (!link.isRoute && link.scrollTo === activeLink)
+                      ? "gredient-text"
+                      : ""
                   }`}
                 >
                   {link.name}
                 </span>
-                {activeSection === link.scrollTo && (
+                {((link.isRoute && link.path === activeLink) ||
+                  (!link.isRoute && link.scrollTo === activeLink)) && (
                   <motion.div
                     layoutId="navUnderline"
                     className="absolute bottom-0 left-0 w-full h-0.5 gradient-bg"
