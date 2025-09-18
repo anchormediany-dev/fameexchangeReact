@@ -389,9 +389,13 @@ const TalentTokenTicker = ({
             </div>
 
             {/* Table Body */}
-            <div className="divide-y divide-gray-700/30 h-[500px] overflow-y-auto">
+
+            <div
+              className={`divide-y divide-gray-700/30 
+              ${viewAll ? "" : "h-[1000px] overflow-y-auto overflow-x-hidden"}`}
+            >
               {(talent ?? [])
-                .slice(0, viewAll ? 20 : talent.length)
+                .slice(0, viewAll ? 10 : talent.length)
                 .map((token, index) => (
                   <motion.div
                     key={token?._id || index}
