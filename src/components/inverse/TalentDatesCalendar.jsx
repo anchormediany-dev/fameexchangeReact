@@ -20,6 +20,7 @@ import { toast } from "react-toastify";
 
 const TalentDatesCalendar = ({
   sessionsData: data,
+  onSelectSession,
   isLoading,
   isError,
   error,
@@ -217,18 +218,21 @@ const TalentDatesCalendar = ({
                 aria-label="Close"
                 title="Close"
               >
-                <FaTimes className="text-white" />
+                <FaTimes className="text-white cursor-pointer" />
               </button>
             </div>
 
             <div className="p-4 overflow-auto">
-              <SessionsTable sessions={sessionsForDate(openModalFor)} />
+              <SessionsTable
+                onSelectSession={onSelectSession}
+                sessions={sessionsForDate(openModalFor)}
+              />
             </div>
 
             <div className="p-3 border-t border-white/10 flex items-center justify-end">
               <button
                 onClick={closeModal}
-                className="px-4 py-2 rounded-lg bg-white/10 hover:bg-white/20 text-white text-sm"
+                className="px-4 py-2 rounded-lg bg-white/10 hover:bg-white/20 cursor-pointer text-white text-sm"
               >
                 Close
               </button>
@@ -241,7 +245,7 @@ const TalentDatesCalendar = ({
 };
 
 /* ---------- Table that shows EXACT payload fields ---------- */
-function SessionsTable({ sessions }) {
+function SessionsTable({ sessions, onSelectSession }) {
   if (!Array.isArray(sessions) || sessions.length === 0) {
     return (
       <div className="text-sm text-white/80">
@@ -266,6 +270,7 @@ function SessionsTable({ sessions }) {
             <Th>Access</Th>
             <Th>Price</Th>
             <Th>Status</Th>
+            <Th>Action</Th>
           </tr>
         </thead>
         <tbody className="divide-y divide-white/10">
@@ -295,6 +300,25 @@ function SessionsTable({ sessions }) {
                   >
                     {s.isActive ? "Active" : "Inactive"}
                   </span>
+                </Td>
+                <Td>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      console.log("[CHILD] clicked:", { s });
+                      if (!onSelectSession) {
+                        throw new Error(
+                          "onSelectSession prop is missing in TalentDatesCalendar"
+                        );
+                      }
+                      const id = s?.s_id ?? s?._id;
+                      const data = s?.sessionData ?? s;
+                      onSelectSession(id, data);
+                    }}
+                    className="bg-[#a38b41] py-1 px-3 rounded-md cursor-pointer"
+                  >
+                    inverse Request
+                  </button>
                 </Td>
               </tr>
             );

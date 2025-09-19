@@ -1,5 +1,4 @@
-// src/pages/inverse/InversePage.jsx
-import { useState, useEffect, useMemo } from "react";
+import { useState, useEffect, useMemo, useCallback } from "react";
 import { useLocation, useParams } from "react-router-dom";
 import { FiExternalLink } from "react-icons/fi";
 import FeedbackPopup from "../../components/FeedbackPopup";
@@ -13,7 +12,6 @@ import {
 import SearchTalents from "../../components/inverse/SearchTalents";
 
 const InversePage = () => {
-  // --- current user (no Redux, localStorage only)
   const userFromLS = useMemo(() => {
     try {
       return JSON.parse(localStorage.getItem("user") || "{}");
@@ -24,31 +22,19 @@ const InversePage = () => {
 
   const isTalent =
     (userFromLS?.role || userFromLS?.usertype || "").toUpperCase() === "TALENT";
-
-  // Optional route param support: /inverse/:roleId
   const { roleId } = useParams();
-
-  // Determine default talent to load so the calendar calls the API by default:
-  // - TALENT -> their own id from localStorage
-  // - otherwise -> roleId from URL (if present), else empty (user can search)
   const defaultTalentId = useMemo(() => {
     if (isTalent && userFromLS?.id) return userFromLS.id;
     if (roleId) return roleId;
     return "";
   }, [isTalent, roleId, userFromLS?.id]);
-
-  // Selected talent id (drives the sessions query)
   const [selectedSearchuser, setSelectedSearchUser] = useState(defaultTalentId);
 
-  // Keep default in sync if the param changes (e.g., navigating between talents)
   useEffect(() => {
     if (defaultTalentId && defaultTalentId !== selectedSearchuser) {
       setSelectedSearchUser(defaultTalentId);
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [defaultTalentId]);
-
-  // All users (for search)
   const {
     data: usersData,
     isLoading: isUsersLoading,
@@ -57,8 +43,6 @@ const InversePage = () => {
 
   const [isFeedbackShow, setIsFeedbackShow] = useState(false);
   const [isTalentName, setIsTalentName] = useState(false);
-
-  // State passed via navigate(..., { state })
   const location = useLocation();
   const { selectedRequestId, selectedFanName } = location.state || {};
 
@@ -69,10 +53,9 @@ const InversePage = () => {
     isError,
     error,
   } = useGetUpcomingSessionsQuery(selectedSearchuser, {
-    skip: !selectedSearchuser, // will fetch by default if we have a defaultTalentId
+    skip: !selectedSearchuser,
   });
 
-  // Smooth scroll to hash anchors (e.g., #reschedule-section)
   useEffect(() => {
     const hash = location.hash;
     if (hash) {
@@ -86,11 +69,15 @@ const InversePage = () => {
   }, [location]);
 
   const handleFeedbackPopup = () => setIsFeedbackShow(false);
-
+  const [selectedSession, setSelectedSession] = useState(null);
+  const handleSelectSession = useCallback((id, data) => {
+    console.log("[PARENT] handleSelectSession called with:", { id, data });
+    setSelectedSession({ id, data });
+  }, []);
+  const clearSelectedSession = () => setSelectedSession(null);
   return (
     <section className="w-full z-50 bg-gradient-to-br py-12 2xl:py-16 flex flex-col 2xl:gap-16 gap-12 px-4 sm:px-6 lg:px-8">
       <div className="2xl:gap-16 gap-12 px-4 container sm:px-6 lg:px-8 mt-10 lg:mt-16 2xl:mt-20">
-        {/* Search Talents — still works the same, updates selectedSearchuser */}
         <SearchTalents
           setIsTalentName={setIsTalentName}
           usersData={usersData}
@@ -161,6 +148,7 @@ const InversePage = () => {
               {/* Calendar — API is called by default if a defaultTalentId exists */}
               <TalentDatesCalendar
                 sessionsData={sessionsData}
+                onSelectSession={handleSelectSession}
                 isLoading={isLoading}
                 isError={isError}
                 error={error}
@@ -174,7 +162,13 @@ const InversePage = () => {
         <div className="flex flex-col 2xl:gap-16 gap-12 mt-10 lg:mt-16 2xl:mt-20">
           <div className="grid grid-cols-1 lg:grid-cols-4 gap-10 lg:gap-12 xl:gap-16 2xl:gap-20 items-stretch">
             {/* Fans submit requests */}
-            {!isTalent && <FanInverseRequestForm isTalentName={isTalentName} />}
+            {!isTalent && (
+              <FanInverseRequestForm
+                isTalentName={isTalentName}
+                sessionsData={sessionsData}
+                selectedSession={selectedSession}
+              />
+            )}
 
             {/* Talents confirm/reschedule (uses navigate state if provided) */}
             {isTalent && (

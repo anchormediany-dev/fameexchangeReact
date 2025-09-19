@@ -3,12 +3,17 @@ import { useLocation } from "react-router-dom";
 import { useFanInverseRequestMutation } from "../../app/authApi";
 import { toast } from "react-toastify";
 import { animate } from "framer-motion";
-const FanInverseRequestForm = ({ isTalentName }) => {
+const FanInverseRequestForm = ({
+  isTalentName,
+  sessionsData,
+  selectedSession,
+}) => {
+  console.log(selectedSession, "inverse request form");
   const [fanRequest, setFanRequest] = useState({
     talentName: isTalentName ? isTalentName : "",
-    date: "",
-    time: "",
-    desiredLocation: "",
+    date: selectedSession?.data?.sessionDate,
+    time: selectedSession?.data?.sessionTime,
+    desiredLocation: selectedSession?.data?.where,
     cardNumber: "",
     cardExpiry: "",
     cardCvv: "",
@@ -51,25 +56,26 @@ const FanInverseRequestForm = ({ isTalentName }) => {
           !fanRequest.time ||
           !fanRequest.desiredLocation ||
           !fanRequest.cardType
-    ) {
-      toast.error("Please fill in all the required fields.");
-      return;
-    }
-    try {
-      const requestBody = {
-        talentName: isTalentName ? isTalentName : fanRequest.talentName,
-        date: fanRequest.date,
-        time: fanRequest.time,
-        location: fanRequest.desiredLocation,
-        paymentMethod:
-          fanRequest.cardType === "credit" ? "Credit Card" : "Debit Card",
-      };
-      await sendFanRequest(requestBody).unwrap();
-      toast.success("Inverse request sent successfully!");
-      handleClear();
-    } catch (err) {
-      toast.error(error?.data.message);
-    }
+    )
+      // {
+      //   toast.error("Please fill in all the required fields.");
+      //   return;
+      // }
+      try {
+        const requestBody = {
+          talentName: isTalentName ? isTalentName : fanRequest.talentName,
+          date: selectedSession?.data?.sessionDate,
+          time: selectedSession?.data?.sessionTime,
+          location: selectedSession?.data?.where,
+          paymentMethod:
+            fanRequest.cardType === "credit" ? "Credit Card" : "Debit Card",
+        };
+        await sendFanRequest(requestBody).unwrap();
+        toast.success("Inverse request sent successfully!");
+        handleClear();
+      } catch (err) {
+        toast.error(error?.data?.message);
+      }
   };
 
   // Cancel request
@@ -156,9 +162,9 @@ const FanInverseRequestForm = ({ isTalentName }) => {
               Date
             </label>
             <input
-              type="date"
-              value={fanRequest.date}
-              onChange={(e) => handleFanRequestChange("date", e.target.value)}
+              type="text"
+              value={selectedSession?.data?.sessionDate}
+              // onChange={(e) => handleFanRequestChange("date", e.target.value)}
               className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition-all"
             />
           </div>
@@ -168,9 +174,9 @@ const FanInverseRequestForm = ({ isTalentName }) => {
               Time
             </label>
             <input
-              type="time"
-              value={fanRequest.time}
-              onChange={(e) => handleFanRequestChange("time", e.target.value)}
+              type="text"
+              value={selectedSession?.data?.sessionTime}
+              // onChange={(e) => handleFanRequestChange("time", e.target.value)}
               className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition-all"
             />
           </div>
@@ -181,10 +187,10 @@ const FanInverseRequestForm = ({ isTalentName }) => {
             </label>
             <input
               type="text"
-              value={fanRequest.desiredLocation}
-              onChange={(e) =>
-                handleFanRequestChange("desiredLocation", e.target.value)
-              }
+              value={selectedSession?.data?.where}
+              // onChange={(e) =>
+              //   handleFanRequestChange("desiredLocation", e.target.value)
+              // }
               className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition-all"
               placeholder="Enter desired location"
             />
