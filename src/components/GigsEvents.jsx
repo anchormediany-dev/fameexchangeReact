@@ -12,7 +12,7 @@ import { BiSolidDiscount } from "react-icons/bi";
 import { IoLocationOutline } from "react-icons/io5";
 import { BsPeople } from "react-icons/bs";
 import { Link, useNavigate } from "react-router-dom";
-import { useGetEventsQuery } from "../app/authApi";
+import { useGetFeaturedEventsQuery } from "../app/authApi";
 import { truncate } from "../utils/truncate";
 
 import hollywoodImage from "../assets/images/hollywood-sign-night_Fotor.jpg";
@@ -123,7 +123,8 @@ function getPageItems(arr, pageIndex, count) {
 
 const GigsEvents = () => {
   const navigate = useNavigate();
-  const { data, isLoading, isError } = useGetEventsQuery();
+
+  const { data, isLoading, isError } = useGetFeaturedEventsQuery();
   const events = Array.isArray(data?.data) ? data.data : [];
   const featuredEvents = events.filter((event) => event?.is_featured === true);
   const hasEvents = featuredEvents.length > 0;
