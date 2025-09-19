@@ -3,6 +3,7 @@ import {
   useUpdateMyProfileMutation,
 } from "../../app/authApi";
 import FanNotifications from "./FanNotifications";
+import FanPendingRequestsList from "./FanPendingRequestsList";
 import ImageCarouselFanProfile from "./ImageCarouselFanProfile";
 const FanProfile = () => {
   const userLocalData = JSON.parse(localStorage.getItem("user"));
@@ -20,6 +21,7 @@ const FanProfile = () => {
             updateMyProfile={updateMyProfile}
           />
           <FanNotifications />
+          <FanPendingRequestsList />
         </div>
       </div>
     </section>
