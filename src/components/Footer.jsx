@@ -161,20 +161,26 @@ const Footer = () => {
   return (
     <motion.footer
       className="bg-black text-white w-full py-12 2xl:py-16"
-      initial="hidden"
-      whileInView="visible"
-      viewport={{ once: true, amount: 0.1 }}
-      variants={containerVariants}
+      // initial="hidden"
+      // whileInView="visible"
+      // viewport={{ once: true, amount: 0.1 }}
+      // variants={containerVariants}
     >
       <div className="z-10 space-y-8 container">
         <motion.div
           className="grid grid-cols-1 md:grid-cols-3 xl:grid-cols-5 gap-8"
-          variants={containerVariants}
+          // variants={containerVariants}
         >
           {/* Left Block */}
-          <motion.div className="space-y-4" variants={itemVariants}>
+          <motion.div
+            className="space-y-4"
+            // variants={itemVariants}
+          >
             {/* Logo Row */}
-            <motion.div className="flex items-start" variants={logoVariants}>
+            <motion.div
+              className="flex items-start"
+              // variants={logoVariants}
+            >
               <img
                 src={siteLogo}
                 alt="Coin Logo"
@@ -184,7 +190,7 @@ const Footer = () => {
 
             <motion.p
               className="footer_paragraph text-center text-[#81a2b8]"
-              variants={itemVariants}
+              // variants={itemVariants}
             >
               Fan Engagement with Real Benefits: Fans are not just spectators
               but active participants. Beyond intrinsic value. "THE FAME
@@ -194,9 +200,9 @@ const Footer = () => {
             <motion.div className="flex justify-center" variants={itemVariants}>
               <motion.button
                 className="bg-[#a38b41] hover:brightness-110 cursor-pointer font-medium text-black py-3 px-6 mt-2 bg-gradient-to-r from-[#a18a3f] to-[#e6ca7c]"
-                variants={buttonVariants}
-                whileHover="hover"
-                whileTap="tap"
+                // variants={buttonVariants}
+                // whileHover="hover"
+                // whileTap="tap"
               >
                 GET STARTED
               </motion.button>
@@ -207,7 +213,7 @@ const Footer = () => {
           <motion.div variants={itemVariants}>
             <motion.h3
               className="footer_nav_title mb-5 text-[#f2f2f2]"
-              variants={itemVariants}
+              // variants={itemVariants}
             >
               SERVICES
             </motion.h3>

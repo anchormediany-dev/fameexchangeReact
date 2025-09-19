@@ -57,7 +57,7 @@ export default function EventCreateForm() {
     regular_price: "",
     discount_percent: "",
     discount_codes: [],
-    event_coordinates: { lat: "", long: "" },
+    // event_coordinates: { lat: "", long: "" },
     prefrence: "interested",
     talent: [],
   });
@@ -101,14 +101,14 @@ export default function EventCreateForm() {
   const handleBoolean = (e) =>
     setForm((s) => ({ ...s, [e.target.name]: e.target.checked }));
 
-  const handleCoordsChange = (key, v) =>
-    setForm((s) => ({
-      ...s,
-      event_coordinates:
-        key === "lat"
-          ? { ...s.event_coordinates, lat: v === "" ? "" : Number(v) }
-          : { ...s.event_coordinates, long: v === "" ? "" : Number(v) },
-    }));
+  // const handleCoordsChange = (key, v) =>
+  //   setForm((s) => ({
+  //     ...s,
+  //     event_coordinates:
+  //       key === "lat"
+  //         ? { ...s.event_coordinates, lat: v === "" ? "" : Number(v) }
+  //         : { ...s.event_coordinates, long: v === "" ? "" : Number(v) },
+  //   }));
 
   const handleArrayChange = (idx, v) =>
     setForm((s) => {
@@ -177,7 +177,7 @@ export default function EventCreateForm() {
       discount_percent: String(form.discount_percent ?? ""),
       prefrence: form.prefrence,
       discount_codes: JSON.stringify(form.discount_codes || []),
-      event_coordinates: JSON.stringify(form.event_coordinates || {}),
+      // event_coordinates: JSON.stringify(form.event_coordinates || {}),
       talent: JSON.stringify(form.talent || []),
     }).forEach(([k, v]) => fd.append(k, v));
 
@@ -214,7 +214,7 @@ export default function EventCreateForm() {
         regular_price: "",
         discount_percent: "",
         discount_codes: [],
-        event_coordinates: { lat: "", long: "" },
+        // event_coordinates: { lat: "", long: "" },
         prefrence: "interested",
         talent: [],
       });
@@ -501,7 +501,7 @@ export default function EventCreateForm() {
                 </div>
 
                 {/* Coordinates */}
-                <div>
+                {/* <div>
                   <label className="block text-white text-sm font-medium mb-2">
                     Latitude
                   </label>
@@ -517,9 +517,9 @@ export default function EventCreateForm() {
                       className="bg-transparent outline-none w-full text-white"
                     />
                   </div>
-                </div>
+                </div> */}
 
-                <div>
+                {/* <div>
                   <label className="block text-white text-sm font-medium mb-2">
                     Longitude
                   </label>
@@ -535,7 +535,7 @@ export default function EventCreateForm() {
                       className="bg-transparent outline-none w-full text-white"
                     />
                   </div>
-                </div>
+                </div> */}
               </div>
 
               {/* Pricing Section */}
