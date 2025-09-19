@@ -1,16 +1,11 @@
 import { useState, useRef, useEffect } from "react";
-import {
-  FaEdit,
-  FaSave,
-  FaTimes,
-  FaUpload,
-  FaPlus,
-} from "react-icons/fa";
+import { FaEdit, FaSave, FaTimes, FaUpload, FaPlus } from "react-icons/fa";
 import { toast } from "react-toastify";
 import {
   useGetUserByIdQuery,
   useDeleteProfileImageMutation,
 } from "../../app/authApi";
+import FanNotifications from "./FanNotifications";
 
 const IMAGE_BASE_URL = import.meta.env.VITE_API_IMAGE_BASE_URL;
 
@@ -186,7 +181,7 @@ const ImageCarouselFanProfile = ({ userData, updateMyProfile }) => {
   };
 
   return (
-    <div className="container grid grid-cols-1 lg:grid-cols-2 gap-6 px-4">
+    <div className="container grid grid-cols-1 lg:grid-cols-3 gap-6 px-4">
       {/* Image Upload Gallery - First Column */}
       <div className="bg-white/5 backdrop-blur-xl border border-white/10 rounded-2xl shadow-xl p-3 md:p-4">
         {/* Main Image Display */}
@@ -342,6 +337,16 @@ const ImageCarouselFanProfile = ({ userData, updateMyProfile }) => {
                   </pre>
                 </div>
               )}
+            </div>
+          </div>
+        </div>
+      </div>
+      {/* Third Column for notifications */}
+      <div className="bg-white/5 backdrop-blur-xl border border-white/10 rounded-2xl shadow-xl p-4 md:p-6 flex flex-col">
+        <div className="flex-1 flex flex-col">
+          <div className="space-y-4 flex-1">
+            <div className="group relative flex-1 flex flex-col h-full">
+              {/* <FanNotifications /> */}
             </div>
           </div>
         </div>
