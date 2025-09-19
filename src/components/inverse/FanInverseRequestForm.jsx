@@ -129,7 +129,11 @@ const FanInverseRequestForm = ({ isTalentName }) => {
         <h2 className="text-2xl font-bold text-primary2 mb-6 text-center">
           Fan Inverse Request Form
         </h2>
-
+        {!isTalentName && (
+          <div className="animate-pulse mt-4 text-center">
+            <p className="text-gray-500">Select a talent from the top</p>
+          </div>
+        )}
         <div className="space-y-4">
           <div>
             <label className="block text-sm font-medium text-gray-400 mb-2">
