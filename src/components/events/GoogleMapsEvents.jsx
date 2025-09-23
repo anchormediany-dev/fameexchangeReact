@@ -12,6 +12,7 @@ import {
   useJsApiLoader,
 } from "@react-google-maps/api";
 import { Link } from "react-router-dom";
+
 const isValidCoord = (lat, lng) =>
   Number.isFinite(lat) &&
   Number.isFinite(lng) &&
@@ -47,6 +48,12 @@ const normalizeEvents = (input) => {
 };
 
 const containerStyle = { width: "100%", height: "100%" };
+
+// Function to get the first character or two for the label
+const getLabelText = (title) => {
+  if (!title) return "•";
+  return title.substring(0, 20).toUpperCase();
+};
 
 export default function GoogleMapsEvents({
   allTalentsEvents,
@@ -154,7 +161,7 @@ export default function GoogleMapsEvents({
           mapTypeId: "roadmap",
         }}
       >
-        {/* Markers (simple) */}
+        {/* Markers with labels */}
         {(events.length
           ? events
           : [
@@ -169,9 +176,22 @@ export default function GoogleMapsEvents({
         ).map((ev) => {
           const pos = { lat: ev.lat, lng: ev.lng };
           const isOpen = selectedId === ev.id;
+          const labelText = getLabelText(ev.title);
+
           return (
             <React.Fragment key={ev.id}>
-              <Marker position={pos} onClick={() => setSelectedId(ev.id)} />
+              <Marker
+                position={pos}
+                onClick={() => setSelectedId(ev.id)}
+                // label={{
+                //   text: labelText,
+                //   color: "#000",
+                //   fontSize: "12px",
+                //   fontWeight: "bold",
+                //   className: "marker-label",
+                // }}
+                title={ev.title} // This shows as tooltip on hover
+              />
               {isOpen && (
                 <InfoWindow
                   position={pos}
