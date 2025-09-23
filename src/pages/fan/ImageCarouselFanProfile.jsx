@@ -6,6 +6,7 @@ import {
   useDeleteProfileImageMutation,
 } from "../../app/authApi";
 import FanNotifications from "./FanNotifications";
+import InterestedEventsForFan from "./InterestedEvents";
 
 const IMAGE_BASE_URL = import.meta.env.VITE_API_IMAGE_BASE_URL;
 
@@ -346,7 +347,7 @@ const ImageCarouselFanProfile = ({ userData, updateMyProfile }) => {
         <div className="flex-1 flex flex-col">
           <div className="space-y-4 flex-1">
             <div className="group relative flex-1 flex flex-col h-full">
-              {/* <FanNotifications /> */}
+              {/* <InterestedEventsForFan /> */}
             </div>
           </div>
         </div>

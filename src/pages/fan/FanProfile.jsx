@@ -5,6 +5,7 @@ import {
 import FanNotifications from "./FanNotifications";
 import FanPendingRequestsList from "./FanPendingRequestsList";
 import ImageCarouselFanProfile from "./ImageCarouselFanProfile";
+import InterestedEventsForFan from "./InterestedEvents";
 const FanProfile = () => {
   const userLocalData = JSON.parse(localStorage.getItem("user"));
   const userId = userLocalData?.id;
@@ -22,6 +23,7 @@ const FanProfile = () => {
           />
           <FanNotifications />
           <FanPendingRequestsList />
+          <InterestedEventsForFan />
         </div>
       </div>
     </section>
