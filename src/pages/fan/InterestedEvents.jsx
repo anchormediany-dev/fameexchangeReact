@@ -73,10 +73,10 @@ export default function InterestedEventsForFan() {
                 <button
                   type="button"
                   onClick={() => handleBuy(ev)}
-                  className="cursor-pointer pointer-events-auto shrink-0 inline-flex items-center gap-2 rounded-lg bg-yellow-400 px-3 py-2 text-sm font-semibold text-black hover:bg-yellow-300 focus:outline-none focus:ring-2 focus:ring-yellow-300 active:scale-[0.99] transition"
+                  className="cursor-pointer custom-button-two gap-2  transition"
                 >
-                  <FaTicketAlt className="text-xs" />
-                  Buy Ticket
+                  {/*  */}
+                  <div className="flex items-center gap-1"> <FaTicketAlt className="text-xs" /><span>Buy Ticket</span></div>
                 </button>
 
                 {/* OPTION B: Link (navigate). Use instead of the button above. */}
