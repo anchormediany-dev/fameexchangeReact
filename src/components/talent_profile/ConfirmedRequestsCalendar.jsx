@@ -16,6 +16,7 @@ import {
   isSameDay,
   format,
   parseISO,
+  isValid,
 } from "date-fns";
 import { useGetConfirmedTalentRequestsQuery } from "../../app/authApi";
 import { toast } from "react-toastify";
@@ -70,20 +71,29 @@ const ConfirmedRequestsCalendar = () => {
     if (!date) return;
     setSelectedDate(date);
   };
-
+  const safeParseISO = (dateString) => {
+    if (!dateString) return null;
+    try {
+      const parsed = parseISO(dateString);
+      return isValid(parsed) ? parsed : null;
+    } catch (error) {
+      console.warn("Invalid date string:", dateString);
+      return null;
+    }
+  };
   const isConfirmedDate = (date) => {
     if (!data?.data) return false;
-    return data.data.some((req) => {
-      const requestDate = parseISO(req.confirmedDate);
-      return isSameDay(requestDate, date);
+    return data?.data?.some((req) => {
+      const requestDate = safeParseISO(req.confirmedDate);
+      return requestDate && isSameDay(requestDate, date);
     });
   };
 
   const getConfirmedRequestsForDate = (date) => {
     if (!data?.data) return [];
-    return data.data.filter((req) => {
-      const requestDate = parseISO(req.confirmedDate);
-      return isSameDay(requestDate, date);
+    return data?.data.filter((req) => {
+      const requestDate = safeParseISO(req.confirmedDate);
+      return requestDate && isSameDay(requestDate, date);
     });
   };
 
