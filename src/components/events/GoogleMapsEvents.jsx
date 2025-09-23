@@ -1,29 +1,17 @@
 import React, {
   useMemo,
   useEffect,
-  useState,
   useRef,
+  useState,
   useCallback,
 } from "react";
 import {
-  MapContainer,
-  TileLayer,
+  GoogleMap,
   Marker,
-  Popup,
-  Tooltip,
-  useMap,
-} from "react-leaflet";
-import "leaflet/dist/leaflet.css";
-import L from "leaflet";
-
-delete L.Icon.Default.prototype._getIconUrl;
-L.Icon.Default.mergeOptions({
-  iconRetinaUrl:
-    "https://unpkg.com/leaflet@1.9.4/dist/images/marker-icon-2x.png",
-  iconUrl: "https://unpkg.com/leaflet@1.9.4/dist/images/marker-icon.png",
-  shadowUrl: "https://unpkg.com/leaflet@1.9.4/dist/images/marker-shadow.png",
-});
-
+  InfoWindow,
+  useJsApiLoader,
+} from "@react-google-maps/api";
+import { Link } from "react-router-dom";
 const isValidCoord = (lat, lng) =>
   Number.isFinite(lat) &&
   Number.isFinite(lng) &&
@@ -31,11 +19,6 @@ const isValidCoord = (lat, lng) =>
   lat <= 90 &&
   lng >= -180 &&
   lng <= 180;
-
-const truncate = (s, max = 20) => {
-  const str = (s || "").trim();
-  return str.length > max ? str.slice(0, max - 1) + "…" : str;
-};
 
 const normalizeEvents = (input) => {
   const list = Array.isArray(input)
@@ -63,46 +46,22 @@ const normalizeEvents = (input) => {
     .filter(Boolean);
 };
 
-function ZoomWatcher({ onZoomInit, onZoomChange }) {
-  const map = useMap();
-  const initRef = useRef(false);
-
-  useEffect(() => {
-    if (!initRef.current) {
-      const z = map.getZoom();
-      onZoomInit?.(z);
-      onZoomChange?.(z);
-      initRef.current = true;
-    }
-    const handle = () => onZoomChange?.(map.getZoom());
-    map.on("zoomend", handle);
-    return () => map.off("zoomend", handle);
-  }, [map, onZoomInit, onZoomChange]);
-
-  return null;
-}
-
-function FitToMarkers({ positions }) {
-  const map = useMap();
-  useEffect(() => {
-    if (!positions?.length) return;
-    if (positions.length === 1)
-      map.setView(positions[0], 12, { animate: true });
-    else map.fitBounds(L.latLngBounds(positions), { padding: [40, 40] });
-  }, [positions, map]);
-  return null;
-}
+const containerStyle = { width: "100%", height: "100%" };
 
 export default function GoogleMapsEvents({
   allTalentsEvents,
   filteredEventsByCalendar,
   height = 650,
-  fallbackCenter = [24.8607, 67.0011],
-  tileUrl = "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
-  attribution = '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
-  labelScaleFactor = 1.2,
+  fallbackCenter = [38.7946, 106.5348],
+  tileUrl,
+  attribution,
+  labelScaleFactor,
   labelMinZoom,
 }) {
+  const { isLoaded, loadError } = useJsApiLoader({
+    googleMapsApiKey: import.meta.env.VITE_GOOGLE_MAPS_KEY,
+  });
+
   const normalizedFiltered = useMemo(
     () => normalizeEvents(filteredEventsByCalendar),
     [filteredEventsByCalendar]
@@ -111,83 +70,148 @@ export default function GoogleMapsEvents({
     () => normalizeEvents(allTalentsEvents),
     [allTalentsEvents]
   );
-  const events = normalizedFiltered.length ? normalizedFiltered : normalizedAll;
+  const events = normalizedFiltered.length && normalizedFiltered;
 
-  const positions = useMemo(
-    () => events.map((ev) => [ev.lat, ev.lng]),
-    [events]
-  );
-
+  const defaultCenter = useMemo(() => {
+    if (events.length) return { lat: events[0].lat, lng: events[0].lng };
+    return { lat: fallbackCenter[0], lng: fallbackCenter[1] };
+  }, [events, fallbackCenter]);
   const [zoom, setZoom] = useState(5);
-  const [baseZoom, setBaseZoom] = useState(5);
+  const handleZoomChanged = useCallback(() => {
+    const m = mapRef.current;
+    if (m) setZoom(m.getZoom());
+  }, []);
 
-  const handleZoomInit = useCallback((z) => setBaseZoom(z), []);
-  const handleZoomChange = useCallback((z) => setZoom(z), []);
-  const computedMin =
-    typeof labelMinZoom === "number"
-      ? labelMinZoom
-      : Math.ceil(baseZoom + Math.log2(labelScaleFactor));
+  const mapRef = useRef(null);
+  const [selectedId, setSelectedId] = useState(null);
 
-  const showLabels = zoom >= computedMin;
+  const onLoad = useCallback((map) => {
+    mapRef.current = map;
+  }, []);
+
+  const onUnmount = useCallback(() => {
+    mapRef.current = null;
+  }, []);
+  useEffect(() => {
+    const map = mapRef.current;
+    if (!map) return;
+
+    if (!events.length) {
+      map.setCenter(defaultCenter);
+      map.setZoom(5);
+      return;
+    }
+
+    if (events.length === 1) {
+      map.setCenter({ lat: events[0].lat, lng: events[0].lng });
+      map.setZoom(12);
+      return;
+    }
+
+    const bounds = new window.google.maps.LatLngBounds();
+    events.forEach(({ lat, lng }) => bounds.extend({ lat, lng }));
+    map.fitBounds(bounds, 40);
+  }, [events, defaultCenter]);
+
+  if (loadError) {
+    return (
+      <div className="w-full rounded-xl overflow-hidden h-[400px] lg:h-[650px] flex items-center justify-center">
+        <div className="text-sm text-red-600">
+          Failed to load Google Maps. Check your API key & billing.
+        </div>
+      </div>
+    );
+  }
+
+  if (!isLoaded) {
+    return (
+      <div className="w-full rounded-xl overflow-hidden h-[400px] lg:h-[650px] flex items-center justify-center">
+        <div className="text-sm opacity-70">Loading map…</div>
+      </div>
+    );
+  }
 
   return (
-    <div className="w-full rounded-xl overflow-hidden h-[400px] lg:h-[650px]">
-      <MapContainer
-        className="w-full h-full"
-        center={positions[0] || fallbackCenter}
+    <div
+      className="w-full rounded-xl overflow-hidden h-[400px] lg:h-[650px] text-black"
+      style={{ height }}
+    >
+      <GoogleMap
+        mapContainerStyle={containerStyle}
+        center={defaultCenter}
         zoom={5}
-        style={{}}
+        onLoad={onLoad}
+        onUnmount={onUnmount}
+        options={{
+          // simple default Google map with standard controls
+          disableDefaultUI: false,
+          zoomControl: true,
+          mapTypeControl: true,
+          streetViewControl: true,
+          fullscreenControl: true,
+          gestureHandling: "greedy",
+          scrollwheel: true,
+          mapTypeId: "roadmap",
+        }}
       >
-        <ZoomWatcher
-          onZoomInit={handleZoomInit}
-          onZoomChange={handleZoomChange}
-        />
-        <TileLayer url={tileUrl} attribution={attribution} />
-        <FitToMarkers positions={positions} />
-
-        {events.map((ev) => (
-          <Marker key={ev.id} position={[ev.lat, ev.lng]}>
-            {showLabels && ev.title && (
-              <Tooltip
-                permanent
-                direction="top"
-                offset={[0, -28]}
-                opacity={1}
-                className="event-label"
-              >
-                {truncate(ev.title, 20)}
-              </Tooltip>
-            )}
-
-            <Popup>
-              <div style={{ maxWidth: 240 }}>
-                <strong>{ev.title}</strong>
-                {ev.address && (
-                  <div style={{ fontSize: 12, marginTop: 4 }}>{ev.address}</div>
-                )}
-                {ev.datetime && (
-                  <div style={{ fontSize: 12, marginTop: 4, opacity: 0.8 }}>
-                    {new Date(ev.datetime).toLocaleString()}
+        {/* Markers (simple) */}
+        {(events.length
+          ? events
+          : [
+              {
+                id: "fallback",
+                title: "Default Location",
+                address: "",
+                lat: fallbackCenter[0],
+                lng: fallbackCenter[1],
+              },
+            ]
+        ).map((ev) => {
+          const pos = { lat: ev.lat, lng: ev.lng };
+          const isOpen = selectedId === ev.id;
+          return (
+            <React.Fragment key={ev.id}>
+              <Marker position={pos} onClick={() => setSelectedId(ev.id)} />
+              {isOpen && (
+                <InfoWindow
+                  position={pos}
+                  onCloseClick={() => setSelectedId(null)}
+                >
+                  <div style={{ maxWidth: 240 }}>
+                    <Link to={`/event-details/${ev?.id}`}>
+                      <strong className="underline">
+                        {ev.title || "Location"}
+                      </strong>
+                    </Link>
+                    {ev.address && (
+                      <div style={{ fontSize: 12, marginTop: 4 }}>
+                        {ev.address}
+                      </div>
+                    )}
+                    {ev.datetime && (
+                      <div style={{ fontSize: 12, marginTop: 4, opacity: 0.8 }}>
+                        {new Date(ev.datetime).toLocaleString()}
+                      </div>
+                    )}
+                    {ev.website && (
+                      <div style={{ marginTop: 6 }}>
+                        <a
+                          href={ev.website}
+                          target="_blank"
+                          className="underline text-blue-400"
+                          rel="noreferrer"
+                        >
+                          Website
+                        </a>
+                      </div>
+                    )}
                   </div>
-                )}
-                {ev.website && (
-                  <div style={{ marginTop: 6 }}>
-                    <a href={ev.website} target="_blank" rel="noreferrer">
-                      Website
-                    </a>
-                  </div>
-                )}
-              </div>
-            </Popup>
-          </Marker>
-        ))}
-
-        {!events.length && (
-          <Marker position={fallbackCenter}>
-            <Popup>No events with valid coordinates to show.</Popup>
-          </Marker>
-        )}
-      </MapContainer>
+                </InfoWindow>
+              )}
+            </React.Fragment>
+          );
+        })}
+      </GoogleMap>
     </div>
   );
 }
