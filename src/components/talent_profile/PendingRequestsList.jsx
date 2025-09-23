@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   FaCheck,
@@ -75,7 +75,16 @@ const PendingRequestsList = () => {
     });
     setShowReschedulePopup(true);
   };
-
+  useEffect(() => {
+    if (showReschedulePopup) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "unset";
+    }
+    return () => {
+      document.body.style.overflow = "unset";
+    };
+  }, [showReschedulePopup]);
   const handleClosePopup = () => {
     setShowReschedulePopup(false);
     setSelectedRequest(null);
@@ -348,7 +357,7 @@ const PendingRequestsList = () => {
             initial={{ opacity: 0, scale: 0.9 }}
             animate={{ opacity: 1, scale: 1 }}
             exit={{ opacity: 0, scale: 0.9 }}
-            className="bg-gradient-to-br from-[#1a1a1a] to-[#0d0d0d] rounded-2xl border border-white/10 max-w-md w-full max-h-[90vh] overflow-y-auto"
+            className="bg-gradient-to-br from-[#1a1a1a] to-[#0d0d0d] rounded-2xl border border-white/10 max-w-3xl w-full max-h-[90vh] overflow-y-auto"
           >
             <div className="p-6">
               <div className="flex justify-between items-center mb-6">
@@ -447,14 +456,14 @@ const PendingRequestsList = () => {
               <div className="flex gap-3 pt-6">
                 <button
                   onClick={handleClosePopup}
-                  className="flex-1 px-4 py-3 bg-gray-600 text-white rounded-lg hover:bg-gray-700 transition-colors font-medium"
+                  className="flex-1 px-4 py-3 cursor-pointer bg-gray-600 text-white rounded-lg hover:bg-gray-700 transition-colors font-medium"
                 >
                   Cancel
                 </button>
                 <button
                   onClick={handleRescheduleSubmit}
                   disabled={isRescheduling}
-                  className="flex-1 px-4 py-3 bg-[#a38b41] text-white rounded-lg hover:bg-[#b59a4a] transition-colors font-medium disabled:opacity-50 disabled:cursor-not-allowed"
+                  className="flex-1 px-4 py-3 cursor-pointer bg-[#a38b41] text-white rounded-lg hover:bg-[#b59a4a] transition-colors font-medium disabled:opacity-50 disabled:cursor-not-allowed"
                 >
                   {isRescheduling ? (
                     <span className="flex items-center justify-center gap-2">
