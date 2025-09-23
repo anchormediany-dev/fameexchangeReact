@@ -206,7 +206,7 @@ const EventsCalendar = ({
                             : "border-white/5 hover:border-[#a38b41]/30",
                           isSelected
                             ? "ring-2 ring-[#a38b41] bg-[#a38b41]/20"
-                            : "hover:scale-105",
+                            : "",
                           isToday(day)
                             ? "outline outline-1 outline-[#a38b41]/60"
                             : "",
@@ -234,7 +234,7 @@ const EventsCalendar = ({
                       </button>
 
                       {/* Hover tooltip */}
-                      {hasEvents && (
+                      {/* {hasEvents && (
                         <div className="pointer-events-none hidden group-hover:block absolute left-1/2 -translate-x-1/2 -top-2 -translate-y-full z-20">
                           <div className="bg-[#a38b41] text-white text-xs rounded-md border border-white/10 shadow-xl p-2 min-w-44 max-w-64">
                             <div className="font-semibold mb-1">
@@ -256,7 +256,7 @@ const EventsCalendar = ({
                             </ul>
                           </div>
                         </div>
-                      )}
+                      )} */}
                     </div>
                   )}
                 </div>
