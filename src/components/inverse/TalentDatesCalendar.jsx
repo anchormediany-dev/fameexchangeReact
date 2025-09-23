@@ -226,17 +226,18 @@ const TalentDatesCalendar = ({
               <SessionsTable
                 onSelectSession={onSelectSession}
                 sessions={sessionsForDate(openModalFor)}
+                onClose={closeModal}
               />
             </div>
 
-            <div className="p-3 border-t border-white/10 flex items-center justify-end">
+            {/* <div className="p-3 border-t border-white/10 flex items-center justify-end">
               <button
                 onClick={closeModal}
                 className="px-4 py-2 rounded-lg bg-white/10 hover:bg-white/20 cursor-pointer text-white text-sm"
               >
                 Close
               </button>
-            </div>
+            </div> */}
           </div>
         </div>
       )}
@@ -245,7 +246,7 @@ const TalentDatesCalendar = ({
 };
 
 /* ---------- Table that shows EXACT payload fields ---------- */
-function SessionsTable({ sessions, onSelectSession }) {
+function SessionsTable({ sessions, onSelectSession, onClose }) {
   if (!Array.isArray(sessions) || sessions.length === 0) {
     return (
       <div className="text-sm text-white/80">
@@ -278,7 +279,7 @@ function SessionsTable({ sessions, onSelectSession }) {
             const len = asInt(s.sessionLength);
             const buf = asInt(s.bufferTime);
             return (
-              <tr key={s._id} className="hover:bg-white/5">
+              <tr key={s._id} className="">
                 <Td>
                   {s.sessionDate
                     ? format(new Date(s.sessionDate), "EEE, MMM d, yyyy")
@@ -306,14 +307,18 @@ function SessionsTable({ sessions, onSelectSession }) {
                     type="button"
                     onClick={() => {
                       console.log("[CHILD] clicked:", { s });
-                      if (!onSelectSession) {
-                        throw new Error(
-                          "onSelectSession prop is missing in TalentDatesCalendar"
-                        );
+                      try {
+                        if (!onSelectSession) {
+                          throw new Error(
+                            "onSelectSession prop is missing in TalentDatesCalendar"
+                          );
+                        }
+                        const id = s?.s_id ?? s?._id;
+                        const data = s?.sessionData ?? s;
+                        onSelectSession(id, data);
+                      } finally {
+                        onClose?.();
                       }
-                      const id = s?.s_id ?? s?._id;
-                      const data = s?.sessionData ?? s;
-                      onSelectSession(id, data);
                     }}
                     className="bg-[#a38b41] py-1 px-3 rounded-md cursor-pointer"
                   >
