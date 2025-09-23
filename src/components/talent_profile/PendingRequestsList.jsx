@@ -89,10 +89,10 @@ const PendingRequestsList = () => {
   };
 
   const handleRescheduleFormChange = (field, value) => {
-    setRescheduleForm({
-      ...rescheduleForm,
+    setRescheduleForm((prev) => ({
+      ...prev,
       [field]: value,
-    });
+    }));
   };
 
   const handleRescheduleSubmit = async () => {
@@ -153,6 +153,7 @@ const PendingRequestsList = () => {
       time: request.time,
       location: request.location,
       fanName: request.fanName,
+      accessType: request.accessType,
       status,
     };
 

@@ -246,7 +246,7 @@ export const authApi = api.injectEndpoints({
     // confirmed talent request
     getConfirmedTalentRequests: builder.query({
       query: () => `/talent-confirmation/`,
-      providesTags: ["ConfirmedTalentRequests"],
+      providesTags: ["ConfirmedTalentRequests", "FanRequestsOne"],
     }),
 
     fanInverseRequest: builder.mutation({
@@ -296,8 +296,10 @@ export const authApi = api.injectEndpoints({
           confirmedDate: data.confirmedDate,
           time: data.time,
           location: data.location,
+          accessType: data.accessType,
         },
       }),
+      invalidatesTags: ["FanRequestsOne"],
     }),
     // get talents
     getTalent: builder.query({
