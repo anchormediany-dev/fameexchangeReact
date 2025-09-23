@@ -59,7 +59,7 @@ export default function GoogleMapsEvents({
   allTalentsEvents,
   filteredEventsByCalendar,
   height = 650,
-  fallbackCenter = [38.7946, 106.5348],
+  fallbackCenter = [43.0, -75.0],
   tileUrl,
   attribution,
   labelScaleFactor,
