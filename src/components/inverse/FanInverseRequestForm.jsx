@@ -8,7 +8,6 @@ const FanInverseRequestForm = ({
   sessionsData,
   selectedSession,
 }) => {
-  console.log(selectedSession, "inverse request form");
   const [fanRequest, setFanRequest] = useState({
     talentName: isTalentName ? isTalentName : "",
     date: selectedSession?.data?.sessionDate,
@@ -184,7 +183,19 @@ const FanInverseRequestForm = ({
               className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition-all"
             />
           </div>
-
+          <div>
+            <label className="block text-sm font-medium text-gray-400 mb-2">
+              Price (USD)
+            </label>
+            <input
+              type="text"
+              readOnly
+              placeholder="Price"
+              value={`${selectedSession?.data?.price}`}
+              // onChange={(e) => handleFanRequestChange("time", e.target.value)}
+              className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition-all"
+            />
+          </div>
           <div>
             <label className="block text-sm font-medium text-gray-400 mb-2">
               Desired Location
