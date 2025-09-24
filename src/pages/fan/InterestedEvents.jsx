@@ -7,18 +7,16 @@ export default function InterestedEventsForFan({ userData }) {
 
   return (
     <div className="bg-[#1f1f1f] rounded-xl p-6">
-      {userData && userData?.length < 0 && (
-        <div className="flex items-center gap-3 mb-6">
-          <div className="inline-flex h-10 w-10 items-center justify-center rounded-xl bg-yellow-500/15 ring-1 ring-yellow-400/30">
-            <FaTicketAlt className="text-yellow-400 text-lg" />
-          </div>
-          <div className="min-w-0">
-            <h2 className="text-white text-xl font-semibold leading-tight">
-              Interested Events
-            </h2>
-          </div>
+      <div className="flex items-center gap-3 mb-6">
+        <div className="inline-flex h-10 w-10 items-center justify-center rounded-xl bg-yellow-500/15 ring-1 ring-yellow-400/30">
+          <FaTicketAlt className="text-yellow-400 text-lg" />
         </div>
-      )}
+        <div className="min-w-0">
+          <h2 className="text-white text-xl font-semibold leading-tight">
+            Interested Events
+          </h2>
+        </div>
+      </div>
 
       {userData && userData.length > 0 ? (
         <div className="grid gap-5 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">

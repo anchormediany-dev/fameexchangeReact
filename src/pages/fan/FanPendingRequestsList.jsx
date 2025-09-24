@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import { MdOutlinePendingActions } from "react-icons/md";
 import {
   FaCheck,
   FaTimes,
@@ -98,7 +99,7 @@ const FanPendingRequestsList = ({ userData }) => {
     toast.error(error?.data?.message || "Failed to load pending requests");
     return (
       <section className="w-full max-w-3xl mx-auto px-3 sm:px-4">
-        <div className="text-center py-8 bg-[#1f1f1f] rounded-xl border border-dashed border-red-500/30">
+        <div className="text-center py-8 bg-[#1f1f1f73] rounded-xl border border-dashed border-red-500/30">
           <div className="mx-auto w-16 h-16 rounded-full bg-[#1a1a1a] border-2 border-dashed border-red-500/30 flex items-center justify-center mb-4">
             <FaTimes className="text-red-500/50 text-xl" />
           </div>
@@ -119,7 +120,13 @@ const FanPendingRequestsList = ({ userData }) => {
       : "";
 
   return (
-    <section className="w-full px-3 sm:px-4">
+    <div className="bg-[#1f1f1f] rounded-xl p-6">
+      <div className="flex items-center mb-6">
+        <MdOutlinePendingActions className="text-yellow-400 text-2xl mr-2" />
+        <h2 className="text-lg font-semibold text-white uppercase">
+          Rescheduled Requests
+        </h2>
+      </div>
       <AnimatePresence>
         {userData?.length > 0 ? (
           <div className={`space-y-3 ${scrollClass}`}>
@@ -233,7 +240,7 @@ const FanPendingRequestsList = ({ userData }) => {
           </div>
         )}
       </AnimatePresence>
-    </section>
+    </div>
   );
 };
 
