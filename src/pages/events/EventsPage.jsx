@@ -1,4 +1,4 @@
-import { useState, useMemo, useEffect, useCallback } from "react";
+import { useState, useMemo, useRef, useEffect, useCallback } from "react";
 import FeaturedEvents from "../../components/events/FeaturedEvents";
 import EventsListings from "../../components/events/EventsListings";
 import GoogleMapsEvents from "../../components/events/GoogleMapsEvents";
@@ -70,9 +70,16 @@ function PaginationControls({
 /* ---------- main ---------- */
 const UltraModernEventsPllatform = () => {
   const [page, setPage] = useState(1);
+  const listTopRef = useRef(null);
+
   const [limit] = useState(10);
   const baseParams = { page, limit, sort: "-createdAt", status: "active" };
-
+  useEffect(() => {
+    if (!listTopRef.current) return;
+    const y =
+      listTopRef.current.getBoundingClientRect().top + window.scrollY - 80;
+    window.scrollTo({ top: y, behavior: "smooth" });
+  }, [page]);
   const {
     data: baseResp,
     isLoading,
@@ -213,7 +220,7 @@ const UltraModernEventsPllatform = () => {
               onDateChange={setEventsDate}
             />
           </div>
-
+          <div ref={listTopRef} />
           <EventsListings
             events={searchActive ? searchEvents : filteredEvents}
             isLoading={searchActive ? false : isLoading}

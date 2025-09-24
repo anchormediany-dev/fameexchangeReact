@@ -26,7 +26,7 @@ const EventsListings = ({
   const empty = !isLoading && !isError && (!events || events.length === 0);
   const navigate = useNavigate();
   return (
-    <div className="bg-white/5 backdrop-blur-xl border border-white/10 rounded-2xl shadow-xl p-3 md:p-4">
+    <div className=" [overflow-anchor:none] backdrop-blur-xl border border-white/10 rounded-2xl shadow-xl p-3 md:p-4">
       {/* Heading + Selected date chip */}
       <div className="flex items-center justify-between mb-4">
         <h2
