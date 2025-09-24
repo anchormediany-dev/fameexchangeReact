@@ -1,5 +1,4 @@
 import {
-  useGetUserByIdQuery,
   useUpdateMyProfileMutation,
   useGetFanOverviewQuery,
 } from "../../app/authApi";

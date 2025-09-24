@@ -90,9 +90,10 @@ export const authApi = api.injectEndpoints({
         method: "POST",
         body: profileData,
       }),
-      invalidatesTags: (result, error, body) => [
-        { type: "User", id: JSON.parse(localStorage.getItem("user"))?.id },
-      ],
+      // invalidatesTags: (result, error, body) => [
+      //   { type: "User", id: JSON.parse(localStorage.getItem("user"))?.id },
+      // ],
+      invalidatesTags: ["OverviewForFan"],
     }),
     deleteProfileImage: builder.mutation({
       query: (imageId) => ({
@@ -286,7 +287,18 @@ export const authApi = api.injectEndpoints({
       },
       providesTags: ["Sessions"],
     }),
-
+    // Accepting and Decling Request for Fan Profile
+    fanRequestConfirmation: builder.mutation({
+      query: (data) => ({
+        url: `/fan-request/${data.selectedRequestId}/reschedule`,
+        method: "PUT",
+        body: {
+          status: data.status,
+          // accessType: data.accessType,
+        },
+      }),
+      invalidatesTags: ["OverviewForFan"],
+    }),
     // Request confirmation reschedule
     rescheduleTalentConfirmation: builder.mutation({
       query: (data) => ({
@@ -311,6 +323,7 @@ export const authApi = api.injectEndpoints({
     }),
     getFanOverview: builder.query({
       query: (id) => `/user/${id}/fan/overview`,
+      providesTags: ["OverviewForFan"],
     }),
     //  our team API's
     getTeam: builder.query({
@@ -438,6 +451,7 @@ export const {
   useGetAllFanRequestsForAdminQuery,
   // Talent confirmation
   useRescheduleTalentConfirmationMutation,
+  useFanRequestConfirmationMutation,
   // Get all talents
   useGetTalentQuery,
   useGetTalentOverviewQuery,

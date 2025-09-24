@@ -3,14 +3,9 @@ import { FaEdit, FaSave, FaTimes, FaUpload, FaPlus } from "react-icons/fa";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 import {
-  useGetUserByIdQuery,
   useDeleteProfileImageMutation,
 } from "../../app/authApi";
-import FanNotifications from "./FanNotifications";
-import InterestedEventsForFan from "./InterestedEvents";
-
 const IMAGE_BASE_URL = import.meta.env.VITE_API_IMAGE_BASE_URL;
-
 const ImageCarouselFanProfile = ({ userData, updateMyProfile }) => {
   const navigate = useNavigate();
   const tickets = [
@@ -28,7 +23,6 @@ const ImageCarouselFanProfile = ({ userData, updateMyProfile }) => {
   const userId = user?.id;
   const [images, setImages] = useState([]);
   const [selectedImage, setSelectedImage] = useState(0);
-  const { data: userDataOne, isLoading, isError } = useGetUserByIdQuery(userId);
   const [deleteProfileImage] = useDeleteProfileImageMutation();
   const [editingBio, setEditingBio] = useState(false);
   const [dragOver, setDragOver] = useState(false);
@@ -59,9 +53,6 @@ const ImageCarouselFanProfile = ({ userData, updateMyProfile }) => {
     }
   };
 
-  const handleActionClick = (label) => {
-    console.log(`${label} clicked`);
-  };
 
   const cancelEdit = () => {
     setEditingBio(false);
@@ -81,7 +72,6 @@ const ImageCarouselFanProfile = ({ userData, updateMyProfile }) => {
     setIsUploading(true);
 
     try {
-      // Read all selected files
       const newImages = await Promise.all(
         imageFiles.map((file) => {
           return new Promise((resolve) => {
@@ -92,16 +82,11 @@ const ImageCarouselFanProfile = ({ userData, updateMyProfile }) => {
         })
       );
 
-      // Combine existing images with new ones
       const updatedImages = [...images, ...newImages];
       setImages(updatedImages);
-
-      // Auto-select the first new image if no image was selected before
       if (images.length === 0 && newImages.length > 0) {
         setSelectedImage(0);
       }
-
-      // Automatically save to backend
       await saveImagesToBackend(updatedImages);
     } catch (error) {
       console.error("Error processing images:", error);
@@ -111,12 +96,9 @@ const ImageCarouselFanProfile = ({ userData, updateMyProfile }) => {
     }
   };
 
-  // Save images to backend
   const saveImagesToBackend = async (imagesToSave) => {
     try {
       const formData = new FormData();
-
-      // Convert DataURLs to Blobs and add to FormData
       imagesToSave.forEach((img, index) => {
         if (img.startsWith("data:image")) {
           const blob = dataURLtoBlob(img);
@@ -131,8 +113,6 @@ const ImageCarouselFanProfile = ({ userData, updateMyProfile }) => {
       toast.error("Failed to save images");
     }
   };
-
-  // Handle drag and drop
   const handleDragOver = (e) => {
     e.preventDefault();
     setDragOver(true);
@@ -150,10 +130,8 @@ const ImageCarouselFanProfile = ({ userData, updateMyProfile }) => {
     }
   };
 
-  // Remove image
   const removeImage = async (index) => {
     try {
-      // Check if this is an existing image from backend
       if (index < userData?.images?.length) {
         const imageId = userData?.images[index]._id;
         const response = await deleteProfileImage(imageId).unwrap();
@@ -163,15 +141,11 @@ const ImageCarouselFanProfile = ({ userData, updateMyProfile }) => {
       const newImages = [...images];
       newImages.splice(index, 1);
       setImages(newImages);
-
-      // Adjust selected image index if needed
       if (selectedImage >= newImages.length && newImages.length > 0) {
         setSelectedImage(newImages.length - 1);
       } else if (newImages.length === 0) {
         setSelectedImage(0);
       }
-
-      // Save changes if there are remaining images
       if (newImages.length > 0) {
         await saveImagesToBackend(newImages);
       }
@@ -181,7 +155,6 @@ const ImageCarouselFanProfile = ({ userData, updateMyProfile }) => {
     }
   };
 
-  // Helper to convert DataURL to Blob
   const dataURLtoBlob = (dataUrl) => {
     const arr = dataUrl.split(",");
     const mime = arr[0].match(/:(.*?);/)[1];
