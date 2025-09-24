@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { useLocation } from "react-router-dom";
 import { FaSearch, FaTimes } from "react-icons/fa";
-
+import { imgSrc } from "../../utils/imgSrc";
 const SearchTalents = ({
   usersData,
   isUsersLoading,
@@ -32,9 +32,7 @@ const SearchTalents = ({
     setSearchValue(value);
 
     // Filter users with role "TALENT"
-    const filteredUsers = usersData?.users.filter(
-      (user) => user.role === "TALENT"
-    );
+    const filteredUsers = usersData?.filter((user) => user.role === "TALENT");
 
     if (value.trim()) {
       // Apply search filter to only "TALENT" users
@@ -102,8 +100,13 @@ const SearchTalents = ({
                   className="p-3 hover:bg-gray-700 cursor-pointer flex items-center gap-3"
                   onClick={() => handleSelectTalent(talent)}
                 >
-                  <div className="w-10 h-10 rounded-full bg-gray-600 flex items-center justify-center">
-                    {talent.name.charAt(0)}
+                  <div className="max-w-full">
+                    <img
+                      src={imgSrc(talent?.images[0]?.fileUrl)}
+                      alt={"Talent Image"}
+                      className="rounded-full w-8 h-8 object-cover mx-auto mb-1"
+                    />
+                    {/* <p className="text-center">{friend.friendName}</p> */}
                   </div>
                   <div>
                     <div className="font-medium text-white">{talent.name}</div>

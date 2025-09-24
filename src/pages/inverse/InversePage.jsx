@@ -8,6 +8,7 @@ import FanInverseRequestForm from "../../components/inverse/FanInverseRequestFor
 import {
   useGetUpcomingSessionsQuery,
   useGetUsersQuery,
+  useGetTalentQuery,
 } from "../../app/authApi";
 import SearchTalents from "../../components/inverse/SearchTalents";
 
@@ -36,11 +37,12 @@ const InversePage = () => {
     }
   }, [defaultTalentId]);
   const {
-    data: usersData,
+    data,
     isLoading: isUsersLoading,
     refetch: refetchUsers,
-  } = useGetUsersQuery();
-
+  } = useGetTalentQuery();
+  const usersData = data?.taleUsers;
+  console.log(data, "usersData");
   const [isFeedbackShow, setIsFeedbackShow] = useState(false);
   const [isTalentName, setIsTalentName] = useState(false);
   const location = useLocation();

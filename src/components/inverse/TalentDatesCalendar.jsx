@@ -263,6 +263,7 @@ function SessionsTable({ sessions, onSelectSession, onClose }) {
       <table className="min-w-full text-left text-sm border border-white/10 rounded-lg overflow-hidden">
         <thead className="bg-white/5 text-white/80">
           <tr>
+            <Th>Location</Th>
             <Th>Date</Th>
             <Th>Time</Th>
             <Th>Length</Th>
@@ -280,6 +281,7 @@ function SessionsTable({ sessions, onSelectSession, onClose }) {
             const buf = asInt(s.bufferTime);
             return (
               <tr key={s._id} className="">
+                <Td>{s.where || "—"}</Td>
                 <Td>
                   {s.sessionDate
                     ? format(new Date(s.sessionDate), "EEE, MMM d, yyyy")
