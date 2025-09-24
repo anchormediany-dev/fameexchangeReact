@@ -25,7 +25,7 @@ const FanProfile = () => {
           />
           <FanNotifications />
           <FanPendingRequestsList userData={data?.data?.rescheduledRequests} />
-          <InterestedEventsForFan />
+          <InterestedEventsForFan userData={data?.data?.interestedEvents} />
         </div>
       </div>
     </section>

@@ -266,7 +266,7 @@ const PendingRequestsList = () => {
                     <div className="flex flex-col sm:flex-row gap-2 w-full sm:w-auto">
                       <button
                         onClick={() =>
-                          handleTalentConfirmation(request.id, "decline")
+                          handleTalentConfirmation(request.id, "declined")
                         }
                         disabled={
                           isConfirming && activeRequestId === request.id
