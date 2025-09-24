@@ -148,7 +148,7 @@ const FanInverseRequestForm = ({
             <input
               type="text"
               value={isTalentName ? isTalentName : fanRequest.talentName}
-              // readOnly
+              readOnly
               onChange={(e) =>
                 handleFanRequestChange("talentName", e.target.value)
               }
@@ -163,6 +163,8 @@ const FanInverseRequestForm = ({
             </label>
             <input
               type="text"
+              readOnly
+              placeholder="Date"
               value={selectedSession?.data?.sessionDate}
               // onChange={(e) => handleFanRequestChange("date", e.target.value)}
               className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition-all"
@@ -175,6 +177,8 @@ const FanInverseRequestForm = ({
             </label>
             <input
               type="text"
+              readOnly
+              placeholder="Time"
               value={selectedSession?.data?.sessionTime}
               // onChange={(e) => handleFanRequestChange("time", e.target.value)}
               className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition-all"
@@ -231,19 +235,19 @@ const FanInverseRequestForm = ({
         <div className="flex flex-wrap gap-3 mt-8 justify-center">
           <button
             onClick={handleClear}
-            className="px-6 py-3 bg-gray-500 text-white rounded-lg hover:bg-gray-600 transition-colors font-medium"
+            className="px-6 cursor-pointer py-3 bg-gray-500 text-white rounded-lg hover:bg-gray-600 transition-colors font-medium"
           >
             Clear
           </button>
           <button
             onClick={handleSendRequest}
-            className="px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors font-medium"
+            className="px-6 py-3 cursor-pointer bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors font-medium"
           >
             Send Request
           </button>
           <button
             onClick={handleCancel}
-            className="px-6 py-3 bg-red-500 text-white rounded-lg hover:bg-red-600 transition-colors font-medium"
+            className="px-6 py-3 cursor-pointer bg-red-500 text-white rounded-lg hover:bg-red-600 transition-colors font-medium"
           >
             Cancel
           </button>
