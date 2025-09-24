@@ -1,6 +1,7 @@
 import { useState, useRef, useEffect } from "react";
 import { FaEdit, FaSave, FaTimes, FaUpload, FaPlus } from "react-icons/fa";
 import { toast } from "react-toastify";
+import { useNavigate } from "react-router-dom";
 import {
   useGetUserByIdQuery,
   useDeleteProfileImageMutation,
@@ -11,6 +12,18 @@ import InterestedEventsForFan from "./InterestedEvents";
 const IMAGE_BASE_URL = import.meta.env.VITE_API_IMAGE_BASE_URL;
 
 const ImageCarouselFanProfile = ({ userData, updateMyProfile }) => {
+  const navigate = useNavigate();
+  const tickets = [
+    { id: "1", eventId: "101", eventName: "Music Fiesta 2025" },
+    { id: "2", eventId: "102", eventName: "Tech Conference 2025" },
+    { id: "3", eventId: "103", eventName: "Startup Pitch Night" },
+    { id: "1", eventId: "101", eventName: "Music Fiesta 2025" },
+    { id: "2", eventId: "102", eventName: "Tech Conference 2025" },
+    { id: "3", eventId: "103", eventName: "Startup Pitch Night" },
+    { id: "1", eventId: "101", eventName: "Music Fiesta 2025" },
+    { id: "2", eventId: "102", eventName: "Tech Conference 2025" },
+    { id: "3", eventId: "103", eventName: "Startup Pitch Night" },
+  ];
   const user = JSON.parse(localStorage.getItem("user"));
   const userId = user?.id;
   const [images, setImages] = useState([]);
@@ -347,7 +360,54 @@ const ImageCarouselFanProfile = ({ userData, updateMyProfile }) => {
         <div className="flex-1 flex flex-col">
           <div className="space-y-4 flex-1">
             <div className="group relative flex-1 flex flex-col h-full">
-              {/* <InterestedEventsForFan /> */}
+              <section>
+                <h2
+                  className="text-xl uppercase text-[#a38b41] mb-5 font-bold"
+                  style={{
+                    background: "linear-gradient(to right, #a38b41, #d4c374)",
+                    WebkitBackgroundClip: "text",
+                    WebkitTextFillColor: "transparent",
+                    backgroundClip: "text",
+                  }}
+                >
+                  Buyed Tickets
+                </h2>
+
+                <div className="h-[300px] overflow-y-auto overflow-x-auto">
+                  <table className="w-full">
+                    <thead>
+                      <tr className="border-b border-white/10">
+                        <th className="p-3 text-left text-sm text-gray-300">
+                          S.No
+                        </th>
+                        <th className="p-3 text-left text-sm text-gray-300">
+                          Event
+                        </th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {tickets.map((t, i) => (
+                        <tr
+                          key={t.id}
+                          className="border-b border-white/5 hover:bg-white/5 transition-colors"
+                        >
+                          <td className="p-3 text-sm text-gray-200">{i + 1}</td>
+                          <td className="p-3">
+                            <button
+                              onClick={() =>
+                                navigate(`/event-details/${t.eventId}`)
+                              }
+                              className="text-sm cursor-pointer text-white underline underline-offset-2 hover:text-[#d4c374]"
+                            >
+                              {t.eventName}
+                            </button>
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              </section>
             </div>
           </div>
         </div>
