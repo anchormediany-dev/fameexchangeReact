@@ -149,7 +149,7 @@ const SearchEvents = ({
       <h2 className="text-2xl font-bold uppercase text-white mb-6 text-center" />
 
       <div className="lg:w-[25%] mb-3" ref={wrapperRef}>
-        <div className="relative z-50">
+        <div className="relative">
           <form onSubmit={handleSearch} className="group" role="search">
             <div
               className={`
@@ -164,7 +164,7 @@ const SearchEvents = ({
               <div
                 className={`
                   absolute inset-0 bg-gradient-to-r from-[#a38b41]/10 via-transparent to-[#a38b41]/10 
-                  transition-opacity duration-500 pointer-events-none z-5 ${
+                  transition-opacity duration-500 pointer-events-none ${
                     isFocused ? "opacity-100" : "opacity-0"
                   }
                 `}
@@ -209,8 +209,8 @@ const SearchEvents = ({
                   `}
                   title={isSearching ? "Searching..." : "Search"}
                 >
-                  <FaSearch size={11} className="relative z-10" />
-                  <span className="relative z-10 hidden sm:inline">
+                  <FaSearch size={11} className="relative" />
+                  <span className="relative hidden sm:inline">
                     {isSearching ? "Searching…" : "Enter"}
                   </span>
                   {trimmed.length >= MIN_CHARS && !isSearching && (
@@ -222,7 +222,7 @@ const SearchEvents = ({
               <div
                 className={`
                   absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent via-white/5 to-transparent 
-                  transition-transform duration-1000 pointer-events-none z-5 ${
+                  transition-transform duration-1000 pointer-events-none ${
                     isFocused ? "translate-x-full" : ""
                   }
                 `}
@@ -231,7 +231,7 @@ const SearchEvents = ({
           </form>
 
           {showDropdown && (
-            <div className="absolute left-0 right-0 top-full mt-2 bg-white/5 backdrop-blur-xl border border-white/10 rounded-2xl shadow-xl  overflow-hidden z-50">
+            <div className="absolute left-0 right-0 top-full mt-2 bg-white/5 backdrop-blur-xl border border-white/10 rounded-2xl shadow-xl  overflow-hidden">
               {belowMin && (
                 <div className="p-3 text-xs text-gray-400">
                   Type at least {MIN_CHARS} characters to search.
