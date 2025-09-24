@@ -1,7 +1,6 @@
 import { useState, useRef, useEffect } from "react";
 import { FaHeart, FaFileAlt, FaUpload } from "react-icons/fa";
 import { toast } from "react-toastify";
-import { useGetUserByIdQuery } from "../../app/authApi";
 import { useNavigate } from "react-router-dom";
 const IMAGE_BASE_URL = import.meta.env.VITE_API_IMAGE_BASE_URL;
 const ImageSwitchFan = ({ userData }) => {
@@ -12,7 +11,6 @@ const ImageSwitchFan = ({ userData }) => {
   const userId = user?.id;
   const [images, setImages] = useState([]);
   const [selectedImage, setSelectedImage] = useState(0);
-  const { data: userDataOne, isLoading, isError } = useGetUserByIdQuery(userId);
   const [dragOver, setDragOver] = useState(false);
   const fileInputRef = useRef(null);
   const [isUploading, setIsUploading] = useState(false);

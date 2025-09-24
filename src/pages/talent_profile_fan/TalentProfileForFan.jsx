@@ -7,16 +7,15 @@ import {
   FaTimes,
 } from "react-icons/fa";
 import ImageSwitch from "./ImageSwitchFan";
-import PortfolioDashboard from "../../components/PortfolioDashboard";
 import { useGetTalentOverviewQuery } from "../../app/authApi";
 import { useParams } from "react-router-dom";
 import FriendsFanSection from "../../components/talent_profile_fan/FriendsFanSection";
 import EventsFanSection from "../../components/talent_profile_fan/EventsFanSection";
 import TalentLinksFan from "../../components/talent_profile_fan/TalentLinksFan";
+import PortfolioDashboardForFan from "./Portfolio";
 
 const TalentProfileForFan = () => {
   const { id } = useParams();
-  console.log(id, "here data");
   const { data, isLoading, isError } = useGetTalentOverviewQuery(id, {
     skip: !id,
   });
@@ -235,7 +234,7 @@ const TalentProfileForFan = () => {
       </div>
       <section className=" px-4 md:px-8 container mx-auto ">
         <div className="rounded-xl p-6 bg-[#1f1f1f]">
-          <PortfolioDashboard />
+          <PortfolioDashboardForFan userData={data} />
         </div>
       </section>
     </section>
