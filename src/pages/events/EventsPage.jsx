@@ -1,10 +1,10 @@
+import { useState, useMemo, useEffect, useCallback } from "react";
 import FeaturedEvents from "../../components/events/FeaturedEvents";
 import EventsListings from "../../components/events/EventsListings";
 import GoogleMapsEvents from "../../components/events/GoogleMapsEvents";
 import EventsCalendar from "../../components/events/EventsCalendar";
 import SearchEvents from "../../components/events/SearchEvents";
 import { useGetEventsQuery, useLazySearchEventsQuery } from "../../app/authApi";
-import { useState, useMemo, useEffect } from "react";
 
 const CDN_BASE = import.meta.env.VITE_API_IMAGE_BASE_URL || "";
 const sameDay = (a, b) =>
@@ -64,16 +64,13 @@ function PaginationControls({
         Next
       </button>
     </div>
-  ) : (
-    <></>
-  );
+  ) : null;
 }
 
 /* ---------- main ---------- */
 const UltraModernEventsPllatform = () => {
-  /* Base list pagination (ONLY here) */
   const [page, setPage] = useState(1);
-  const [limit] = useState(10); // adjust if needed
+  const [limit] = useState(10);
   const baseParams = { page, limit, sort: "-createdAt", status: "active" };
 
   const {
@@ -155,29 +152,32 @@ const UltraModernEventsPllatform = () => {
   const searchRaw = Array.isArray(searchResp?.data) ? searchResp.data : [];
   const searchEvents = searchRaw.map(mapEvent);
 
-  /* Search handlers (no page/limit) */
-  const handleSearchSubmit = async (q) => {
-    if (!q?.trim()) return;
-    setSearchActive(true);
-    setLastQuery(q.trim());
+  /* Search handlers (memoized) */
+  const handleSearchSubmit = useCallback(
+    async (q) => {
+      if (!q?.trim()) return;
+      setSearchActive(true);
+      const clean = q.trim();
+      setLastQuery(clean);
 
-    const now = new Date();
-    await triggerSearch({
-      q: q.trim(),
-      month: now.getMonth() + 1,
-      withinMonth: true,
-      year: now.getFullYear(),
-      featured: true,
-      status: "active",
-      sort: "-createdAt",
-      // ❌ no page/limit here
-    });
-  };
+      const now = new Date();
+      await triggerSearch({
+        q: clean,
+        month: now.getMonth() + 1,
+        withinMonth: true,
+        year: now.getFullYear(),
+        featured: true,
+        status: "active",
+        sort: "-createdAt",
+      });
+    },
+    [triggerSearch]
+  );
 
-  const handleSearchClear = () => {
+  const handleSearchClear = useCallback(() => {
     setSearchActive(false);
     setLastQuery("");
-  };
+  }, []);
 
   /* Base pagination actions */
   const goBasePage = (p) => setPage(p);
@@ -226,7 +226,6 @@ const UltraModernEventsPllatform = () => {
             eventsDate={eventsDate}
           />
 
-          {/* ✅ Base pagination ONLY (hidden during search) */}
           {!searchActive && (
             <PaginationControls
               page={baseMeta.page || page}
