@@ -11,7 +11,7 @@ import { isSameMonth, parseISO, format } from "date-fns";
 import { useNavigate } from "react-router-dom";
 import {
   useGetAllFanRequestsQuery,
-  useTalentConfirmationRequestMutation,
+  useFanRequestConfirmationMutation,
 } from "../../app/authApi";
 import { toast } from "react-toastify";
 
@@ -29,19 +29,9 @@ const FanPendingRequestsList = ({ userData }) => {
   } = useGetAllFanRequestsQuery();
 
   const [confirmTalentRequest, { isLoading: isConfirming }] =
-    useTalentConfirmationRequestMutation();
+    useFanRequestConfirmationMutation();
   const userLocalData = JSON.parse(localStorage.getItem("user"));
-  const isRoleTalent = userLocalData?.role === "TALENT";
-  const isRoleFan = userLocalData?.role === "FAN";
-  const isRoleAdmin = userLocalData?.role === "ADMIN";
   const roleId = userLocalData?.id;
-  const handleReschedule = (request) => {
-    const selectedFanName = request?.fanName || "Unknown Fan";
-    const selectedRequestId = request?.id;
-    navigate(`/inverse/${roleId}#reschedule-section`, {
-      state: { selectedRequestId, selectedFanName },
-    });
-  };
 
   const transformRequests = (data) => {
     if (!data?.data) return [];
@@ -68,20 +58,15 @@ const FanPendingRequestsList = ({ userData }) => {
   });
 
   const handleTalentConfirmation = async (requestId, status) => {
-    const request = filteredRequests.find((r) => r.id === requestId);
-    if (!request) return;
-
+    console.log(requestId);
     const payload = {
-      requestId: request.id,
-      confirmedDate: request.rawDate,
-      time: request.time,
-      location: request.location,
-      fanName: request.fanName,
+      selectedRequestId: requestId,
       status,
     };
 
     try {
       setActiveRequestId(requestId);
+
       setLoadingAction(status);
       await confirmTalentRequest(payload).unwrap();
       toast.success(
@@ -179,56 +164,55 @@ const FanPendingRequestsList = ({ userData }) => {
                   <div className="flex flex-col sm:flex-row gap-2 w-full sm:w-auto">
                     <button
                       onClick={() =>
-                        handleTalentConfirmation(request.id, "decline")
+                        handleTalentConfirmation(request._id, "accepted")
                       }
-                      disabled={isConfirming && activeRequestId === request.id}
+                      disabled={isConfirming && activeRequestId === request._id}
                       className={`flex items-center justify-center gap-1 px-3 py-2 rounded-lg transition-all text-xs sm:text-sm w-full sm:w-auto ${
-                        isConfirming && activeRequestId === request.id
+                        isConfirming && activeRequestId === request._id
                           ? "cursor-not-allowed"
                           : ""
                       } ${
                         isConfirming &&
-                        activeRequestId === request.id &&
-                        loadingAction === "decline"
-                          ? "bg-gray-500/40 text-white"
-                          : "bg-red-500/10 hover:bg-red-500/20 border border-red-500/20 text-red-400"
-                      }`}
-                    >
-                      {isConfirming &&
-                      activeRequestId === request.id &&
-                      loadingAction === "decline" ? (
-                        <FaSpinner className="animate-spin text-xs" />
-                      ) : (
-                        <FaTimes />
-                      )}
-                      <span>Decline</span>
-                    </button>
-
-                    <button
-                      onClick={() =>
-                        handleTalentConfirmation(request.id, "accepted")
-                      }
-                      disabled={isConfirming && activeRequestId === request.id}
-                      className={`flex items-center justify-center gap-1 px-3 py-2 rounded-lg transition-all text-xs sm:text-sm w-full sm:w-auto ${
-                        isConfirming && activeRequestId === request.id
-                          ? "cursor-not-allowed"
-                          : ""
-                      } ${
-                        isConfirming &&
-                        activeRequestId === request.id &&
+                        activeRequestId === request._id &&
                         loadingAction === "accepted"
                           ? "bg-gray-500/40 text-white"
                           : "bg-gradient-to-r from-[#a38b41] to-[#c2ab67] text-black"
                       }`}
                     >
                       {isConfirming &&
-                      activeRequestId === request.id &&
+                      activeRequestId === request._id &&
                       loadingAction === "accepted" ? (
                         <FaSpinner className="animate-spin text-xs" />
                       ) : (
                         <FaCheck />
                       )}
                       <span>Confirm</span>
+                    </button>{" "}
+                    <button
+                      onClick={() =>
+                        handleTalentConfirmation(request._id, "declined")
+                      }
+                      disabled={isConfirming && activeRequestId === request._id}
+                      className={`flex items-center justify-center gap-1 px-3 py-2 rounded-lg transition-all text-xs sm:text-sm w-full sm:w-auto ${
+                        isConfirming && activeRequestId === request._id
+                          ? "cursor-not-allowed"
+                          : ""
+                      } ${
+                        isConfirming &&
+                        activeRequestId === request._id &&
+                        loadingAction === "decline"
+                          ? "bg-gray-500/40 text-white"
+                          : "bg-red-500/10 hover:bg-red-500/20 border border-red-500/20 text-red-400"
+                      }`}
+                    >
+                      {isConfirming &&
+                      activeRequestId === request._id &&
+                      loadingAction === "decline" ? (
+                        <FaSpinner className="animate-spin text-xs" />
+                      ) : (
+                        <FaTimes />
+                      )}
+                      <span>Decline</span>
                     </button>
                   </div>
                 </div>

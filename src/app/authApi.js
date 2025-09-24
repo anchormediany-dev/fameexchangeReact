@@ -294,7 +294,6 @@ export const authApi = api.injectEndpoints({
         method: "PUT",
         body: {
           status: data.status,
-          // accessType: data.accessType,
         },
       }),
       invalidatesTags: ["OverviewForFan"],
