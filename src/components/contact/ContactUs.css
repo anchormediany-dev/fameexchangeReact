@@ -151,3 +151,28 @@
 .send-button:hover::after {
   left: 100%;
 }
+.form-group input:-webkit-autofill,
+.form-group input:-webkit-autofill:hover,
+.form-group input:-webkit-autofill:focus,
+.form-group input:-webkit-autofill:active {
+  -webkit-box-shadow: 0 0 0 1000px transparent inset !important;
+  box-shadow: 0 0 0 1000px transparent inset !important;
+  -webkit-text-fill-color: #fff !important;
+  caret-color: #fff;
+  transition: background-color 9999s ease-out 0s;
+  background-color: transparent !important;
+  border-bottom-color: #d9aa27;
+}
+
+.form-group input:-moz-autofill {
+  box-shadow: 0 0 0 1000px transparent inset !important;
+  -moz-text-fill-color: #fff !important;
+  caret-color: #fff;
+  background-color: transparent !important;
+}
+.form-group input:-webkit-autofill ~ label,
+.form-group input:-moz-autofill ~ label {
+  top: -0.6rem;
+  font-size: 0.8rem;
+  color: #d9aa27;
+}
