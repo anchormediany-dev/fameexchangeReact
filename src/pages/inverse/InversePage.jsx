@@ -173,7 +173,7 @@ const InversePage = () => {
             )}
 
             {/* Talents confirm/reschedule (uses navigate state if provided) */}
-            {isTalent && (
+            {/* {isTalent && (
               <TalentConfirmationForm
                 selectedFanName={selectedFanName}
                 selectedRequestId={selectedRequestId}
@@ -182,7 +182,7 @@ const InversePage = () => {
                 isError={isError}
                 error={error}
               />
-            )}
+            )} */}
           </div>
         </div>
       </div>
