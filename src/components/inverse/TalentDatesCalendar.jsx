@@ -320,7 +320,7 @@ function SessionsTable({ sessions, onSelectSession, onClose }) {
                         onClose?.();
                       }
                     }}
-                    className="bg-[#a38b41] py-1 px-3 rounded-md cursor-pointer"
+                    className="bg-[#a38b41] py-1 px-3 rounded-md cursor-pointer whitespace-nowrap"
                   >
                     inverse Request
                   </button>
