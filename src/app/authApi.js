@@ -309,6 +309,9 @@ export const authApi = api.injectEndpoints({
     getTalentOverview: builder.query({
       query: (id) => `/user/${id}/overview`,
     }),
+    getFanOverview: builder.query({
+      query: (id) => `/user/${id}/fan/overview`,
+    }),
     //  our team API's
     getTeam: builder.query({
       query: () => ({
@@ -438,6 +441,7 @@ export const {
   // Get all talents
   useGetTalentQuery,
   useGetTalentOverviewQuery,
+  useGetFanOverviewQuery,
   // newsletter
   useNewsletterSubscribeMutation,
   useGetNewslettersQuery,

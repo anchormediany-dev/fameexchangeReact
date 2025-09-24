@@ -15,7 +15,7 @@ import {
 } from "../../app/authApi";
 import { toast } from "react-toastify";
 
-const FanPendingRequestsList = () => {
+const FanPendingRequestsList = ({ userData }) => {
   const [currentDate] = useState(new Date());
   const [activeRequestId, setActiveRequestId] = useState(null);
   const [loadingAction, setLoadingAction] = useState(null);
@@ -136,9 +136,9 @@ const FanPendingRequestsList = () => {
   return (
     <section className="w-full px-3 sm:px-4">
       <AnimatePresence>
-        {filteredRequests.length > 0 ? (
+        {userData?.length > 0 ? (
           <div className={`space-y-3 ${scrollClass}`}>
-            {filteredRequests.map((request) => (
+            {userData?.map((request) => (
               <motion.div
                 key={request.id}
                 initial={{ opacity: 0, y: 20 }}
@@ -157,7 +157,7 @@ const FanPendingRequestsList = () => {
                     <FaClock className="text-[#a38b41] mt-1 sm:mt-0 shrink-0" />
                     <div className="flex-1 min-w-0">
                       <div className="text-white text-sm sm:text-base truncate">
-                        {request.date}
+                        {format(request?.date, "MMMM d, yyyy")}
                       </div>
                       <div className="text-gray-300 text-xs sm:text-sm">
                         {request.time} • {request.location}
@@ -229,14 +229,6 @@ const FanPendingRequestsList = () => {
                         <FaCheck />
                       )}
                       <span>Confirm</span>
-                    </button>
-
-                    <button
-                      onClick={() => handleReschedule(request)}
-                      className="flex items-center justify-center gap-1 px-3 py-2 rounded-lg bg-blue-500/10 hover:bg-blue-500/20 border border-blue-500/20 text-blue-400 transition-colors text-xs sm:text-sm w-full sm:w-auto"
-                    >
-                      <FaCalendarAlt />
-                      <span>Reschedule</span>
                     </button>
                   </div>
                 </div>

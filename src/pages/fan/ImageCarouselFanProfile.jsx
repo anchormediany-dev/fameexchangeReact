@@ -37,8 +37,8 @@ const ImageCarouselFanProfile = ({ userData, updateMyProfile }) => {
   const [bioText, setBioText] = useState("");
 
   useEffect(() => {
-    if (userData?.user?.images?.length) {
-      const backendImages = userData?.user?.images?.map(
+    if (userData?.images?.length) {
+      const backendImages = userData?.images?.map(
         (doc) => `${IMAGE_BASE_URL}${doc?.fileUrl?.replace(/\\/g, "/")}`
       );
       setImages(backendImages);
@@ -154,8 +154,8 @@ const ImageCarouselFanProfile = ({ userData, updateMyProfile }) => {
   const removeImage = async (index) => {
     try {
       // Check if this is an existing image from backend
-      if (index < userData?.user?.images?.length) {
-        const imageId = userData.user.images[index]._id;
+      if (index < userData?.images?.length) {
+        const imageId = userData?.images[index]._id;
         const response = await deleteProfileImage(imageId).unwrap();
         toast.success(response?.message || "Image deleted successfully");
       }
@@ -302,7 +302,7 @@ const ImageCarouselFanProfile = ({ userData, updateMyProfile }) => {
           <div className="space-y-4 flex-1">
             <div className="group relative flex-1 flex flex-col h-full">
               <label className="text-xl uppercase text-[#a38b41] mb-5 font-bold">
-                {userData?.user?.name}
+                {userData?.name}
               </label>
               <div className="flex justify-between items-center mb-2">
                 <label className="text-xs uppercase text-gray-400 font-semibold">
@@ -347,7 +347,7 @@ const ImageCarouselFanProfile = ({ userData, updateMyProfile }) => {
               ) : (
                 <div className="flex-1 px-3 py-2 bg-white/5 text-white border border-white/10 rounded-lg overflow-hidden">
                   <pre className="text-sm whitespace-pre-wrap font-sans h-full">
-                    {userData?.user?.biography}
+                    {userData?.biography}
                   </pre>
                 </div>
               )}
