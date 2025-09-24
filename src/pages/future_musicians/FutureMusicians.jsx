@@ -18,6 +18,7 @@ import {
   FaMicrophone,
   FaInstagram,
 } from "react-icons/fa";
+import { imgSrc } from "../../utils/imgSrc";
 
 /* ---------------- state & reducer ---------------- */
 const initialState = {
@@ -390,7 +391,7 @@ export default function FutureTalents() {
                   <div className="flex items-center gap-4">
                     {img ? (
                       <img
-                        src={img}
+                        src={imgSrc(img)}
                         alt={u?.name || "talent"}
                         className="w-10 h-10 rounded-full object-cover border border-gray-600"
                       />
