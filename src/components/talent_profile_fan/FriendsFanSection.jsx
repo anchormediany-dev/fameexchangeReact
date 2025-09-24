@@ -1,4 +1,5 @@
 import { FaHeart } from "react-icons/fa";
+import { imgSrc } from "../../utils/imgSrc";
 const FriendsFanSection = ({ userData }) => {
   const friends = userData?.data?.friends || [];
   return (
@@ -24,9 +25,7 @@ const FriendsFanSection = ({ userData }) => {
                 >
                   <div className="max-w-full">
                     <img
-                      src={`https://ui-avatars.com/api/?name=${encodeURIComponent(
-                        friend.friendName
-                      )}&background=random`}
+                      src={imgSrc(friend?.images[0]?.fileUrl)}
                       alt={friend?.name}
                       className="rounded-full w-16 h-16 object-cover mx-auto mb-1"
                     />

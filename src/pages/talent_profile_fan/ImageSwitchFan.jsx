@@ -15,7 +15,7 @@ const ImageSwitchFan = ({ userData }) => {
   const fileInputRef = useRef(null);
   const [isUploading, setIsUploading] = useState(false);
   const [bioText, setBioText] = useState("");
-  const IMAGE_BASE_URL = import.meta.env.VITE_API_IMAGE_BASE_URL;
+  const IMAGE_BASE_URL = import.meta.env.VITE_API_BASE_URL;
   const handleInverseClick = () => {
     navigate("/inverse#inverse-request-form");
   };
