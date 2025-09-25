@@ -139,7 +139,7 @@ const FanPendingRequestsList = ({ userData }) => {
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, x: -50 }}
                 transition={{ type: "spring", stiffness: 300 }}
-                className={`bg-gradient-to-br from-[#1a1a1a] to-[#0d0d0d] rounded-xl p-3 sm:p-4 border ${
+                className={`bg-[#2a2a2a] p-4 rounded-md border border-gray-600 hover:bg-[#333] transition duration-200 ${
                   request.rescheduledStatus
                     ? "border-yellow-500/40 hover:border-yellow-500/60"
                     : "border-white/10 hover:border-[#a38b41]/40"
