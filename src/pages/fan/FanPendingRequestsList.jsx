@@ -129,7 +129,9 @@ const FanPendingRequestsList = ({ userData }) => {
       </div>
       <AnimatePresence>
         {userData?.length > 0 ? (
-          <div className={`space-y-3 h-[500px] overflow-y-auto overflow-x-auto ${scrollClass}`}>
+          <div
+            className={`space-y-3 h-[500px] overflow-y-auto overflow-x-auto ${scrollClass}`}
+          >
             {userData?.map((request) => (
               <motion.div
                 key={request.id}
@@ -168,60 +170,84 @@ const FanPendingRequestsList = ({ userData }) => {
                   </div>
 
                   {/* Right: actions (stack on mobile) */}
-                  <div className="flex flex-col sm:flex-row gap-2 w-full sm:w-auto">
-                    <button
-                      onClick={() =>
-                        handleTalentConfirmation(request._id, "accepted")
-                      }
-                      disabled={isConfirming && activeRequestId === request._id}
-                      className={`flex items-center justify-center gap-1 px-3 py-2 rounded-lg transition-all text-xs sm:text-sm w-full sm:w-auto ${
-                        isConfirming && activeRequestId === request._id
-                          ? "cursor-not-allowed"
-                          : ""
-                      } ${
-                        isConfirming &&
-                        activeRequestId === request._id &&
-                        loadingAction === "accepted"
-                          ? "bg-gray-500/40 text-white"
-                          : "bg-gradient-to-r from-[#a38b41] to-[#c2ab67] text-black"
-                      }`}
-                    >
-                      {isConfirming &&
-                      activeRequestId === request._id &&
-                      loadingAction === "accepted" ? (
-                        <FaSpinner className="animate-spin text-xs" />
-                      ) : (
-                        <FaCheck />
-                      )}
-                      <span>Confirm</span>
-                    </button>{" "}
-                    <button
-                      onClick={() =>
-                        handleTalentConfirmation(request._id, "declined")
-                      }
-                      disabled={isConfirming && activeRequestId === request._id}
-                      className={`flex items-center justify-center gap-1 px-3 py-2 rounded-lg transition-all text-xs sm:text-sm w-full sm:w-auto ${
-                        isConfirming && activeRequestId === request._id
-                          ? "cursor-not-allowed"
-                          : ""
-                      } ${
-                        isConfirming &&
-                        activeRequestId === request._id &&
-                        loadingAction === "decline"
-                          ? "bg-gray-500/40 text-white"
-                          : "bg-red-500/10 hover:bg-red-500/20 border border-red-500/20 text-red-400"
-                      }`}
-                    >
-                      {isConfirming &&
-                      activeRequestId === request._id &&
-                      loadingAction === "decline" ? (
-                        <FaSpinner className="animate-spin text-xs" />
-                      ) : (
-                        <FaTimes />
-                      )}
-                      <span>Decline</span>
-                    </button>
-                  </div>
+                  {/* {request.rescheduledStatus === "accepted" && "I am accepted"}
+
+                  {request.rescheduledStatus === "rescheduled" &&
+                    "I am Rescheduled"}
+                  {request.rescheduledStatus === "decline" &&
+                    "I am just Decline"}
+                  {request.rescheduledStatus === "pending" && "I am pending"} */}
+                  {request?.rescheduled === true &&
+                  request?.status === "rescheduled" ? (
+                    <>
+                      {" "}
+                      <div className="flex flex-col sm:flex-row gap-2 w-full sm:w-auto">
+                        <button
+                          onClick={() =>
+                            handleTalentConfirmation(request._id, "accepted")
+                          }
+                          disabled={
+                            isConfirming && activeRequestId === request._id
+                          }
+                          className={`flex items-center justify-center gap-1 px-3 py-2 rounded-lg transition-all text-xs sm:text-sm w-full sm:w-auto ${
+                            isConfirming && activeRequestId === request._id
+                              ? "cursor-not-allowed"
+                              : ""
+                          } ${
+                            isConfirming &&
+                            activeRequestId === request._id &&
+                            loadingAction === "accepted"
+                              ? "bg-gray-500/40 text-white"
+                              : "bg-gradient-to-r from-[#a38b41] to-[#c2ab67] text-black"
+                          }`}
+                        >
+                          {isConfirming &&
+                          activeRequestId === request._id &&
+                          loadingAction === "accepted" ? (
+                            <FaSpinner className="animate-spin text-xs" />
+                          ) : (
+                            <FaCheck />
+                          )}
+                          <span>Confirm</span>
+                        </button>{" "}
+                        <button
+                          onClick={() =>
+                            handleTalentConfirmation(request._id, "declined")
+                          }
+                          disabled={
+                            isConfirming && activeRequestId === request._id
+                          }
+                          className={`flex items-center justify-center gap-1 px-3 py-2 rounded-lg transition-all text-xs sm:text-sm w-full sm:w-auto ${
+                            isConfirming && activeRequestId === request._id
+                              ? "cursor-not-allowed"
+                              : ""
+                          } ${
+                            isConfirming &&
+                            activeRequestId === request._id &&
+                            loadingAction === "decline"
+                              ? "bg-gray-500/40 text-white"
+                              : "bg-red-500/10 hover:bg-red-500/20 border border-red-500/20 text-red-400"
+                          }`}
+                        >
+                          {isConfirming &&
+                          activeRequestId === request._id &&
+                          loadingAction === "decline" ? (
+                            <FaSpinner className="animate-spin text-xs" />
+                          ) : (
+                            <FaTimes />
+                          )}
+                          <span>Decline</span>
+                        </button>
+                      </div>
+                    </>
+                  ) : (
+                    <>
+                      {" "}
+                      <div className="flex flex-col text-[#a38b41]/50 sm:flex-row gap-2 w-full sm:w-auto">
+                        {request?.status}
+                      </div>
+                    </>
+                  )}
                 </div>
               </motion.div>
             ))}
