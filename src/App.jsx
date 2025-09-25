@@ -64,6 +64,7 @@ import FanProfile from "./pages/fan/FanProfile";
 import ContactPage from "./pages/contact/ContactPage";
 import BrandedTalentSharesPage from "./pages/branded_talent_shares/BrandedTalentSharesPage";
 import Unauthorized from "./pages/Unauthorized";
+import AdminKycListings from "./pages/admin/AdminKycListings";
 
 // Simple Black Header Component
 const SimpleHeader = () => {
@@ -285,6 +286,14 @@ export default function App() {
                 element={
                   <MotionPageWrapper>
                     <AdminNewsletter />
+                  </MotionPageWrapper>
+                }
+              />
+              <Route
+                path="kyc-requests"
+                element={
+                  <MotionPageWrapper>
+                    <AdminKycListings />
                   </MotionPageWrapper>
                 }
               />

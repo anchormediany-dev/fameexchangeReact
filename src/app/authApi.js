@@ -32,8 +32,22 @@ export const authApi = api.injectEndpoints({
       }),
       invalidatesTags: ["KYC"],
     }),
+    adminKycConfirmation: builder.mutation({
+      query: (data) => ({
+        url: `/user_documents/verify-or-reject/${data.selectedRequestId}`,
+        method: "POST",
+        body: {
+          status: data.status,
+        },
+      }),
+      invalidatesTags: ["OverviewForFan"],
+    }),
     getKYCDocuments: builder.query({
       query: (userId) => `/user/get/${userId}`,
+      providesTags: ["KYC"],
+    }),
+    getKYCListings: builder.query({
+      query: () => `/user_documents/all-user-documents`,
       providesTags: ["KYC"],
     }),
     verifyId: builder.mutation({
@@ -463,6 +477,7 @@ export const {
   // Talent confirmation
   useRescheduleTalentConfirmationMutation,
   useFanRequestConfirmationMutation,
+  useAdminKycConfirmationMutation,
   // Get all talents
   useGetTalentQuery,
   useGetTalentOverviewQuery,
@@ -481,6 +496,7 @@ export const {
   // KYC
   useUploadKYCDocumentsMutation,
   useGetKYCDocumentsQuery,
+  useGetKYCListingsQuery,
   // contact us
   useContactUsMutation,
   useGetContactsQuery,
