@@ -7,15 +7,96 @@ const IMAGE_BASE_URL = import.meta.env.VITE_API_IMAGE_BASE_URL;
 const ImageCarouselFanProfile = ({ userData, updateMyProfile }) => {
   const navigate = useNavigate();
   const tickets = [
-    { id: "1", eventId: "101", eventName: "Music Fiesta 2025" },
-    { id: "2", eventId: "102", eventName: "Tech Conference 2025" },
-    { id: "3", eventId: "103", eventName: "Startup Pitch Night" },
-    { id: "1", eventId: "101", eventName: "Music Fiesta 2025" },
-    { id: "2", eventId: "102", eventName: "Tech Conference 2025" },
-    { id: "3", eventId: "103", eventName: "Startup Pitch Night" },
-    { id: "1", eventId: "101", eventName: "Music Fiesta 2025" },
-    { id: "2", eventId: "102", eventName: "Tech Conference 2025" },
-    { id: "3", eventId: "103", eventName: "Startup Pitch Night" },
+    {
+      id: "1",
+      eventId: "101",
+      eventName: "Music Fiesta 2025",
+      date: "2025-03-15",
+      time: "19:00",
+      venue: "Madison Square Garden",
+      city: "New York",
+    },
+    {
+      id: "2",
+      eventId: "102",
+      eventName: "Tech Conference 2025",
+      date: "2025-04-22",
+      time: "09:00",
+      venue: "Convention Center",
+      city: "San Francisco",
+    },
+    {
+      id: "3",
+      eventId: "103",
+      eventName: "Startup Pitch Night",
+      date: "2025-05-10",
+      time: "18:30",
+      venue: "Innovation Hub",
+      city: "Austin",
+    },
+    {
+      id: "4",
+      eventId: "104",
+      eventName: "Jazz Festival",
+      date: "2025-06-05",
+      time: "20:00",
+      venue: "Riverfront Park",
+      city: "New Orleans",
+    },
+    {
+      id: "5",
+      eventId: "105",
+      eventName: "Comedy Night Special",
+      date: "2025-07-18",
+      time: "21:00",
+      venue: "Laugh Factory",
+      city: "Los Angeles",
+    },
+    {
+      id: "6",
+      eventId: "106",
+      eventName: "Food & Wine Expo",
+      date: "2025-08-12",
+      time: "11:00",
+      venue: "Metro Convention",
+      city: "Chicago",
+    },
+    {
+      id: "7",
+      eventId: "107",
+      eventName: "Film Premiere Gala",
+      date: "2025-09-25",
+      time: "19:30",
+      venue: "Hollywood Theater",
+      city: "Los Angeles",
+    },
+    {
+      id: "8",
+      eventId: "108",
+      eventName: "Sports Championship",
+      date: "2025-10-08",
+      time: "15:00",
+      venue: "National Stadium",
+      city: "Miami",
+    },
+    {
+      id: "9",
+      eventId: "109",
+      eventName: "Art Exhibition Opening",
+      date: "2025-11-14",
+      time: "18:00",
+      venue: "Modern Art Museum",
+      city: "Boston",
+    },
+    {
+      id: "10",
+      eventId: "110",
+      eventName: "New Year's Eve Concert",
+      date: "2025-12-31",
+      time: "22:00",
+      venue: "Times Square",
+      city: "New York",
+    },
   ];
   const user = JSON.parse(localStorage.getItem("user"));
   const userId = user?.id;
@@ -347,11 +428,14 @@ const ImageCarouselFanProfile = ({ userData, updateMyProfile }) => {
                   <table className="w-full">
                     <thead>
                       <tr className="border-b border-white/10">
-                        <th className="p-3 text-left text-sm text-gray-300">
+                        {/* <th className="p-3 text-left text-sm text-gray-300">
                           S.No
-                        </th>
+                        </th> */}
                         <th className="p-3 text-left text-sm text-gray-300">
                           Event
+                        </th>
+                        <th className="p-3 text-left text-sm text-gray-300">
+                          Date
                         </th>
                       </tr>
                     </thead>
@@ -361,7 +445,7 @@ const ImageCarouselFanProfile = ({ userData, updateMyProfile }) => {
                           key={t.id}
                           className="border-b border-white/5 hover:bg-white/5 transition-colors"
                         >
-                          <td className="p-3 text-sm text-gray-200">{i + 1}</td>
+                          {/* <td className="p-3 text-sm text-gray-200">{i + 1}</td> */}
                           <td className="p-3">
                             <button
                               onClick={() =>
@@ -369,8 +453,13 @@ const ImageCarouselFanProfile = ({ userData, updateMyProfile }) => {
                               }
                               className="text-sm cursor-pointer text-white underline underline-offset-2 hover:text-[#d4c374]"
                             >
-                              {t.eventName}
+                              {t?.eventName}
                             </button>
+                          </td>
+                          <td className="p-3">
+                            <div className="text-sm  text-white  hover:text-[#d4c374]">
+                              Your event is on: {t?.date}
+                            </div>
                           </td>
                         </tr>
                       ))}

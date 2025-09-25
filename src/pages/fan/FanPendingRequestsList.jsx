@@ -122,8 +122,8 @@ const FanPendingRequestsList = ({ userData }) => {
   return (
     <div className="bg-[#1f1f1f] rounded-xl p-6">
       <div className="flex items-center mb-6">
-        <MdOutlinePendingActions className="text-yellow-400 text-2xl mr-2" />
-        <h2 className="text-lg font-semibold text-white uppercase">
+        <MdOutlinePendingActions className="text-[#a38b41] text-2xl mr-2" />
+        <h2 className="text-xl uppercase text-[#a38b41] font-bold">
           Rescheduled Requests
         </h2>
       </div>
