@@ -2,9 +2,7 @@ import { useState, useRef, useEffect } from "react";
 import { FaEdit, FaSave, FaTimes, FaUpload, FaPlus } from "react-icons/fa";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
-import {
-  useDeleteProfileImageMutation,
-} from "../../app/authApi";
+import { useDeleteProfileImageMutation } from "../../app/authApi";
 const IMAGE_BASE_URL = import.meta.env.VITE_API_IMAGE_BASE_URL;
 const ImageCarouselFanProfile = ({ userData, updateMyProfile }) => {
   const navigate = useNavigate();
@@ -52,7 +50,6 @@ const ImageCarouselFanProfile = ({ userData, updateMyProfile }) => {
       console.error("Error updating biography:", err);
     }
   };
-
 
   const cancelEdit = () => {
     setEditingBio(false);
@@ -168,11 +165,11 @@ const ImageCarouselFanProfile = ({ userData, updateMyProfile }) => {
   };
 
   return (
-    <div className="container grid grid-cols-1 lg:grid-cols-3 gap-6 px-4">
+    <div className="container grid grid-cols-1 lg:grid-cols-3 gap-6 px-4 ">
       {/* Image Upload Gallery - First Column */}
-      <div className="bg-white/5 backdrop-blur-xl border border-white/10 rounded-2xl shadow-xl p-3 md:p-4">
+      <div className="bg-white/5  backdrop-blur-xl border border-white/10 rounded-2xl shadow-xl p-3 md:p-4">
         {/* Main Image Display */}
-        <div className="relative group mb-3">
+        <div className="relative group mb-3 ">
           <div className="aspect-square md:aspect-[4/3] rounded-lg md:rounded-xl overflow-hidden bg-gradient-to-br from-gray-800 to-gray-900 shadow-md relative">
             {images.length > 0 && images[selectedImage] ? (
               <img
@@ -346,7 +343,7 @@ const ImageCarouselFanProfile = ({ userData, updateMyProfile }) => {
                   Buyed Tickets
                 </h2>
 
-                <div className="h-[300px] overflow-y-auto overflow-x-auto">
+                <div className="h-[400px] overflow-y-auto overflow-x-auto">
                   <table className="w-full">
                     <thead>
                       <tr className="border-b border-white/10">

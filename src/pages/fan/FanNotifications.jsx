@@ -34,9 +34,9 @@ const FanNotifications = () => {
         </h2>
       </div>
 
-      <ul className="space-y-4">
+      <ul className="space-y-4 h-[500px] overflow-y-auto overflow-x-auto">
         {notifications.length > 0 ? (
-          notifications.slice(0, 5).map((notification, index) => (
+          notifications?.map((notification, index) => (
             <li
               key={index}
               className="bg-[#2a2a2a] p-4 rounded-md border border-gray-600 hover:bg-[#333] transition duration-200"

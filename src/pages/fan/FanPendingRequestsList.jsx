@@ -129,7 +129,7 @@ const FanPendingRequestsList = ({ userData }) => {
       </div>
       <AnimatePresence>
         {userData?.length > 0 ? (
-          <div className={`space-y-3 ${scrollClass}`}>
+          <div className={`space-y-3 h-[500px] overflow-y-auto overflow-x-auto ${scrollClass}`}>
             {userData?.map((request) => (
               <motion.div
                 key={request.id}
