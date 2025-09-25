@@ -63,6 +63,7 @@ import UpdateProfile from "./pages/UpdateProfile";
 import FanProfile from "./pages/fan/FanProfile";
 import ContactPage from "./pages/contact/ContactPage";
 import BrandedTalentSharesPage from "./pages/branded_talent_shares/BrandedTalentSharesPage";
+import Unauthorized from "./pages/Unauthorized";
 
 // Simple Black Header Component
 const SimpleHeader = () => {
@@ -268,13 +269,8 @@ export default function App() {
               }
             />
           </Route>
-          <Route
-            path="admin/*"
-            // element={<Navigate to="/admin" replace />}
-          />
-
-          {/* Admin protected routes */}
-          <Route element={<ProtectedRoute /* allowRoles={['admin']} */ />}>
+          <Route path="unauthorized" element={<Unauthorized />} />
+          <Route element={<ProtectedRoute allowRoles={["ADMIN"]} />}>
             <Route path="admin" element={<AdminLayout />}>
               <Route
                 index
