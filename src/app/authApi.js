@@ -24,6 +24,18 @@ export const authApi = api.injectEndpoints({
         body: data,
       }),
     }),
+    uploadKYCDocuments: builder.mutation({
+      query: (formData) => ({
+        url: "/user_documents/upload-docs",
+        method: "POST",
+        body: formData,
+      }),
+      invalidatesTags: ["KYC"],
+    }),
+    getKYCDocuments: builder.query({
+      query: (userId) => `/user/get/${userId}`,
+      providesTags: ["KYC"],
+    }),
     verifyId: builder.mutation({
       query: (data) => ({
         url: "/user_documents/upload-docs",
@@ -466,6 +478,9 @@ export const {
   useGetReviewsQuery,
   useCreateReviewMutation,
   useDeleteReviewMutation,
+  // KYC
+  useUploadKYCDocumentsMutation,
+  useGetKYCDocumentsQuery,
   // contact us
   useContactUsMutation,
   useGetContactsQuery,
