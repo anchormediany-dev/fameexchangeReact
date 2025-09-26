@@ -3,12 +3,13 @@ import React, { useEffect, useRef, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { FiEdit, FiLink, FiLogOut } from "react-icons/fi";
-
+import { useAuth } from "../utils/auth/useAuth";
 export default function ProfileMenu({
   user = { name: "User", avatarUrl: "" },
   onLogout,
 }) {
   const navigate = useNavigate();
+  const { user: userDetails, isAuthenticated } = useAuth();
   const [open, setOpen] = useState(false);
   const btnRef = useRef(null);
   const panelRef = useRef(null);
@@ -119,15 +120,21 @@ export default function ProfileMenu({
                 <p className="truncate text-sm font-semibold text-neutral-800 dark:text-neutral-100">
                   {user?.name || "User"}
                 </p>
-
-                {user?.email && (
-                  <p
-                    className="text-xs font-light text-neutral-500 dark:text-neutral-400 whitespace-normal break-words select-text leading-snug"
-                    title={user?.email}
+                <div className="flex items-center gap-2 mt-1">
+                  <span
+                    className={`inline-flex items-center px-2 py-1 rounded-full text-xs font-medium ${
+                      userDetails?.role === "ADMIN"
+                        ? "bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200"
+                        : userDetails?.role === "TALENT"
+                        ? "bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200"
+                        : userDetails?.role === "FAN"
+                        ? "bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200"
+                        : "bg-gray-100 text-gray-800 dark:bg-gray-900 dark:text-gray-200"
+                    }`}
                   >
-                    {user?.email}
-                  </p>
-                )}
+                    {userDetails?.role?.toUpperCase() || "USER"}
+                  </span>
+                </div>
               </div>
             </div>
 

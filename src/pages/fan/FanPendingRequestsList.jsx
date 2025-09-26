@@ -124,7 +124,7 @@ const FanPendingRequestsList = ({ userData }) => {
       <div className="flex items-center mb-6">
         <MdOutlinePendingActions className="text-[#a38b41] text-2xl mr-2" />
         <h2 className="text-xl uppercase text-[#a38b41] font-bold">
-          Rescheduled Requests
+          Inverse Requests
         </h2>
       </div>
       <AnimatePresence>

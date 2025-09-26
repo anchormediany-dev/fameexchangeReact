@@ -321,7 +321,7 @@ const ImageSwitchForAdmin = ({ userData }) => {
                     backgroundClip: "text",
                   }}
                 >
-                  Buyed Tickets
+                Purchased Tickets
                 </h2>
 
                 <div className="h-[400px] overflow-y-auto overflow-x-auto">
