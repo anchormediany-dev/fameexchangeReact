@@ -193,7 +193,7 @@ export default function AdminInverse() {
             >
               <div className="flex items-center justify-between mb-3">
                 <h2 className="text-lg font-semibold text-white">
-                  Message Details
+                  Inverse Request Details
                 </h2>
                 <button
                   onClick={onClose}
@@ -206,43 +206,51 @@ export default function AdminInverse() {
 
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-sm">
                 <div className="space-y-1">
-                  <div className="text-gray-400">Name</div>
-                  <div className="text-white">{selected.name || "—"}</div>
+                  <div className="text-gray-400">Fan Name</div>
+                  <div className="text-white">
+                    {selected?.fanId?.name || "—"}
+                  </div>
                 </div>
                 <div className="space-y-1">
                   <div className="text-gray-400">Email</div>
                   <div className="text-white break-all">
-                    {selected.email || "—"}
+                    {selected?.fanId?.email || "—"}
                   </div>
                 </div>
                 <div className="space-y-1">
-                  <div className="text-gray-400">Subject</div>
-                  <div className="text-white">{selected.subject || "—"}</div>
-                </div>
-                <div className="space-y-1">
-                  <div className="text-gray-400">Created At</div>
-                  <div className="text-white" title={selected.createdAt}>
-                    {selected.createdAt
-                      ? new Date(selected.createdAt).toLocaleString()
-                      : "—"}
+                  <div className="text-gray-400">Payment Method</div>
+                  <div className="text-white">
+                    {selected?.paymentMethod || "—"}
                   </div>
                 </div>
                 <div className="space-y-1">
-                  <div className="text-gray-400">Updated At</div>
-                  <div className="text-white" title={selected.updatedAt}>
-                    {selected.updatedAt
-                      ? new Date(selected.updatedAt).toLocaleString()
-                      : "—"}
+                  <div className="text-gray-400">Status</div>
+                  <div className="text-white" title={selected?.status}>
+                    {selected?.status || "—"}
+                  </div>
+                </div>
+                <div className="space-y-1">
+                  <div className="text-gray-400">Location</div>
+                  <div className="text-white" title={selected?.status}>
+                    {selected?.location || "—"}
+                  </div>
+                </div>
+                <div className="space-y-1">
+                  <div className="text-gray-400">Paid</div>
+                  <div className="text-white" title={selected?.status}>
+                    {(selected?.ispaid === true && "Yes") ||
+                      (selected?.ispaid === false && "No") ||
+                      "—"}
                   </div>
                 </div>
               </div>
 
-              <div className="mt-4 space-y-1">
+              {/* <div className="mt-4 space-y-1">
                 <div className="text-gray-400 text-sm">Message</div>
                 <div className="text-white/90 whitespace-pre-wrap bg-white/5 border border-white/10 rounded-lg p-3">
                   {selected.message || "—"}
                 </div>
-              </div>
+              </div> */}
 
               <div className="mt-5 flex justify-end">
                 <button
