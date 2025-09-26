@@ -20,6 +20,7 @@ const navLinks = [
   // { name: "Brands", scrollTo: "brands" },
   // { name: "Meet & Greet", scrollTo: "meet_greet" },
   // { name: "Advertising", scrollTo: "advertising" },
+  // This is comment.
   { name: "Events", path: "/events", isRoute: true },
   { name: "About Us", path: "/about-us", isRoute: true },
   { name: "Contact us", path: "/contact-us", isRoute: true },
