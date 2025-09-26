@@ -299,6 +299,13 @@ export const authApi = api.injectEndpoints({
       invalidatesTags: ["FanRequests", "ConfirmedTalentRequests"],
     }),
     // Sessions
+    deleteSessionByAdmin: builder.mutation({
+      query: (sessionId) => ({
+        url: `/sessions/${sessionId}`,
+        method: "DELETE",
+      }),
+      invalidatesTags: ["User"],
+    }),
     createSession: builder.mutation({
       query: (sessionData) => ({
         url: "/sessions/",
@@ -489,6 +496,8 @@ export const {
   useGetTeamQuery,
   useCreateTeamMutation,
   useDeleteTeamMutation,
+  // Delete session
+  useDeleteSessionByAdminMutation,
   // Customer reviews
   useGetReviewsQuery,
   useCreateReviewMutation,

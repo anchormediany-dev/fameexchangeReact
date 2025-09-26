@@ -1,14 +1,14 @@
 // pages/AdminDashboard.jsx
 import React, { useMemo, useState } from "react";
 import {
-  useDeleteUserMutation,
   useGetAdminDashboardQuery,
+  useDeleteSessionByAdminMutation,
 } from "../../app/authApi";
 import { useNavigate } from "react-router-dom";
 import { FiTrash2 } from "react-icons/fi";
 import ConfirmDialog from "../../utils/ConfirmDialog";
+import { toast } from "react-toastify";
 const API_BASE = (import.meta.env?.VITE_API_URL || "").replace(/\/$/, "");
-
 const toAbsolute = (pathOrUrl) => {
   if (!pathOrUrl) return "";
   if (/^https?:\/\//i.test(pathOrUrl)) return pathOrUrl;
@@ -122,7 +122,8 @@ const AdminDashboard = () => {
   const [deleteError, setDeleteError] = useState(null);
   const { data, isLoading, isFetching, isError, error, refetch } =
     useGetAdminDashboardQuery();
-  const [deleteUser, { isLoading: isDeleting }] = useDeleteUserMutation();
+  const [deleteSession, { isLoading: isDeleting, error: deleteSessionError }] =
+    useDeleteSessionByAdminMutation();
   const navigate = useNavigate();
   // response envelope: { success, data: {...} }
   const payload = data?.data || {};
@@ -196,12 +197,14 @@ const AdminDashboard = () => {
     setDeleteError(null);
 
     try {
-      await deleteUser(id).unwrap();
+      await deleteSession(id).unwrap();
       // Optimistic local removal
       setUsersLocal((prev) => prev.filter((u) => u._id !== id));
       // Optional full sync:
       refetch();
     } catch (err) {
+      console.log("error", { deleteSessionError });
+      toast.error(deleteSessionError?.data?.message || "No session found");
       setDeleteError(
         err?.data?.message || err?.error || "Failed to delete user"
       );
