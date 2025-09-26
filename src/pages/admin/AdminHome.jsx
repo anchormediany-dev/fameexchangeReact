@@ -1,7 +1,12 @@
 // pages/AdminDashboard.jsx
 import React, { useMemo, useState } from "react";
-import { useGetAdminDashboardQuery } from "../../app/authApi";
+import {
+  useDeleteUserMutation,
+  useGetAdminDashboardQuery,
+} from "../../app/authApi";
 import { useNavigate } from "react-router-dom";
+import { FiTrash2 } from "react-icons/fi";
+import ConfirmDialog from "../../utils/ConfirmDialog";
 const API_BASE = (import.meta.env?.VITE_API_URL || "").replace(/\/$/, "");
 
 const toAbsolute = (pathOrUrl) => {
@@ -111,8 +116,13 @@ const Avatar = ({
 };
 
 const AdminDashboard = () => {
+  const [confirmOpen, setConfirmOpen] = useState(false);
+  const [target, setTarget] = useState(null);
+  const [pendingId, setPendingId] = useState(null);
+  const [deleteError, setDeleteError] = useState(null);
   const { data, isLoading, isFetching, isError, error, refetch } =
     useGetAdminDashboardQuery();
+  const [deleteUser, { isLoading: isDeleting }] = useDeleteUserMutation();
   const navigate = useNavigate();
   // response envelope: { success, data: {...} }
   const payload = data?.data || {};
@@ -165,6 +175,41 @@ const AdminDashboard = () => {
   }, [normalizedSessions]);
 
   const isBusy = isLoading || isFetching;
+  const askDelete = (e, user) => {
+    e?.stopPropagation?.();
+    setTarget(user);
+    setConfirmOpen(true);
+    setDeleteError(null);
+  };
+  const closeConfirm = () => {
+    if (isDeleting) return;
+    setConfirmOpen(false);
+    setTarget(null);
+  };
+
+  // Perform delete after confirmation
+  const doDelete = async () => {
+    if (!target?._id) return;
+    const id = target._id;
+
+    setPendingId(id);
+    setDeleteError(null);
+
+    try {
+      await deleteUser(id).unwrap();
+      // Optimistic local removal
+      setUsersLocal((prev) => prev.filter((u) => u._id !== id));
+      // Optional full sync:
+      refetch();
+    } catch (err) {
+      setDeleteError(
+        err?.data?.message || err?.error || "Failed to delete user"
+      );
+    } finally {
+      setPendingId(null);
+      closeConfirm();
+    }
+  };
 
   return (
     <div className="bg-white/5 backdrop-blur-xl border border-white/10 rounded-2xl shadow-xl p-3 md:p-5">
@@ -363,6 +408,9 @@ const AdminDashboard = () => {
                 <th className="text-left p-3 text-gray-300 font-semibold text-sm">
                   Created By
                 </th>
+                <th className="text-left p-3 text-gray-300 font-semibold text-sm">
+                  Actions
+                </th>
               </tr>
             </thead>
             <tbody>
@@ -417,12 +465,43 @@ const AdminDashboard = () => {
                       </div>
                     </div>
                   </td>
+                  <td className="p-3">
+                    <button
+                      onClick={(e) => askDelete(e, s)}
+                      disabled={pendingId === s?._id}
+                      className="px-2 py-1 rounded-lg bg-red-500/20 text-red-200 hover:bg-red-500/30 transition flex items-center gap-1 disabled:opacity-60"
+                      title="Remove user"
+                    >
+                      <FiTrash2 className="w-4 h-4" />
+                      <span className="text-xs">
+                        {pendingId === s?._id ? "Removing..." : "Remove"}
+                      </span>
+                    </button>
+                  </td>
                 </tr>
               ))}
             </tbody>
           </table>
         )}
       </div>
+      {/* ✅ Confirmation dialog */}
+      <ConfirmDialog
+        open={confirmOpen}
+        onClose={closeConfirm}
+        onConfirm={doDelete}
+        pending={isDeleting}
+        variant="danger"
+        title="Delete this session?"
+        // description={
+        //   target
+        //     ? `You’re about to delete “${
+        //         target.name || target.email || "this user"
+        //       }”. This action cannot be undone.`
+        //     : ""
+        // }
+        confirmLabel={isDeleting ? "Deleting…" : "Delete"}
+        cancelLabel="Cancel"
+      />
     </div>
   );
 };
