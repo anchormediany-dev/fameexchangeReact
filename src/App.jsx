@@ -66,6 +66,7 @@ import BrandedTalentSharesPage from "./pages/branded_talent_shares/BrandedTalent
 import Unauthorized from "./pages/Unauthorized";
 import AdminKycListings from "./pages/admin/AdminKycListings";
 import KYCDetailsPage from "./pages/KYCDetailsPage";
+import FanProfileForAdmin from "./pages/admin/FanProfileForAdmin";
 
 // Simple Black Header Component
 const SimpleHeader = () => {
@@ -254,7 +255,7 @@ export default function App() {
             path="fan-profile/:id"
             element={
               <MotionPageWrapper>
-                <FanProfile />
+                <FanProfileForAdmin />
               </MotionPageWrapper>
             }
           />
