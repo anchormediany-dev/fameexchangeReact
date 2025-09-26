@@ -5,8 +5,9 @@ import {
 } from "../app/authApi";
 import { useAuth } from "../utils/auth/useAuth";
 import { toast } from "react-toastify";
-
+import { useNavigate } from "react-router-dom";
 const KYCUpload = () => {
+  const navigate = useNavigate();
   const { user, isAuthenticated } = useAuth();
   const { data } = useGetKYCDocumentsQuery(user?.id);
   console.log(data, "data here");
@@ -88,7 +89,14 @@ const KYCUpload = () => {
       setImages([]);
       setFiles([]);
       setFormData({ text: "" });
-
+      setTimeout(() => {
+        {
+          user?.role === "FAN" && navigate("/");
+        }
+        {
+          user?.role === "TALENT" && navigate("/networth-calculator");
+        }
+      }, 500);
       document.getElementById("image-upload").value = "";
       document.getElementById("file-upload").value = "";
     } catch (error) {
@@ -365,7 +373,7 @@ const KYCUpload = () => {
               disabled={
                 isSubmitting || (images.length === 0 && files.length === 0)
               }
-              className={`px-6 py-2 bg-${themeColors.primary} border border-${themeColors.primary} rounded-lg hover:bg-${themeColors.primary}/90 transition-colors duration-200 text-white font-medium disabled:opacity-50 disabled:cursor-not-allowed`}
+              className={`px-6 cursor-pointer py-2 bg-${themeColors.primary} border border-${themeColors.primary} rounded-lg hover:bg-${themeColors.primary}/90 transition-colors duration-200 text-white font-medium disabled:opacity-50 disabled:cursor-not-allowed`}
               style={{
                 backgroundColor: themeColors.primary,
                 borderColor: themeColors.primary,
