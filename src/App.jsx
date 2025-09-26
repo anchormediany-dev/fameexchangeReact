@@ -65,6 +65,7 @@ import ContactPage from "./pages/contact/ContactPage";
 import BrandedTalentSharesPage from "./pages/branded_talent_shares/BrandedTalentSharesPage";
 import Unauthorized from "./pages/Unauthorized";
 import AdminKycListings from "./pages/admin/AdminKycListings";
+import KYCDetailsPage from "./pages/KYCDetailsPage";
 
 // Simple Black Header Component
 const SimpleHeader = () => {
@@ -270,6 +271,14 @@ export default function App() {
               }
             />
           </Route>
+          <Route
+            path="kyc/:id"
+            element={
+              <MotionPageWrapper>
+                <KYCDetailsPage />
+              </MotionPageWrapper>
+            }
+          />
           <Route path="unauthorized" element={<Unauthorized />} />
           <Route element={<ProtectedRoute allowRoles={["ADMIN"]} />}>
             <Route path="admin" element={<AdminLayout />}>

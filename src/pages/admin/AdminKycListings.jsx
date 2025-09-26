@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import {
   useGetKYCListingsQuery,
   useAdminKycConfirmationMutation,
@@ -6,8 +7,10 @@ import {
 import { motion, AnimatePresence } from "framer-motion";
 import { FiRefreshCcw, FiX } from "react-icons/fi";
 import { FaCheck, FaSpinner, FaTimes } from "react-icons/fa";
+import { Navigate } from "react-router-dom";
 
 export default function AdminKycListings() {
+  const navigate = useNavigate();
   const { data, isLoading, isError, error, refetch, isFetching } =
     useGetKYCListingsQuery();
   const [confirmTalentRequest, { isLoading: isConfirming }] =
@@ -170,7 +173,10 @@ export default function AdminKycListings() {
                       </td>
                       <td className="p-3 text-white text-sm">
                         <div className="flex flex-col sm:flex-row gap-2 w-full sm:w-auto">
-                          <button className="custom-button-two cursor-pointer">
+                          <button
+                            onClick={() => navigate(`/kyc/${r?.userId?._id}`)}
+                            className="custom-button-two cursor-pointer"
+                          >
                             View
                           </button>
                         </div>
