@@ -30,5 +30,4 @@ dist-ssr
 .env.production
 
 # Ignore package.json
-package.json
 package-lock.json
