@@ -9,6 +9,7 @@ import {
   GoogleMap,
   Marker,
   InfoWindow,
+  OverlayView,
   useJsApiLoader,
 } from "@react-google-maps/api";
 import { Link } from "react-router-dom";
@@ -49,10 +50,21 @@ const normalizeEvents = (input) => {
 
 const containerStyle = { width: "100%", height: "100%" };
 
-// Function to get the first character or two for the label
-const getLabelText = (title) => {
-  if (!title) return "•";
-  return title.substring(0, 20).toUpperCase();
+const labelStyle = {
+  pointerEvents: "none",
+  background: "rgba(255, 255, 255, 0.95)",
+  border: "1px solid rgba(0, 0, 0, 0.12)",
+  borderRadius: "6px",
+  padding: "6px 10px",
+  boxShadow: "0 2px 6px rgba(0, 0, 0, 0.15)",
+  fontSize: "13px",
+  fontWeight: 600,
+  lineHeight: 1.4,
+  color: "#1e293b",
+  display: "inline-block",
+  whiteSpace: "nowrap",
+  overflow: "visible",
+  transform: "translate(10px, -14px)",
 };
 
 export default function GoogleMapsEvents({
@@ -77,17 +89,14 @@ export default function GoogleMapsEvents({
     () => normalizeEvents(allTalentsEvents),
     [allTalentsEvents]
   );
-  const events = normalizedFiltered.length && normalizedFiltered;
+
+  // Use filtered if it has items, otherwise fall back to all
+  const events = normalizedFiltered.length ? normalizedFiltered : normalizedAll;
 
   const defaultCenter = useMemo(() => {
     if (events.length) return { lat: events[0].lat, lng: events[0].lng };
     return { lat: fallbackCenter[0], lng: fallbackCenter[1] };
   }, [events, fallbackCenter]);
-  const [zoom, setZoom] = useState(5);
-  const handleZoomChanged = useCallback(() => {
-    const m = mapRef.current;
-    if (m) setZoom(m.getZoom());
-  }, []);
 
   const mapRef = useRef(null);
   const [selectedId, setSelectedId] = useState(null);
@@ -99,6 +108,7 @@ export default function GoogleMapsEvents({
   const onUnmount = useCallback(() => {
     mapRef.current = null;
   }, []);
+
   useEffect(() => {
     const map = mapRef.current;
     if (!map) return;
@@ -138,6 +148,18 @@ export default function GoogleMapsEvents({
     );
   }
 
+  const listToRender = events.length
+    ? events
+    : [
+        {
+          id: "fallback",
+          title: "Default Location",
+          address: "",
+          lat: fallbackCenter[0],
+          lng: fallbackCenter[1],
+        },
+      ];
+
   return (
     <div
       className="w-full rounded-xl overflow-hidden h-[400px] lg:h-[650px] text-black"
@@ -150,7 +172,6 @@ export default function GoogleMapsEvents({
         onLoad={onLoad}
         onUnmount={onUnmount}
         options={{
-          // simple default Google map with standard controls
           disableDefaultUI: false,
           zoomControl: true,
           mapTypeControl: true,
@@ -161,37 +182,26 @@ export default function GoogleMapsEvents({
           mapTypeId: "roadmap",
         }}
       >
-        {/* Markers with labels */}
-        {(events.length
-          ? events
-          : [
-              {
-                id: "fallback",
-                title: "Default Location",
-                address: "",
-                lat: fallbackCenter[0],
-                lng: fallbackCenter[1],
-              },
-            ]
-        ).map((ev) => {
+        {listToRender.map((ev) => {
           const pos = { lat: ev.lat, lng: ev.lng };
           const isOpen = selectedId === ev.id;
-          const labelText = getLabelText(ev.title);
 
           return (
             <React.Fragment key={ev.id}>
               <Marker
                 position={pos}
                 onClick={() => setSelectedId(ev.id)}
-                // label={{
-                //   text: labelText,
-                //   color: "#000",
-                //   fontSize: "12px",
-                //   fontWeight: "bold",
-                //   className: "marker-label",
-                // }}
-                title={ev.title} // This shows as tooltip on hover
+                title={ev.title}
               />
+              <OverlayView
+                position={pos}
+                mapPaneName={OverlayView.OVERLAY_LAYER}
+              >
+                <div style={labelStyle} aria-label="ev-title">
+                  {ev.title || "Untitled"}
+                </div>
+              </OverlayView>
+
               {isOpen && (
                 <InfoWindow
                   position={pos}
