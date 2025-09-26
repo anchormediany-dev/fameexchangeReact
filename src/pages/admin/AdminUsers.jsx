@@ -4,6 +4,7 @@ import { FiTrash2 } from "react-icons/fi";
 import { useGetUsersQuery, useDeleteUserMutation } from "../../app/authApi";
 
 import ConfirmDialog from "../../utils/ConfirmDialog";
+import { Link } from "react-router-dom";
 
 const fallbackAvatar =
   "https://images.unsplash.com/photo-1502685104226-ee32379fefbe?w=200&auto=format&fit=crop&q=60";
@@ -275,7 +276,7 @@ const AdminUsers = () => {
                     <div className="flex items-center space-x-3">
                       <UserRowAvatar src={u?.image} name={u?.name} />
                       <div>
-                        <h4 className="font-semibold text-white text-sm">
+                        <h4 className="font-semibold  text-white text-sm">
                           {u?.name || "Unnamed"}
                         </h4>
                         <div className="text-xs text-gray-400 capitalize">
@@ -358,9 +359,22 @@ const AdminUsers = () => {
                     <div className="flex items-center space-x-3">
                       <UserRowAvatar src={u?.image} name={u?.name} />
                       <div>
-                        <span className="font-semibold text-white text-sm block">
-                          {u?.name || "—"}
-                        </span>
+                        {u?.role === "FAN" && (
+                          <Link
+                            to={`/fan-profile/${u?._id}`}
+                            className="font-semibold underline text-white text-sm block"
+                          >
+                            {u?.name || "—"}
+                          </Link>
+                        )}
+                        {u?.role === "TALENT" && (
+                          <Link
+                            to={`/talent-profile/${u?._id}`}
+                            className="font-semibold underline text-white text-sm block"
+                          >
+                            {u?.name || "—"}
+                          </Link>
+                        )}
                         <span className="text-xs text-gray-400">
                           {u?.email || "—"}
                         </span>

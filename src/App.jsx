@@ -250,6 +250,14 @@ export default function App() {
               }
             />
           </Route>
+          <Route
+            path="fan-profile/:id"
+            element={
+              <MotionPageWrapper>
+                <FanProfile />
+              </MotionPageWrapper>
+            }
+          />
           {/* Fan Profile Page */}
           <Route element={<ProtectedRoute />}>
             <Route
