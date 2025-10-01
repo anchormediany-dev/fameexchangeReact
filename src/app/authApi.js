@@ -304,7 +304,7 @@ export const authApi = api.injectEndpoints({
         url: `/sessions/${sessionId}`,
         method: "DELETE",
       }),
-      invalidatesTags: ["User"],
+      invalidatesTags: ["User", "AdminDashboard"],
     }),
     createSession: builder.mutation({
       query: (sessionData) => ({

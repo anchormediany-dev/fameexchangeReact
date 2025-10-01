@@ -197,14 +197,15 @@ const AdminDashboard = () => {
     setDeleteError(null);
 
     try {
-      await deleteSession(id).unwrap();
+      const result = await deleteSession(id).unwrap();
+      toast.success(result?.message || "Session deleted successfully");
       // Optimistic local removal
       setUsersLocal((prev) => prev.filter((u) => u._id !== id));
       // Optional full sync:
       refetch();
     } catch (err) {
-      console.log("error", { deleteSessionError });
-      toast.error(deleteSessionError?.data?.message || "No session found");
+      // console.log("error", { deleteSessionError });
+      // toast.error(deleteSessionError?.message || "No session found");
       setDeleteError(
         err?.data?.message || err?.error || "Failed to delete user"
       );
