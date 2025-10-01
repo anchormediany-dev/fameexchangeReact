@@ -74,13 +74,22 @@ const SearchTalents = ({
   };
 
   const handleSelectTalent = (talent) => {
-    setSearchValue(talent.name);  
+    setSearchValue(talent.name);
     setIsTalentName(talent.name);
     setSearchResults([]);
     setShowResults(false);
     setSelectedSearchUser(talent?._id);
   };
+  const clearSearch = () => {
+    setSearchValue("");
+    setIsTalentName("");
+    setSearchResults([]);
+    setShowResults(false);
+    setSelectedSearchUser("");
 
+    // Clear from localStorage
+    localStorage.removeItem("currentUserData");
+  };
   return (
     <section className="flex justify-end items-center">
       <div className="lg:w-[25%] mb-3 relative">
@@ -105,6 +114,7 @@ const SearchTalents = ({
                     setSearchValue("");
                     setIsTalentName("");
                     setSearchResults([]);
+                    clearSearch();
                     setShowResults(false);
                   }}
                   className="p-2 text-gray-400 hover:text-white transition-all duration-200 rounded-xl hover:bg-white/10 active:scale-95 z-30"
