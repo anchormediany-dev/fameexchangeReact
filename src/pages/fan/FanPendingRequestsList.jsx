@@ -15,8 +15,11 @@ import {
   useFanRequestConfirmationMutation,
 } from "../../app/authApi";
 import { toast } from "react-toastify";
+import FeedbackPopup from "../../components/FeedbackPopup";
 
 const FanPendingRequestsList = ({ userData }) => {
+  const [isFeedbackShow, setIsFeedbackShow] = useState(false);
+  const [selectedRequest, setSelectedRequest] = useState(null);
   const [currentDate] = useState(new Date());
   const [activeRequestId, setActiveRequestId] = useState(null);
   const [loadingAction, setLoadingAction] = useState(null);
@@ -83,7 +86,22 @@ const FanPendingRequestsList = ({ userData }) => {
       setLoadingAction(null);
     }
   };
+  const handleOpenFeedback = (request) => {
+    setSelectedRequest(request);
+    setIsFeedbackShow(true);
+  };
 
+  const handleCloseFeedback = () => {
+    setIsFeedbackShow(false);
+    setSelectedRequest(null);
+  };
+
+  const handleFeedbackSubmit = (feedbackData) => {
+    // Handle feedback submission here
+    console.log("Feedback for request:", selectedRequest?._id, feedbackData);
+    toast.success("Feedback submitted successfully!");
+    handleCloseFeedback();
+  };
   if (isLoading) {
     return (
       <section className="w-full max-w-3xl mx-auto px-3 sm:px-4 flex items-center justify-center">
@@ -118,6 +136,7 @@ const FanPendingRequestsList = ({ userData }) => {
     filteredRequests.length > 8
       ? "max-h-[60vh] md:max-h-[70vh] overflow-y-auto overscroll-contain pr-1"
       : "";
+  // Feedback Functionality
 
   return (
     <div className="bg-[#1f1f1f] rounded-xl p-6">
@@ -241,12 +260,19 @@ const FanPendingRequestsList = ({ userData }) => {
                       </div>
                     </>
                   ) : (
-                    <>
-                      {" "}
-                      <div className="flex flex-col text-[#a38b41]/50 sm:flex-row gap-2 w-full sm:w-auto">
+                    <div className="flex flex-col sm:flex-row items-center gap-2 w-full sm:w-auto">
+                      {request?.status === "accepted" && (
+                        <button
+                          onClick={() => handleOpenFeedback(request)}
+                          className="custom-button-two bg-[#a38b41] hover:bg-[#8a7637] text-white font-medium py-2 px-4 rounded-lg transition-colors text-xs sm:text-sm"
+                        >
+                          Add Feedback
+                        </button>
+                      )}
+                      <span className="text-[#a38b41]/50 text-xs sm:text-sm capitalize">
                         {request?.status}
-                      </div>
-                    </>
+                      </span>
+                    </div>
                   )}
                 </div>
               </motion.div>
@@ -266,6 +292,14 @@ const FanPendingRequestsList = ({ userData }) => {
           </div>
         )}
       </AnimatePresence>
+
+      {/* Feedback Popup */}
+      <FeedbackPopup
+        isFeedbackShow={isFeedbackShow}
+        onClick={handleCloseFeedback}
+        onSubmit={handleFeedbackSubmit}
+        request={selectedRequest}
+      />
     </div>
   );
 };

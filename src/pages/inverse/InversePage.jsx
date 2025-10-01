@@ -193,7 +193,7 @@ const InversePage = () => {
       </div>
 
       {/* Feedback */}
-      <div className="container mx-auto">
+      {/* <div className="container mx-auto">
         <button
           onClick={() => setIsFeedbackShow(true)}
           className="custom-button-two"
@@ -205,7 +205,7 @@ const InversePage = () => {
           isFeedbackShow={isFeedbackShow}
           onClick={handleFeedbackPopup}
         />
-      </div>
+      </div> */}
     </section>
   );
 };

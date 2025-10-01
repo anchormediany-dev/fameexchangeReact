@@ -1,14 +1,27 @@
 import React, { useState, useEffect } from "react";
 import { FiX } from "react-icons/fi";
 
-const FeedbackPopup = ({ isFeedbackShow, onClick }) => {
+const FeedbackPopup = ({ isFeedbackShow, onClick, onSubmit, request }) => {
   const [feedbackText, setFeedbackText] = useState("");
+
+  // Reset form when popup opens
+  useEffect(() => {
+    if (isFeedbackShow) {
+      setFeedbackText("");
+    }
+  }, [isFeedbackShow]);
 
   const handleSubmit = () => {
     if (feedbackText.trim()) {
-      console.log("Feedback submitted:", feedbackText);
-      onClick(); // Close modal via parent
-      setFeedbackText("");
+      if (onSubmit) {
+        // If onSubmit prop exists, use it
+        onSubmit(feedbackText);
+      } else {
+        // Fallback to original behavior
+        console.log("Feedback submitted:", feedbackText);
+        onClick(); // Close modal via parent
+        setFeedbackText("");
+      }
     }
   };
 
@@ -37,6 +50,19 @@ const FeedbackPopup = ({ isFeedbackShow, onClick }) => {
           Share your experience with us. Your feedback helps us improve!
         </p>
 
+        {/* Show request info if available */}
+        {/* {request && (
+          <div className="bg-white/5 rounded-lg p-3 mb-4 text-sm">
+            <p className="text-white">
+              Session with:{" "}
+              <span className="text-[#a38b41]">{request.fanName}</span>
+            </p>
+            <p className="text-gray-300">
+              {request.date} at {request.time}
+            </p>
+          </div>
+        )} */}
+
         <textarea
           rows={4}
           placeholder="Write your feedback here..."
@@ -47,7 +73,12 @@ const FeedbackPopup = ({ isFeedbackShow, onClick }) => {
 
         <button
           onClick={handleSubmit}
-          className="w-full mt-5 py-2 rounded-xl font-semibold text-black bg-gradient-to-r from-[#a38b41] via-[#c2ab67] to-[#e6ca7c] hover:scale-105 active:scale-95 transition-all"
+          disabled={!feedbackText.trim()}
+          className={`w-full mt-5 py-2 rounded-xl font-semibold text-black transition-all ${
+            feedbackText.trim()
+              ? "bg-gradient-to-r from-[#a38b41] via-[#c2ab67] to-[#e6ca7c] hover:scale-105 active:scale-95 cursor-pointer"
+              : "bg-gray-500/50 cursor-not-allowed"
+          }`}
         >
           Submit Feedback
         </button>
