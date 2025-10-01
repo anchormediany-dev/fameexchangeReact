@@ -5,8 +5,9 @@ import googlePlay from "../assets/images/google-play.png";
 import appStore from "../assets/images/app-store.png";
 import { Link } from "react-router-dom";
 import Newsletter from "./Newsletter";
-
+import { useNavigate } from "react-router-dom";
 const Footer = () => {
+  const navigate = useNavigate();
   // Animation variants
   const containerVariants = {
     hidden: { opacity: 0 },
@@ -199,6 +200,8 @@ const Footer = () => {
             </motion.p>
             <motion.div className="flex justify-center" variants={itemVariants}>
               <motion.button
+                type="button"
+                onClick={() => navigate("/signup/fan")}
                 className="bg-[#a38b41] hover:brightness-110 cursor-pointer font-medium text-black py-3 px-6 mt-2 bg-gradient-to-r from-[#a18a3f] to-[#e6ca7c]"
                 // variants={buttonVariants}
                 // whileHover="hover"
