@@ -54,12 +54,21 @@ export default function EventCreateForm() {
     website: "",
     organizername: "",
     is_featured: true,
+
+    // pricing/discounts
     regular_price: "",
     discount_percent: "",
     discount_codes: [],
-    // event_coordinates: { lat: "", long: "" },
+
+    // selection
     prefrence: "interested",
     talent: [],
+
+    // --- Ticket details (NEW) ---
+    is_free: false, // checkbox
+    price: "", // per-ticket price; forced to 0 if is_free
+    no_of_tickets: "", // total available tickets
+    purchase_url: "", // external checkout URL
   });
 
   // Files + previews
@@ -90,7 +99,15 @@ export default function EventCreateForm() {
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    const numeric = ["regular_price", "discount_percent"];
+
+    // numeric fields
+    const numeric = [
+      "regular_price",
+      "discount_percent",
+      "price",
+      "no_of_tickets",
+    ];
+
     if (numeric.includes(name)) {
       setForm((s) => ({ ...s, [name]: value === "" ? "" : Number(value) }));
     } else {
@@ -98,17 +115,25 @@ export default function EventCreateForm() {
     }
   };
 
-  const handleBoolean = (e) =>
-    setForm((s) => ({ ...s, [e.target.name]: e.target.checked }));
+  const handleBoolean = (e) => {
+    const { name, checked } = e.target;
 
-  // const handleCoordsChange = (key, v) =>
-  //   setForm((s) => ({
-  //     ...s,
-  //     event_coordinates:
-  //       key === "lat"
-  //         ? { ...s.event_coordinates, lat: v === "" ? "" : Number(v) }
-  //         : { ...s.event_coordinates, long: v === "" ? "" : Number(v) },
-  //   }));
+    // special handling when toggling is_free
+    if (name === "is_free") {
+      setForm((s) => ({
+        ...s,
+        is_free: checked,
+        // when free: price 0 and disable/clear other pricing fields
+        price: checked ? 0 : s.price === 0 ? "" : s.price,
+        regular_price: checked ? "" : s.regular_price,
+        discount_percent: checked ? "" : s.discount_percent,
+        discount_codes: checked ? [] : s.discount_codes,
+      }));
+      return;
+    }
+
+    setForm((s) => ({ ...s, [name]: checked }));
+  };
 
   const handleArrayChange = (idx, v) =>
     setForm((s) => {
@@ -126,10 +151,9 @@ export default function EventCreateForm() {
       discount_codes: s.discount_codes.filter((_, i) => i !== idx),
     }));
 
-  // ---- File input handlers (fix first-attempt issue) ----
+  // ---- File input handlers ----
   const resetInput = (input) => {
     try {
-      // Allow re-selecting the same file(s)
       input.value = "";
     } catch {}
   };
@@ -173,12 +197,21 @@ export default function EventCreateForm() {
       website: form.website,
       organizername: form.organizername,
       is_featured: String(form.is_featured),
+
+      // pricing/discounts
       regular_price: String(form.regular_price ?? ""),
       discount_percent: String(form.discount_percent ?? ""),
-      prefrence: form.prefrence,
       discount_codes: JSON.stringify(form.discount_codes || []),
-      // event_coordinates: JSON.stringify(form.event_coordinates || {}),
+
+      // selection
+      prefrence: form.prefrence,
       talent: JSON.stringify(form.talent || []),
+
+      // ticket details
+      is_free: String(form.is_free),
+      price: String(form.is_free ? 0 : form.price ?? ""),
+      no_of_tickets: String(form.no_of_tickets ?? ""),
+      purchase_url: form.purchase_url || "",
     }).forEach(([k, v]) => fd.append(k, v));
 
     return fd;
@@ -186,14 +219,15 @@ export default function EventCreateForm() {
 
   const onSubmit = async (e) => {
     e.preventDefault();
+
+    // guard: if is_free, ensure price = 0
+    const payloadCheck = {
+      ...form,
+      price: form.is_free ? 0 : form.price,
+    };
+
     try {
-      const formData = buildFormData();
-
-      // Debug (optional): verify fields
-      // for (const [k, v] of formData.entries()) {
-      //   console.log(k, v instanceof File ? `${v.name} (${v.type}, ${v.size})` : v);
-      // }
-
+      const formData = buildFormData(payloadCheck);
       await createEvent(formData).unwrap();
       toast.success("Event created successfully!");
 
@@ -204,19 +238,25 @@ export default function EventCreateForm() {
         details: "",
         event_type: "live",
         status: "active",
-        category: "music",
+        category: "",
         location: "",
         address: "",
         phone: "",
         website: "",
         organizername: "",
         is_featured: true,
+
         regular_price: "",
         discount_percent: "",
         discount_codes: [],
-        // event_coordinates: { lat: "", long: "" },
+
         prefrence: "interested",
         talent: [],
+
+        is_free: false,
+        price: "",
+        no_of_tickets: "",
+        purchase_url: "",
       });
       setLogo(null);
       setEventCover(null);
@@ -234,6 +274,8 @@ export default function EventCreateForm() {
 
   const sectionTitleCls =
     "text-lg font-semibold mb-4 col-span-full gredient-text";
+
+  const disabledPricing = form.is_free;
 
   return (
     <MotionPageWrapper>
@@ -499,51 +541,120 @@ export default function EventCreateForm() {
                     />
                   </div>
                 </div>
-
-                {/* Coordinates */}
-                {/* <div>
-                  <label className="block text-white text-sm font-medium mb-2">
-                    Latitude
-                  </label>
-                  <div className="flex items-center border rounded-lg px-4 py-3 bg-[#2d2d2d]">
-                    <input
-                      type="number"
-                      step="any"
-                      value={form.event_coordinates.lat}
-                      onChange={(e) =>
-                        handleCoordsChange("lat", e.target.value)
-                      }
-                      placeholder="Enter latitude"
-                      className="bg-transparent outline-none w-full text-white"
-                    />
-                  </div>
-                </div> */}
-
-                {/* <div>
-                  <label className="block text-white text-sm font-medium mb-2">
-                    Longitude
-                  </label>
-                  <div className="flex items-center border rounded-lg px-4 py-3 bg-[#2d2d2d]">
-                    <input
-                      type="number"
-                      step="any"
-                      value={form.event_coordinates.long}
-                      onChange={(e) =>
-                        handleCoordsChange("long", e.target.value)
-                      }
-                      placeholder="Enter longitude"
-                      className="bg-transparent outline-none w-full text-white"
-                    />
-                  </div>
-                </div> */}
               </div>
 
-              {/* Pricing Section */}
+              {/* Ticket Details (NEW) */}
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                <h2 className={sectionTitleCls}>Ticket Details</h2>
+                {/* Ticket Price */}
+                <div>
+                  <label className="block text-white text-sm font-medium mb-2">
+                    Ticket Price{" "}
+                    {/* {form.is_free ? "(disabled for free events)" : ""} */}
+                  </label>
+                  <div
+                    className={`flex items-center border rounded-lg px-4 py-3 bg-[#2d2d2d] ${
+                      form.is_free ? "opacity-60" : ""
+                    }`}
+                  >
+                    <FaDollarSign className="text-gray-400 mr-3" />
+                    <input
+                      type="number"
+                      name="price"
+                      value={form.is_free ? 0 : form.price}
+                      onChange={handleChange}
+                      min="0"
+                      step="0.01"
+                      placeholder="Per ticket price"
+                      className="bg-transparent outline-none w-full text-white"
+                      disabled={form.is_free}
+                    />
+                  </div>
+                </div>
+                {/* Number of Tickets */}
+                <div>
+                  <label className="block text-white text-sm font-medium mb-2">
+                    Number of Tickets
+                  </label>
+                  <div className="flex items-center border rounded-lg px-4 py-3 bg-[#2d2d2d]">
+                    <input
+                      type="number"
+                      name="no_of_tickets"
+                      value={form.no_of_tickets}
+                      onChange={handleChange}
+                      min="0"
+                      step="1"
+                      placeholder="Total tickets available"
+                      className="bg-transparent outline-none w-full text-white"
+                    />
+                  </div>
+                </div>
+                {/* Purchase URL */}
+                <div className="md:col-span-2 lg:col-span-2">
+                  <label className="block text-white text-sm font-medium mb-2">
+                    Purchase URL
+                  </label>
+                  <div className="flex gap-3">
+                    <div className="flex-1 flex items-center border rounded-lg px-4 py-3 bg-[#2d2d2d]">
+                      <FaLink className="text-gray-400 mr-3" />
+                      <input
+                        type="url"
+                        name="purchase_url"
+                        value={form.purchase_url}
+                        onChange={handleChange}
+                        placeholder="https://example.com/checkout"
+                        className="bg-transparent outline-none w-full text-white"
+                      />
+                    </div>
+                    {/* <button
+                      type="button"
+                      onClick={() => {
+                        if (!form.purchase_url) return;
+                        const url = form.purchase_url.trim();
+                        try {
+                          // basic validation
+                          const u = new URL(
+                            url.startsWith("http") ? url : `https://${url}`
+                          );
+                          window.open(
+                            u.toString(),
+                            "_blank",
+                            "noopener,noreferrer"
+                          );
+                        } catch {
+                          toast.error("Enter a valid Purchase URL");
+                        }
+                      }}
+                      className="px-4 min-w-[120px] custom-button-two text-black rounded-md font-medium hover:opacity-90 transition disabled:opacity-70 disabled:cursor-not-allowed"
+                      disabled={!form.purchase_url}
+                      title="Open the ticket purchase page"
+                    >
+                      Buy Ticket
+                    </button> */}
+                  </div>
+                </div>{" "}
+                {/* Is Free */}
+                <div className="flex items-center space-x-3">
+                  <input
+                    id="is_free"
+                    type="checkbox"
+                    name="is_free"
+                    checked={form.is_free}
+                    onChange={handleBoolean}
+                    className="rounded h-5 w-5"
+                  />
+                  <label htmlFor="is_free" className="text-sm text-primary">
+                    Is this event free?
+                  </label>
+                </div>
+              </div>
+
+              {/* Pricing Section (disabled when free) */}
+              {/* <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
                 <h2 className={sectionTitleCls}>Pricing & Discounts</h2>
 
-                {/* Regular Price */}
-                <div>
+         
+                <div className={disabledPricing ? "opacity-60" : ""}>
                   <label className="block text-white text-sm font-medium mb-2">
                     Regular Price*
                   </label>
@@ -552,19 +663,20 @@ export default function EventCreateForm() {
                     <input
                       type="number"
                       name="regular_price"
-                      value={form.regular_price}
+                      value={disabledPricing ? "" : form.regular_price}
                       onChange={handleChange}
                       min="0"
                       step="0.01"
                       placeholder="Enter price"
                       className="bg-transparent outline-none w-full text-white"
-                      required
+                      required={!disabledPricing}
+                      disabled={disabledPricing}
                     />
                   </div>
                 </div>
 
-                {/* Discount Percent */}
-                <div>
+           
+                <div className={disabledPricing ? "opacity-60" : ""}>
                   <label className="block text-white text-sm font-medium mb-2">
                     Discount (%)
                   </label>
@@ -573,19 +685,24 @@ export default function EventCreateForm() {
                     <input
                       type="number"
                       name="discount_percent"
-                      value={form.discount_percent}
+                      value={disabledPricing ? "" : form.discount_percent}
                       onChange={handleChange}
                       min="0"
                       max="100"
                       step="1"
                       placeholder="Enter discount %"
                       className="bg-transparent outline-none w-full text-white"
+                      disabled={disabledPricing}
                     />
                   </div>
                 </div>
 
-                {/* Discount Codes */}
-                <div className="md:col-span-2 lg:col-span-2 space-y-4">
+        
+                <div
+                  className={`md:col-span-2 lg:col-span-2 space-y-4 ${
+                    disabledPricing ? "opacity-60" : ""
+                  }`}
+                >
                   <div className="flex justify-between items-center">
                     <label className="block text-white text-sm font-medium mb-2">
                       Discount Codes
@@ -596,21 +713,26 @@ export default function EventCreateForm() {
                   </div>
 
                   <div className="space-y-3">
-                    {form.discount_codes.map((code, idx) => (
-                      <DiscountCodeInput
-                        key={idx}
-                        value={code}
-                        onChange={(e) => handleArrayChange(idx, e.target.value)}
-                        onRemove={() => removeDiscountCode(idx)}
-                        index={idx}
-                      />
-                    ))}
+                    {(disabledPricing ? [] : form.discount_codes).map(
+                      (code, idx) => (
+                        <DiscountCodeInput
+                          key={idx}
+                          value={code}
+                          onChange={(e) =>
+                            handleArrayChange(idx, e.target.value)
+                          }
+                          onRemove={() => removeDiscountCode(idx)}
+                          index={idx}
+                        />
+                      )
+                    )}
                   </div>
 
                   <button
                     type="button"
                     onClick={addDiscountCode}
-                    className="flex items-center gap-2 text-sm gredient-text hover:underline"
+                    className="flex items-center gap-2 text-sm gredient-text hover:underline disabled:opacity-60"
+                    disabled={disabledPricing}
                   >
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
@@ -629,7 +751,7 @@ export default function EventCreateForm() {
                     Add another discount code
                   </button>
                 </div>
-              </div>
+              </div> */}
 
               {/* Content Section */}
               <div className="grid grid-cols-1 gap-6">
