@@ -25,6 +25,32 @@ const SearchTalents = ({
       }, 100);
     }
   }, [location]);
+  useEffect(() => {
+    try {
+      const raw = localStorage.getItem("currentUserData");
+      if (!raw) return;
+
+      const parsed = JSON.parse(raw);
+      // Your payload shows: { success, data: { profile, sessions, ... } }
+      const profile = parsed?.data?.profile || parsed?.profile || null;
+
+      const role = (profile?.role || profile?.usertype || "")
+        .toString()
+        .toUpperCase();
+
+      if (profile?._id && role === "TALENT") {
+        // Prefill input + mark as selected
+        setSearchValue(profile.name || "");
+        setIsTalentName?.(profile.name || "");
+        setSelectedSearchUser?.(profile._id);
+        setShowResults(false);
+      }
+    } catch (e) {
+      // ignore JSON errors silently
+    }
+    // Run once on mount
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const handleSearchChange = (e) => {
     const value = e.target.value;
@@ -48,7 +74,7 @@ const SearchTalents = ({
   };
 
   const handleSelectTalent = (talent) => {
-    setSearchValue(talent.name);
+    setSearchValue(talent.name);  
     setIsTalentName(talent.name);
     setSearchResults([]);
     setShowResults(false);
@@ -79,6 +105,7 @@ const SearchTalents = ({
                     setSearchValue("");
                     setIsTalentName("");
                     setSearchResults([]);
+                    setShowResults(false);
                   }}
                   className="p-2 text-gray-400 hover:text-white transition-all duration-200 rounded-xl hover:bg-white/10 active:scale-95 z-30"
                 >

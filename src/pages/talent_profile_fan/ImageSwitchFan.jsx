@@ -16,12 +16,22 @@ const ImageSwitchFan = ({ userData }) => {
   const [isUploading, setIsUploading] = useState(false);
   const [bioText, setBioText] = useState("");
   const IMAGE_BASE_URL = import.meta.env.VITE_API_BASE_URL;
+  // const handleInverseClick = () => {
+  //   navigate("/inverse#inverse-request-form");
+  // };
   const handleInverseClick = () => {
-    navigate("/inverse#inverse-request-form");
+    localStorage.removeItem("currentUserData");
+    if (userData) {
+      localStorage.setItem("currentUserData", JSON.stringify(userData));
+    }
+
+    navigate("/inverse#inverse-request-form", {
+      state: { userData },
+    });
   };
   const normalizePath = (p) => {
     if (!p) return "";
-    const clean = p.replace(/\\/g, "/"); // windows -> url
+    const clean = p.replace(/\\/g, "/");
     return clean.startsWith("/") ? clean : `/${clean}`;
   };
   useEffect(() => {

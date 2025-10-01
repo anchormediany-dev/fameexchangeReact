@@ -82,16 +82,22 @@ const InversePage = () => {
   return (
     <section className="w-full z-50 bg-gradient-to-br py-12 2xl:py-16 flex flex-col 2xl:gap-16 gap-12 px-4 sm:px-6 lg:px-8">
       <div className="2xl:gap-16 gap-12 px-4 container sm:px-6 lg:px-8 mt-10 lg:mt-16 2xl:mt-20">
-        {userDetails?.role === "ADMIN" ||
-          (userDetails?.role === "FAN" && (
-            <SearchTalents
-              setIsTalentName={setIsTalentName}
-              usersData={usersData}
-              isUsersLoading={isUsersLoading}
-              refetchUsers={refetchUsers}
-              setSelectedSearchUser={setSelectedSearchUser}
-            />
-          ))}
+        {(userDetails?.role === "ADMIN" || userDetails?.role === "FAN") && (
+          <SearchTalents
+            defaultTalentId={defaultTalentId}
+            initialSearchTerm={
+              userFromLS?.stageName ||
+              userFromLS?.displayName ||
+              userFromLS?.name ||
+              ""
+            }
+            setIsTalentName={setIsTalentName}
+            usersData={usersData}
+            isUsersLoading={isUsersLoading}
+            refetchUsers={refetchUsers}
+            setSelectedSearchUser={setSelectedSearchUser}
+          />
+        )}
 
         <div className="flex flex-col 2xl:gap-16 gap-12">
           <div className="grid grid-cols-1 lg:grid-cols-4 gap-10 lg:gap-12 xl:gap-16 2xl:gap-20 items-stretch">
