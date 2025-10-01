@@ -333,8 +333,18 @@ const TalentProfile = () => {
       </div>
       {/* <PendingRequests /> */}
       <div className="container mx-auto flex flex-col lg:flex-row gap-6 px-4 py-8 h-full min-h-[400px]">
-        <ConfirmedRequestsCalendar />
-        <PendingRequestsList />
+        <section className="w-full lg:w-[40%] ">
+          <h2 className="text-2xl font-bold text-primary2 mb-3 ">
+            All Sessions
+          </h2>
+          <ConfirmedRequestsCalendar />
+        </section>
+        <section className="w-full max-w-3xl lg:max-w-5xl mx-auto px-3 sm:px-4 ">
+          <h2 className="text-2xl font-bold text-primary2 mb-3 ">
+            All Fan Inverse Requests
+          </h2>
+          <PendingRequestsList />{" "}
+        </section>
       </div>
       <CreateSession />
       <div className="bg-[#171717] px-4 md:px-8 container text-white">

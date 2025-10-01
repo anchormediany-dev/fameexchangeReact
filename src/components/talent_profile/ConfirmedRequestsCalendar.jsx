@@ -106,11 +106,7 @@ const ConfirmedRequestsCalendar = () => {
   }
 
   return (
-    <div className="bg-white/5 w-full lg:w-[40%] backdrop-blur-xl border border-white/10 rounded-2xl p-3 md:p-4 mb-6 ">
-      <h2 className="text-2xl font-bold text-primary2 mb-6 text-center gradient-text">
-        Confirmed Requests
-      </h2>
-
+    <div className="bg-white/5  backdrop-blur-xl border border-white/10 rounded-2xl p-3 md:p-4 mb-6 ">
       <div className="flex items-center justify-center space-x-4 mb-6">
         <button
           onClick={() => navigateMonth(-1)}

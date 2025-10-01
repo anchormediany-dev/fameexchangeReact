@@ -221,7 +221,7 @@ const PendingRequestsList = () => {
 
   return (
     <>
-      <section className="w-full max-w-3xl lg:max-w-5xl mx-auto px-3 sm:px-4">
+      <section className="">
         <AnimatePresence>
           {filteredRequests.length > 0 ? (
             <div className={`space-y-3 ${scrollClass}`}>
