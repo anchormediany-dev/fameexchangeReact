@@ -154,7 +154,7 @@ const TalentProfile = () => {
         {/* Ultra Modern Single Row Layout */}
         <div className="flex flex-col xl:flex-row gap-4 xl:gap-6 items-stretch">
           {/* Modern Compact Search Bar */}
-          <div className="w-full xl:w-80 2xl:w-96">
+          {/* <div className="w-full xl:w-80 2xl:w-96">
             <form onSubmit={handleSearch} className="relative group">
               <div
                 className={`
@@ -166,7 +166,7 @@ const TalentProfile = () => {
                 }
               `}
               >
-                {/* Animated background gradient */}
+           
                 <div
                   className={`
                   absolute inset-0 bg-gradient-to-r from-[#a38b41]/10 via-transparent to-[#a38b41]/10 
@@ -176,7 +176,7 @@ const TalentProfile = () => {
                 `}
                 />
 
-                {/* Search Input */}
+             
                 <input
                   type="text"
                   value={searchValue}
@@ -187,13 +187,13 @@ const TalentProfile = () => {
                   className="relative z-10 w-full h-14 sm:h-16 bg-transparent pl-5 pr-24 text-white placeholder-gray-400 focus:outline-none text-sm sm:text-base font-medium placeholder:font-normal"
                 />
 
-                {/* Search Actions */}
+             
                 <div className="absolute right-3 top-1/2 -translate-y-1/2 flex items-center gap-2 z-20">
-                  {/* Clear Button */}
+          
                   {searchValue && (
                     <button
                       type="button"
-                      onMouseDown={(e) => e.preventDefault()} // Prevent input blur
+                      onMouseDown={(e) => e.preventDefault()} 
                       onClick={clearSearch}
                       className="p-2 text-gray-400 hover:text-white transition-all duration-200 rounded-xl hover:bg-white/10 active:scale-95 z-30"
                     >
@@ -201,11 +201,11 @@ const TalentProfile = () => {
                     </button>
                   )}
 
-                  {/* Ultra Modern Search Button */}
+          
                   <button
                     type="submit"
                     disabled={!searchValue.trim()}
-                    onMouseDown={(e) => e.preventDefault()} // Prevent input blur
+                    onMouseDown={(e) => e.preventDefault()} 
                     className={`
                       group/search relative overflow-hidden px-4 py-2 rounded-xl font-bold text-xs transition-all duration-300 flex items-center gap-2 z-30
                       ${
@@ -220,14 +220,14 @@ const TalentProfile = () => {
                       Enter
                     </span>
 
-                    {/* Button shine effect */}
+                  
                     {searchValue.trim() && (
                       <div className="absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent via-white/30 to-transparent group-hover/search:translate-x-full transition-transform duration-700" />
                     )}
                   </button>
                 </div>
 
-                {/* Search bar shine effect */}
+           
                 <div
                   className={`
                   absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent via-white/5 to-transparent 
@@ -238,7 +238,7 @@ const TalentProfile = () => {
                 />
               </div>
             </form>
-          </div>
+          </div> */}
 
           {/* Ultra Modern Action Buttons */}
           <div className="flex-1 grid grid-cols-1 sm:grid-cols-3 gap-4 xl:gap-6">
