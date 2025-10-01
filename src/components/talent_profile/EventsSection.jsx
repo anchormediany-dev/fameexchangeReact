@@ -29,7 +29,13 @@ const EventsSection = () => {
         {events.length > 0 ? (
           events.map((event) => (
             <div key={event.id} className="p-4 hover:bg-[#2c2c2c] transition">
-              <div className="flex flex-col gap-1">
+              <div
+                key={event?._id}
+                onClick={() =>
+                  event?._id && navigate(`/event-details/${event?._id}`)
+                }
+                className="flex flex-col gap-1 cursor-pointer"
+              >
                 <div className="flex items-center text-sm text-gray-400 mb-1">
                   <span className="px-2 py-0.5 rounded-full text-xs mr-2 bg-green-900 text-green-300">
                     {event?.event_type}
@@ -54,15 +60,6 @@ const EventsSection = () => {
                   <p className="text-sm text-gray-400 line-clamp-2">
                     {event?.details}
                   </p>
-                  <button
-                    key={event?._id}
-                    onClick={() =>
-                      event?._id && navigate(`/event-details/${event?._id}`)
-                    }
-                    className="text-yellow-400 text-xs cursor-pointer"
-                  >
-                    View details →
-                  </button>
                 </div>
               </div>
             </div>

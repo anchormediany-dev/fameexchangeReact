@@ -115,7 +115,7 @@ const ConfirmedRequestsCalendar = () => {
           <FaChevronLeft />
         </button>
 
-        <h2 className="text-2xl font-bold gradient-text">
+        <h2 className="text-2xl font-bold ">
           {monthNames[currentDate.getMonth()]} {currentDate.getFullYear()}
         </h2>
 
