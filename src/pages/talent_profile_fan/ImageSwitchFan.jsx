@@ -113,6 +113,44 @@ const ImageSwitchFan = ({ userData }) => {
     }
     return new Blob([u8arr], { type: mime });
   };
+  // Sponsor functionality
+  const [isPopupOpen, setIsPopupOpen] = useState(false);
+  useEffect(() => {
+    if (isPopupOpen) {
+      const scrollY = window.scrollY;
+      document.body.style.position = "fixed";
+      document.body.style.top = `-${scrollY}px`;
+      document.body.style.width = "100%";
+      document.body.style.overflow = "hidden";
+      return () => {
+        document.body.style.position = "";
+        document.body.style.top = "";
+        document.body.style.width = "";
+        document.body.style.overflow = "";
+        window.scrollTo(0, scrollY);
+      };
+    }
+  }, [isPopupOpen]);
+
+  const handleSponsorClick = () => {
+    setIsPopupOpen(true);
+  };
+
+  const handleConfirm = () => {
+    toast.success(`Successfully sponsored ${talentName}!`);
+    setIsPopupOpen(false);
+  };
+
+  const handleCancel = () => {
+    setIsPopupOpen(false);
+  };
+
+  // Close popup when clicking outside
+  const handleBackdropClick = (e) => {
+    if (e.target === e.currentTarget) {
+      handleCancel();
+    }
+  };
 
   return (
     <div className="container grid grid-cols-1 lg:grid-cols-3 gap-6 px-4">
@@ -230,13 +268,53 @@ const ImageSwitchFan = ({ userData }) => {
               Support this talent's career development
             </p>
             <button
-              // onClick={() => handleActionClick(label)}
+              onClick={handleSponsorClick}
               className="w-full cursor-pointer bg-[#a38b41] hover:bg-[#8a7637] text-white font-medium py-2 rounded-lg transition-colors text-sm md:text-base"
             >
               Sponsor Talent
             </button>
           </div>
         </div>
+        {isPopupOpen && (
+          <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50 p-4">
+            <div className="bg-white/10 backdrop-blur-xl border border-white/20 rounded-2xl shadow-2xl p-6 max-w-md w-full">
+              <div className="text-center">
+                {/* Icon */}
+                <div className="w-16 h-16 mx-auto rounded-full bg-[#a38b41]/20 flex items-center justify-center mb-4">
+                  <FaHeart className="text-[#a38b41] text-2xl" />
+                </div>
+
+                {/* Title */}
+                <h3 className="text-xl font-semibold text-white mb-2">
+                  Confirm Sponsorship
+                </h3>
+
+                {/* Message */}
+                <p className="text-gray-300 mb-6">
+                  Are you sure you would like to sponsor{" "}
+                  <span className="text-white font-semibold">{talentName}</span>
+                  ?
+                </p>
+
+                {/* Buttons */}
+                <div className="flex gap-3">
+                  <button
+                    onClick={handleCancel}
+                    className="flex-1 cursor-pointer bg-gray-600 hover:bg-gray-700 text-white font-medium py-3 rounded-lg transition-colors"
+                  >
+                    No
+                  </button>
+                  <button
+                    onClick={handleConfirm}
+                    className="flex-1 cursor-pointer bg-[#a38b41] hover:bg-[#8a7637] text-white font-medium py-3 rounded-lg transition-colors"
+                  >
+                    Yes
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
         {/* Inverse Request */}
         <div className="bg-white/5 flex justify-center items-center backdrop-blur-xl border border-white/10 rounded-2xl shadow-xl p-4 md:p-6 hover:shadow-[#a38b41]/20 hover:border-[#a38b41]/50 transition-all h-full">
           <div className="flex flex-col items-center text-center">
