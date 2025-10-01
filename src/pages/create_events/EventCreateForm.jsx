@@ -15,6 +15,7 @@ import { toast } from "react-toastify";
 import { useCreateEventMutation } from "../../app/authApi";
 import TalentMultiSelect from "../../components/TalentMultiSelect";
 
+/* ---------- small inputs ---------- */
 const DiscountCodeInput = ({ value, onChange, onRemove, index }) => (
   <div className="relative">
     <div className="flex items-center border rounded-lg px-4 py-3 bg-[#2d2d2d]">
@@ -29,6 +30,7 @@ const DiscountCodeInput = ({ value, onChange, onRemove, index }) => (
         type="button"
         onClick={onRemove}
         className="text-gray-400 hover:text-red-500 transition-colors"
+        title="Remove"
       >
         <IoClose size={18} />
       </button>
@@ -36,6 +38,39 @@ const DiscountCodeInput = ({ value, onChange, onRemove, index }) => (
   </div>
 );
 
+const PurchaseUrlInput = ({ value, onChange, onRemove, index, onOpen }) => (
+  <div className="relative">
+    <div className="flex items-center gap-2 border rounded-lg px-4 py-3 bg-[#2d2d2d]">
+      <FaLink className="text-gray-400 shrink-0" />
+      <input
+        type="url"
+        value={value}
+        onChange={onChange}
+        placeholder={`https://... (URL ${index + 1})`}
+        className="bg-transparent outline-none w-full text-white placeholder-gray-400"
+      />
+      {/* <button
+        type="button"
+        onClick={onOpen}
+        className="text-xs px-2 py-1 rounded border border-gray-600 hover:border-gray-400"
+        title="Open link"
+        disabled={!value?.trim()}
+      >
+        Open
+      </button> */}
+      <button
+        type="button"
+        onClick={onRemove}
+        className="text-gray-400 hover:text-red-500 transition-colors"
+        title="Remove"
+      >
+        <IoClose size={18} />
+      </button>
+    </div>
+  </div>
+);
+
+/* ---------- main component ---------- */
 export default function EventCreateForm() {
   const navigate = useNavigate();
   const [createEvent, { isLoading }] = useCreateEventMutation();
@@ -64,14 +99,14 @@ export default function EventCreateForm() {
     prefrence: "interested",
     talent: [],
 
-    // --- Ticket details (NEW) ---
-    is_free: false, // checkbox
-    price: "", // per-ticket price; forced to 0 if is_free
-    no_of_tickets: "", // total available tickets
-    purchase_url: "", // external checkout URL
+    // tickets
+    is_free: false,
+    price: "",
+    no_of_tickets: "",
+    purchase_url: [""], // <-- ARRAY of strings
   });
 
-  // Files + previews
+  // files + previews
   const [logo, setLogo] = useState(null);
   const [eventCover, setEventCover] = useState(null);
   const [eventImages, setEventImages] = useState([]);
@@ -97,17 +132,15 @@ export default function EventCreateForm() {
     };
   }, [logoPreview, coverPreview, imagePreviews]);
 
+  /* ---------- handlers ---------- */
   const handleChange = (e) => {
     const { name, value } = e.target;
-
-    // numeric fields
     const numeric = [
       "regular_price",
       "discount_percent",
       "price",
       "no_of_tickets",
     ];
-
     if (numeric.includes(name)) {
       setForm((s) => ({ ...s, [name]: value === "" ? "" : Number(value) }));
     } else {
@@ -117,13 +150,10 @@ export default function EventCreateForm() {
 
   const handleBoolean = (e) => {
     const { name, checked } = e.target;
-
-    // special handling when toggling is_free
     if (name === "is_free") {
       setForm((s) => ({
         ...s,
         is_free: checked,
-        // when free: price 0 and disable/clear other pricing fields
         price: checked ? 0 : s.price === 0 ? "" : s.price,
         regular_price: checked ? "" : s.regular_price,
         discount_percent: checked ? "" : s.discount_percent,
@@ -131,11 +161,10 @@ export default function EventCreateForm() {
       }));
       return;
     }
-
     setForm((s) => ({ ...s, [name]: checked }));
   };
 
-  const handleArrayChange = (idx, v) =>
+  const handleDiscountCodeChange = (idx, v) =>
     setForm((s) => {
       const next = [...s.discount_codes];
       next[idx] = v;
@@ -151,37 +180,66 @@ export default function EventCreateForm() {
       discount_codes: s.discount_codes.filter((_, i) => i !== idx),
     }));
 
-  // ---- File input handlers ----
+  // purchase url helpers
+  const handlePurchaseUrlChange = (idx, v) =>
+    setForm((s) => {
+      const next = [...s.purchase_url];
+      next[idx] = v;
+      return { ...s, purchase_url: next };
+    });
+
+  const addPurchaseUrl = () =>
+    setForm((s) => ({ ...s, purchase_url: [...s.purchase_url, ""] }));
+
+  const removePurchaseUrl = (idx) =>
+    setForm((s) => ({
+      ...s,
+      purchase_url: s.purchase_url.filter((_, i) => i !== idx),
+    }));
+
+  const openPurchaseUrl = (raw) => {
+    if (!raw?.trim()) return;
+    try {
+      const url = raw.startsWith("http") ? raw : `https://${raw}`;
+      const u = new URL(url);
+      window.open(u.toString(), "_blank", "noopener,noreferrer");
+    } catch {
+      toast.error("Enter a valid Purchase URL");
+    }
+  };
+
+  // file inputs
   const resetInput = (input) => {
     try {
       input.value = "";
     } catch {}
   };
-
   const handleLogoChange = (e) => {
     const file = e.target.files?.[0] || null;
     setLogo(file);
     resetInput(e.target);
   };
-
   const handleCoverChange = (e) => {
     const file = e.target.files?.[0] || null;
     setEventCover(file);
     resetInput(e.target);
   };
-
   const handleGalleryChange = (e) => {
     const files = Array.from(e.target.files || []);
     setEventImages(files);
     resetInput(e.target);
   };
 
+  // formData
   const buildFormData = () => {
     const fd = new FormData();
-
     if (logo) fd.append("logo", logo);
     if (eventCover) fd.append("event_cover", eventCover);
-    eventImages.forEach((f) => fd.append("event_images", f)); // same key
+    eventImages.forEach((f) => fd.append("event_images", f));
+
+    const cleanPurchaseUrls = (form.purchase_url || [])
+      .map((u) => (u || "").trim())
+      .filter(Boolean);
 
     Object.entries({
       datetime: form.datetime,
@@ -207,11 +265,11 @@ export default function EventCreateForm() {
       prefrence: form.prefrence,
       talent: JSON.stringify(form.talent || []),
 
-      // ticket details
+      // tickets
       is_free: String(form.is_free),
       price: String(form.is_free ? 0 : form.price ?? ""),
       no_of_tickets: String(form.no_of_tickets ?? ""),
-      purchase_url: form.purchase_url || "",
+      purchase_url: JSON.stringify(cleanPurchaseUrls),
     }).forEach(([k, v]) => fd.append(k, v));
 
     return fd;
@@ -219,15 +277,8 @@ export default function EventCreateForm() {
 
   const onSubmit = async (e) => {
     e.preventDefault();
-
-    // guard: if is_free, ensure price = 0
-    const payloadCheck = {
-      ...form,
-      price: form.is_free ? 0 : form.price,
-    };
-
     try {
-      const formData = buildFormData(payloadCheck);
+      const formData = buildFormData();
       await createEvent(formData).unwrap();
       toast.success("Event created successfully!");
 
@@ -256,7 +307,7 @@ export default function EventCreateForm() {
         is_free: false,
         price: "",
         no_of_tickets: "",
-        purchase_url: "",
+        purchase_url: [""],
       });
       setLogo(null);
       setEventCover(null);
@@ -274,9 +325,9 @@ export default function EventCreateForm() {
 
   const sectionTitleCls =
     "text-lg font-semibold mb-4 col-span-full gredient-text";
-
   const disabledPricing = form.is_free;
 
+  /* ---------- UI ---------- */
   return (
     <MotionPageWrapper>
       <div className="flex relative overflow-hidden">
@@ -287,11 +338,10 @@ export default function EventCreateForm() {
             </h2>
 
             <form onSubmit={onSubmit} className="space-y-8">
-              {/* Basic Information Section */}
+              {/* Basic Information */}
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
                 <h2 className={sectionTitleCls}>Basic Information</h2>
 
-                {/* Title */}
                 <div>
                   <label className="block text-white text-sm font-medium mb-2">
                     Event Title*
@@ -309,7 +359,6 @@ export default function EventCreateForm() {
                   </div>
                 </div>
 
-                {/* Organizer */}
                 <div>
                   <label className="block text-white text-sm font-medium mb-2">
                     Organizer Name*
@@ -327,7 +376,6 @@ export default function EventCreateForm() {
                   </div>
                 </div>
 
-                {/* Category */}
                 <div>
                   <label className="block text-white text-sm font-medium mb-2">
                     Category*
@@ -345,7 +393,6 @@ export default function EventCreateForm() {
                   </div>
                 </div>
 
-                {/* Event Type */}
                 <div>
                   <label className="block text-white text-sm font-medium mb-2">
                     Event Type*
@@ -368,7 +415,6 @@ export default function EventCreateForm() {
                   </div>
                 </div>
 
-                {/* Status */}
                 <div>
                   <label className="block text-white text-sm font-medium mb-2">
                     Status*
@@ -391,7 +437,6 @@ export default function EventCreateForm() {
                   </div>
                 </div>
 
-                {/* Preference */}
                 <div>
                   <label className="block text-white text-sm font-medium mb-2">
                     Preference
@@ -416,7 +461,6 @@ export default function EventCreateForm() {
                   </div>
                 </div>
 
-                {/* Date & Time */}
                 <div>
                   <label className="block text-white text-sm font-medium mb-2">
                     Date & Time*
@@ -434,7 +478,6 @@ export default function EventCreateForm() {
                   </div>
                 </div>
 
-                {/* Talent multi select */}
                 <div className="md:col-span-4">
                   <TalentMultiSelect
                     value={form.talent}
@@ -443,7 +486,6 @@ export default function EventCreateForm() {
                   />
                 </div>
 
-                {/* Featured */}
                 <div className="flex items-center space-x-3 col-span-full">
                   <input
                     id="is_featured"
@@ -464,11 +506,10 @@ export default function EventCreateForm() {
                 </div>
               </div>
 
-              {/* Location Information Section */}
+              {/* Location */}
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
                 <h2 className={sectionTitleCls}>Location Details</h2>
 
-                {/* Location */}
                 <div>
                   <label className="block text-white text-sm font-medium mb-2">
                     Location (City)*
@@ -487,7 +528,6 @@ export default function EventCreateForm() {
                   </div>
                 </div>
 
-                {/* Address */}
                 <div>
                   <label className="block text-white text-sm font-medium mb-2">
                     Address*
@@ -506,7 +546,6 @@ export default function EventCreateForm() {
                   </div>
                 </div>
 
-                {/* Phone */}
                 <div>
                   <label className="block text-white text-sm font-medium mb-2">
                     Phone
@@ -524,7 +563,6 @@ export default function EventCreateForm() {
                   </div>
                 </div>
 
-                {/* Website */}
                 <div>
                   <label className="block text-white text-sm font-medium mb-2">
                     Website
@@ -543,14 +581,13 @@ export default function EventCreateForm() {
                 </div>
               </div>
 
-              {/* Ticket Details (NEW) */}
+              {/* Ticket Details */}
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
                 <h2 className={sectionTitleCls}>Ticket Details</h2>
-                {/* Ticket Price */}
                 <div>
                   <label className="block text-white text-sm font-medium mb-2">
                     Ticket Price{" "}
-                    {/* {form.is_free ? "(disabled for free events)" : ""} */}
+                    {form.is_free ? "(disabled for free events)" : ""}
                   </label>
                   <div
                     className={`flex items-center border rounded-lg px-4 py-3 bg-[#2d2d2d] ${
@@ -571,7 +608,6 @@ export default function EventCreateForm() {
                     />
                   </div>
                 </div>
-                {/* Number of Tickets */}
                 <div>
                   <label className="block text-white text-sm font-medium mb-2">
                     Number of Tickets
@@ -589,51 +625,54 @@ export default function EventCreateForm() {
                     />
                   </div>
                 </div>
-                {/* Purchase URL */}
+                {/* Multiple purchase URLs */}
                 <div className="md:col-span-2 lg:col-span-2">
-                  <label className="block text-white text-sm font-medium mb-2">
-                    Purchase URL
-                  </label>
-                  <div className="flex gap-3">
-                    <div className="flex-1 flex items-center border rounded-lg px-4 py-3 bg-[#2d2d2d]">
-                      <FaLink className="text-gray-400 mr-3" />
-                      <input
-                        type="url"
-                        name="purchase_url"
-                        value={form.purchase_url}
-                        onChange={handleChange}
-                        placeholder="https://example.com/checkout"
-                        className="bg-transparent outline-none w-full text-white"
-                      />
-                    </div>
-                    {/* <button
-                      type="button"
-                      onClick={() => {
-                        if (!form.purchase_url) return;
-                        const url = form.purchase_url.trim();
-                        try {
-                          // basic validation
-                          const u = new URL(
-                            url.startsWith("http") ? url : `https://${url}`
-                          );
-                          window.open(
-                            u.toString(),
-                            "_blank",
-                            "noopener,noreferrer"
-                          );
-                        } catch {
-                          toast.error("Enter a valid Purchase URL");
-                        }
-                      }}
-                      className="px-4 min-w-[120px] custom-button-two text-black rounded-md font-medium hover:opacity-90 transition disabled:opacity-70 disabled:cursor-not-allowed"
-                      disabled={!form.purchase_url}
-                      title="Open the ticket purchase page"
-                    >
-                      Buy Ticket
-                    </button> */}
+                  <div className="flex justify-between items-center mb-2">
+                    <label className="block text-white text-sm font-medium">
+                      Purchase URLs
+                    </label>
+                    <span className="text-xs text-gray-500">
+                      {form.purchase_url.filter((x) => x?.trim()).length} added
+                    </span>
                   </div>
+
+                  <div className="space-y-3">
+                    {form.purchase_url.map((url, idx) => (
+                      <PurchaseUrlInput
+                        key={idx}
+                        value={url}
+                        index={idx}
+                        onChange={(e) =>
+                          handlePurchaseUrlChange(idx, e.target.value)
+                        }
+                        onRemove={() => removePurchaseUrl(idx)}
+                        onOpen={() => openPurchaseUrl(url)}
+                      />
+                    ))}
+                  </div>
+
+                  <button
+                    type="button"
+                    onClick={addPurchaseUrl}
+                    className="mt-3 flex items-center gap-2 text-sm gredient-text hover:underline"
+                  >
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      className="h-4 w-4"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke="currentColor"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M12 6v12m6-6H6"
+                      />
+                    </svg>
+                    Add another purchase URL
+                  </button>
                 </div>{" "}
-                {/* Is Free */}
                 <div className="flex items-center space-x-3">
                   <input
                     id="is_free"
@@ -643,17 +682,16 @@ export default function EventCreateForm() {
                     onChange={handleBoolean}
                     className="rounded h-5 w-5"
                   />
-                  <label htmlFor="is_free" className="text-sm text-primary">
+                  <label htmlFor="is_free" className="text-sm gredient-text">
                     Is this event free?
                   </label>
                 </div>
               </div>
 
-              {/* Pricing Section (disabled when free) */}
-              {/* <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+              {/* Pricing & Discounts (auto-disabled when free) */}
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
                 <h2 className={sectionTitleCls}>Pricing & Discounts</h2>
 
-         
                 <div className={disabledPricing ? "opacity-60" : ""}>
                   <label className="block text-white text-sm font-medium mb-2">
                     Regular Price*
@@ -675,7 +713,6 @@ export default function EventCreateForm() {
                   </div>
                 </div>
 
-           
                 <div className={disabledPricing ? "opacity-60" : ""}>
                   <label className="block text-white text-sm font-medium mb-2">
                     Discount (%)
@@ -697,7 +734,6 @@ export default function EventCreateForm() {
                   </div>
                 </div>
 
-        
                 <div
                   className={`md:col-span-2 lg:col-span-2 space-y-4 ${
                     disabledPricing ? "opacity-60" : ""
@@ -719,7 +755,7 @@ export default function EventCreateForm() {
                           key={idx}
                           value={code}
                           onChange={(e) =>
-                            handleArrayChange(idx, e.target.value)
+                            handleDiscountCodeChange(idx, e.target.value)
                           }
                           onRemove={() => removeDiscountCode(idx)}
                           index={idx}
@@ -745,19 +781,18 @@ export default function EventCreateForm() {
                         strokeLinecap="round"
                         strokeLinejoin="round"
                         strokeWidth={2}
-                        d="M12 6v6m0 0v6m0-6h6m-6 0H6"
+                        d="M12 6v12m6-6H6"
                       />
                     </svg>
                     Add another discount code
                   </button>
                 </div>
-              </div> */}
+              </div>
 
-              {/* Content Section */}
+              {/* Content */}
               <div className="grid grid-cols-1 gap-6">
                 <h2 className={sectionTitleCls}>Content</h2>
 
-                {/* Summary */}
                 <div>
                   <label className="block text-white text-sm font-medium mb-2">
                     Summary*
@@ -775,7 +810,6 @@ export default function EventCreateForm() {
                   </div>
                 </div>
 
-                {/* Details */}
                 <div>
                   <label className="block text-white text-sm font-medium mb-2">
                     Details*
@@ -794,11 +828,10 @@ export default function EventCreateForm() {
                 </div>
               </div>
 
-              {/* Media Section */}
+              {/* Media */}
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
                 <h2 className={sectionTitleCls}>Media</h2>
 
-                {/* Logo */}
                 <div>
                   <label
                     htmlFor="eventLogoInput"
@@ -816,7 +849,6 @@ export default function EventCreateForm() {
                     onChange={handleLogoChange}
                     className="sr-only"
                   />
-
                   {logoPreview && (
                     <div className="mt-2 flex items-center gap-2">
                       <img
@@ -835,7 +867,6 @@ export default function EventCreateForm() {
                   )}
                 </div>
 
-                {/* Event Cover */}
                 <div>
                   <label
                     htmlFor="eventCoverInput"
@@ -853,7 +884,6 @@ export default function EventCreateForm() {
                     onChange={handleCoverChange}
                     className="sr-only"
                   />
-
                   {coverPreview && (
                     <div className="mt-2 flex items-center gap-2">
                       <img
@@ -872,7 +902,6 @@ export default function EventCreateForm() {
                   )}
                 </div>
 
-                {/* Event Gallery */}
                 <div className="md:col-span-2">
                   <label
                     htmlFor="eventGalleryInput"
@@ -891,7 +920,6 @@ export default function EventCreateForm() {
                     onChange={handleGalleryChange}
                     className="sr-only"
                   />
-
                   {imagePreviews?.length > 0 && (
                     <div className="mt-2">
                       <div className="flex gap-2 flex-wrap">
