@@ -15,6 +15,7 @@ import {
   useGetTalentQuery,
 } from "../../app/authApi";
 import { Link } from "react-router-dom";
+import { imgSrc } from "../../utils/imgSrc";
 
 const FriendsSection = () => {
   const {
@@ -238,16 +239,26 @@ const FriendsSection = () => {
                     className="relative group rounded-lg p-2 hover:bg-[#333333] transition"
                   >
                     <div className="max-w-full">
-                      <Link to={`/talent-profile/${friend?.friendId}`}>
+                      <Link
+                        to={`/talent-profile/${
+                          friend?.friendId?._id || friend?.friendId || ""
+                        }`}
+                      >
                         <img
-                          src={`https://ui-avatars.com/api/?name=${encodeURIComponent(
-                            friend.friendName
-                          )}&background=random`}
+                          src={imgSrc(
+                            friend?.friendId?.images[0]?.fileUrl ||
+                              friend?.friendId?.images[0]?.fileUrl ||
+                              ""
+                          )}
                           alt={friend.friendName}
                           className="rounded-full w-16 h-16 object-cover mx-auto mb-1"
                         />
                       </Link>
-                      <Link to={`/talent-profile/${friend?.friendId}`}>
+                      <Link
+                        to={`/talent-profile/${
+                          friend?.friendId?._id || friend?.friendId || ""
+                        }`}
+                      >
                         <p className="text-center underline">
                           {friend.friendName}
                         </p>
