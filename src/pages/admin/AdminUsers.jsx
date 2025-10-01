@@ -361,7 +361,7 @@ const AdminUsers = () => {
                       <div>
                         {u?.role === "FAN" && (
                           <Link
-                            to={`/fan-profile/${u?._id}`}
+                            to={`/fan/user-details/${u?._id}`}
                             className="font-semibold underline text-white text-sm block"
                           >
                             {u?.name || "—"}
@@ -369,7 +369,7 @@ const AdminUsers = () => {
                         )}
                         {u?.role === "TALENT" && (
                           <Link
-                            to={`/talent-profile/${u?._id}`}
+                            to={`/talent/user-details/${u?._id}`}
                             className="font-semibold underline text-white text-sm block"
                           >
                             {u?.name || "—"}

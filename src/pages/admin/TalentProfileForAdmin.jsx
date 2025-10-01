@@ -8,12 +8,13 @@ import {
 } from "react-icons/fa";
 import { useGetTalentOverviewQuery } from "../../app/authApi";
 import { useParams } from "react-router-dom";
+import FriendsFanSection from "../../components/talent_profile_fan/FriendsFanSection";
 import EventsFanSection from "../../components/talent_profile_fan/EventsFanSection";
 import TalentLinksFan from "../../components/talent_profile_fan/TalentLinksFan";
 import PortfolioDashboardForFan from "../../pages/talent_profile_fan/Portfolio";
-import ImageSwitchForFanInAdmin from "./ImageSwitchForFanInAdmin";
+import ImageSwitchForTalentAdmin from "./ImageSwitchForTalentAdmin";
 
-const FanProfileForAdmin = () => {
+const TalentProfileForAdmin = () => {
   const { id } = useParams();
   const { data, isLoading, isError } = useGetTalentOverviewQuery(id, {
     skip: !id,
@@ -154,9 +155,21 @@ const FanProfileForAdmin = () => {
           </div> */}
         </div>
       </div>
-      <ImageSwitchForFanInAdmin userData={data} />
+      <ImageSwitchForTalentAdmin userData={data} />
+      <div className="bg-[#171717] text-white container">
+        <div className="flex gap-6">
+          <EventsFanSection userData={data} />{" "}
+          <TalentLinksFan userData={data} />
+        </div>
+      </div>
+
+      <section className=" px-4 md:px-8 container mx-auto ">
+        <div className="rounded-xl p-6 bg-[#1f1f1f]">
+          <PortfolioDashboardForFan userData={data} />
+        </div>
+      </section>
     </section>
   );
 };
 
-export default FanProfileForAdmin;
+export default TalentProfileForAdmin;

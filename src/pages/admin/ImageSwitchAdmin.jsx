@@ -3,99 +3,7 @@ import { FaHeart, FaFileAlt, FaUpload } from "react-icons/fa";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 const IMAGE_BASE_URL = import.meta.env.VITE_API_IMAGE_BASE_URL;
-const ImageSwitchForAdmin = ({ userData }) => {
-  const tickets = [
-    {
-      id: "1",
-      eventId: "101",
-      eventName: "Music Fiesta 2025",
-      date: "2025-03-15",
-      time: "19:00",
-      venue: "Madison Square Garden",
-      city: "New York",
-    },
-    {
-      id: "2",
-      eventId: "102",
-      eventName: "Tech Conference 2025",
-      date: "2025-04-22",
-      time: "09:00",
-      venue: "Convention Center",
-      city: "San Francisco",
-    },
-    {
-      id: "3",
-      eventId: "103",
-      eventName: "Startup Pitch Night",
-      date: "2025-05-10",
-      time: "18:30",
-      venue: "Innovation Hub",
-      city: "Austin",
-    },
-    {
-      id: "4",
-      eventId: "104",
-      eventName: "Jazz Festival",
-      date: "2025-06-05",
-      time: "20:00",
-      venue: "Riverfront Park",
-      city: "New Orleans",
-    },
-    {
-      id: "5",
-      eventId: "105",
-      eventName: "Comedy Night Special",
-      date: "2025-07-18",
-      time: "21:00",
-      venue: "Laugh Factory",
-      city: "Los Angeles",
-    },
-    {
-      id: "6",
-      eventId: "106",
-      eventName: "Food & Wine Expo",
-      date: "2025-08-12",
-      time: "11:00",
-      venue: "Metro Convention",
-      city: "Chicago",
-    },
-    {
-      id: "7",
-      eventId: "107",
-      eventName: "Film Premiere Gala",
-      date: "2025-09-25",
-      time: "19:30",
-      venue: "Hollywood Theater",
-      city: "Los Angeles",
-    },
-    {
-      id: "8",
-      eventId: "108",
-      eventName: "Sports Championship",
-      date: "2025-10-08",
-      time: "15:00",
-      venue: "National Stadium",
-      city: "Miami",
-    },
-    {
-      id: "9",
-      eventId: "109",
-      eventName: "Art Exhibition Opening",
-      date: "2025-11-14",
-      time: "18:00",
-      venue: "Modern Art Museum",
-      city: "Boston",
-    },
-    {
-      id: "10",
-      eventId: "110",
-      eventName: "New Year's Eve Concert",
-      date: "2025-12-31",
-      time: "22:00",
-      venue: "Times Square",
-      city: "New York",
-    },
-  ];
+const ImageSwitchAdmin = ({ userData }) => {
   const navigate = useNavigate();
   const biography = userData?.data?.profile?.biography;
   const talentName = userData?.data?.profile?.name;
@@ -108,12 +16,22 @@ const ImageSwitchForAdmin = ({ userData }) => {
   const [isUploading, setIsUploading] = useState(false);
   const [bioText, setBioText] = useState("");
   const IMAGE_BASE_URL = import.meta.env.VITE_API_BASE_URL;
+  // const handleInverseClick = () => {
+  //   navigate("/inverse#inverse-request-form");
+  // };
   const handleInverseClick = () => {
-    navigate("/inverse#inverse-request-form");
+    localStorage.removeItem("currentUserData");
+    if (userData) {
+      localStorage.setItem("currentUserData", JSON.stringify(userData));
+    }
+
+    navigate("/inverse#inverse-request-form", {
+      state: { userData },
+    });
   };
   const normalizePath = (p) => {
     if (!p) return "";
-    const clean = p.replace(/\\/g, "/"); // windows -> url
+    const clean = p.replace(/\\/g, "/");
     return clean.startsWith("/") ? clean : `/${clean}`;
   };
   useEffect(() => {
@@ -204,6 +122,44 @@ const ImageSwitchForAdmin = ({ userData }) => {
       u8arr[n] = bstr.charCodeAt(n);
     }
     return new Blob([u8arr], { type: mime });
+  };
+  // Sponsor functionality
+  const [isPopupOpen, setIsPopupOpen] = useState(false);
+  useEffect(() => {
+    if (isPopupOpen) {
+      const scrollY = window.scrollY;
+      document.body.style.position = "fixed";
+      document.body.style.top = `-${scrollY}px`;
+      document.body.style.width = "100%";
+      document.body.style.overflow = "hidden";
+      return () => {
+        document.body.style.position = "";
+        document.body.style.top = "";
+        document.body.style.width = "";
+        document.body.style.overflow = "";
+        window.scrollTo(0, scrollY);
+      };
+    }
+  }, [isPopupOpen]);
+
+  const handleSponsorClick = () => {
+    setIsPopupOpen(true);
+  };
+
+  const handleConfirm = () => {
+    toast.success(`Successfully sponsored ${talentName}!`);
+    setIsPopupOpen(false);
+  };
+
+  const handleCancel = () => {
+    setIsPopupOpen(false);
+  };
+
+  // Close popup when clicking outside
+  const handleBackdropClick = (e) => {
+    if (e.target === e.currentTarget) {
+      handleCancel();
+    }
   };
 
   return (
@@ -307,67 +263,86 @@ const ImageSwitchForAdmin = ({ userData }) => {
           </div>
         </div>
       </div>
-      <div className="bg-white/5 backdrop-blur-xl border border-white/10 rounded-2xl shadow-xl p-4 md:p-6 flex flex-col">
-        <div className="flex-1 flex flex-col">
-          <div className="space-y-4 flex-1">
-            <div className="group relative flex-1 flex flex-col h-full">
-              <section>
-                <h2
-                  className="text-xl uppercase text-[#a38b41] mb-5 font-bold"
-                  style={{
-                    background: "linear-gradient(to right, #a38b41, #d4c374)",
-                    WebkitBackgroundClip: "text",
-                    WebkitTextFillColor: "transparent",
-                    backgroundClip: "text",
-                  }}
-                >
-                Purchased Tickets
-                </h2>
 
-                <div className="h-[400px] overflow-y-auto overflow-x-auto">
-                  <table className="w-full">
-                    <thead>
-                      <tr className="border-b border-white/10">
-                        {/* <th className="p-3 text-left text-sm text-gray-300">
-                          S.No
-                        </th> */}
-                        <th className="p-3 text-left text-sm text-gray-300">
-                          Event
-                        </th>
-                        <th className="p-3 text-left text-sm text-gray-300">
-                          Date
-                        </th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {tickets.map((t, i) => (
-                        <tr
-                          key={t.id}
-                          className="border-b border-white/5 hover:bg-white/5 transition-colors"
-                        >
-                          {/* <td className="p-3 text-sm text-gray-200">{i + 1}</td> */}
-                          <td className="p-3">
-                            <button
-                              onClick={() =>
-                                navigate(`/event-details/${t.eventId}`)
-                              }
-                              className="text-sm cursor-pointer text-white underline underline-offset-2 hover:text-[#d4c374]"
-                            >
-                              {t?.eventName}
-                            </button>
-                          </td>
-                          <td className="p-3">
-                            <div className="text-sm  text-white  hover:text-[#d4c374]">
-                              Your event is on: {t?.date}
-                            </div>
-                          </td>
-                        </tr>
-                      ))}
-                    </tbody>
-                  </table>
-                </div>
-              </section>
+      <div className="flex flex-col justify-center gap-5">
+        {/* Sponsor talent */}
+        <div className="bg-white/5 flex justify-center items-center backdrop-blur-xl border border-white/10 rounded-2xl shadow-xl p-4 md:p-6 hover:shadow-[#a38b41]/20 hover:border-[#a38b41]/50 transition-all h-full">
+          <div className="flex flex-col items-center text-center">
+            <div className="w-10 h-10 md:w-12 md:h-12 rounded-full bg-[#a38b41]/20 flex items-center justify-center mb-3">
+              <FaHeart className="text-[#a38b41] text-lg md:text-xl" />
             </div>
+            <h3 className="text-lg font-semibold text-white mb-1">
+              Sponsor Talent
+            </h3>
+            <p className="text-gray-300 text-xs md:text-sm mb-3">
+              Support this talent's career development
+            </p>
+            <button
+              onClick={handleSponsorClick}
+              className="w-full cursor-pointer bg-[#a38b41] hover:bg-[#8a7637] text-white font-medium py-2 rounded-lg transition-colors text-sm md:text-base"
+            >
+              Sponsor Talent
+            </button>
+          </div>
+        </div>
+        {isPopupOpen && (
+          <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50 p-4">
+            <div className="bg-white/10 backdrop-blur-xl border border-white/20 rounded-2xl shadow-2xl p-6 max-w-md w-full">
+              <div className="text-center">
+                {/* Icon */}
+                <div className="w-16 h-16 mx-auto rounded-full bg-[#a38b41]/20 flex items-center justify-center mb-4">
+                  <FaHeart className="text-[#a38b41] text-2xl" />
+                </div>
+
+                {/* Title */}
+                <h3 className="text-xl font-semibold text-white mb-2">
+                  Confirm Sponsorship
+                </h3>
+
+                {/* Message */}
+                <p className="text-gray-300 mb-6">
+                  Are you sure you would like to sponsor{" "}
+                  <span className="text-white font-semibold">{talentName}</span>
+                  ?
+                </p>
+
+                {/* Buttons */}
+                <div className="flex gap-3">
+                  <button
+                    onClick={handleCancel}
+                    className="flex-1 cursor-pointer bg-gray-600 hover:bg-gray-700 text-white font-medium py-3 rounded-lg transition-colors"
+                  >
+                    No
+                  </button>
+                  <button
+                    onClick={handleConfirm}
+                    className="flex-1 cursor-pointer bg-[#a38b41] hover:bg-[#8a7637] text-white font-medium py-3 rounded-lg transition-colors"
+                  >
+                    Yes
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
+        {/* Inverse Request */}
+        <div className="bg-white/5 flex justify-center items-center backdrop-blur-xl border border-white/10 rounded-2xl shadow-xl p-4 md:p-6 hover:shadow-[#a38b41]/20 hover:border-[#a38b41]/50 transition-all h-full">
+          <div className="flex flex-col items-center text-center">
+            <div className="w-10 h-10 md:w-12 md:h-12 rounded-full bg-[#a38b41]/20 flex items-center justify-center mb-3">
+              <FaFileAlt className="text-[#a38b41] text-lg md:text-xl" />
+            </div>
+            <h3 className="text-lg font-semibold text-white mb-1">
+              Inverse Request
+            </h3>
+            <p className="text-gray-300 text-xs md:text-sm mb-3">
+              Request this talent for your project
+            </p>
+            <button
+              onClick={handleInverseClick}
+              className="w-full cursor-pointer bg-[#a38b41] hover:bg-[#8a7637] text-white font-medium py-2 rounded-lg transition-colors text-sm md:text-base"
+            >
+              Inverse Request
+            </button>
           </div>
         </div>
       </div>
@@ -375,4 +350,4 @@ const ImageSwitchForAdmin = ({ userData }) => {
   );
 };
 
-export default ImageSwitchForAdmin;
+export default ImageSwitchAdmin;
