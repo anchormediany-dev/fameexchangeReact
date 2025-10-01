@@ -1,5 +1,6 @@
 import { FaHeart } from "react-icons/fa";
 import { imgSrc } from "../../utils/imgSrc";
+import { Link } from "react-router-dom";
 const FriendsFanSection = ({ userData }) => {
   const friends = userData?.data?.friends || [];
   return (
@@ -24,12 +25,17 @@ const FriendsFanSection = ({ userData }) => {
                   className="relative group rounded-lg p-2 hover:bg-[#333333] transition"
                 >
                   <div className="max-w-full">
-                    <img
-                      src={imgSrc(friend?.images[0]?.fileUrl)}
-                      alt={friend?.name}
-                      className="rounded-full w-16 h-16 object-cover mx-auto mb-1"
-                    />
-                    <p className="text-center">{friend?.name}</p>
+                    <Link to={`/talent-profile/${friend?._id}`}>
+                      <img
+                        src={imgSrc(friend?.images[0]?.fileUrl)}
+                        alt={friend?.name}
+                        className="rounded-full w-16 h-16 object-cover mx-auto mb-1"
+                      />
+                    </Link>
+                    <Link to={`/talent-profile/${friend?._id}`}>
+                      {" "}
+                      <p className="text-center">{friend?.name}</p>
+                    </Link>
                   </div>
                 </div>
               ))

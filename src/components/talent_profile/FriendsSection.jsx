@@ -14,6 +14,7 @@ import {
   useAddFriendMutation,
   useGetTalentQuery,
 } from "../../app/authApi";
+import { Link } from "react-router-dom";
 
 const FriendsSection = () => {
   const {
@@ -237,14 +238,20 @@ const FriendsSection = () => {
                     className="relative group rounded-lg p-2 hover:bg-[#333333] transition"
                   >
                     <div className="max-w-full">
-                      <img
-                        src={`https://ui-avatars.com/api/?name=${encodeURIComponent(
-                          friend.friendName
-                        )}&background=random`}
-                        alt={friend.friendName}
-                        className="rounded-full w-16 h-16 object-cover mx-auto mb-1"
-                      />
-                      <p className="text-center">{friend.friendName}</p>
+                      <Link to={`/talent-profile/${friend?.friendId}`}>
+                        <img
+                          src={`https://ui-avatars.com/api/?name=${encodeURIComponent(
+                            friend.friendName
+                          )}&background=random`}
+                          alt={friend.friendName}
+                          className="rounded-full w-16 h-16 object-cover mx-auto mb-1"
+                        />
+                      </Link>
+                      <Link to={`/talent-profile/${friend?.friendId}`}>
+                        <p className="text-center underline">
+                          {friend.friendName}
+                        </p>
+                      </Link>
                     </div>
 
                     {editingFriends ? (
