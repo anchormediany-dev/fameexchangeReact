@@ -13,6 +13,7 @@ const FanInverseRequestForm = ({
     date: selectedSession?.data?.sessionDate,
     time: selectedSession?.data?.sessionTime,
     desiredLocation: selectedSession?.data?.where,
+    sessionId: selectedSession?.data?._id,
     cardNumber: "",
     cardExpiry: "",
     cardCvv: "",
@@ -38,6 +39,7 @@ const FanInverseRequestForm = ({
       date: "",
       time: "",
       desiredLocation: "",
+      sessionId: "",
       cardNumber: "",
       cardExpiry: "",
       cardCvv: "",
@@ -54,6 +56,7 @@ const FanInverseRequestForm = ({
           !fanRequest.date ||
           !fanRequest.time ||
           !fanRequest.desiredLocation ||
+          !fanRequest.sessionId ||
           !fanRequest.cardType
     )
       // {
@@ -66,6 +69,7 @@ const FanInverseRequestForm = ({
           date: selectedSession?.data?.sessionDate,
           time: selectedSession?.data?.sessionTime,
           location: selectedSession?.data?.where,
+          sessionId: selectedSession?.data?._id,
           paymentMethod:
             fanRequest.cardType === "credit" ? "Credit Card" : "Debit Card",
         };
