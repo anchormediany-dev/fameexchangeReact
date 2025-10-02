@@ -3,10 +3,12 @@ import { FaHeart, FaFileAlt, FaUpload } from "react-icons/fa";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 const IMAGE_BASE_URL = import.meta.env.VITE_API_IMAGE_BASE_URL;
+import { useAddSponsorshipMutation } from "../../app/authApi";
 const ImageSwitchFan = ({ userData }) => {
   const navigate = useNavigate();
   const biography = userData?.data?.profile?.biography;
   const talentName = userData?.data?.profile?.name;
+  const talentId = userData?.data?.profile?._id;
   const user = JSON.parse(localStorage.getItem("user"));
   const userId = user?.id;
   const [images, setImages] = useState([]);
@@ -16,6 +18,8 @@ const ImageSwitchFan = ({ userData }) => {
   const [isUploading, setIsUploading] = useState(false);
   const [bioText, setBioText] = useState("");
   const IMAGE_BASE_URL = import.meta.env.VITE_API_BASE_URL;
+  const [addSponsorship, { isLoading: isSponsoring }] =
+    useAddSponsorshipMutation();
   // const handleInverseClick = () => {
   //   navigate("/inverse#inverse-request-form");
   // };
@@ -125,6 +129,7 @@ const ImageSwitchFan = ({ userData }) => {
   };
   // Sponsor functionality
   const [isPopupOpen, setIsPopupOpen] = useState(false);
+
   useEffect(() => {
     if (isPopupOpen) {
       const scrollY = window.scrollY;
@@ -142,19 +147,35 @@ const ImageSwitchFan = ({ userData }) => {
     }
   }, [isPopupOpen]);
 
-  const handleSponsorClick = () => {
-    setIsPopupOpen(true);
-  };
+  const handleSponsorClick = () => setIsPopupOpen(true);
+  const handleCancel = () => setIsPopupOpen(false);
 
-  const handleConfirm = () => {
-    toast.success(`Successfully sponsored ${talentName}!`);
-    setIsPopupOpen(false);
-  };
+  // ✅ Confirm → call RTK Query mutation with required body
+  const handleConfirm = async () => {
+    if (!userId || !talentId) {
+      toast.error("User information missing. Please try again.");
+      return;
+    }
 
-  const handleCancel = () => {
-    setIsPopupOpen(false);
-  };
+    const body = {
+      userId, // sponsor (FAN)
+      sponsoredId: talentId, // sponsored (TALENT)
+      occurredAt: new Date().toISOString(), // ✅ current date/time in ISO
+    };
 
+    try {
+      await addSponsorship(body).unwrap();
+      toast.success(`Successfully sponsored ${talentName || "this talent"}!`);
+      setIsPopupOpen(false);
+    } catch (error) {
+      console.error("addSponsorship error:", error);
+      const msg =
+        error?.data?.message ||
+        error?.error ||
+        "Failed to process sponsorship. Please try again.";
+      toast.error(msg);
+    }
+  };
   // Close popup when clicking outside
   const handleBackdropClick = (e) => {
     if (e.target === e.currentTarget) {
@@ -286,39 +307,47 @@ const ImageSwitchFan = ({ userData }) => {
           </div>
         </div>
         {isPopupOpen && (
-          <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50 p-4">
+          <div
+            className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50 p-4"
+            onClick={(e) => {
+              if (e.target === e.currentTarget) handleCancel();
+            }}
+          >
             <div className="bg-white/10 backdrop-blur-xl border border-white/20 rounded-2xl shadow-2xl p-6 max-w-md w-full">
               <div className="text-center">
-                {/* Icon */}
                 <div className="w-16 h-16 mx-auto rounded-full bg-[#a38b41]/20 flex items-center justify-center mb-4">
                   <FaHeart className="text-[#a38b41] text-2xl" />
                 </div>
-
-                {/* Title */}
                 <h3 className="text-xl font-semibold text-white mb-2">
                   Confirm Sponsorship
                 </h3>
-
-                {/* Message */}
                 <p className="text-gray-300 mb-6">
                   Are you sure you would like to sponsor{" "}
                   <span className="text-white font-semibold">{talentName}</span>
                   ?
                 </p>
 
-                {/* Buttons */}
                 <div className="flex gap-3">
                   <button
                     onClick={handleCancel}
-                    className="flex-1 cursor-pointer bg-gray-600 hover:bg-gray-700 text-white font-medium py-3 rounded-lg transition-colors"
+                    disabled={isSponsoring}
+                    className="flex-1 cursor-pointer bg-gray-600 hover:bg-gray-700 text-white font-medium py-3 rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                   >
                     No
                   </button>
                   <button
                     onClick={handleConfirm}
-                    className="flex-1 cursor-pointer bg-[#a38b41] hover:bg-[#8a7637] text-white font-medium py-3 rounded-lg transition-colors"
+                    disabled={isSponsoring || !userId || !talentId}
+                    className="flex-1 cursor-pointer bg-[#a38b41] hover:bg-[#8a7637] text-white font-medium py-3 rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                   >
-                    Yes
+                    {isSponsoring ? (
+                      <div className="flex items-center justify-center gap-2">
+                        <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                        Processing...
+                      </div>
+                    ) : (
+                      "Yes"
+                    )}
                   </button>
                 </div>
               </div>

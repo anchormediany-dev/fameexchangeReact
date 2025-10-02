@@ -424,6 +424,19 @@ export const authApi = api.injectEndpoints({
       }),
       invalidatesTags: ["Friends"],
     }),
+    // Sponsorship
+    addSponsorship: builder.mutation({
+      query: (body) => ({
+        url: "/sponsorships",
+        method: "POST",
+        body,
+      }),
+      invalidatesTags: ["Sponsorships"],
+    }),
+    getAllSponsorships: builder.query({
+      query: () => "/sponsorships/all?page=1&from=2025-01-01&to=2025-10-02",
+      providesTags: ["Sponsorships"],
+    }),
     // Stripe API
     addIntent: builder.mutation({
       query: (body) => ({
@@ -487,6 +500,9 @@ export const {
   useGetUsersQuery,
   useDeleteUserMutation,
   useGetAdminDashboardQuery,
+  // Sponsorship
+  useGetAllSponsorshipsQuery,
+  useAddSponsorshipMutation,
   // Stripe API
   useAddIntentMutation,
   useConfirmPaymentMutation,
