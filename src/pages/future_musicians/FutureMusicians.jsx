@@ -5,8 +5,9 @@ import {
   useRef,
   useCallback,
   useDeferredValue,
+  useState,
 } from "react";
-import { useGetTalentQuery } from "../../app/authApi";
+import { useGetAllSponsorshipsQuery } from "../../app/authApi";
 import {
   FaSearch,
   FaTimes,
@@ -96,7 +97,6 @@ const firstImageUrl = (u) => {
   return null;
 };
 
-/** Build a searchable haystack for a user */
 const buildHaystack = (u) =>
   normalize(
     [
@@ -114,7 +114,6 @@ const buildHaystack = (u) =>
       .join(" ")
   );
 
-/** Advanced query parsing: name: , email: , token: , cat: */
 const parseQuery = (q) => {
   const terms = normalize(q).split(" ").filter(Boolean);
   const filters = { name: [], email: [], token: [], cat: [] };
@@ -141,13 +140,49 @@ export default function FutureTalents() {
     initialState
   );
 
-  // Base fetch (kept simple; we filter client-side as you type)
-  const { data, isLoading, isError, error } = useGetTalentQuery();
+  // ---- API params state (with sensible defaults) ----
+  const today = new Date().toISOString().slice(0, 10);
+  const [page, setPage] = useState(1);
+  const [from, setFrom] = useState("2025-01-01");
+  const [to, setTo] = useState(today);
+  const [sort, setSort] = useState("oldest");
+  const limit = 10;
+
+  // ---- fetch from API ----
+  const { data, isLoading, isError, error } = useGetAllSponsorshipsQuery({
+    page,
+    from,
+    to,
+    sort,
+    limit,
+  });
 
   const dropdownRef = useRef(null);
   const inputRef = useRef(null);
 
-  const talents = Array.isArray(data?.taleUsers) ? data.taleUsers : [];
+  // API returns { success, data: [...events], sponsoredTalents: [...], pagination: {...} }
+  // For this table we use the aggregated `sponsoredTalents` list (unique talents).
+  const rawTalents = Array.isArray(data?.sponsoredTalents)
+    ? data.sponsoredTalents
+    : [];
+
+  // Normalize into the "user" shape the table expects
+  const talents = useMemo(
+    () =>
+      rawTalents.map((t) => ({
+        _id: t.sponsoredId,
+        name: t.name,
+        email: t.email,
+        role: t.role,
+        images: t.images,
+        token_brand_name: t.token_brand_name,
+        // optional passthrough if backend ever adds categories for talents:
+        talent: t.talent,
+      })),
+    [rawTalents]
+  );
+
+  const pagination = data?.pagination;
 
   const categories = useMemo(() => {
     const set = new Set();
@@ -175,7 +210,6 @@ export default function FutureTalents() {
   }, []);
   const clearSearch = useCallback(() => {
     dispatch({ type: "CLEAR_SEARCH" });
-    // keep focus for quick retyping
     inputRef.current?.focus();
   }, []);
   const onSearchKeyDown = useCallback(
@@ -200,7 +234,7 @@ export default function FutureTalents() {
   // Smooth UI while typing
   const deferredSearch = useDeferredValue(search);
 
-  /* ---------- filters ---------- */
+  /* ---------- filters (client-side) ---------- */
   const matchesCategory = useCallback(
     (u) => {
       if (!category) return true;
@@ -217,7 +251,6 @@ export default function FutureTalents() {
 
       const { filters, free } = parseQuery(q);
 
-      // scoped filters
       if (filters.name.length) {
         const v = normalize(u?.name);
         if (!filters.name.every((t) => v.includes(t))) return false;
@@ -246,7 +279,6 @@ export default function FutureTalents() {
         if (!filters.token.every((t) => tokenStr.includes(t))) return false;
       }
 
-      // free terms across entire haystack
       if (free.length) {
         const hay = buildHaystack(u);
         if (!free.every((t) => hay.includes(t))) return false;
@@ -262,84 +294,141 @@ export default function FutureTalents() {
     [talents, matchesCategory, matchesSearch]
   );
 
+  // ---- pagination handlers ----
+  const canPrev = Boolean(pagination?.hasPrev);
+  const canNext = Boolean(pagination?.hasNext);
+  const pages = pagination?.pages || 1;
+
+  const goFirst = () => setPage(1);
+  const goPrev = () => setPage((p) => Math.max(1, p - 1));
+  const goNext = () => setPage((p) => Math.min(pages, p + 1));
+  const goLast = () => setPage(pages);
+
   return (
     <section className="bg-[#171717] min-h-screen text-white px-4 sm:px-6 lg:px-8 mt-10 lg:mt-16 2xl:mt-20">
       <div className="py-12 2xl:py-16 container mx-auto">
         {/* Top controls */}
-        <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-6 mb-10">
-          {/* Category (derived) */}
-          <div className="relative w-full md:w-auto" ref={dropdownRef}>
-            <button
-              onClick={toggleDropdown}
-              className="flex items-center justify-between w-full md:w-64 px-4 py-3 rounded-lg bg-[#2d2d2d] border border-gray-600 text-white"
-            >
-              <span className="flex items-center">
-                {category
-                  ? ICONS[category] ?? <FaUserTie className="mr-2" />
-                  : null}
-                {category || "All categories"}
-              </span>
-              <FaChevronDown
-                className={`ml-2 transition-transform ${
-                  dropdownOpen ? "rotate-180" : ""
-                }`}
-              />
-            </button>
-
-            {dropdownOpen && (
-              <div className="absolute z-50 mt-2 bg-[#2d2d2d] rounded-md w-full md:w-64 border border-gray-700 overflow-hidden max-h-80 overflow-y-auto">
-                <div
-                  onClick={() => selectCategory(null)}
-                  className={`px-4 py-2 cursor-pointer hover:bg-[#3a3a3a] ${
-                    !category ? "text-yellow-400" : ""
+        <div className="flex flex-col gap-6 mb-10">
+          <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-6">
+            {/* Category (derived) */}
+            <div className="relative w-full md:w-auto" ref={dropdownRef}>
+              {/* <button
+                onClick={toggleDropdown}
+                className="flex items-center justify-between w-full md:w-64 px-4 py-3 rounded-lg bg-[#2d2d2d] border border-gray-600 text-white"
+              >
+                <span className="flex items-center">
+                  {category
+                    ? ICONS[category] ?? <FaUserTie className="mr-2" />
+                    : null}
+                  {category || "All categories"}
+                </span>
+                <FaChevronDown
+                  className={`ml-2 transition-transform ${
+                    dropdownOpen ? "rotate-180" : ""
                   }`}
-                >
-                  All categories
-                </div>
+                />
+              </button> */}
 
-                {categories.map((cat) => (
+              {dropdownOpen && (
+                <div className="absolute z-50 mt-2 bg-[#2d2d2d] rounded-md w-full md:w-64 border border-gray-700 overflow-hidden max-h-80 overflow-y-auto">
                   <div
-                    key={cat}
-                    onClick={() => selectCategory(cat)}
-                    className={`flex items-center gap-2 px-4 py-2 cursor-pointer hover:bg-[#3a3a3a] ${
-                      category === cat ? "text-yellow-400" : ""
+                    onClick={() => selectCategory(null)}
+                    className={`px-4 py-2 cursor-pointer hover:bg-[#3a3a3a] ${
+                      !category ? "text-yellow-400" : ""
                     }`}
                   >
-                    {ICONS[cat] ?? <FaUserTie className="mr-2" />}
-                    {cat}
+                    All categories
                   </div>
-                ))}
-              </div>
-            )}
+
+                  {categories.map((cat) => (
+                    <div
+                      key={cat}
+                      onClick={() => selectCategory(cat)}
+                      className={`flex items-center gap-2 px-4 py-2 cursor-pointer hover:bg-[#3a3a3a] ${
+                        category === cat ? "text-yellow-400" : ""
+                      }`}
+                    >
+                      {ICONS[cat] ?? <FaUserTie className="mr-2" />}
+                      {cat}
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+
+            {/* Search */}
+            <div className="relative w-full md:w-[40%] lg:w-[30%]">
+              <input
+                ref={inputRef}
+                type="text"
+                value={search}
+                onChange={onSearchChange}
+                onKeyDown={onSearchKeyDown}
+                placeholder="Search Talent…"
+                aria-label="Search talents by name, email, or token"
+                className="w-full h-11 pl-4 pr-20 rounded-lg bg-[#2d2d2d] border border-gray-600 placeholder-gray-400 text-white focus:outline-none focus:ring-2 focus:ring-yellow-500/30"
+              />
+              {search ? (
+                <button
+                  type="button"
+                  onClick={clearSearch}
+                  className="absolute right-10 top-1/2 -translate-y-1/2 p-1 rounded hover:bg-white/5 focus:outline-none focus:ring-2 focus:ring-yellow-500/30"
+                  aria-label="Clear search"
+                  title="Clear"
+                >
+                  <FaTimes className="text-gray-400 hover:text-gray-300" />
+                </button>
+              ) : null}
+              <FaSearch className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none" />
+            </div>
           </div>
 
-          {/* Search */}
-          <div className="relative w-full md:w-[40%] lg:w-[30%]">
-            <input
-              ref={inputRef}
-              type="text"
-              value={search}
-              onChange={onSearchChange}
-              onKeyDown={onSearchKeyDown}
-              placeholder="Search Talent…"
-              aria-label="Search talents by name, email, or token"
-              className="w-full h-11 pl-4 pr-20 rounded-lg bg-[#2d2d2d] border border-gray-600 placeholder-gray-400 text-white focus:outline-none focus:ring-2 focus:ring-yellow-500/30"
-            />
-
-            {search ? (
-              <button
-                type="button"
-                onClick={clearSearch}
-                className="absolute right-10 top-1/2 -translate-y-1/2 p-1 rounded hover:bg-white/5 focus:outline-none focus:ring-2 focus:ring-yellow-500/30"
-                aria-label="Clear search"
-                title="Clear"
+          {/* API filter controls (from, to, sort) */}
+          {/* <div className="grid grid-cols-1 md:grid-cols-4 gap-3">
+            <div>
+              <label className="block text-xs text-gray-400 mb-1">From</label>
+              <input
+                type="date"
+                value={from}
+                onChange={(e) => {
+                  setPage(1);
+                  setFrom(e.target.value);
+                }}
+                className="w-full h-10 px-3 rounded-lg bg-[#2d2d2d] border border-gray-600 text-white"
+              />
+            </div>
+            <div>
+              <label className="block text-xs text-gray-400 mb-1">To</label>
+              <input
+                type="date"
+                value={to}
+                onChange={(e) => {
+                  setPage(1);
+                  setTo(e.target.value);
+                }}
+                className="w-full h-10 px-3 rounded-lg bg-[#2d2d2d] border border-gray-600 text-white"
+              />
+            </div>
+            <div>
+              <label className="block text-xs text-gray-400 mb-1">Sort</label>
+              <select
+                value={sort}
+                onChange={(e) => {
+                  setPage(1);
+                  setSort(e.target.value);
+                }}
+                className="w-full h-10 px-3 rounded-lg bg-[#2d2d2d] border border-gray-600 text-white"
               >
-                <FaTimes className="text-gray-400 hover:text-gray-300" />
-              </button>
-            ) : null}
-
-            <FaSearch className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none" />
-          </div>
+                <option value="oldest">Oldest</option>
+                <option value="newest">Newest</option>
+              </select>
+            </div>
+            <div className="flex items-end">
+              <div className="text-xs text-gray-400">
+                {pagination?.total ? `Total records: ${pagination.total}` : ""}
+              </div>
+            </div>
+          </div> */}
         </div>
 
         {/* Heading */}
@@ -360,7 +449,6 @@ export default function FutureTalents() {
 
         {/* Table */}
         <div className="overflow-x-auto rounded-xl border border-gray-700 shadow-xl">
-          {/* fixed: 4 columns (header & rows match) */}
           <div className="grid grid-cols-4 text-sm font-semibold bg-[#2d2d2d] text-gray-300 py-4 px-6">
             <div>TALENT</div>
             <div className="text-center">EMAIL</div>
@@ -433,6 +521,49 @@ export default function FutureTalents() {
             })
           )}
         </div>
+
+        {/* Pagination */}
+        {pagination && (
+          <div className="mt-4 flex items-center justify-between gap-3">
+            <div className="text-xs text-gray-400">
+              Page {pagination.page} of {pagination.pages} • Total{" "}
+              {pagination.total}
+            </div>
+            <div className="flex items-center gap-2">
+              <button
+                onClick={goFirst}
+                disabled={!canPrev}
+                className="px-3 py-2 rounded bg-[#2d2d2d] border border-gray-700 disabled:opacity-50"
+              >
+                First
+              </button>
+              <button
+                onClick={goPrev}
+                disabled={!canPrev}
+                className="px-3 py-2 rounded bg-[#2d2d2d] border border-gray-700 disabled:opacity-50"
+              >
+                Prev
+              </button>
+              <span className="px-3 py-2 text-sm">
+                {pagination.page} / {pagination.pages}
+              </span>
+              <button
+                onClick={goNext}
+                disabled={!canNext}
+                className="px-3 py-2 rounded bg-[#2d2d2d] border border-gray-700 disabled:opacity-50"
+              >
+                Next
+              </button>
+              <button
+                onClick={goLast}
+                disabled={!canNext}
+                className="px-3 py-2 rounded bg-[#2d2d2d] border border-gray-700 disabled:opacity-50"
+              >
+                Last
+              </button>
+            </div>
+          </div>
+        )}
       </div>
     </section>
   );

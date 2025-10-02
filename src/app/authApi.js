@@ -434,7 +434,12 @@ export const authApi = api.injectEndpoints({
       invalidatesTags: ["Sponsorships"],
     }),
     getAllSponsorships: builder.query({
-      query: () => "/sponsorships/all?page=1&from=2025-01-01&to=2025-10-02",
+      // args: { page, from, to, sort, limit }
+      query: ({ page = 1, from, to, sort = "oldest", limit = 10 } = {}) => ({
+        url: "/sponsorships/all",
+        method: "GET",
+        params: { page, from, to, sort, limit },
+      }),
       providesTags: ["Sponsorships"],
     }),
     // Stripe API
