@@ -489,6 +489,7 @@ export const {
   useGetAdminDashboardQuery,
   // Stripe API
   useAddIntentMutation,
+  useConfirmPaymentMutation,
   // Notifications
   useGetNotificationsQuery,
   // Confirmed talent requests

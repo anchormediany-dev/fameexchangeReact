@@ -133,9 +133,9 @@ const SearchEvents = ({
   ]);
 
   return (
-    <section className="flex justify-between items-center">
+    <section className="grid grid-cols-2 items-center gap-10 w-full mb-[40px]">
       <h2
-        className="text-xl font-bold"
+        className="text-2xl font-bold"
         style={{
           background: `linear-gradient(to right, #d4c374)`,
           WebkitBackgroundClip: "text",
@@ -146,153 +146,155 @@ const SearchEvents = ({
         Events
       </h2>
 
-      <h2 className="text-2xl font-bold uppercase text-white mb-6 text-center" />
-
-      <div className="lg:w-[25%] mb-3" ref={wrapperRef}>
-        <div className="relative">
-          <form onSubmit={handleSearch} className="group" role="search">
-            <div
-              className={`
-                relative overflow-hidden rounded-2xl transition-all duration-500 ease-out
+      <div>
+        {" "}
+        <h2 className="text-2xl font-bold uppercase text-white mb-6 text-center" />
+        <div className="" ref={wrapperRef}>
+          <div className="relative z-20">
+            <form onSubmit={handleSearch} className="group" role="search">
+              <div
+                className={`
+                relative overflow-hidden rounded-full transition-all duration-500 ease-out
                 ${
                   isFocused
                     ? "bg-white/10 border border-[#a38b41]/40 shadow-2xl shadow-[#a38b41]/20 scale-[1.02]"
                     : "bg-white/5 border border-white/10 hover:border-white/20 hover:bg-white/8"
                 }
               `}
-            >
-              <div
-                className={`
+              >
+                <div
+                  className={`
                   absolute inset-0 bg-gradient-to-r from-[#a38b41]/10 via-transparent to-[#a38b41]/10 
                   transition-opacity duration-500 pointer-events-none ${
                     isFocused ? "opacity-100" : "opacity-0"
                   }
                 `}
-              />
+                />
 
-              <input
-                type="text"
-                value={searchValue}
-                onChange={(e) => setSearchValue(e.target.value)}
-                onFocus={() => setIsFocused(true)}
-                onBlur={handleInputBlur}
-                onKeyDown={handleKeyDown}
-                placeholder={`Search events`}
-                className="relative z-10 w-full h-14 sm:h-16 bg-transparent pl-5 pr-24 text-white placeholder-gray-400 focus:outline-none text-sm sm:text-base font-medium placeholder:font-normal"
-              />
+                <input
+                  type="text"
+                  value={searchValue}
+                  onChange={(e) => setSearchValue(e.target.value)}
+                  onFocus={() => setIsFocused(true)}
+                  onBlur={handleInputBlur}
+                  onKeyDown={handleKeyDown}
+                  placeholder={`Search events`}
+                  className="relative z-10 w-full h-14 sm:h-16 bg-[#fff] pl-5 pr-24 text-black placeholder-gray-400 focus:outline-none text-sm sm:text-base font-medium placeholder:font-normal"
+                />
 
-              <div className="absolute right-3 top-1/2 -translate-y-1/2 flex items-center gap-2 z-20">
-                {searchValue && (
+                <div className="absolute right-3 top-1/2 -translate-y-1/2 flex items-center gap-2 z-20">
+                  {searchValue && (
+                    <button
+                      type="button"
+                      onMouseDown={(e) => e.preventDefault()}
+                      onClick={clearSearch}
+                      className="p-2 text-gray-400 hover:text-white transition-all duration-200 rounded-full hover:bg-white/10 active:scale-95 z-30"
+                      title="Clear"
+                      aria-label="Clear search"
+                    >
+                      <FaTimes size={12} />
+                    </button>
+                  )}
+
                   <button
-                    type="button"
+                    type="submit"
+                    disabled={trimmed.length < MIN_CHARS || isSearching}
                     onMouseDown={(e) => e.preventDefault()}
-                    onClick={clearSearch}
-                    className="p-2 text-gray-400 hover:text-white transition-all duration-200 rounded-xl hover:bg-white/10 active:scale-95 z-30"
-                    title="Clear"
-                    aria-label="Clear search"
-                  >
-                    <FaTimes size={12} />
-                  </button>
-                )}
-
-                <button
-                  type="submit"
-                  disabled={trimmed.length < MIN_CHARS || isSearching}
-                  onMouseDown={(e) => e.preventDefault()}
-                  className={`
-                    group/search relative overflow-hidden px-4 py-2 rounded-xl font-bold text-xs transition-all duration-300 flex items-center gap-2 z-30
+                    className={`
+                    group/search relative overflow-hidden px-8 py-2 rounded-full font-bold text-xs transition-all duration-300 flex items-center gap-2 z-30
                     ${
                       trimmed.length >= MIN_CHARS && !isSearching
                         ? "bg-gradient-to-r from-[#a38b41] cursor-pointer via-[#c2ab67] to-[#e6ca7c] text-black shadow-lg hover:shadow-xl hover:shadow-[#a38b41]/30 hover:scale-110 active:scale-95"
                         : "bg-gray-600/30 text-gray-500 cursor-not-allowed"
                     }
                   `}
-                  title={isSearching ? "Searching..." : "Search"}
-                >
-                  <FaSearch size={11} className="relative" />
-                  <span className="relative hidden sm:inline">
-                    {isSearching ? "Searching…" : "Enter"}
-                  </span>
-                  {trimmed.length >= MIN_CHARS && !isSearching && (
-                    <div className="absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent via-white/30 to-transparent group-hover/search:translate-x-full transition-transform duration-700" />
-                  )}
-                </button>
-              </div>
+                    title={isSearching ? "Searching..." : "Search"}
+                  >
+                    <FaSearch size={11} className="relative" />
+                    <span className="relative hidden sm:inline">
+                      {isSearching ? "Searching…" : "Enter"}
+                    </span>
+                    {trimmed.length >= MIN_CHARS && !isSearching && (
+                      <div className="absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent via-white/30 to-transparent group-hover/search:translate-x-full transition-transform duration-700" />
+                    )}
+                  </button>
+                </div>
 
-              <div
-                className={`
+                <div
+                  className={`
                   absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent via-white/5 to-transparent 
                   transition-transform duration-1000 pointer-events-none ${
                     isFocused ? "translate-x-full" : ""
                   }
                 `}
-              />
-            </div>
-          </form>
+                />
+              </div>
+            </form>
 
-          {showDropdown && (
-            <div className="absolute left-0 right-0 top-full mt-2 bg-white/5 backdrop-blur-xl border border-white/10 rounded-2xl shadow-xl  overflow-hidden">
-              {belowMin && (
-                <div className="p-3 text-xs text-gray-400">
-                  Type at least {MIN_CHARS} characters to search.
-                </div>
-              )}
-
-              {!belowMin && resultsLoading && (
-                <div className="p-3 text-xs text-[#a38b41]">Searching…</div>
-              )}
-
-              {!belowMin && !resultsLoading && resultsError && (
-                <div className="p-3 text-xs text-red-400">{resultsError}</div>
-              )}
-
-              {!belowMin &&
-                !resultsLoading &&
-                !resultsError &&
-                results.length > 0 && (
-                  <ul className="max-h-80 overflow-auto divide-y divide-white/5">
-                    {results.map((r) => (
-                      <li key={r.id} className="bg-transparent">
-                        <Link
-                          to={`/event-details/${r.id}`}
-                          className="flex items-center gap-3 p-3 hover:bg-white/5 transition-colors"
-                        >
-                          <img
-                            src={r.cover || FALLBACK_COVER}
-                            alt=""
-                            className="w-12 h-12 rounded-md object-cover border border-[#333]"
-                            loading="lazy"
-                          />
-                          <div className="min-w-0">
-                            <div className="text-sm text-white font-semibold truncate">
-                              {r.name}
-                            </div>
-                            <div className="text-[11px] text-gray-400 truncate">
-                              {fmt(r.datetime)}
-                              {r.location ? ` · ${r.location}` : ""}
-                            </div>
-                            {r.details && (
-                              <div className="text-[11px] text-gray-500">
-                                {truncate(r.details, 100)}
-                              </div>
-                            )}
-                          </div>
-                        </Link>
-                      </li>
-                    ))}
-                  </ul>
-                )}
-
-              {!belowMin &&
-                !resultsLoading &&
-                !resultsError &&
-                results.length === 0 && (
+            {showDropdown && (
+              <div className="absolute left-0 right-0 top-full mt-2 bg-white/5 backdrop-blur-xl border border-white/10 rounded-2xl shadow-xl  overflow-hidden">
+                {belowMin && (
                   <div className="p-3 text-xs text-gray-400">
-                    No results found.
+                    Type at least {MIN_CHARS} characters to search.
                   </div>
                 )}
-            </div>
-          )}
+
+                {!belowMin && resultsLoading && (
+                  <div className="p-3 text-xs text-[#a38b41]">Searching…</div>
+                )}
+
+                {!belowMin && !resultsLoading && resultsError && (
+                  <div className="p-3 text-xs text-red-400">{resultsError}</div>
+                )}
+
+                {!belowMin &&
+                  !resultsLoading &&
+                  !resultsError &&
+                  results.length > 0 && (
+                    <ul className="max-h-80 overflow-auto divide-y divide-white/5">
+                      {results.map((r) => (
+                        <li key={r.id} className="bg-transparent">
+                          <Link
+                            to={`/event-details/${r.id}`}
+                            className="flex items-center gap-3 p-3 hover:bg-white/5 transition-colors"
+                          >
+                            <img
+                              src={r.cover || FALLBACK_COVER}
+                              alt=""
+                              className="w-12 h-12 rounded-md object-cover border border-[#333]"
+                              loading="lazy"
+                            />
+                            <div className="min-w-0">
+                              <div className="text-sm text-white font-semibold truncate">
+                                {r.name}
+                              </div>
+                              <div className="text-[11px] text-gray-400 truncate">
+                                {fmt(r.datetime)}
+                                {r.location ? ` · ${r.location}` : ""}
+                              </div>
+                              {r.details && (
+                                <div className="text-[11px] text-gray-500">
+                                  {truncate(r.details, 100)}
+                                </div>
+                              )}
+                            </div>
+                          </Link>
+                        </li>
+                      ))}
+                    </ul>
+                  )}
+
+                {!belowMin &&
+                  !resultsLoading &&
+                  !resultsError &&
+                  results.length === 0 && (
+                    <div className="p-3 text-xs text-gray-400">
+                      No results found.
+                    </div>
+                  )}
+              </div>
+            )}
+          </div>
         </div>
       </div>
     </section>

@@ -91,75 +91,81 @@ const SearchTalents = ({
     localStorage.removeItem("currentUserData");
   };
   return (
-    <section className="flex justify-end items-center">
-      <div className="lg:w-[25%] mb-3 relative">
-        <div className="relative group">
-          <div className="relative overflow-hidden rounded-2xl transition-all duration-500 ease-out bg-white/5 border border-white/10 hover:border-white/20 hover:bg-white/8">
-            <input
-              type="text"
-              value={searchValue}
-              onChange={handleSearchChange}
-              onFocus={() => setShowResults(true)}
-              onBlur={() => setTimeout(() => setShowResults(false), 200)} // Adjusted delay
-              placeholder="Search talents..."
-              className="relative z-10 w-full h-14 sm:h-16 bg-transparent pl-5 pr-24 text-white placeholder-gray-400 focus:outline-none text-sm sm:text-base font-medium placeholder:font-normal"
-            />
+    <section className="grid grid-cols-1 md:grid-cols-2 items-center gap-6 md:gap-10 w-full mb-10">
+      <h2 className="text-2xl font-bold "></h2>
+      <div className="">
+        {" "}
+        <div className=" relative">
+          <div className="relative group">
+            <div className="relative overflow-hidden rounded-full transition-all duration-500 ease-out bg-white/5 border border-white/10 hover:border-white/20 hover:bg-white/8">
+              <input
+                type="text"
+                value={searchValue}
+                onChange={handleSearchChange}
+                onFocus={() => setShowResults(true)}
+                onBlur={() => setTimeout(() => setShowResults(false), 200)} // Adjusted delay
+                placeholder="Search talents..."
+                className="relative z-10 w-full h-14 sm:h-16 bg-white pl-5 pr-24 text-black placeholder-gray-400 focus:outline-none text-sm sm:text-base font-medium placeholder:font-normal"
+              />
 
-            {/* Search Icon */}
-            <div className="absolute right-3 top-1/2 -translate-y-1/2 flex items-center gap-2 z-20">
-              {searchValue && (
-                <button
-                  type="button"
-                  onClick={() => {
-                    setSearchValue("");
-                    setIsTalentName("");
-                    setSearchResults([]);
-                    clearSearch();
-                    setShowResults(false);
-                  }}
-                  className="p-2 text-gray-400 hover:text-white transition-all duration-200 rounded-xl hover:bg-white/10 active:scale-95 z-30"
-                >
-                  <FaTimes size={12} />
-                </button>
-              )}
-              <div className="p-2 text-gray-400">
-                <FaSearch size={12} />
+              {/* Search Icon */}
+              <div className="absolute right-3 top-1/2 -translate-y-1/2 flex items-center gap-2 z-20">
+                {searchValue && (
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setSearchValue("");
+                      setIsTalentName("");
+                      setSearchResults([]);
+                      clearSearch();
+                      setShowResults(false);
+                    }}
+                    className="p-2 text-gray-400 hover:text-white transition-all duration-200 rounded-xl hover:bg-white/10 active:scale-95 z-30"
+                  >
+                    <FaTimes size={12} />
+                  </button>
+                )}
+                <div className="p-2 text-gray-400">
+                  <FaSearch size={12} />
+                </div>
               </div>
             </div>
-          </div>
 
-          {/* Search Results */}
-          {showResults && searchResults.length > 0 && (
-            <div className="absolute z-50 mt-2 w-full bg-gray-800 rounded-lg shadow-lg border border-gray-700 max-h-60 overflow-y-auto">
-              {searchResults.map((talent) => (
-                <div
-                  key={talent._id}
-                  className="p-3 hover:bg-gray-700 cursor-pointer flex items-center gap-3"
-                  onClick={() => handleSelectTalent(talent)}
-                >
-                  <div className="max-w-full">
-                    <img
-                      src={imgSrc(talent?.images[0]?.fileUrl)}
-                      alt={"Talent Image"}
-                      className="rounded-full w-8 h-8 object-cover mx-auto mb-1"
-                    />
-                    {/* <p className="text-center">{friend.friendName}</p> */}
-                  </div>
-                  <div>
-                    <div className="font-medium text-white">{talent.name}</div>
-                    {/* <div className="text-xs text-gray-400">
+            {/* Search Results */}
+            {showResults && searchResults.length > 0 && (
+              <div className="absolute z-50 mt-2 w-full bg-gray-800 rounded-lg shadow-lg border border-gray-700 max-h-60 overflow-y-auto">
+                {searchResults.map((talent) => (
+                  <div
+                    key={talent._id}
+                    className="p-3 hover:bg-gray-700 cursor-pointer flex items-center gap-3"
+                    onClick={() => handleSelectTalent(talent)}
+                  >
+                    <div className="max-w-full">
+                      <img
+                        src={imgSrc(talent?.images[0]?.fileUrl)}
+                        alt={"Talent Image"}
+                        className="rounded-full w-8 h-8 object-cover mx-auto mb-1"
+                      />
+                      {/* <p className="text-center">{friend.friendName}</p> */}
+                    </div>
+                    <div>
+                      <div className="font-medium text-white">
+                        {talent.name}
+                      </div>
+                      {/* <div className="text-xs text-gray-400">
                       {talent.category} • {talent.price}
                     </div> */}
+                    </div>
                   </div>
-                </div>
-              ))}
-            </div>
-          )}
+                ))}
+              </div>
+            )}
 
-          {/* If no results found */}
-          {showResults && searchResults.length === 0 && (
-            <div className="p-3 text-gray-400">No talents found</div>
-          )}
+            {/* If no results found */}
+            {showResults && searchResults.length === 0 && (
+              <div className="p-3 text-gray-400">No talents found</div>
+            )}
+          </div>
         </div>
       </div>
     </section>
