@@ -424,7 +424,22 @@ export const authApi = api.injectEndpoints({
       }),
       invalidatesTags: ["Friends"],
     }),
-
+    // Stripe API
+    addIntent: builder.mutation({
+      query: (body) => ({
+        url: "/billing/payment-intents",
+        method: "POST",
+        body,
+      }),
+      // invalidatesTags: ["Friends"],
+    }),
+    confirmPayment: builder.mutation({
+      query: (body) => ({
+        url: "/billing/confirm",
+        method: "POST",
+        body,
+      }),
+    }),
     getUsers: builder.query({
       query: () => "/user/getusers",
       providesTags: ["Users"],
@@ -472,7 +487,8 @@ export const {
   useGetUsersQuery,
   useDeleteUserMutation,
   useGetAdminDashboardQuery,
-
+  // Stripe API
+  useAddIntentMutation,
   // Notifications
   useGetNotificationsQuery,
   // Confirmed talent requests

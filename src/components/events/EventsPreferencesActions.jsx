@@ -9,6 +9,7 @@ import {
 import { IoTicketOutline } from "react-icons/io5";
 import { useSetEventPreferenceMutation } from "../../app/authApi";
 import { toast } from "react-toastify";
+import { Link } from "react-router-dom";
 const EventsPreferencesActions = ({ eventId, eventDetails }) => {
   const [attendanceOption, setAttendanceOption] = useState("interested");
   const [eventType, setEventType] = useState("liveInPerson");
@@ -248,15 +249,15 @@ const EventsPreferencesActions = ({ eventId, eventDetails }) => {
             COMING TO THE SHOW?
           </span>
         </h3>
-        <a
-          href="#tickets"
+        <Link
+          to={`/checkout/${eventId}`}
           className="w-full flex items-center justify-center space-x-2 p-3 rounded-xl transition-all duration-300 font-semibold hover:scale-105 shadow-lg text-white"
           style={{ backgroundColor: "#a38b41" }}
         >
           <IoTicketOutline className="w-4 h-4" />
           <span className="text-sm">BUY YOUR TICKETS HERE NOW!</span>
           <FiExternalLink className="w-3 h-3" />
-        </a>
+        </Link>
       </div>
 
       {/* Upload */}

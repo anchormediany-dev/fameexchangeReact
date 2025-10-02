@@ -16,28 +16,6 @@ import { useCreateEventMutation } from "../../app/authApi";
 import TalentMultiSelect from "../../components/TalentMultiSelect";
 
 /* ---------- small inputs ---------- */
-const DiscountCodeInput = ({ value, onChange, onRemove, index }) => (
-  <div className="relative">
-    <div className="flex items-center border rounded-lg px-4 py-3 bg-[#2d2d2d]">
-      <input
-        type="text"
-        value={value}
-        onChange={onChange}
-        placeholder={`Discount code ${index + 1}`}
-        className="bg-transparent outline-none w-full text-white placeholder-gray-400"
-      />
-      <button
-        type="button"
-        onClick={onRemove}
-        className="text-gray-400 hover:text-red-500 transition-colors"
-        title="Remove"
-      >
-        <IoClose size={18} />
-      </button>
-    </div>
-  </div>
-);
-
 const PurchaseUrlInput = ({ value, onChange, onRemove, index, onOpen }) => (
   <div className="relative">
     <div className="flex items-center gap-2 border rounded-lg px-4 py-3 bg-[#2d2d2d]">
@@ -49,15 +27,6 @@ const PurchaseUrlInput = ({ value, onChange, onRemove, index, onOpen }) => (
         placeholder={`https://... (URL ${index + 1})`}
         className="bg-transparent outline-none w-full text-white placeholder-gray-400"
       />
-      {/* <button
-        type="button"
-        onClick={onOpen}
-        className="text-xs px-2 py-1 rounded border border-gray-600 hover:border-gray-400"
-        title="Open link"
-        disabled={!value?.trim()}
-      >
-        Open
-      </button> */}
       <button
         type="button"
         onClick={onRemove}
@@ -93,7 +62,7 @@ export default function EventCreateForm() {
     // pricing/discounts
     regular_price: "",
     discount_percent: "",
-    discount_codes: [],
+    discount_code: "", // <-- single string now
 
     // selection
     prefrence: "interested",
@@ -103,7 +72,7 @@ export default function EventCreateForm() {
     is_free: false,
     price: "",
     no_of_tickets: "",
-    purchase_url: [""], // <-- ARRAY of strings
+    purchase_url: [""], // still an ARRAY of strings
   });
 
   // files + previews
@@ -157,28 +126,12 @@ export default function EventCreateForm() {
         price: checked ? 0 : s.price === 0 ? "" : s.price,
         regular_price: checked ? "" : s.regular_price,
         discount_percent: checked ? "" : s.discount_percent,
-        discount_codes: checked ? [] : s.discount_codes,
+        discount_code: checked ? "" : s.discount_code, // reset when free
       }));
       return;
     }
     setForm((s) => ({ ...s, [name]: checked }));
   };
-
-  const handleDiscountCodeChange = (idx, v) =>
-    setForm((s) => {
-      const next = [...s.discount_codes];
-      next[idx] = v;
-      return { ...s, discount_codes: next };
-    });
-
-  const addDiscountCode = () =>
-    setForm((s) => ({ ...s, discount_codes: [...s.discount_codes, ""] }));
-
-  const removeDiscountCode = (idx) =>
-    setForm((s) => ({
-      ...s,
-      discount_codes: s.discount_codes.filter((_, i) => i !== idx),
-    }));
 
   // purchase url helpers
   const handlePurchaseUrlChange = (idx, v) =>
@@ -259,7 +212,7 @@ export default function EventCreateForm() {
       // pricing/discounts
       regular_price: String(form.regular_price ?? ""),
       discount_percent: String(form.discount_percent ?? ""),
-      discount_codes: JSON.stringify(form.discount_codes || []),
+      discount_code: form.discount_code ?? "", // <-- single string
 
       // selection
       prefrence: form.prefrence,
@@ -299,7 +252,7 @@ export default function EventCreateForm() {
 
         regular_price: "",
         discount_percent: "",
-        discount_codes: [],
+        discount_code: "",
 
         prefrence: "interested",
         talent: [],
@@ -586,8 +539,7 @@ export default function EventCreateForm() {
                 <h2 className={sectionTitleCls}>Ticket Details</h2>
                 <div>
                   <label className="block text-white text-sm font-medium mb-2">
-                    Ticket Price{" "}
-                    {form.is_free ? "(disabled for free events)" : ""}
+                    Ticket Price {form.is_free}
                   </label>
                   <div
                     className={`flex items-center border rounded-lg px-4 py-3 bg-[#2d2d2d] ${
@@ -625,6 +577,58 @@ export default function EventCreateForm() {
                     />
                   </div>
                 </div>
+                <div className={form.is_free ? "opacity-60" : ""}>
+                  <label className="block text-white text-sm font-medium mb-2">
+                    Discount (%)
+                  </label>
+                  <div className="flex items-center border rounded-lg px-4 py-3 bg-[#2d2d2d]">
+                    <FaPercent className="text-gray-400 mr-3" />
+                    <input
+                      type="number"
+                      name="discount_percent"
+                      value={form.is_free ? "" : form.discount_percent}
+                      onChange={handleChange}
+                      min="0"
+                      max="100"
+                      step="1"
+                      placeholder="Enter discount %"
+                      className="bg-transparent outline-none w-full text-white"
+                      disabled={form.is_free}
+                    />
+                  </div>
+                </div>
+                <div className={form.is_free ? "opacity-60" : ""}>
+                  <label className="block text-white text-sm font-medium mb-2">
+                    Discount Code
+                  </label>
+                  <div className="flex items-center border rounded-lg px-4 py-3 bg-[#2d2d2d]">
+                    <FaPercent className="text-gray-400 mr-3" />
+                    <input
+                      type="text"
+                      name="discount_code" // <-- correct binding
+                      value={form.is_free ? "" : form.discount_code}
+                      onChange={handleChange}
+                      placeholder="Enter discount code"
+                      className="bg-transparent outline-none w-full text-white"
+                      disabled={form.is_free}
+                    />
+                  </div>
+                </div>
+
+                <div className="flex items-center space-x-3">
+                  <input
+                    id="is_free"
+                    type="checkbox"
+                    name="is_free"
+                    checked={form.is_free}
+                    onChange={handleBoolean}
+                    className="rounded h-5 w-5"
+                  />
+                  <label htmlFor="is_free" className="text-sm gredient-text">
+                    Is this event free?
+                  </label>
+                </div>
+
                 {/* Multiple purchase URLs */}
                 <div className="md:col-span-2 lg:col-span-2">
                   <div className="flex justify-between items-center mb-2">
@@ -671,120 +675,6 @@ export default function EventCreateForm() {
                       />
                     </svg>
                     Add another purchase URL
-                  </button>
-                </div>{" "}
-                <div className="flex items-center space-x-3">
-                  <input
-                    id="is_free"
-                    type="checkbox"
-                    name="is_free"
-                    checked={form.is_free}
-                    onChange={handleBoolean}
-                    className="rounded h-5 w-5"
-                  />
-                  <label htmlFor="is_free" className="text-sm gredient-text">
-                    Is this event free?
-                  </label>
-                </div>
-              </div>
-
-              {/* Pricing & Discounts (auto-disabled when free) */}
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-                <h2 className={sectionTitleCls}>Pricing & Discounts</h2>
-
-                <div className={disabledPricing ? "opacity-60" : ""}>
-                  <label className="block text-white text-sm font-medium mb-2">
-                    Regular Price*
-                  </label>
-                  <div className="flex items-center border rounded-lg px-4 py-3 bg-[#2d2d2d]">
-                    <FaDollarSign className="text-gray-400 mr-3" />
-                    <input
-                      type="number"
-                      name="regular_price"
-                      value={disabledPricing ? "" : form.regular_price}
-                      onChange={handleChange}
-                      min="0"
-                      step="0.01"
-                      placeholder="Enter price"
-                      className="bg-transparent outline-none w-full text-white"
-                      required={!disabledPricing}
-                      disabled={disabledPricing}
-                    />
-                  </div>
-                </div>
-
-                <div className={disabledPricing ? "opacity-60" : ""}>
-                  <label className="block text-white text-sm font-medium mb-2">
-                    Discount (%)
-                  </label>
-                  <div className="flex items-center border rounded-lg px-4 py-3 bg-[#2d2d2d]">
-                    <FaPercent className="text-gray-400 mr-3" />
-                    <input
-                      type="number"
-                      name="discount_percent"
-                      value={disabledPricing ? "" : form.discount_percent}
-                      onChange={handleChange}
-                      min="0"
-                      max="100"
-                      step="1"
-                      placeholder="Enter discount %"
-                      className="bg-transparent outline-none w-full text-white"
-                      disabled={disabledPricing}
-                    />
-                  </div>
-                </div>
-
-                <div
-                  className={`md:col-span-2 lg:col-span-2 space-y-4 ${
-                    disabledPricing ? "opacity-60" : ""
-                  }`}
-                >
-                  <div className="flex justify-between items-center">
-                    <label className="block text-white text-sm font-medium mb-2">
-                      Discount Codes
-                    </label>
-                    <span className="text-xs text-gray-500">
-                      {form.discount_codes.length} added
-                    </span>
-                  </div>
-
-                  <div className="space-y-3">
-                    {(disabledPricing ? [] : form.discount_codes).map(
-                      (code, idx) => (
-                        <DiscountCodeInput
-                          key={idx}
-                          value={code}
-                          onChange={(e) =>
-                            handleDiscountCodeChange(idx, e.target.value)
-                          }
-                          onRemove={() => removeDiscountCode(idx)}
-                          index={idx}
-                        />
-                      )
-                    )}
-                  </div>
-
-                  <button
-                    type="button"
-                    onClick={addDiscountCode}
-                    className="flex items-center gap-2 text-sm gredient-text hover:underline disabled:opacity-60"
-                    disabled={disabledPricing}
-                  >
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      className="h-4 w-4"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                      stroke="currentColor"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth={2}
-                        d="M12 6v12m6-6H6"
-                      />
-                    </svg>
-                    Add another discount code
                   </button>
                 </div>
               </div>
