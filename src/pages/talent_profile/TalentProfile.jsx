@@ -337,7 +337,7 @@ const TalentProfile = () => {
         <div className="container">
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
             <FriendsSection userData={data} isLoading={isLoading} />
-            <EventsSection userData={data} />
+            <EventsSection userData={data} isLoading={isLoading} />
           </div>
         </div>
       </div>
