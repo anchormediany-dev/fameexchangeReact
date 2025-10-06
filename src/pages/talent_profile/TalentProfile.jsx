@@ -365,7 +365,7 @@ const TalentProfile = () => {
       </div>
       <section className=" px-4 md:px-8 container mx-auto ">
         <div className="rounded-xl p-6 bg-[#1f1f1f]">
-          <PortfolioDashboard />
+          <PortfolioDashboard userData={data} />
         </div>
       </section>{" "}
       {/* {isSavingNetworth && <CalculatingNetworthPopup />} */}

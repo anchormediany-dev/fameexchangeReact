@@ -10,7 +10,6 @@ import {
 import { SlSettings } from "react-icons/sl";
 import { IoCheckmark } from "react-icons/io5";
 import PurchaseConfirmationModal from "./PurchaseConfirmationModal";
-import { useGetNetworthQuery } from "../app/authApi";
 const data = [
   { time: "1", value: 0.003 },
   { time: "2", value: 0.002 },
@@ -26,10 +25,9 @@ const data = [
   { time: "12", value: 0.005 },
 ];
 
-export default function PortfolioDashboard() {
+export default function PortfolioDashboard({ userData }) {
   const [activeTab, setActiveTab] = useState("buy");
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const { data, error, isError } = useGetNetworthQuery();
   const handlePreviewOrderClick = () => {
     setIsModalOpen(true);
   };
@@ -46,7 +44,8 @@ export default function PortfolioDashboard() {
           <h1 className="text-xl md:text-3xl font-semibold">
             Your Portfolio Is Worth{" "}
             <span className="text-yellow-400">
-              {data?.data?.netWorth} {data?.data?.currency}
+              {userData?.data?.networth[0]?.netWorth}{" "}
+              {userData?.data?.networth[0]?.currency}
             </span>
           </h1>
           <p className="text-md md:text-xl text-yellow-300 mt-1">
