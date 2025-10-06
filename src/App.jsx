@@ -1,4 +1,4 @@
-import { Routes, Route, useLocation, Outlet } from "react-router-dom";
+import { Routes, Route, useLocation, Outlet, Navigate } from "react-router-dom";
 import { AnimatePresence } from "framer-motion";
 import Login from "./pages/login/Login";
 import MotionPageWrapper from "./components/MotionPageWrapper";
@@ -68,7 +68,12 @@ import AdminKycListings from "./pages/admin/AdminKycListings";
 import KYCDetailsPage from "./pages/KYCDetailsPage";
 import FanProfileForAdmin from "./pages/admin/FanProfileForAdmin";
 import TalentProfileForAdmin from "./pages/admin/TalentProfileForAdmin";
-import CheckoutPage from "./pages/Checkout";
+import CheckoutPage from "./pages/checkout_pages/Checkout";
+import AttendeesStep from "./pages/checkout_pages/steps/AttendeesStep";
+import BillingStep from "./pages/checkout_pages/steps/BillingStep";
+import PaymentStep from "./pages/checkout_pages/steps/PaymentStep";
+import ConfirmationStep from "./pages/checkout_pages/steps/ConfirmationStep";
+import CheckoutLayout from "./pages/checkout_pages/CheckoutLayout";
 
 // Simple Black Header Component
 const SimpleHeader = () => {
@@ -192,6 +197,13 @@ export default function App() {
               </MotionPageWrapper>
             }
           />
+          <Route path="/checkout/:id" element={<CheckoutLayout />}>
+            <Route index element={<Navigate to="attendees" replace />} />
+            <Route path="attendees" element={<AttendeesStep />} />
+            <Route path="billing" element={<BillingStep />} />
+            <Route path="payment" element={<PaymentStep />} />
+            <Route path="confirmation" element={<ConfirmationStep />} />
+          </Route>
           <Route
             path="talent-profile/:id"
             element={

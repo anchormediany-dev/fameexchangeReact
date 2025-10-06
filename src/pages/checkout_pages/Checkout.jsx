@@ -17,8 +17,8 @@ import {
   useGetEventByIdQuery,
   useAddIntentMutation,
   useConfirmPaymentMutation,
-} from "../app/authApi";
-import { useAuth } from "../utils/auth/useAuth";
+} from "../../app/authApi";
+import { useAuth } from "../../utils/auth/useAuth";
 
 // Stripe imports
 import { loadStripe } from "@stripe/stripe-js";
