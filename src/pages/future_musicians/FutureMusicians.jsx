@@ -7,6 +7,7 @@ import {
   useDeferredValue,
   useState,
 } from "react";
+import { useSearchParams } from "react-router-dom";
 import { useGetAllSponsorshipsQuery } from "../../app/authApi";
 import {
   FaSearch,
@@ -69,11 +70,15 @@ const normalize = (s) =>
     .replace(/\s+/g, " ")
     .trim();
 
-const userCategories = (u) =>
-  Array.isArray(u?.talent)
-    ? u.talent.map((t) => t?.category).filter(Boolean)
-    : [];
+// Safer category reader
+const userCategories = (u) => {
+  if (!Array.isArray(u?.talent)) return [];
+  return u.talent
+    .map((t) => (t && typeof t === "object" ? t.category : null))
+    .filter(Boolean);
+};
 
+// Safe image getter for talent user object
 const firstImageUrl = (u) => {
   if (u?.image) return u.image;
   const arr = u?.images;
@@ -82,6 +87,7 @@ const firstImageUrl = (u) => {
   const withFile = arr.find((x) => x && typeof x === "object" && x.fileUrl);
   if (withFile) return withFile.fileUrl;
 
+  // Some backends return weird objects with numeric keys
   const weird = arr.find(
     (x) =>
       x && typeof x === "object" && Object.keys(x).some((k) => /^\d+$/.test(k))
@@ -139,6 +145,7 @@ export default function FutureTalents() {
     reducer,
     initialState
   );
+  const [searchParams, setSearchParams] = useSearchParams();
 
   // ---- API params state (with sensible defaults) ----
   const today = new Date().toISOString().slice(0, 10);
@@ -161,7 +168,7 @@ export default function FutureTalents() {
   const inputRef = useRef(null);
 
   // API returns { success, data: [...events], sponsoredTalents: [...], pagination: {...} }
-  // For this table we use the aggregated `sponsoredTalents` list (unique talents).
+  // We use the aggregated `sponsoredTalents` list (unique talents).
   const rawTalents = Array.isArray(data?.sponsoredTalents)
     ? data.sponsoredTalents
     : [];
@@ -176,21 +183,40 @@ export default function FutureTalents() {
         role: t.role,
         images: t.images,
         token_brand_name: t.token_brand_name,
-        // optional passthrough if backend ever adds categories for talents:
-        talent: t.talent,
+        talent: t.talent, // may be [], undefined, or array of {category, subcategory[]}
       })),
     [rawTalents]
   );
 
   const pagination = data?.pagination;
 
-  const categories = useMemo(() => {
-    const set = new Set();
+  // Derive available categories and counts
+  const { categories, categoryCounts, totalWithAnyCategory } = useMemo(() => {
+    const counts = new Map(); // category -> count
+    let withAny = 0;
     for (const u of talents) {
-      for (const c of userCategories(u)) set.add(c);
+      const cats = userCategories(u);
+      if (cats.length) withAny++;
+      // Count each category once per user (avoid double count if duplicate)
+      const uniq = new Set(cats);
+      for (const c of uniq) counts.set(c, (counts.get(c) || 0) + 1);
     }
-    return Array.from(set).sort((a, b) => a.localeCompare(b));
+    const list = Array.from(counts.keys()).sort((a, b) => a.localeCompare(b));
+    return {
+      categories: list,
+      categoryCounts: counts,
+      totalWithAnyCategory: withAny,
+    };
   }, [talents]);
+
+  // Restore category from ?cat=
+  useEffect(() => {
+    const cat = searchParams.get("cat");
+    if (cat && cat !== category) {
+      dispatch({ type: "SET_CATEGORY", payload: cat });
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [searchParams]);
 
   // close category dropdown on outside click
   useEffect(() => {
@@ -226,9 +252,16 @@ export default function FutureTalents() {
     () => dispatch({ type: "TOGGLE_DROPDOWN" }),
     []
   );
+
   const selectCategory = useCallback(
-    (c) => dispatch({ type: "SET_CATEGORY", payload: c }),
-    []
+    (c) => {
+      dispatch({ type: "SET_CATEGORY", payload: c });
+      const next = new URLSearchParams(searchParams);
+      if (c) next.set("cat", c);
+      else next.delete("cat");
+      setSearchParams(next, { replace: true });
+    },
+    [searchParams, setSearchParams]
   );
 
   // Smooth UI while typing
@@ -312,9 +345,9 @@ export default function FutureTalents() {
           <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-6">
             {/* Category (derived) */}
             <div className="relative w-full md:w-auto" ref={dropdownRef}>
-              {/* <button
+              <button
                 onClick={toggleDropdown}
-                className="flex items-center justify-between w-full md:w-64 px-4 py-3 rounded-lg bg-[#2d2d2d] border border-gray-600 text-white"
+                className="flex items-center justify-between w-full md:w-72 px-4 py-3 rounded-lg bg-[#2d2d2d] border border-gray-600 text-white"
               >
                 <span className="flex items-center">
                   {category
@@ -327,31 +360,62 @@ export default function FutureTalents() {
                     dropdownOpen ? "rotate-180" : ""
                   }`}
                 />
-              </button> */}
+              </button>
 
               {dropdownOpen && (
-                <div className="absolute z-50 mt-2 bg-[#2d2d2d] rounded-md w-full md:w-64 border border-gray-700 overflow-hidden max-h-80 overflow-y-auto">
+                <div className="absolute z-50 mt-2 bg-[#2d2d2d] rounded-md w-full md:w-72 border border-gray-700 overflow-hidden max-h-80 overflow-y-auto">
+                  {/* All */}
                   <div
                     onClick={() => selectCategory(null)}
-                    className={`px-4 py-2 cursor-pointer hover:bg-[#3a3a3a] ${
+                    className={`flex items-center justify-between px-4 py-2 cursor-pointer hover:bg-[#3a3a3a] ${
                       !category ? "text-yellow-400" : ""
                     }`}
                   >
-                    All categories
+                    <span className="flex items-center">
+                      <FaUserTie className="mr-2" />
+                      All categories
+                    </span>
+                    {/* <span className="text-xs bg-[#1f1f1f] border border-gray-700 px-2 py-0.5 rounded">
+                      {totalWithAnyCategory || 0}
+                    </span> */}
                   </div>
 
+                  {/* Each category with count */}
                   {categories.map((cat) => (
                     <div
                       key={cat}
                       onClick={() => selectCategory(cat)}
-                      className={`flex items-center gap-2 px-4 py-2 cursor-pointer hover:bg-[#3a3a3a] ${
+                      className={`flex items-center justify-between px-4 py-2 cursor-pointer hover:bg-[#3a3a3a] ${
                         category === cat ? "text-yellow-400" : ""
                       }`}
                     >
-                      {ICONS[cat] ?? <FaUserTie className="mr-2" />}
-                      {cat}
+                      <span className="flex items-center">
+                        {ICONS[cat] ?? <FaUserTie className="mr-2" />}
+                        {cat}
+                      </span>
+                      {/* <span className="text-xs bg-[#1f1f1f] border border-gray-700 px-2 py-0.5 rounded">
+                        {categoryCounts.get(cat) || 0}
+                      </span> */}
                     </div>
                   ))}
+
+                  {/* No category talents quick filter (optional) */}
+                  {totalWithAnyCategory < talents.length && (
+                    <div
+                      onClick={() => selectCategory("__none__")}
+                      className={`flex items-center justify-between px-4 py-2 cursor-pointer hover:bg-[#3a3a3a] ${
+                        category === "__none__" ? "text-yellow-400" : ""
+                      }`}
+                    >
+                      <span className="flex items-center">
+                        <FaUserTie className="mr-2" />
+                        No Category
+                      </span>
+                      {/* <span className="text-xs bg-[#1f1f1f] border border-gray-700 px-2 py-0.5 rounded">
+                        {talents.length - (totalWithAnyCategory || 0)}
+                      </span> */}
+                    </div>
+                  )}
                 </div>
               )}
             </div>
@@ -365,7 +429,7 @@ export default function FutureTalents() {
                 onChange={onSearchChange}
                 onKeyDown={onSearchKeyDown}
                 placeholder="Search Talent…"
-                aria-label="Search talents by name, email, or token"
+                aria-label="Search talents by name, email, token, or category"
                 className="w-full h-11 pl-4 pr-20 rounded-lg bg-[#2d2d2d] border border-gray-600 placeholder-gray-400 text-white focus:outline-none focus:ring-2 focus:ring-yellow-500/30"
               />
               {search ? (
@@ -382,59 +446,16 @@ export default function FutureTalents() {
               <FaSearch className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none" />
             </div>
           </div>
-
-          {/* API filter controls (from, to, sort) */}
-          {/* <div className="grid grid-cols-1 md:grid-cols-4 gap-3">
-            <div>
-              <label className="block text-xs text-gray-400 mb-1">From</label>
-              <input
-                type="date"
-                value={from}
-                onChange={(e) => {
-                  setPage(1);
-                  setFrom(e.target.value);
-                }}
-                className="w-full h-10 px-3 rounded-lg bg-[#2d2d2d] border border-gray-600 text-white"
-              />
-            </div>
-            <div>
-              <label className="block text-xs text-gray-400 mb-1">To</label>
-              <input
-                type="date"
-                value={to}
-                onChange={(e) => {
-                  setPage(1);
-                  setTo(e.target.value);
-                }}
-                className="w-full h-10 px-3 rounded-lg bg-[#2d2d2d] border border-gray-600 text-white"
-              />
-            </div>
-            <div>
-              <label className="block text-xs text-gray-400 mb-1">Sort</label>
-              <select
-                value={sort}
-                onChange={(e) => {
-                  setPage(1);
-                  setSort(e.target.value);
-                }}
-                className="w-full h-10 px-3 rounded-lg bg-[#2d2d2d] border border-gray-600 text-white"
-              >
-                <option value="oldest">Oldest</option>
-                <option value="newest">Newest</option>
-              </select>
-            </div>
-            <div className="flex items-end">
-              <div className="text-xs text-gray-400">
-                {pagination?.total ? `Total records: ${pagination.total}` : ""}
-              </div>
-            </div>
-          </div> */}
         </div>
 
         {/* Heading */}
         <div className="text-center mb-6">
           <h2 className="text-3xl font-bold text-yellow-400 uppercase">
-            {category ? `${category} Talents` : "All Talents"}
+            {category && category !== "__none__"
+              ? `${category} Talents`
+              : category === "__none__"
+              ? "Talents Without Category"
+              : "All Talents"}
           </h2>
           <p className="text-gray-400 mt-2">
             {isLoading
@@ -470,6 +491,9 @@ export default function FutureTalents() {
             filtered.map((u) => {
               const img = firstImageUrl(u);
               const cats = userCategories(u);
+              // Special handling: "__none__" filter
+              if (category === "__none__" && cats.length > 0) return null;
+
               return (
                 <div
                   key={u._id}
