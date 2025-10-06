@@ -109,7 +109,7 @@ const ImageSwitchForFanInAdmin = ({ userData }) => {
   const [bioText, setBioText] = useState("");
   const IMAGE_BASE_URL = import.meta.env.VITE_API_BASE_URL;
   const handleInverseClick = () => {
-    navigate("/inverse#inverse-request-form");
+    navigate("/inverse");
   };
   const normalizePath = (p) => {
     if (!p) return "";

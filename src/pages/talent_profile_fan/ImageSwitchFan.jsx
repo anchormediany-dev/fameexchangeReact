@@ -29,7 +29,7 @@ const ImageSwitchFan = ({ userData }) => {
       localStorage.setItem("currentUserData", JSON.stringify(userData));
     }
 
-    navigate("/inverse#inverse-request-form", {
+    navigate("/inverse", {
       state: { userData },
     });
   };
