@@ -80,7 +80,7 @@ const TalentTradingSection = () => {
             animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
             transition={{ duration: 0.6, delay: 0.6 }}
             whileHover={{ scale: 1.02 }}
-            className="mt-4 px-6 py-3 bg-gradient-to-r from-[#a18a3f] to-[#e6ca7c] text-white rounded-lg flex items-center gap-2 hover:brightness-110 transition-all"
+            className="mt-4 px-6 py-3 bg-gradient-to-r from-[#a18a3f] cursor-pointer to-[#e6ca7c] text-white rounded-lg flex items-center gap-2 hover:brightness-110 transition-all"
           >
             Read More
             <motion.div whileHover={{ x: 3, y: -3 }}>

@@ -5,9 +5,10 @@ import {
   FaChartLine,
   FaWallet,
   FaTimes,
+  FaArrowLeft,
 } from "react-icons/fa";
 import { useGetTalentOverviewQuery } from "../../app/authApi";
-import { useParams } from "react-router-dom";
+import { useParams, Link } from "react-router-dom";
 import EventsFanSection from "../../components/talent_profile_fan/EventsFanSection";
 import TalentLinksFan from "../../components/talent_profile_fan/TalentLinksFan";
 import PortfolioDashboardForFan from "../../pages/talent_profile_fan/Portfolio";
@@ -67,6 +68,18 @@ const FanProfileForAdmin = () => {
   return (
     <section className="w-full bg-gradient-to-br py-12 2xl:py-16 flex flex-col 2xl:gap-16 gap-12 px-4 sm:px-6 lg:px-8">
       <div className="container mt-10 lg:mt-16 2xl:mt-20">
+        {/* Back to Dashboard */}
+        <div className="">
+          <Link
+            to="/admin"
+            className="inline-flex items-center gap-2 rounded-xl px-4 py-2 text-sm font-semibold
+                       bg-white/10 border border-white/20 text-white backdrop-blur
+                       hover:bg-white/15 hover:border-white/30 transition active:scale-95"
+          >
+            <FaArrowLeft className="text-white/90" />
+            Back to Dashboard
+          </Link>
+        </div>
         <div className="flex flex-col xl:flex-row gap-4 xl:gap-6 items-stretch">
           {/* <div className="w-full xl:w-80 2xl:w-96">
             <form onSubmit={handleSearch} className="relative group">

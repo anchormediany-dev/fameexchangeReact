@@ -133,7 +133,7 @@ const VideoBanner = () => {
             </button>
 
             {/* Secondary Button */}
-            <button className="group px-8 py-4 border-2 border-gray-600/50 hover:border-cyan-400/60 text-gray-200 hover:text-white font-medium rounded-full transform transition-all duration-500 hover:scale-105 hover:bg-gray-800/30 focus:outline-none focus:ring-4 focus:ring-gray-500/30 w-full sm:w-auto text-base min-w-[200px] backdrop-blur-sm">
+            <button className="group px-8 py-4 border-2 cursor-pointer border-gray-600/50 hover:border-cyan-400/60 text-gray-200 hover:text-white font-medium rounded-full transform transition-all duration-500 hover:scale-105 hover:bg-gray-800/30 focus:outline-none focus:ring-4 focus:ring-gray-500/30 w-full sm:w-auto text-base min-w-[200px] backdrop-blur-sm">
               <span className="flex items-center justify-center">
                 Watch Demo
                 <svg
