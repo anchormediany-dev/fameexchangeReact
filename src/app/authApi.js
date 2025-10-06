@@ -352,6 +352,7 @@ export const authApi = api.injectEndpoints({
     }),
     getTalentOverview: builder.query({
       query: (id) => `/user/${id}/overview`,
+      providesTags: ["Friends"],
     }),
     getFanOverview: builder.query({
       query: (id) => `/user/${id}/fan/overview`,

@@ -121,6 +121,18 @@ const FriendsSection = ({
     }
   }, [showAddFriendPopup, refetchUsers]);
   const currentUser = JSON.parse(localStorage.getItem("user"));
+  function firstWithLastInitial(fullName = "") {
+    if (!fullName.trim()) return "";
+    const parts = fullName.trim().split(/\s+/);
+    const first = parts[0];
+    const last = parts[parts.length - 1];
+    if (parts.length === 1) return first;
+    return `${first} ${last.charAt(0).toUpperCase()}.`;
+  }
+
+  function fallbackInitial(name = "") {
+    return (name.trim()[0] || "?").toUpperCase();
+  }
   return (
     <div className="bg-[#1f1f1f] rounded-xl shadow-lg">
       <div className="p-4 border-b border-gray-700 flex justify-between items-center">
@@ -154,8 +166,8 @@ const FriendsSection = ({
 
       {showAddFriendPopup ? (
         <div className="p-4">
-          <div className="mb-4">
-            {/* <div className="relative">
+          {/* <div className="mb-4">
+            <div className="relative">
               <FaSearch className="absolute left-3 top-3 text-gray-400" />
               <input
                 type="text"
@@ -164,7 +176,7 @@ const FriendsSection = ({
                 onChange={(e) => setSearchTerm(e.target.value)}
                 className="w-full pl-10 pr-4 py-2 bg-[#3d3d3d] text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-yellow-500 mb-2"
               />
-            </div> */}
+            </div>
             <select
               value={selectedUser ? JSON.stringify(selectedUser) : ""}
               onChange={(e) => setSelectedUser(JSON.parse(e.target.value))}
@@ -183,6 +195,76 @@ const FriendsSection = ({
                 ))
               )}
             </select>
+          </div> */}
+          <div className="mb-4">
+            <label className="block text-gray-300 mb-2">Search talent</label>
+
+            <div className="relative">
+              <input
+                type="text"
+                placeholder="Type a talent name..."
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                className="w-full px-3 py-2 bg-[#3d3d3d] text-white rounded-lg border border-gray-600 focus:outline-none focus:ring-2 focus:ring-yellow-500"
+              />
+
+              {/* Results */}
+              {searchTerm.trim() && (
+                <div className="absolute z-20 mt-2 w-full max-h-64 overflow-y-auto bg-[#2b2b2b] border border-gray-700 rounded-lg shadow-lg">
+                  {isUsersLoading ? (
+                    <div className="px-3 py-2 text-gray-400 text-sm">
+                      Loading users…
+                    </div>
+                  ) : filteredUsers.length === 0 ? (
+                    <div className="px-3 py-2 text-gray-400 text-sm">
+                      No users found
+                    </div>
+                  ) : (
+                    filteredUsers.map((user) => (
+                      <button
+                        key={user._id}
+                        type="button"
+                        onClick={() => {
+                          setSelectedUser(user);
+                          setSearchTerm(firstWithLastInitial(user.name));
+                        }}
+                        className="w-full text-left px-3 py-2 hover:bg-[#3a3a3a] flex items-center gap-3"
+                      >
+                        <img
+                          src={imgSrc(
+                            user?.images?.[0]?.fileUrl ||
+                              user?.profileImage?.url ||
+                              user?.avatarUrl ||
+                              ""
+                          )}
+                          alt={user?.name || "User"}
+                          className="w-8 h-8 rounded-full object-cover"
+                        />
+
+                        <div className="flex-1 min-w-0">
+                          <div className="text-white text-sm truncate">
+                            {firstWithLastInitial(user.name)}
+                          </div>
+                          {/* <div className="text-gray-400 text-xs truncate">
+                            {user.email}
+                          </div> */}
+                        </div>
+                      </button>
+                    ))
+                  )}
+                </div>
+              )}
+            </div>
+
+            {/* Selected user preview (optional) */}
+            {selectedUser?._id && (
+              <div className="mt-2 text-xs text-gray-300">
+                Selected:{" "}
+                <span className="font-semibold">
+                  {firstWithLastInitial(selectedUser.name)}
+                </span>
+              </div>
+            )}
           </div>
 
           <div className="mb-4">
