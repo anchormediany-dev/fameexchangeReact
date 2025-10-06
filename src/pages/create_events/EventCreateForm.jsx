@@ -39,6 +39,69 @@ const PurchaseUrlInput = ({ value, onChange, onRemove, index, onOpen }) => (
   </div>
 );
 
+/* ---------- discount code input ---------- */
+const DiscountCodeInput = ({
+  discount,
+  onChange,
+  onRemove,
+  index,
+  disabled,
+}) => (
+  <div className="flex gap-3 items-start">
+    <div className="flex-1">
+      <label className="block text-white text-sm font-medium mb-2">
+        Discount Code {index + 1}
+      </label>
+      <div className="flex items-center border rounded-lg px-4 py-3 bg-[#2d2d2d]">
+        <input
+          type="text"
+          value={discount.discount_codes}
+          onChange={(e) => onChange(index, "discount_codes", e.target.value)}
+          placeholder="e.g., SUMMER2025"
+          className="bg-transparent outline-none w-full text-white placeholder-gray-400"
+          disabled={disabled}
+        />
+      </div>
+    </div>
+    <div className="flex-1">
+      <label className="block text-white text-sm font-medium mb-2">
+        Discount Percentage
+      </label>
+      <div className="flex items-center border rounded-lg px-4 py-3 bg-[#2d2d2d]">
+        <FaPercent className="text-gray-400 mr-3" />
+        <input
+          type="number"
+          value={discount.discount_percent}
+          onChange={(e) =>
+            onChange(
+              index,
+              "discount_percent",
+              e.target.value === "" ? "" : Number(e.target.value)
+            )
+          }
+          min="0"
+          max="100"
+          step="1"
+          placeholder="10"
+          className="bg-transparent outline-none w-full text-white placeholder-gray-400"
+          disabled={disabled}
+        />
+      </div>
+    </div>
+    <div className="pt-10">
+      <button
+        type="button"
+        onClick={() => onRemove(index)}
+        className="text-gray-400 hover:text-red-500 transition-colors mt-1"
+        title="Remove discount code"
+        disabled={disabled}
+      >
+        <IoClose size={20} />
+      </button>
+    </div>
+  </div>
+);
+
 /* ---------- main component ---------- */
 export default function EventCreateForm() {
   const navigate = useNavigate();
@@ -59,10 +122,9 @@ export default function EventCreateForm() {
     organizername: "",
     is_featured: true,
 
-    // pricing/discounts
-    regular_price: "",
-    discount_percent: "",
-    discount_code: "", // <-- single string now
+    // pricing/discounts - CHANGED: Now using array for multiple discounts
+    // regular_price: "",
+    discounts: [{ discount_percent: "", discount_codes: "" }], // Array of discount objects
 
     // selection
     prefrence: "interested",
@@ -72,7 +134,7 @@ export default function EventCreateForm() {
     is_free: false,
     price: "",
     no_of_tickets: "",
-    purchase_url: [""], // still an ARRAY of strings
+    purchase_url: [""],
   });
 
   // files + previews
@@ -104,12 +166,7 @@ export default function EventCreateForm() {
   /* ---------- handlers ---------- */
   const handleChange = (e) => {
     const { name, value } = e.target;
-    const numeric = [
-      "regular_price",
-      "discount_percent",
-      "price",
-      "no_of_tickets",
-    ];
+    const numeric = ["regular_price", "price", "no_of_tickets"];
     if (numeric.includes(name)) {
       setForm((s) => ({ ...s, [name]: value === "" ? "" : Number(value) }));
     } else {
@@ -125,12 +182,41 @@ export default function EventCreateForm() {
         is_free: checked,
         price: checked ? 0 : s.price === 0 ? "" : s.price,
         regular_price: checked ? "" : s.regular_price,
-        discount_percent: checked ? "" : s.discount_percent,
-        discount_code: checked ? "" : s.discount_code, // reset when free
+        discounts: checked
+          ? []
+          : s.discounts.length === 0
+          ? [{ discount_percent: "", discount_codes: "" }]
+          : s.discounts,
       }));
       return;
     }
     setForm((s) => ({ ...s, [name]: checked }));
+  };
+
+  // Discount code handlers
+  const handleDiscountChange = (index, field, value) => {
+    setForm((s) => {
+      const newDiscounts = [...s.discounts];
+      newDiscounts[index] = {
+        ...newDiscounts[index],
+        [field]: value,
+      };
+      return { ...s, discounts: newDiscounts };
+    });
+  };
+
+  const addDiscountCode = () => {
+    setForm((s) => ({
+      ...s,
+      discounts: [...s.discounts, { discount_percent: "", discount_codes: "" }],
+    }));
+  };
+
+  const removeDiscountCode = (index) => {
+    setForm((s) => ({
+      ...s,
+      discounts: s.discounts.filter((_, i) => i !== index),
+    }));
   };
 
   // purchase url helpers
@@ -194,6 +280,17 @@ export default function EventCreateForm() {
       .map((u) => (u || "").trim())
       .filter(Boolean);
 
+    // Filter out empty discount objects and clean the data
+    const cleanDiscounts = form.discounts
+      .filter(
+        (discount) =>
+          discount.discount_codes?.trim() && discount.discount_percent !== ""
+      )
+      .map((discount) => ({
+        discount_percent: Number(discount.discount_percent),
+        discount_codes: discount.discount_codes.trim(),
+      }));
+
     Object.entries({
       datetime: form.datetime,
       title: form.title,
@@ -209,10 +306,9 @@ export default function EventCreateForm() {
       organizername: form.organizername,
       is_featured: String(form.is_featured),
 
-      // pricing/discounts
+      // pricing/discounts - UPDATED: Now sending array
       regular_price: String(form.regular_price ?? ""),
-      discount_percent: String(form.discount_percent ?? ""),
-      discount_code: form.discount_code ?? "", // <-- single string
+      discounts: JSON.stringify(cleanDiscounts), // Send as JSON string
 
       // selection
       prefrence: form.prefrence,
@@ -235,6 +331,7 @@ export default function EventCreateForm() {
       await createEvent(formData).unwrap();
       toast.success("Event created successfully!");
 
+      // Reset form
       setForm({
         datetime: "",
         title: "",
@@ -249,14 +346,10 @@ export default function EventCreateForm() {
         website: "",
         organizername: "",
         is_featured: true,
-
         regular_price: "",
-        discount_percent: "",
-        discount_code: "",
-
+        discounts: [{ discount_percent: "", discount_codes: "" }],
         prefrence: "interested",
         talent: [],
-
         is_free: false,
         price: "",
         no_of_tickets: "",
@@ -537,13 +630,38 @@ export default function EventCreateForm() {
               {/* Ticket Details */}
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
                 <h2 className={sectionTitleCls}>Ticket Details</h2>
-                <div>
+
+                {/* <div>
                   <label className="block text-white text-sm font-medium mb-2">
-                    Ticket Price {form.is_free}
+                    Regular Price
                   </label>
                   <div
                     className={`flex items-center border rounded-lg px-4 py-3 bg-[#2d2d2d] ${
-                      form.is_free ? "opacity-60" : ""
+                      disabledPricing ? "opacity-60" : ""
+                    }`}
+                  >
+                    <FaDollarSign className="text-gray-400 mr-3" />
+                    <input
+                      type="number"
+                      name="regular_price"
+                      value={form.regular_price}
+                      onChange={handleChange}
+                      min="0"
+                      step="0.01"
+                      placeholder="Regular price"
+                      className="bg-transparent outline-none w-full text-white"
+                      disabled={disabledPricing}
+                    />
+                  </div>
+                </div> */}
+
+                <div>
+                  <label className="block text-white text-sm font-medium mb-2">
+                    Ticket Price
+                  </label>
+                  <div
+                    className={`flex items-center border rounded-lg px-4 py-3 bg-[#2d2d2d] ${
+                      disabledPricing ? "opacity-60" : ""
                     }`}
                   >
                     <FaDollarSign className="text-gray-400 mr-3" />
@@ -560,6 +678,7 @@ export default function EventCreateForm() {
                     />
                   </div>
                 </div>
+
                 <div>
                   <label className="block text-white text-sm font-medium mb-2">
                     Number of Tickets
@@ -577,45 +696,8 @@ export default function EventCreateForm() {
                     />
                   </div>
                 </div>
-                <div className={form.is_free ? "opacity-60" : ""}>
-                  <label className="block text-white text-sm font-medium mb-2">
-                    Discount (%)
-                  </label>
-                  <div className="flex items-center border rounded-lg px-4 py-3 bg-[#2d2d2d]">
-                    <FaPercent className="text-gray-400 mr-3" />
-                    <input
-                      type="number"
-                      name="discount_percent"
-                      value={form.is_free ? "" : form.discount_percent}
-                      onChange={handleChange}
-                      min="0"
-                      max="100"
-                      step="1"
-                      placeholder="Enter discount %"
-                      className="bg-transparent outline-none w-full text-white"
-                      disabled={form.is_free}
-                    />
-                  </div>
-                </div>
-                <div className={form.is_free ? "opacity-60" : ""}>
-                  <label className="block text-white text-sm font-medium mb-2">
-                    Discount Code
-                  </label>
-                  <div className="flex items-center border rounded-lg px-4 py-3 bg-[#2d2d2d]">
-                    <FaPercent className="text-gray-400 mr-3" />
-                    <input
-                      type="text"
-                      name="discount_code" // <-- correct binding
-                      value={form.is_free ? "" : form.discount_code}
-                      onChange={handleChange}
-                      placeholder="Enter discount code"
-                      className="bg-transparent outline-none w-full text-white"
-                      disabled={form.is_free}
-                    />
-                  </div>
-                </div>
 
-                <div className="flex items-center space-x-3">
+                <div className="flex items-center space-x-3 col-span-full">
                   <input
                     id="is_free"
                     type="checkbox"
@@ -627,6 +709,63 @@ export default function EventCreateForm() {
                   <label htmlFor="is_free" className="text-sm gredient-text">
                     Is this event free?
                   </label>
+                </div>
+
+                {/* Discount Codes Section */}
+                <div className="md:col-span-4 lg:col-span-4">
+                  <div className="flex justify-between items-center mb-4">
+                    <label className="block text-white text-lg font-semibold">
+                      Discount Codes
+                    </label>
+                    {/* <span className="text-sm text-gray-500">
+                      {
+                        form.discounts.filter(
+                          (d) =>
+                            d.discount_codes?.trim() &&
+                            d.discount_percent !== ""
+                        ).length
+                      }{" "}
+                      active
+                    </span> */}
+                  </div>
+
+                  <div className="space-y-4">
+                    {form.discounts.map((discount, index) => (
+                      <DiscountCodeInput
+                        key={index}
+                        discount={discount}
+                        index={index}
+                        onChange={handleDiscountChange}
+                        onRemove={removeDiscountCode}
+                        disabled={disabledPricing}
+                      />
+                    ))}
+                  </div>
+
+                  <button
+                    type="button"
+                    onClick={addDiscountCode}
+                    disabled={disabledPricing}
+                    className={`mt-4 flex items-center gap-2 text-sm gredient-text hover:underline ${
+                      disabledPricing ? "opacity-50 cursor-not-allowed" : ""
+                    }`}
+                  >
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      className="h-4 w-4"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke="currentColor"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M12 6v12m6-6H6"
+                      />
+                    </svg>
+                    Add another discount code
+                  </button>
                 </div>
 
                 {/* Multiple purchase URLs */}
