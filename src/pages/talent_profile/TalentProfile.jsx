@@ -364,7 +364,12 @@ const TalentProfile = () => {
       <CreateSession />
       <div className="bg-[#171717] px-4 md:px-8 container text-white">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-          <Notifications />
+          <Notifications
+            userData={data}
+            error={error}
+            isError={isError}
+            isLoading={isLoading}
+          />
           <TalentLinks userData={data} />
         </div>{" "}
       </div>

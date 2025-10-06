@@ -1,20 +1,20 @@
 import { FaBell } from "react-icons/fa";
 import { getTimeAgo } from "../../utils/getTimeAgo";
-import { useGetNotificationsQuery } from "../../app/authApi";
+// import { useGetNotificationsQuery } from "../../app/authApi";
 
-const Notifications = () => {
-  const userLocalData = JSON.parse(localStorage.getItem("user")); // replace "user" with your actual key
-  const userId = userLocalData?.id;
-  const {
-    data: notificationData,
-    isLoading,
-    isError,
-    error,
-  } = useGetNotificationsQuery(userId, {
-    skip: !userId,
-  });
+const Notifications = ({ userData, error, isError, isLoading }) => {
+  // const userLocalData = JSON.parse(localStorage.getItem("user")); // replace "user" with your actual key
+  // const userId = userLocalData?.id;
+  // const {
+  //   data: notificationData,
+  //   isLoading,
+  //   isError,
+  //   error,
+  // } = useGetNotificationsQuery(userId, {
+  //   skip: !userId,
+  // });
 
-  const notifications = notificationData?.data || [];
+  const notifications = userData?.data?.notifications || [];
 
   if (isLoading)
     return <div className="text-gray-400">Loading notifications...</div>;
