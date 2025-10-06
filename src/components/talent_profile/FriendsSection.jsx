@@ -285,7 +285,7 @@ const FriendsSection = ({
                 setSearchTerm("");
                 setNotes("");
               }}
-              className="px-4 py-2 bg-gray-600 hover:bg-gray-700 text-white rounded-lg flex items-center gap-2"
+              className="px-4 py-2 bg-gray-600 hover:bg-gray-700 text-white rounded-lg flex items-center gap-2 cursor-pointer"
             >
               <FaArrowLeft /> Back
             </button>
@@ -297,14 +297,14 @@ const FriendsSection = ({
                   setSearchTerm("");
                   setNotes("");
                 }}
-                className="px-4 py-2 bg-gray-600 hover:bg-gray-700 text-white rounded-lg"
+                className="px-4 py-2 bg-gray-600 hover:bg-gray-700 text-white rounded-lg cursor-pointer"
               >
                 Cancel
               </button>
               <button
                 onClick={handleAddFriend}
                 disabled={isAdding || !selectedUser}
-                className="px-4 py-2 bg-[#a38b41] hover:bg-[#8a7637] text-white rounded-lg disabled:opacity-50"
+                className="px-4 py-2 bg-[#a38b41] hover:bg-[#8a7637] text-white rounded-lg disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer"
               >
                 {isAdding ? "Adding..." : "Add Friend"}
               </button>
