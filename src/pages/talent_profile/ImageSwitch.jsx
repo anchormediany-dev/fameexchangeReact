@@ -11,10 +11,7 @@ import {
   FaCalendarAlt,
 } from "react-icons/fa";
 import { toast } from "react-toastify";
-import {
-  useGetUserByIdQuery,
-  useDeleteProfileImageMutation,
-} from "../../app/authApi";
+import { useDeleteProfileImageMutation } from "../../app/authApi";
 
 const scrollToCreateSession = () => {
   const el = document.getElementById("create-session");
@@ -31,7 +28,6 @@ const ImageUploadSwitcher = ({ userData, updateMyProfile }) => {
   const userId = user?.id;
   const [images, setImages] = useState([]);
   const [selectedImage, setSelectedImage] = useState(0);
-  const { data: userDataOne, isLoading, isError } = useGetUserByIdQuery(userId);
   const [deleteProfileImage] = useDeleteProfileImageMutation();
   const [editingBio, setEditingBio] = useState(false);
   const [dragOver, setDragOver] = useState(false);
@@ -40,8 +36,8 @@ const ImageUploadSwitcher = ({ userData, updateMyProfile }) => {
   const [bioText, setBioText] = useState("");
 
   useEffect(() => {
-    if (userData?.user?.images?.length) {
-      const backendImages = userData?.user?.images?.map(
+    if (userData?.data?.profile?.images?.length) {
+      const backendImages = userData?.data?.profile?.images?.map(
         (doc) => `${IMAGE_BASE_URL}${doc?.fileUrl?.replace(/\\/g, "/")}`
       );
       setImages(backendImages);
@@ -157,8 +153,8 @@ const ImageUploadSwitcher = ({ userData, updateMyProfile }) => {
   const removeImage = async (index) => {
     try {
       // Check if this is an existing image from backend
-      if (index < userData?.user?.images?.length) {
-        const imageId = userData.user.images[index]._id;
+      if (index < userData?.data?.profile?.images?.length) {
+        const imageId = userData?.data?.profile?.images[index]._id;
         const response = await deleteProfileImage(imageId).unwrap();
         toast.success(response?.message || "Image deleted successfully");
       }
@@ -305,7 +301,7 @@ const ImageUploadSwitcher = ({ userData, updateMyProfile }) => {
           <div className="space-y-4 flex-1">
             <div className="group relative flex-1 flex flex-col h-full">
               <label className="text-xl uppercase text-[#a38b41] mb-5 font-bold">
-                {userData?.user?.name}
+                {userData?.data?.profile?.name}
               </label>
               <div className="flex justify-between items-center mb-2">
                 <label className="text-xs uppercase text-gray-400 font-semibold">
@@ -314,7 +310,7 @@ const ImageUploadSwitcher = ({ userData, updateMyProfile }) => {
                 {!editingBio && (
                   <button
                     onClick={() => setEditingBio(true)}
-                    className="text-[#a38b41] text-xs flex items-center gap-1 hover:underline"
+                    className="text-[#a38b41] text-xs cursor-pointer flex items-center gap-1 hover:underline"
                   >
                     <FaEdit size={10} /> Edit
                   </button>
@@ -333,14 +329,14 @@ const ImageUploadSwitcher = ({ userData, updateMyProfile }) => {
                   <div className="flex gap-2 justify-end">
                     <button
                       onClick={cancelEdit}
-                      className="px-3 py-1.5 bg-red-600/80 hover:bg-red-700 text-white rounded-lg text-xs flex items-center gap-1"
+                      className="px-3 py-1.5 cursor-pointer bg-red-600/80 hover:bg-red-700 text-white rounded-lg text-xs flex items-center gap-1"
                     >
                       <FaTimes size={10} />
                       Cancel
                     </button>
                     <button
                       onClick={saveBio}
-                      className="px-3 py-1.5 bg-[#a38b41] hover:bg-[#8a7637] text-white rounded-lg text-xs flex items-center gap-1"
+                      className="px-3 py-1.5 cursor-pointer bg-[#a38b41] hover:bg-[#8a7637] text-white rounded-lg text-xs flex items-center gap-1"
                     >
                       <FaSave size={10} />
                       Save Changes
@@ -350,7 +346,7 @@ const ImageUploadSwitcher = ({ userData, updateMyProfile }) => {
               ) : (
                 <div className="flex-1 px-3 py-2 bg-white/5 text-white border border-white/10 rounded-lg overflow-hidden">
                   <pre className="text-sm whitespace-pre-wrap font-sans h-full">
-                    {userData?.user?.biography}
+                    {userData?.data?.profile?.biography}
                   </pre>
                 </div>
               )}
@@ -385,8 +381,6 @@ const ImageUploadSwitcher = ({ userData, updateMyProfile }) => {
         ))} */}
         {/* Static Actions (no map) */}
         <div className="flex flex-col justify-center gap-5">
-        
-
           {/* Manage Availability */}
           <div className="bg-white/5 flex justify-center items-center backdrop-blur-xl border border-white/10 rounded-2xl shadow-xl p-4 md:p-6 hover:shadow-[#a38b41]/20 hover:border-[#a38b41]/50 transition-all h-full">
             <div className="flex flex-col items-center text-center">

@@ -18,6 +18,8 @@ import {
   useUpdateMyProfileMutation,
   useNetworthCalculateMutation,
   useGetNetworthQuery,
+  // Talent Overview API
+  useGetTalentOverviewQuery,
 } from "../../app/authApi";
 import EventsSection from "../../components/talent_profile/EventsSection";
 import FriendsSection from "../../components/talent_profile/FriendsSection";
@@ -31,13 +33,17 @@ import CalculatingNetworthPopupUser from "./CalculatingNetworthPopupUser";
 const TalentProfile = () => {
   const userLocalData = JSON.parse(localStorage.getItem("user"));
   const userId = userLocalData?.id;
+  const id = userLocalData?.id;
+  const { data, isLoading, isError, refetch } = useGetTalentOverviewQuery(id, {
+    skip: !id,
+  });
   const navigate = useNavigate();
-  const {
-    data,
-    isLoading: isLoadingGetNetworth,
-    isError: isErrorGetNetworth,
-    refetch,
-  } = useGetNetworthQuery();
+  // const {
+  //   data,
+  //   isLoading: isLoadingGetNetworth,
+  //   isError: isErrorGetNetworth,
+  //   refetch,
+  // } = useGetNetworthQuery();
   const [saveNetworth, { isLoading: isSavingNetworth }] =
     useNetworthCalculateMutation();
   const [statusMsg, setStatusMsg] = useState("");
@@ -102,8 +108,8 @@ const TalentProfile = () => {
   const [isFocused, setIsFocused] = useState(false);
   const [updateMyProfile, { isLoading: isUpdating, error: isUpdatingError }] =
     useUpdateMyProfileMutation();
-  const { data: userData, isLoading, isError } = useGetUserByIdQuery(userId);
-  console.log(userData?.user?.name, "user data");
+  // const { data: userData, isLoading, isError } = useGetUserByIdQuery(userId);
+  // console.log(userData?.user?.name, "user data");
   const handleSearch = (e) => {
     e.preventDefault();
     if (searchValue.trim()) {
@@ -245,7 +251,10 @@ const TalentProfile = () => {
             {/* Get & Save Networth */}
             <button
               onClick={handleGetNetworthAndSave}
-              disabled={isLoadingGetNetworth || isSavingNetworth}
+              disabled={
+                // isLoadingGetNetworth
+                isLoading || isSavingNetworth
+              }
               className="group relative overflow-hidden h-14 sm:h-16 bg-white/5 hover:bg-white/10 border border-white/10 hover:border-[#a38b41]/30 rounded-2xl transition-all duration-500 hover:shadow-2xl hover:shadow-[#a38b41]/15 hover:-translate-y-1 active:scale-95 disabled:opacity-60 disabled:cursor-not-allowed"
             >
               <div className="absolute inset-0 bg-gradient-to-br from-[#a38b41]/5 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
@@ -322,12 +331,12 @@ const TalentProfile = () => {
           </div>
         </div>
       </div>
-      <ImageSwitch userData={userData} updateMyProfile={updateMyProfile} />
+      <ImageSwitch userData={data} updateMyProfile={updateMyProfile} />
       <div className="bg-[#171717] text-white">
         <div className="container">
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-            <FriendsSection />
-            <EventsSection />
+            <FriendsSection userData={data} />
+            <EventsSection userData={data} />
           </div>
         </div>
       </div>
@@ -350,7 +359,7 @@ const TalentProfile = () => {
       <div className="bg-[#171717] px-4 md:px-8 container text-white">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
           <Notifications />
-          <TalentLinks userData={userData} />
+          <TalentLinks userData={data} />
         </div>{" "}
       </div>
       <section className=" px-4 md:px-8 container mx-auto ">
@@ -361,7 +370,7 @@ const TalentProfile = () => {
       {/* {isSavingNetworth && <CalculatingNetworthPopup />} */}
       <CalculatingNetworthPopupUser
         open={showNetworthPopup}
-        loading={isLoadingGetNetworth || isSavingNetworth}
+        loading={isLoading || isSavingNetworth}
         data={networthResult}
         error={networthError}
         onClose={() => setShowNetworthPopup(false)}
