@@ -9,7 +9,7 @@ import {
 } from "react-icons/fa";
 import { toast } from "react-toastify";
 import {
-  useGetAllFriendsQuery,
+  // useGetAllFriendsQuery,
   useDeleteFriendsMutation,
   useAddFriendMutation,
   useGetTalentQuery,
@@ -17,13 +17,18 @@ import {
 import { Link } from "react-router-dom";
 import { imgSrc } from "../../utils/imgSrc";
 
-const FriendsSection = () => {
-  const {
-    data: friendsData,
-    isLoading: isFriendsLoading,
-    isError: isFriendsError,
-    error: friendsError,
-  } = useGetAllFriendsQuery();
+const FriendsSection = ({
+  userData,
+  isLoading: isFriendsLoading,
+  isError,
+  error,
+}) => {
+  // const {
+  //   data: friendsData,
+  //   isLoading: isFriendsLoading,
+  //   isError: isFriendsError,
+  //   error: friendsError,
+  // } = useGetAllFriendsQuery();
 
   const {
     data: usersData,
@@ -34,7 +39,7 @@ const FriendsSection = () => {
   const [deleteFriends, { isLoading: isDeleting }] = useDeleteFriendsMutation();
   const [addFriend, { isLoading: isAdding }] = useAddFriendMutation();
 
-  const friends = friendsData?.data || [];
+  const friends = userData?.data?.friends || [];
   const users = usersData?.taleUsers || [];
 
   const [editingFriends, setEditingFriends] = useState(false);
@@ -129,7 +134,7 @@ const FriendsSection = () => {
             <>
               <button
                 onClick={() => setShowAddFriendPopup(true)}
-                className="px-3 py-1 bg-[#a38b41] hover:bg-[#8a7637] text-white rounded text-sm"
+                className="px-3 py-1 bg-[#a38b41] hover:bg-[#8a7637] text-white rounded text-sm cursor-pointer"
               >
                 Add Friend
               </button>
@@ -138,7 +143,7 @@ const FriendsSection = () => {
                   setEditingFriends(!editingFriends);
                   setSelected([]);
                 }}
-                className="text-gray-400 hover:text-yellow-400"
+                className="text-gray-400 hover:text-yellow-400 cursor-pointer"
               >
                 <FaEllipsisH />
               </button>
@@ -235,33 +240,23 @@ const FriendsSection = () => {
               ) : (
                 friends.map((friend) => (
                   <div
-                    key={friend.friendId}
+                    key={friend?._id}
                     className="relative group rounded-lg p-2 hover:bg-[#333333] transition"
                   >
                     <div className="max-w-full">
-                      <Link
-                        to={`/talent-profile/${
-                          friend?.friendId?._id || friend?.friendId || ""
-                        }`}
-                      >
+                      <Link to={`/talent-profile/${friend?._id || ""}`}>
                         <img
                           src={imgSrc(
-                            friend?.friendId?.images[0]?.fileUrl ||
-                              friend?.friendId?.images[0]?.fileUrl ||
+                            friend?.images[0]?.fileUrl ||
+                              friend?.images[0]?.fileUrl ||
                               ""
                           )}
-                          alt={friend.friendName}
+                          alt={friend?.name}
                           className="rounded-full w-16 h-16 object-cover mx-auto mb-1"
                         />
                       </Link>
-                      <Link
-                        to={`/talent-profile/${
-                          friend?.friendId?._id || friend?.friendId || ""
-                        }`}
-                      >
-                        <p className="text-center underline">
-                          {friend.friendName}
-                        </p>
+                      <Link to={`/talent-profile/${friend?._id || ""}`}>
+                        <p className="text-center underline">{friend?.name}</p>
                       </Link>
                     </div>
 
@@ -269,15 +264,15 @@ const FriendsSection = () => {
                       <div className="absolute top-1 left-1">
                         <input
                           type="checkbox"
-                          checked={selected.includes(friend.friendId)}
-                          onChange={() => toggleSelect(friend.friendId)}
+                          checked={selected.includes(friend?._id)}
+                          onChange={() => toggleSelect(friend?._id)}
                           className="form-checkbox h-4 w-4 text-yellow-400 bg-[#1f1f1f] border-gray-600"
                         />
                       </div>
                     ) : (
                       <button
-                        onClick={() => removeFriend(friend.friendId)}
-                        className="absolute top-1 right-1 text-red-400 opacity-0 group-hover:opacity-100 transition"
+                        onClick={() => removeFriend(friend?._id)}
+                        className="absolute top-1 cursor-pointer right-1 text-red-400 opacity-0 group-hover:opacity-100 transition"
                       >
                         <FaTrash size={12} />
                       </button>
@@ -293,7 +288,7 @@ const FriendsSection = () => {
                   <button
                     onClick={removeMultipleFriends}
                     disabled={selected.length === 0}
-                    className="text-sm text-red-400 hover:text-red-500"
+                    className="text-sm text-red-400 hover:text-red-500 cursor-pointer"
                   >
                     Remove Selected
                   </button>

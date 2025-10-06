@@ -34,9 +34,10 @@ const TalentProfile = () => {
   const userLocalData = JSON.parse(localStorage.getItem("user"));
   const userId = userLocalData?.id;
   const id = userLocalData?.id;
-  const { data, isLoading, isError, refetch } = useGetTalentOverviewQuery(id, {
-    skip: !id,
-  });
+  const { data, isLoading, isError, error, refetch } =
+    useGetTalentOverviewQuery(id, {
+      skip: !id,
+    });
   const navigate = useNavigate();
   // const {
   //   data,
@@ -335,7 +336,7 @@ const TalentProfile = () => {
       <div className="bg-[#171717] text-white">
         <div className="container">
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-            <FriendsSection userData={data} />
+            <FriendsSection userData={data} isLoading={isLoading} />
             <EventsSection userData={data} />
           </div>
         </div>
