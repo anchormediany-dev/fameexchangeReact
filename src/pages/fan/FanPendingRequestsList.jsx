@@ -180,11 +180,11 @@ const FanPendingRequestsList = ({ userData }) => {
                           {request.fanName}
                         </span>
                       </div>
-                      {request.rescheduledStatus && (
+                      {/* {request.rescheduledStatus && (
                         <div className="text-yellow-500 text-[11px] sm:text-xs mt-1">
                           {request.rescheduledStatus.replace(/-/g, " ")}
                         </div>
-                      )}
+                      )} */}
                     </div>
                   </div>
 
