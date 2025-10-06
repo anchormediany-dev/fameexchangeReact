@@ -18,15 +18,12 @@ import {
   parseISO,
   isValid,
 } from "date-fns";
-import { useGetConfirmedTalentRequestsQuery } from "../../app/authApi";
 import { toast } from "react-toastify";
 
-const ConfirmedRequestsCalendar = () => {
+const ConfirmedRequestsCalendar = ({ userData, error, isError, isLoading }) => {
+  const confirmations = userData?.data?.confirmations;
   const [currentDate, setCurrentDate] = useState(new Date());
   const [selectedDate, setSelectedDate] = useState(null);
-  const { data, isLoading, isError, error } =
-    useGetConfirmedTalentRequestsQuery();
-
   const monthNames = [
     "January",
     "February",
@@ -82,16 +79,16 @@ const ConfirmedRequestsCalendar = () => {
     }
   };
   const isConfirmedDate = (date) => {
-    if (!data?.data) return false;
-    return data?.data?.some((req) => {
+    if (!confirmations) return false;
+    return confirmations?.some((req) => {
       const requestDate = safeParseISO(req.confirmedDate);
       return requestDate && isSameDay(requestDate, date);
     });
   };
 
   const getConfirmedRequestsForDate = (date) => {
-    if (!data?.data) return [];
-    return data?.data.filter((req) => {
+    if (!confirmations) return [];
+    return confirmations?.filter((req) => {
       const requestDate = safeParseISO(req.confirmedDate);
       return requestDate && isSameDay(requestDate, date);
     });

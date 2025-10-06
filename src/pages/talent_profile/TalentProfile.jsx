@@ -347,7 +347,12 @@ const TalentProfile = () => {
           <h2 className="text-2xl font-bold text-primary2 mb-3 ">
             All Sessions
           </h2>
-          <ConfirmedRequestsCalendar />
+          <ConfirmedRequestsCalendar
+            userData={data}
+            isLoading={isLoading}
+            error={error}
+            isError={isError}
+          />
         </section>
         <section className="w-full max-w-3xl lg:max-w-5xl mx-auto px-3 sm:px-4 ">
           <h2 className="text-2xl font-bold text-primary2 mb-3 ">
