@@ -12,36 +12,42 @@ import {
 } from "react-icons/fa";
 
 const TalentLinks = ({ userData: user }) => {
+  const youtube = user?.data?.networth[0]?.socialMedia?.youtube?.url;
+  const facebook = user?.data?.networth[0]?.socialMedia?.facebook?.url;
+  const instagram = user?.data?.networth[0]?.socialMedia?.instagram?.url;
+  const snapchat = user?.data?.networth[0]?.socialMedia?.snapchat?.url;
+  const tiktok = user?.data?.networth[0]?.socialMedia?.tiktok?.url;
+  const twitter = user?.data?.networth[0]?.socialMedia?.twitter?.url;
   const socialLinks = [
-    user?.user?.social_youtube && {
+    youtube && {
       name: "YouTube",
       icon: <FaYoutube />,
-      url: user?.user?.social_youtube,
+      url: youtube,
     },
-    user?.user?.social_facebook && {
+    facebook && {
       name: "Facebook",
       icon: <FaFacebook />,
-      url: user?.user?.social_facebook,
+      url: facebook,
     },
-    user?.user?.social_insta && {
+    instagram && {
       name: "Instagram",
       icon: <FaInstagram />,
-      url: user?.user?.social_insta,
+      url: instagram,
     },
-    user?.user?.social_tiktok && {
+    tiktok && {
       name: "TikTok",
       icon: <FaTiktok />,
-      url: user?.user?.social_tiktok,
+      url: tiktok,
     },
-    user?.user?.social_snap && {
+    snapchat && {
       name: "Snapchat",
       icon: <FaSnapchatGhost />,
-      url: user?.user?.social_snap,
+      url: snapchat,
     },
-    user?.user?.social_twitter && {
+    twitter && {
       name: "Twitter",
       icon: <FaTwitter />,
-      url: user?.user?.social_twitter,
+      url: twitter,
     },
   ].filter(Boolean);
 
