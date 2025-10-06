@@ -85,53 +85,53 @@ const FanInverseRequestForm = ({
   const handleCancel = () => {
     handleClear();
   };
-  useEffect(() => {
-    if (location.hash !== "#inverse-request-form") return;
+  // useEffect(() => {
+  //   if (location.hash !== "#inverse-request-form") return;
 
-    let rafId;
-    let animControls;
-    let tries = 0;
-    const maxTries = 60; // ~1s (60 frames)
+  //   let rafId;
+  //   let animControls;
+  //   let tries = 0;
+  //   const maxTries = 60; // ~1s (60 frames)
 
-    const go = () => {
-      const el = document.getElementById("inverse-request-form");
-      if (!el) {
-        if (tries++ < maxTries) rafId = requestAnimationFrame(go);
-        return;
-      }
+  //   const go = () => {
+  //     const el = document.getElementById("inverse-request-form");
+  //     if (!el) {
+  //       if (tries++ < maxTries) rafId = requestAnimationFrame(go);
+  //       return;
+  //     }
 
-      const targetY = el.getBoundingClientRect().top + window.pageYOffset - 200; // 👈 100px offset
-      const startY = window.pageYOffset;
+  //     const targetY = el.getBoundingClientRect().top + window.pageYOffset - 200; // 👈 100px offset
+  //     const startY = window.pageYOffset;
 
-      // Respect reduced motion
-      const prefersReducedMotion = window.matchMedia(
-        "(prefers-reduced-motion: reduce)"
-      ).matches;
-      if (prefersReducedMotion) {
-        window.scrollTo(0, targetY);
-        return;
-      }
+  //     // Respect reduced motion
+  //     const prefersReducedMotion = window.matchMedia(
+  //       "(prefers-reduced-motion: reduce)"
+  //     ).matches;
+  //     if (prefersReducedMotion) {
+  //       window.scrollTo(0, targetY);
+  //       return;
+  //     }
 
-      // Framer Motion-powered smooth scroll
-      animControls = animate(startY, targetY, {
-        duration: 0.6,
-        ease: [0.22, 1, 0.36, 1], // expo-ish
-        onUpdate: (latest) => window.scrollTo(0, latest),
-      });
-    };
+  //     // Framer Motion-powered smooth scroll
+  //     animControls = animate(startY, targetY, {
+  //       duration: 0.6,
+  //       ease: [0.22, 1, 0.36, 1], // expo-ish
+  //       onUpdate: (latest) => window.scrollTo(0, latest),
+  //     });
+  //   };
 
-    go();
+  //   go();
 
-    return () => {
-      if (rafId) cancelAnimationFrame(rafId);
-      if (animControls) animControls.stop();
-    };
-  }, [location.hash]);
+  //   return () => {
+  //     if (rafId) cancelAnimationFrame(rafId);
+  //     if (animControls) animControls.stop();
+  //   };
+  // }, [location.hash]);
 
   return (
     <div
       className="lg:col-span-2 flex flex-col space-y-3 h-full"
-      id="inverse-request-form"
+      // id="inverse-request-form"
     >
       {/* Fan Request Form section */}
       <div className="bg-white/5 backdrop-blur-xl border border-white/10 rounded-2xl p-3 md:p-4 flex-1">
