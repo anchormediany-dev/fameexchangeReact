@@ -21,6 +21,8 @@ const GOLD = "#a38b41";
 const KYCDetailsPageForTalent = ({ data: apiData, error, isLoading }) => {
   const [selectedImage, setSelectedImage] = useState(null);
 
+  const talentMessages = apiData?.userDocument?.messages;
+  console.log(talentMessages, "api data here");
   const fmtDate = (d) =>
     d
       ? new Date(d).toLocaleDateString("en-US", {
@@ -86,6 +88,7 @@ const KYCDetailsPageForTalent = ({ data: apiData, error, isLoading }) => {
         isVerified: !!userDocument?.isKYCVerified,
         rejectionReason: userDocument?.rejectionReason || "",
       },
+      messages: [],
       docs: { images, files },
     };
   })();
@@ -260,6 +263,62 @@ const KYCDetailsPageForTalent = ({ data: apiData, error, isLoading }) => {
               </div>
             )}
           </motion.div>
+          <motion.div
+            initial={{ opacity: 0, x: -20 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ delay: 0.2 }}
+            className="bg-gradient-to-br from-[#1a1a1a] to-[#0d0d0d] rounded-2xl border border-white/10 p-6"
+          >
+            <h2 className="text-xl font-semibold text-white mb-4">
+              Communication ({talentMessages?.length})
+            </h2>
+
+            <div className="space-y-4 mb-6 max-h-64 overflow-y-auto pr-2">
+              {talentMessages?.length > 0 ? (
+                talentMessages?.map((message) => (
+                  <CommentBubble key={message.id} comment={message} />
+                ))
+              ) : (
+                <p className="text-gray-400 text-center py-4">
+                  No messages yet
+                </p>
+              )}
+            </div>
+
+            {/* <div>
+              <h3 className="text-lg font-semibold text-white mb-3">
+                Reply / Send Message
+              </h3>
+              <div className="space-y-3">
+                <textarea
+                  value={formData.text}
+                  onChange={(e) => setFormData({ text: e.target.value })}
+                  rows={4}
+                  className={`w-full px-4 py-3 rounded-lg bg-white/5 ${theme.text} ${theme.border} outline-none`}
+                  style={{ boxShadow: `0 0 0 0px ${theme.primary}` }}
+                  onFocus={(e) =>
+                    (e.currentTarget.style.boxShadow = `0 0 0 2px ${theme.primary}`)
+                  }
+                  onBlur={(e) =>
+                    (e.currentTarget.style.boxShadow = `0 0 0 0px ${theme.primary}`)
+                  }
+                  placeholder="Type your message here..."
+                  // className="w-full px-4 py-3 bg-[#2a2a2a] border border-gray-600 rounded-lg focus:ring-2 focus:ring-[#a38b41] focus:border-transparent outline-none text-white resize-none"
+                  // rows="3"
+                />
+                <div className="flex justify-end items-center">
+                  <button
+                    onClick={handleSendComment}
+                    // disabled={!comment.trim()}
+                    className="px-6 py-2 cursor-pointer bg-gradient-to-r from-[#a38b41] to-[#c2ab67] text-black rounded-lg hover:from-[#b59a4a] hover:to-[#d4bc7d] transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center space-x-2"
+                  >
+                    <FaPaperPlane />
+                    <span>Send</span>
+                  </button>
+                </div>
+              </div>
+            </div> */}
+          </motion.div>
         </div>
 
         {/* RIGHT: status panel (1 col) */}
@@ -431,5 +490,33 @@ const KV = ({ label, value, valueClass = "text-white" }) => (
     <span className={valueClass}>{value}</span>
   </div>
 );
-
+const CommentBubble = ({ comment }) => (
+  <div className={`flex ${comment.isAdmin ? "justify-end" : "justify-start"}`}>
+    <div
+      className={`max-w-xs lg:max-w-md rounded-2xl p-3 ${
+        comment.isAdmin
+          ? "bg-gradient-to-r from-[#a38b41] to-[#c2ab67] text-black"
+          : "bg-[#2a2a2a] text-white border border-gray-600"
+      }`}
+    >
+      <div className="flex items-center justify-between mb-1">
+        <span
+          className={`text-sm font-medium ${
+            comment.isAdmin ? "text-black" : "text-[#a38b41]"
+          }`}
+        >
+          {comment.user}
+        </span>
+        <span
+          className={`text-xs ${
+            comment.isAdmin ? "text-black/70" : "text-gray-400"
+          }`}
+        >
+          {comment.time}
+        </span>
+      </div>
+      <p className="text-sm">{comment.text}</p>
+    </div>
+  </div>
+);
 export default KYCDetailsPageForTalent;
