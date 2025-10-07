@@ -127,7 +127,7 @@ export default function EventCreateForm() {
     discounts: [{ discount_percent: "", discount_codes: "" }], // Array of discount objects
 
     // selection
-    prefrence: "interested",
+    // prefrence: "interested",
     talent: [],
 
     // tickets
@@ -311,7 +311,7 @@ export default function EventCreateForm() {
       discounts: JSON.stringify(cleanDiscounts), // Send as JSON string
 
       // selection
-      prefrence: form.prefrence,
+      // prefrence: form.prefrence,
       talent: JSON.stringify(form.talent || []),
 
       // tickets
@@ -348,7 +348,7 @@ export default function EventCreateForm() {
         is_featured: true,
         regular_price: "",
         discounts: [{ discount_percent: "", discount_codes: "" }],
-        prefrence: "interested",
+        // prefrence: "interested",
         talent: [],
         is_free: false,
         price: "",
@@ -483,7 +483,7 @@ export default function EventCreateForm() {
                   </div>
                 </div>
 
-                <div>
+                {/* <div>
                   <label className="block text-white text-sm font-medium mb-2">
                     Preference
                   </label>
@@ -505,7 +505,7 @@ export default function EventCreateForm() {
                       </option>
                     </select>
                   </div>
-                </div>
+                </div> */}
 
                 <div>
                   <label className="block text-white text-sm font-medium mb-2">
