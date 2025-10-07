@@ -39,6 +39,7 @@ const KYCDetailsPage = () => {
   const [selectedImage, setSelectedImage] = useState(null);
   const [showRejectionPopup, setShowRejectionPopup] = useState(false);
   const [rejectionReason, setRejectionReason] = useState("");
+  const [verifyingDocumentId, setVerifyingDocumentId] = useState(null);
 
   // Format date function
   const formatDate = (dateString) => {
@@ -72,36 +73,36 @@ const KYCDetailsPage = () => {
     return url.split("/").pop() || "Unknown File";
   };
 
-  // Categorize documents
-  const categorizeDocuments = (uploads = []) => {
-    const images = [];
-    const files = [];
-
-    uploads.forEach((upload) => {
-      const document = {
-        id: upload._id || Math.random(),
-        name: getFileNameFromUrl(upload.fileUrl),
-        type: upload.fileType,
-        url: upload.fileUrl,
-        verification: upload.verification,
-        uploadedAt: upload.verifiedAt,
+  // Handle individual document verification
+  const handleDocumentVerification = async (action) => {
+    
+    try {
+      // setVerifyingDocumentId(documentId);
+      const userDocumentId = apiData?.userDocument?._id;
+      const verificationData = {
+        selectedRequestId: userDocumentId,
+        action: action,
+        rejectionReason: action === "REJECTED" ? rejectionReason : "",
       };
 
-      if (
-        ["webp", "jpg", "jpeg", "png", "gif"].includes(
-          upload.fileType?.toLowerCase()
-        )
-      ) {
-        images.push(document);
-      } else {
-        files.push(document);
-      }
-    });
+      await adminKycConfirmation(verificationData).unwrap();
 
-    return { images, files };
+      // Refetch data to get updated status
+      await refetch();
+
+      // Reset rejection reason and close popup
+      setRejectionReason("");
+      setShowRejectionPopup(false);
+      setVerifyingDocumentId(null);
+
+      console.log(`Document ${action} successfully`);
+    } catch (error) {
+      console.error("Error verifying document:", error);
+      setVerifyingDocumentId(null);
+    }
   };
 
-  // Handle KYC verification
+  // Handle KYC verification (for entire application)
   const handleKYCVerification = async (action) => {
     try {
       // Get the user document ID from API data
@@ -133,20 +134,20 @@ const KYCDetailsPage = () => {
     }
   };
 
-  // Handle reject button click
-  const handleRejectClick = () => {
+  // Handle reject button click for individual document
+  const handleDocumentRejectClick = () => {
     setShowRejectionPopup(true);
   };
 
-  // Handle reject confirmation
-  const handleRejectConfirm = () => {
+  // Handle reject confirmation for individual document
+  const handleDocumentRejectConfirm = () => {
     if (
       rejectionReason.trim() ||
       window.confirm(
         "Are you sure you want to reject without providing a reason?"
       )
     ) {
-      handleKYCVerification("REJECTED");
+      handleDocumentVerification(verifyingDocumentId, "REJECTED");
     }
   };
 
@@ -154,6 +155,7 @@ const KYCDetailsPage = () => {
   const handleRejectCancel = () => {
     setShowRejectionPopup(false);
     setRejectionReason("");
+    setVerifyingDocumentId(null);
   };
 
   // Process API data
@@ -161,7 +163,8 @@ const KYCDetailsPage = () => {
     if (!apiData?.success) return null;
 
     const { user, userDocument } = apiData;
-    const { images, files } = categorizeDocuments(userDocument?.uploads);
+    const talentUploads = userDocument?.uploads || [];
+    const talentDocumentId = userDocument?._id || "";
 
     return {
       user: {
@@ -184,10 +187,15 @@ const KYCDetailsPage = () => {
         isKYCVerified: userDocument?.isKYCVerified || false,
         rejectionReason: userDocument?.rejectionReason || "",
       },
-      documents: {
-        images,
-        files,
-      },
+      talentUploads: talentUploads.map((upload) => ({
+        id: upload._id || Math.random(),
+        name: getFileNameFromUrl(upload.fileUrl),
+        type: upload.fileType,
+        url: upload.fileUrl,
+        verification: upload.verification,
+        uploadedAt: upload.verifiedAt,
+        documentId: upload._id, // Add document ID for individual verification
+      })),
       messages:
         userDocument?.messages?.map((msg) => ({
           id: msg._id || Math.random(),
@@ -227,10 +235,7 @@ const KYCDetailsPage = () => {
       isKYCVerified: false,
       rejectionReason: "",
     },
-    documents: {
-      images: [],
-      files: [],
-    },
+    talentUploads: [],
     messages: [],
     submission: {
       user: "Loading...",
@@ -359,35 +364,25 @@ const KYCDetailsPage = () => {
               transition={{ delay: 0.1 }}
               className="space-y-6"
             >
-              {/* Images */}
-              {kycData.documents.images.length > 0 && (
+              {/* Talent Uploads */}
+              {kycData.talentUploads?.length > 0 && (
                 <div className="bg-gradient-to-br from-[#1a1a1a] to-[#0d0d0d] rounded-2xl border border-white/10 p-6">
                   <h2 className="text-xl font-semibold text-white mb-4 flex items-center">
                     <FaImage className="mr-2 text-[#a38b41]" />
-                    Document Images ({kycData.documents.images.length})
+                    Documents ({kycData.talentUploads?.length})
                   </h2>
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    {kycData.documents.images.map((doc) => (
+                  <div className="grid grid-cols-1 gap-4">
+                    {kycData.talentUploads?.map((document) => (
                       <DocumentCard
-                        key={doc.id}
-                        document={doc}
-                        onExpand={() => setSelectedImage(doc)}
+                        key={document.id}
+                        document={document}
+                        onApprove={() => handleDocumentVerification("VERIFIED")}
+                        onReject={() => handleDocumentVerification("REJECTED")}
+                        isVerifying={
+                          verifyingDocumentId === document.documentId
+                        }
+                        verificationStatus={document.verification?.status}
                       />
-                    ))}
-                  </div>
-                </div>
-              )}
-
-              {/* Files */}
-              {kycData.documents.files.length > 0 && (
-                <div className="bg-gradient-to-br from-[#1a1a1a] to-[#0d0d0d] rounded-2xl border border-white/10 p-6">
-                  <h2 className="text-xl font-semibold text-white mb-4 flex items-center">
-                    <FaFile className="mr-2 text-[#a38b41]" />
-                    Files ({kycData.documents.files.length})
-                  </h2>
-                  <div className="space-y-3">
-                    {kycData.documents.files.map((file) => (
-                      <FileCard key={file.id} file={file} />
                     ))}
                   </div>
                 </div>
@@ -499,7 +494,7 @@ const KYCDetailsPage = () => {
                 )}
 
                 {/* KYC Verification Actions */}
-                <div className="pt-4 border-t border-white/10">
+                {/* <div className="pt-4 border-t border-white/10">
                   <h3 className="text-sm font-medium text-white mb-3">
                     Verify KYC Application
                   </h3>
@@ -521,7 +516,7 @@ const KYCDetailsPage = () => {
                     </button>
 
                     <button
-                      onClick={handleRejectClick}
+                      onClick={() => handleKYCVerification("REJECTED")}
                       disabled={
                         isVerifying || kycData.status.current === "rejected"
                       }
@@ -535,7 +530,7 @@ const KYCDetailsPage = () => {
                       <span>Reject KYC</span>
                     </button>
                   </div>
-                </div>
+                </div> */}
               </div>
             </motion.div>
           </div>
@@ -550,8 +545,7 @@ const KYCDetailsPage = () => {
               Rejection Reason
             </h3>
             <p className="text-gray-400 text-sm mb-4">
-              Please provide a reason for rejecting this KYC application
-              (optional):
+              Please provide a reason for rejecting this document (optional):
             </p>
             <textarea
               value={rejectionReason}
@@ -568,11 +562,11 @@ const KYCDetailsPage = () => {
                 Cancel
               </button>
               <button
-                onClick={handleRejectConfirm}
+                onClick={handleDocumentRejectConfirm}
                 className="px-4 py-2 bg-red-600 hover:bg-red-700 text-white rounded-lg transition-colors flex items-center space-x-2"
               >
                 <FaTimes />
-                <span>Reject KYC</span>
+                <span>Reject Document</span>
               </button>
             </div>
           </div>
@@ -611,7 +605,7 @@ const KYCDetailsPage = () => {
   );
 };
 
-// Reusable Components (keep the same as before)
+// Reusable Components
 const InfoField = ({ icon: Icon, label, value, colSpan }) => (
   <div className={colSpan === "full" ? "md:col-span-2" : ""}>
     <div className="flex items-center space-x-3 p-3 bg-[#2a2a2a] rounded-lg border border-gray-600">
@@ -628,44 +622,135 @@ const InfoField = ({ icon: Icon, label, value, colSpan }) => (
   </div>
 );
 
-const DocumentCard = ({ document, onExpand }) => (
-  <div className="group relative bg-[#2a2a2a] rounded-lg overflow-hidden border border-gray-600 hover:border-[#a38b41] transition-all">
-    <div className="p-3">
-      <p className="">
-        <a
-          href={imgSrc(document?.url)}
-          download
-          target="_blank"
-          className="p-2 hover:text-[#a38b41] transition-colors text-blue-400 underline text-sm font-medium truncate max-w-xs"
-        >
-          {imgSrc(document?.url)}
-        </a>
-      </p>
-    </div>
-  </div>
-);
+const DocumentCard = ({
+  document,
+  onExpand,
+  onApprove,
+  onReject,
+  isVerifying,
+  verificationStatus,
+}) => {
+  const getStatusColor = (status) => {
+    switch (status) {
+      case "approved":
+        return "text-green-400";
+      case "rejected":
+        return "text-red-400";
+      default:
+        return "text-yellow-400";
+    }
+  };
 
-const FileCard = ({ file }) => (
-  <div className="flex items-center justify-between p-3 bg-[#2a2a2a] rounded-lg border border-gray-600 hover:border-[#a38b41] transition-all">
-    <div className="flex items-center space-x-3">
-      <div className="p-2 bg-[#a38b41]/10 rounded-lg">
-        <FaFile className="text-[#a38b41]" />
-      </div>
-      <div>
-        <p className="">
-          <a
-            href={imgSrc(file?.url)}
-            download
-            target="_blank"
-            className="p-2 hover:text-[#a38b41] transition-colors text-blue-400 underline text-sm font-medium truncate max-w-xs"
-          >
-            {imgSrc(file?.url)}
-          </a>
-        </p>
+  const getStatusText = (status) => {
+    switch (status) {
+      case "approved":
+        return "Approved";
+      case "rejected":
+        return "Rejected";
+      default:
+        return "Pending";
+    }
+  };
+
+  return (
+    <div className="group relative bg-[#2a2a2a] rounded-lg overflow-hidden border border-gray-600 hover:border-[#a38b41] transition-all">
+      <div className="p-4 flex justify-between items-center">
+        <div className="flex-1">
+          <div className="flex items-center space-x-3 mb-2">
+            {/* <div className="p-2 bg-[#a38b41]/10 rounded-lg">
+              <FaFile className="text-[#a38b41]" />
+            </div> */}
+            <div>
+              <a
+                href={imgSrc(document?.url)}
+                download
+                target="_blank"
+                className="text-blue-400 hover:text-blue-300 underline text-xs"
+              >
+                <p className="text-blue-400 underline text-sm font-medium">
+                  {document?.name}
+                </p>
+              </a>
+              {/* <p className="text-gray-400 text-xs capitalize">
+                {document.type}
+              </p> */}
+            </div>
+          </div>
+          <div className="flex items-center space-x-4">
+            {/* <a
+              href={imgSrc(document?.url)}
+              download
+              target="_blank"
+              className="text-blue-400 hover:text-blue-300 underline text-xs"
+            >
+              View/Download File
+            </a> */}
+            {/* {verificationStatus && (
+              <span
+                className={`text-xs font-medium ${getStatusColor(
+                  verificationStatus
+                )}`}
+              >
+                Status: {getStatusText(verificationStatus)}
+              </span>
+            )} */}
+          </div>
+        </div>
+
+        <div className="flex items-center space-x-2 ml-4">
+          {/* Action Buttons */}
+          <div className="flex space-x-2">
+            <button
+              onClick={onApprove}
+              disabled={isVerifying || verificationStatus === "approved"}
+              className="flex items-center space-x-1 px-3 py-2 cursor-pointer bg-green-600 hover:bg-green-700 disabled:bg-green-800 text-white rounded text-sm transition-colors disabled:cursor-not-allowed"
+            >
+              {isVerifying ? (
+                <FaSpinner className="animate-spin" size={12} />
+              ) : (
+                <FaCheck size={12} />
+              )}
+              <span>Approve</span>
+            </button>
+
+            <button
+              onClick={onReject}
+              disabled={isVerifying || verificationStatus === "rejected"}
+              className="flex items-center cursor-pointer space-x-1 px-3 py-2 bg-red-600 hover:bg-red-700 disabled:bg-red-800 text-white rounded text-sm transition-colors disabled:cursor-not-allowed"
+            >
+              {isVerifying ? (
+                <FaSpinner className="animate-spin" size={12} />
+              ) : (
+                <FaTimes size={12} />
+              )}
+              <span>Reject</span>
+            </button>
+          </div>
+
+          {/* Utility Buttons */}
+          <div className="flex space-x-1 ml-2">
+            {/* <button
+              onClick={onExpand}
+              className="p-2 bg-[#a38b41] hover:bg-[#b59a4a] text-white rounded transition-colors"
+              title="Expand"
+            >
+              <FaExpand size={14} />
+            </button> */}
+            {/* <a
+              href={imgSrc(document?.url)}
+              download
+              target="_blank"
+              className="p-2 bg-[#2a2a2a] hover:bg-[#3a3a3a] text-white rounded transition-colors"
+              title="Download"
+            >
+              <FaDownload size={14} />
+            </a> */}
+          </div>
+        </div>
       </div>
     </div>
-  </div>
-);
+  );
+};
 
 const CommentBubble = ({ comment }) => (
   <div className={`flex ${comment.isAdmin ? "justify-end" : "justify-start"}`}>
