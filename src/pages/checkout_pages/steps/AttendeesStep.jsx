@@ -127,25 +127,35 @@ export default function AttendeesStep() {
                 )}
               </div>
 
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <input
-                  placeholder="First name *"
-                  className="w-full bg-[#171717] border border-[#333333] rounded-lg px-4 py-3 text-white"
-                  value={a.firstName}
-                  onChange={(e) =>
-                    handleChange(idx, "firstName", e.target.value)
-                  }
-                  required
-                />
-                <input
-                  placeholder="Last name *"
-                  className="w-full bg-[#171717] border border-[#333333] rounded-lg px-4 py-3 text-white"
-                  value={a.lastName}
-                  onChange={(e) =>
-                    handleChange(idx, "lastName", e.target.value)
-                  }
-                  required
-                />
+              <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+                <div className="md:col-span-1">
+                  <label className="block text-sm font-medium text-gray-400 mb-2 flex items-center gap-2">
+                    First Name *
+                  </label>
+                  <input
+                    placeholder="First name *"
+                    className="w-full bg-[#171717] border border-[#333333] rounded-lg px-4 py-3 text-white"
+                    value={a.firstName}
+                    onChange={(e) =>
+                      handleChange(idx, "firstName", e.target.value)
+                    }
+                    required
+                  />
+                </div>
+                <div className="md:col-span-1">
+                  <label className="block text-sm font-medium text-gray-400 mb-2 flex items-center gap-2">
+                    Last Name *
+                  </label>
+                  <input
+                    placeholder="Last name *"
+                    className="w-full bg-[#171717] border border-[#333333] rounded-lg px-4 py-3 text-white"
+                    value={a.lastName}
+                    onChange={(e) =>
+                      handleChange(idx, "lastName", e.target.value)
+                    }
+                    required
+                  />
+                </div>
                 <div className="md:col-span-1">
                   <label className="block text-sm font-medium text-gray-400 mb-2 flex items-center gap-2">
                     <FiPhone className="w-4 h-4" /> Phone *
