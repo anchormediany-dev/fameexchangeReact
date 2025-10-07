@@ -35,9 +35,10 @@ export const authApi = api.injectEndpoints({
     adminKycConfirmation: builder.mutation({
       query: (data) => ({
         url: `/user_documents/verify-or-reject/${data.selectedRequestId}`,
-        method: "POST",
+        method: "PUT",
         body: {
-          status: data.status,
+          action: data.action,
+          rejectionReason: data.rejectionReason,
         },
       }),
       invalidatesTags: ["OverviewForFan"],

@@ -1,6 +1,9 @@
 import React, { useState } from "react";
 import { motion } from "framer-motion";
-import { useGetKYCDocumentsQuery } from "../app/authApi";
+import {
+  useGetKYCDocumentsQuery,
+  useAdminKycConfirmationMutation,
+} from "../app/authApi";
 import {
   FaCheck,
   FaTimes,
@@ -23,10 +26,19 @@ import { imgSrc } from "../utils/imgSrc";
 
 const KYCDetailsPage = () => {
   const { id: userId } = useParams();
-  const { data: apiData, isLoading, error } = useGetKYCDocumentsQuery(userId);
+  const {
+    data: apiData,
+    isLoading,
+    error,
+    refetch,
+  } = useGetKYCDocumentsQuery(userId);
+  const [adminKycConfirmation, { isLoading: isVerifying }] =
+    useAdminKycConfirmationMutation();
   const [kycStatus, setKycStatus] = useState("pending");
   const [comment, setComment] = useState("");
   const [selectedImage, setSelectedImage] = useState(null);
+  const [showRejectionPopup, setShowRejectionPopup] = useState(false);
+  const [rejectionReason, setRejectionReason] = useState("");
 
   // Format date function
   const formatDate = (dateString) => {
@@ -89,6 +101,61 @@ const KYCDetailsPage = () => {
     return { images, files };
   };
 
+  // Handle KYC verification
+  const handleKYCVerification = async (action) => {
+    try {
+      // Get the user document ID from API data
+      const userDocumentId = apiData?.userDocument?._id;
+
+      if (!userDocumentId) {
+        console.error("No user document ID found");
+        return;
+      }
+
+      const verificationData = {
+        selectedRequestId: userDocumentId,
+        action: action,
+        rejectionReason: action === "REJECTED" ? rejectionReason : "",
+      };
+
+      await adminKycConfirmation(verificationData).unwrap();
+
+      // Refetch data to get updated status
+      await refetch();
+
+      // Reset rejection reason and close popup
+      setRejectionReason("");
+      setShowRejectionPopup(false);
+
+      console.log(`KYC ${action} successfully`);
+    } catch (error) {
+      console.error("Error verifying KYC:", error);
+    }
+  };
+
+  // Handle reject button click
+  const handleRejectClick = () => {
+    setShowRejectionPopup(true);
+  };
+
+  // Handle reject confirmation
+  const handleRejectConfirm = () => {
+    if (
+      rejectionReason.trim() ||
+      window.confirm(
+        "Are you sure you want to reject without providing a reason?"
+      )
+    ) {
+      handleKYCVerification("REJECTED");
+    }
+  };
+
+  // Handle reject cancel
+  const handleRejectCancel = () => {
+    setShowRejectionPopup(false);
+    setRejectionReason("");
+  };
+
   // Process API data
   const processApiData = () => {
     if (!apiData?.success) return null;
@@ -101,11 +168,11 @@ const KYCDetailsPage = () => {
         name: user?.name || "N/A",
         email: user?.email || "N/A",
         joinDate: formatDate(user?.createdAt),
-        idType: "User", // You might want to get this from API
+        idType: "User",
         documentType: "KYC Documents",
-        dateOfIssue: "N/A", // You might want to get this from API
-        dateOfExpiry: "N/A", // You might want to get this from API
-        address: "N/A", // You might want to get this from API
+        dateOfIssue: "N/A",
+        dateOfExpiry: "N/A",
+        address: "N/A",
         stageName: user?.stage_name || "N/A",
         talent: user?.talent?.join(", ") || "N/A",
         tokenBrandName: user?.token_brand_name || "N/A",
@@ -135,6 +202,7 @@ const KYCDetailsPage = () => {
         user: user?.name || "N/A",
         date: formatDateTime(userDocument?.createdAt),
       },
+      userDocumentId: userDocument?._id, // Add user document ID for verification
     };
   };
 
@@ -168,17 +236,16 @@ const KYCDetailsPage = () => {
       user: "Loading...",
       date: "Loading...",
     },
+    userDocumentId: null,
   };
 
   const handleStatusUpdate = (status) => {
     setKycStatus(status);
-    // TODO: Add API call to update status
   };
 
   const handleSendComment = () => {
     if (comment.trim()) {
       console.log("Comment sent:", comment);
-      // TODO: Add API call to send message
       setComment("");
     }
   };
@@ -231,39 +298,6 @@ const KYCDetailsPage = () => {
   return (
     <div className="bg-[#171717] py-12 2xl:py-16 px-4 min-h-screen">
       <div className="container mt-10 lg:mt-16 2xl:mt-20 max-w-7xl mx-auto">
-        {/* Header Card */}
-        <motion.div
-          initial={{ opacity: 0, y: -20 }}
-          animate={{ opacity: 1, y: 0 }}
-          className="bg-gradient-to-br from-[#1a1a1a] to-[#0d0d0d] rounded-2xl border border-white/10 p-6 mb-6"
-        >
-          <div className="flex items-center justify-between mb-4">
-            <div>
-              <h1 className="text-2xl font-bold text-white mb-2">
-                KYC Details
-              </h1>
-              <div className="flex items-center space-x-4">
-                <div className="flex items-center space-x-3">
-                  <div className="w-12 h-12 bg-gradient-to-r from-[#a38b41] to-[#c2ab67] rounded-full flex items-center justify-center">
-                    <span className="text-black font-bold text-lg">
-                      {kycData.user.name.charAt(0)}
-                    </span>
-                  </div>
-                  <div>
-                    <h2 className="text-lg font-semibold text-white">
-                      {kycData.user.name}
-                    </h2>
-                    <p className="text-gray-400 text-sm">
-                      {kycData.user.email}
-                    </p>
-                  </div>
-                </div>
-                <StatusIndicator status={kycData.status.current} />
-              </div>
-            </div>
-          </div>
-        </motion.div>
-
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
           {/* Main Content - Left 2/3 */}
           <div className="lg:col-span-2 space-y-6">
@@ -304,26 +338,11 @@ const KYCDetailsPage = () => {
                   label="User Email"
                   value={kycData.user.email}
                 />
-                {/* <InfoField
-                  icon={FaCalendarAlt}
-                  label="Date of Issue"
-                  value={kycData.user.dateOfIssue}
-                />
-                <InfoField
-                  icon={FaCalendarAlt}
-                  label="Date of Expiry"
-                  value={kycData.user.dateOfExpiry}
-                /> */}
                 <InfoField
                   icon={FaUser}
                   label="Stage Name"
                   value={kycData.user.stageName}
                 />
-                {/* <InfoField
-                  icon={FaUser}
-                  label="Talent"
-                  value={kycData.user.talent}
-                /> */}
                 <InfoField
                   icon={FaIdCard}
                   label="Token Brand Name"
@@ -479,62 +498,86 @@ const KYCDetailsPage = () => {
                   </div>
                 )}
 
+                {/* KYC Verification Actions */}
                 <div className="pt-4 border-t border-white/10">
                   <h3 className="text-sm font-medium text-white mb-3">
-                    Update Status
+                    Verify KYC Application
                   </h3>
-                  <div className="grid grid-cols-1 gap-2">
-                    {["pending", "approved", "rejected"].map((status) => (
-                      <button
-                        key={status}
-                        onClick={() => handleStatusUpdate(status)}
-                        className={`p-3 rounded-lg text-sm font-medium transition-all text-left ${
-                          kycData.status.current === status
-                            ? status === "approved"
-                              ? "bg-green-500 text-white"
-                              : status === "rejected"
-                              ? "bg-red-500 text-white"
-                              : "bg-[#a38b41] text-white"
-                            : "bg-[#2a2a2a] text-gray-300 hover:bg-[#3a3a3a]"
-                        }`}
-                      >
-                        {status.charAt(0).toUpperCase() + status.slice(1)}
-                      </button>
-                    ))}
+
+                  <div className="grid grid-cols-2 gap-3">
+                    <button
+                      onClick={() => handleKYCVerification("VERIFIED")}
+                      disabled={
+                        isVerifying || kycData.status.current === "approved"
+                      }
+                      className="flex items-center justify-center space-x-2 px-4 py-3 bg-green-600 hover:bg-green-700 disabled:bg-green-800 text-white rounded-lg transition-colors disabled:cursor-not-allowed"
+                    >
+                      {isVerifying ? (
+                        <FaSpinner className="animate-spin" />
+                      ) : (
+                        <FaCheck />
+                      )}
+                      <span>Approve KYC</span>
+                    </button>
+
+                    <button
+                      onClick={handleRejectClick}
+                      disabled={
+                        isVerifying || kycData.status.current === "rejected"
+                      }
+                      className="flex items-center justify-center space-x-2 px-4 py-3 bg-red-600 hover:bg-red-700 disabled:bg-red-800 text-white rounded-lg transition-colors disabled:cursor-not-allowed"
+                    >
+                      {isVerifying ? (
+                        <FaSpinner className="animate-spin" />
+                      ) : (
+                        <FaTimes />
+                      )}
+                      <span>Reject KYC</span>
+                    </button>
                   </div>
                 </div>
               </div>
             </motion.div>
-
-            {/* Quick Actions */}
-            {/* <motion.div
-              initial={{ opacity: 0, x: 20 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ delay: 0.1 }}
-              className="bg-gradient-to-br from-[#1a1a1a] to-[#0d0d0d] rounded-2xl border border-white/10 p-6"
-            >
-              <h2 className="text-xl font-semibold text-white mb-4">
-                Quick Actions
-              </h2>
-
-              <div className="space-y-3">
-                <button className="w-full flex items-center justify-center space-x-2 p-3 bg-[#2a2a2a] text-white rounded-lg hover:bg-[#3a3a3a] transition-colors">
-                  <FaDownload />
-                  <span>Download All Documents</span>
-                </button>
-                <button className="w-full flex items-center justify-center space-x-2 p-3 bg-[#2a2a2a] text-white rounded-lg hover:bg-[#3a3a3a] transition-colors">
-                  <FaEnvelope />
-                  <span>Send Email to User</span>
-                </button>
-                <button className="w-full flex items-center justify-center space-x-2 p-3 bg-[#2a2a2a] text-white rounded-lg hover:bg-[#3a3a3a] transition-colors">
-                  <FaFile />
-                  <span>Generate Report</span>
-                </button>
-              </div>
-            </motion.div> */}
           </div>
         </div>
       </div>
+
+      {/* Rejection Reason Popup */}
+      {showRejectionPopup && (
+        <div className="fixed inset-0 bg-black/90 backdrop-blur-sm flex items-center justify-center z-50 p-4">
+          <div className="bg-gradient-to-br from-[#1a1a1a] to-[#0d0d0d] rounded-2xl border border-white/10 p-6 max-w-md w-full">
+            <h3 className="text-xl font-semibold text-white mb-4">
+              Rejection Reason
+            </h3>
+            <p className="text-gray-400 text-sm mb-4">
+              Please provide a reason for rejecting this KYC application
+              (optional):
+            </p>
+            <textarea
+              value={rejectionReason}
+              onChange={(e) => setRejectionReason(e.target.value)}
+              placeholder="Enter reason for rejection..."
+              className="w-full px-3 py-2 bg-[#2a2a2a] border border-gray-600 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent outline-none text-white resize-none text-sm mb-4"
+              rows="3"
+            />
+            <div className="flex justify-end space-x-3">
+              <button
+                onClick={handleRejectCancel}
+                className="px-4 py-2 bg-gray-600 hover:bg-gray-700 text-white rounded-lg transition-colors"
+              >
+                Cancel
+              </button>
+              <button
+                onClick={handleRejectConfirm}
+                className="px-4 py-2 bg-red-600 hover:bg-red-700 text-white rounded-lg transition-colors flex items-center space-x-2"
+              >
+                <FaTimes />
+                <span>Reject KYC</span>
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* Image Modal */}
       {selectedImage && (
@@ -547,7 +590,7 @@ const KYCDetailsPage = () => {
             onClick={(e) => e.stopPropagation()}
           >
             <img
-              src={`http://localhost:3001/${selectedImage.url}`} // Adjust based on your server URL
+              src={imgSrc(selectedImage.url)}
               alt={selectedImage.name}
               className="rounded-lg max-w-full max-h-full"
               onError={(e) => {
@@ -568,7 +611,7 @@ const KYCDetailsPage = () => {
   );
 };
 
-// Reusable Components
+// Reusable Components (keep the same as before)
 const InfoField = ({ icon: Icon, label, value, colSpan }) => (
   <div className={colSpan === "full" ? "md:col-span-2" : ""}>
     <div className="flex items-center space-x-3 p-3 bg-[#2a2a2a] rounded-lg border border-gray-600">
@@ -587,38 +630,16 @@ const InfoField = ({ icon: Icon, label, value, colSpan }) => (
 
 const DocumentCard = ({ document, onExpand }) => (
   <div className="group relative bg-[#2a2a2a] rounded-lg overflow-hidden border border-gray-600 hover:border-[#a38b41] transition-all">
-    <div className="relative aspect-video">
-      <img
-        src={imgSrc(document.url)}
-        alt={document.name}
-        className="w-full h-full object-cover"
-        onError={(e) => {
-          e.target.src =
-            "https://via.placeholder.com/400x300?text=Image+Not+Found";
-        }}
-      />
-      <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-all flex items-center justify-center opacity-0 group-hover:opacity-100">
-        <div className="flex space-x-2">
-          {/* <button
-            onClick={onExpand}
-            className="p-2 bg-white/20 rounded-full backdrop-blur-sm hover:bg-white/30"
-          >
-            <FaExpand size={14} className="text-white" />
-          </button> */}
-          {/* <a
-            href={`http://localhost:3001/${document.url}`}
-            download
-            className="p-2 bg-white/20 rounded-full backdrop-blur-sm hover:bg-white/30"
-          >
-            <FaDownload size={14} className="text-white" />
-          </a> */}
-        </div>
-      </div>
-    </div>
     <div className="p-3">
-      <p className="text-white text-sm font-medium truncate">{document.name}</p>
-      <p className="text-gray-400 text-xs capitalize">
-        {document.type} • {document.verification?.status}
+      <p className="">
+        <a
+          href={imgSrc(document?.url)}
+          download
+          target="_blank"
+          className="p-2 hover:text-[#a38b41] transition-colors text-blue-400 underline text-sm font-medium truncate max-w-xs"
+        >
+          {imgSrc(document?.url)}
+        </a>
       </p>
     </div>
   </div>
@@ -631,22 +652,18 @@ const FileCard = ({ file }) => (
         <FaFile className="text-[#a38b41]" />
       </div>
       <div>
-        <p className="text-white text-sm font-medium truncate max-w-xs">
-          {file.name}
-        </p>
-        <p className="text-gray-400 text-xs capitalize">
-          {file.type} • {file.verification?.status}
+        <p className="">
+          <a
+            href={imgSrc(file?.url)}
+            download
+            target="_blank"
+            className="p-2 hover:text-[#a38b41] transition-colors text-blue-400 underline text-sm font-medium truncate max-w-xs"
+          >
+            {imgSrc(file?.url)}
+          </a>
         </p>
       </div>
     </div>
-    <a
-      href={imgSrc(file.url)}
-      download
-      target="_blank"
-      className="p-2 text-gray-400 hover:text-[#a38b41] transition-colors"
-    >
-      <FaDownload />
-    </a>
   </div>
 );
 

@@ -388,8 +388,15 @@ const ImageDoc = ({ doc, onOpen }) => (
       <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-all" />
     </div> */}
     <div className="p-3">
-      <p className="text-blue-400 cursor-pointer underline text-sm font-medium truncate">
-        {imgSrc(doc.url)}
+      <p className="">
+        <a
+          href={imgSrc(doc?.url)}
+          download
+          target="_blank"
+          className="p-2  hover:text-[#a38b41] transition-colors text-blue-400 underline text-sm font-medium truncate max-w-xs"
+        >
+          {imgSrc(doc?.url)}
+        </a>
       </p>
       {/* <p className="text-gray-400 text-xs capitalize">
         {doc.type} • {doc.verification?.status || "—"}
