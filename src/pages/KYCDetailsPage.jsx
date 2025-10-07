@@ -1,8 +1,11 @@
 import React, { useState } from "react";
 import { motion } from "framer-motion";
+import { toast } from "react-toastify";
+import { FaCheckCircle, FaTimesCircle } from "react-icons/fa";
 import {
   useGetKYCDocumentsQuery,
   useAdminKycConfirmationMutation,
+  useUploadKYCDocumentsMutation,
 } from "../app/authApi";
 import {
   FaCheck,
@@ -11,13 +14,10 @@ import {
   FaExpand,
   FaUser,
   FaIdCard,
-  FaMapMarkerAlt,
   FaCalendarAlt,
   FaEnvelope,
-  FaPaperclip,
   FaPaperPlane,
   FaImage,
-  FaFile,
   FaClock,
   FaSpinner,
 } from "react-icons/fa";
@@ -34,14 +34,54 @@ const KYCDetailsPage = () => {
   } = useGetKYCDocumentsQuery(userId);
   const [adminKycConfirmation, { isLoading: isVerifying }] =
     useAdminKycConfirmationMutation();
-  const [kycStatus, setKycStatus] = useState("pending");
+  const [uploadKYCDocuments] = useUploadKYCDocumentsMutation();
+  const [kycStatus, setKycStatus] = useState("pending"); // kept for compatibility
   const [comment, setComment] = useState("");
   const [selectedImage, setSelectedImage] = useState(null);
+  const [formData, setFormData] = useState({ text: "" });
+  // popup + reason + which doc we're rejecting
   const [showRejectionPopup, setShowRejectionPopup] = useState(false);
   const [rejectionReason, setRejectionReason] = useState("");
   const [verifyingDocumentId, setVerifyingDocumentId] = useState(null);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const theme = {
+    primary: "#a38b41",
+    bg: "bg-[#171717]",
+    card: "bg-gradient-to-br from-[#1a1a1a] to-[#0d0d0d]",
+    border: "border border-white/10",
+    text: "text-white",
+    sub: "text-gray-400",
+  };
+  const handleSendComment = async (e) => {
+    e.preventDefault();
+    if (comment.trim()) {
+      setComment("");
+    }
 
-  // Format date function
+    setIsSubmitting(true);
+    try {
+      const submitData = new FormData();
+      submitData.append("text", formData.text);
+      await uploadKYCDocuments(submitData).unwrap();
+      toast.success("Message sent successfully!");
+      setFormData({ text: "" });
+
+      setTimeout(() => {
+        if (user?.role === "FAN") navigate("/");
+        if (user?.role === "TALENT") navigate("/networth-calculator");
+      }, 400);
+      const imgEl = document.getElementById("image-upload");
+      const fileEl = document.getElementById("file-upload");
+      if (imgEl) imgEl.value = "";
+      if (fileEl) fileEl.value = "";
+    } catch (err) {
+      console.error(err);
+      toast.error(err?.data?.message || "Upload failed. Please try again.");
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+  // ---- helpers
   const formatDate = (dateString) => {
     if (!dateString) return "N/A";
     const date = new Date(dateString);
@@ -52,7 +92,6 @@ const KYCDetailsPage = () => {
     });
   };
 
-  // Format datetime function
   const formatDateTime = (dateString) => {
     if (!dateString) return "N/A";
     const date = new Date(dateString);
@@ -67,104 +106,17 @@ const KYCDetailsPage = () => {
     });
   };
 
-  // Extract file name from URL
   const getFileNameFromUrl = (url) => {
     if (!url) return "Unknown File";
     return url.split("/").pop() || "Unknown File";
   };
 
-  // Handle individual document verification
-  const handleDocumentVerification = async (action) => {
-    
-    try {
-      // setVerifyingDocumentId(documentId);
-      const userDocumentId = apiData?.userDocument?._id;
-      const verificationData = {
-        selectedRequestId: userDocumentId,
-        action: action,
-        rejectionReason: action === "REJECTED" ? rejectionReason : "",
-      };
-
-      await adminKycConfirmation(verificationData).unwrap();
-
-      // Refetch data to get updated status
-      await refetch();
-
-      // Reset rejection reason and close popup
-      setRejectionReason("");
-      setShowRejectionPopup(false);
-      setVerifyingDocumentId(null);
-
-      console.log(`Document ${action} successfully`);
-    } catch (error) {
-      console.error("Error verifying document:", error);
-      setVerifyingDocumentId(null);
-    }
-  };
-
-  // Handle KYC verification (for entire application)
-  const handleKYCVerification = async (action) => {
-    try {
-      // Get the user document ID from API data
-      const userDocumentId = apiData?.userDocument?._id;
-
-      if (!userDocumentId) {
-        console.error("No user document ID found");
-        return;
-      }
-
-      const verificationData = {
-        selectedRequestId: userDocumentId,
-        action: action,
-        rejectionReason: action === "REJECTED" ? rejectionReason : "",
-      };
-
-      await adminKycConfirmation(verificationData).unwrap();
-
-      // Refetch data to get updated status
-      await refetch();
-
-      // Reset rejection reason and close popup
-      setRejectionReason("");
-      setShowRejectionPopup(false);
-
-      console.log(`KYC ${action} successfully`);
-    } catch (error) {
-      console.error("Error verifying KYC:", error);
-    }
-  };
-
-  // Handle reject button click for individual document
-  const handleDocumentRejectClick = () => {
-    setShowRejectionPopup(true);
-  };
-
-  // Handle reject confirmation for individual document
-  const handleDocumentRejectConfirm = () => {
-    if (
-      rejectionReason.trim() ||
-      window.confirm(
-        "Are you sure you want to reject without providing a reason?"
-      )
-    ) {
-      handleDocumentVerification(verifyingDocumentId, "REJECTED");
-    }
-  };
-
-  // Handle reject cancel
-  const handleRejectCancel = () => {
-    setShowRejectionPopup(false);
-    setRejectionReason("");
-    setVerifyingDocumentId(null);
-  };
-
-  // Process API data
+  // ---- Process API data
   const processApiData = () => {
     if (!apiData?.success) return null;
 
     const { user, userDocument } = apiData;
     const talentUploads = userDocument?.uploads || [];
-    const talentDocumentId = userDocument?._id || "";
 
     return {
       user: {
@@ -181,7 +133,7 @@ const KYCDetailsPage = () => {
         tokenBrandName: user?.token_brand_name || "N/A",
       },
       status: {
-        current: userDocument?.status?.toLowerCase() || "pending",
+        current: (userDocument?.status || "pending").toLowerCase(),
         requestStarted: formatDate(userDocument?.createdAt),
         lastUpdated: formatDate(userDocument?.updatedAt),
         isKYCVerified: userDocument?.isKYCVerified || false,
@@ -194,7 +146,7 @@ const KYCDetailsPage = () => {
         url: upload.fileUrl,
         verification: upload.verification,
         uploadedAt: upload.verifiedAt,
-        documentId: upload._id, // Add document ID for individual verification
+        documentId: upload._id, // used for per-doc actions
       })),
       messages:
         userDocument?.messages?.map((msg) => ({
@@ -210,7 +162,7 @@ const KYCDetailsPage = () => {
         user: user?.name || "N/A",
         date: formatDateTime(userDocument?.createdAt),
       },
-      userDocumentId: userDocument?._id, // Add user document ID for verification
+      userDocumentId: userDocument?._id,
     };
   };
 
@@ -244,17 +196,109 @@ const KYCDetailsPage = () => {
     userDocumentId: null,
   };
 
-  const handleStatusUpdate = (status) => {
-    setKycStatus(status);
+  // ---- UI state helpers
+  const handleStatusUpdate = (status) => setKycStatus(status);
+
+  // ---- Popup flow
+  const openRejectPopup = (docId) => {
+    setVerifyingDocumentId(docId || null); // null means whole KYC
+    setShowRejectionPopup(true);
   };
 
-  const handleSendComment = () => {
-    if (comment.trim()) {
-      console.log("Comment sent:", comment);
-      setComment("");
+  const handleRejectCancel = () => {
+    setShowRejectionPopup(false);
+    setRejectionReason("");
+    setVerifyingDocumentId(null);
+  };
+
+  const handleDocumentRejectConfirm = async () => {
+    if (
+      rejectionReason.trim() ||
+      window.confirm(
+        "Are you sure you want to reject without providing a reason?"
+      )
+    ) {
+      if (verifyingDocumentId) {
+        await handleDocumentVerification(verifyingDocumentId, "REJECTED"); // per document
+      } else {
+        await handleKYCVerification("REJECTED"); // whole KYC
+      }
     }
   };
 
+  // ---- Actions
+  // Flexible signature:
+  //   handleDocumentVerification(docId, "VERIFIED" | "REJECTED")
+  // or handleDocumentVerification("VERIFIED") when verifyingDocumentId already set
+  const handleDocumentVerification = async (
+    documentIdOrAction,
+    maybeAction
+  ) => {
+    const hasDocId = typeof maybeAction === "string";
+    const documentId = hasDocId ? documentIdOrAction : verifyingDocumentId;
+    const action = hasDocId ? maybeAction : documentIdOrAction;
+
+    try {
+      const userDocumentId = apiData?.userDocument?._id;
+      if (!userDocumentId) {
+        console.error("No user document ID found");
+        return;
+      }
+
+      setVerifyingDocumentId(documentId || null);
+
+      const verificationData = {
+        selectedRequestId: userDocumentId, // whole KYC id
+        documentId, // per-upload id
+        action, // "VERIFIED" | "REJECTED"
+        rejectionReason:
+          action === "REJECTED" ? (rejectionReason || "").trim() : "",
+      };
+
+      const response = await adminKycConfirmation(verificationData).unwrap();
+      await refetch();
+
+      // cleanup if it was a reject (came via popup)
+      setRejectionReason("");
+      setShowRejectionPopup(false);
+      setVerifyingDocumentId(null);
+
+      toast.success(response?.message);
+    } catch (err) {
+      console.error("Error verifying document:", err);
+      setVerifyingDocumentId(null);
+    }
+  };
+
+  const handleKYCVerification = async (action) => {
+    try {
+      const userDocumentId = apiData?.userDocument?._id;
+      if (!userDocumentId) {
+        console.error("No user document ID found");
+        return;
+      }
+
+      const verificationData = {
+        selectedRequestId: userDocumentId,
+        action,
+        rejectionReason:
+          action === "REJECTED" ? (rejectionReason || "").trim() : "",
+      };
+
+      const response = await adminKycConfirmation(verificationData).unwrap();
+      await refetch();
+
+      setRejectionReason("");
+      setShowRejectionPopup(false);
+      setVerifyingDocumentId(null);
+
+      toast.success(response?.message);
+    } catch (err) {
+      console.error("Error verifying KYC:", err);
+    }
+  };
+
+  // ---- Status badge
   const StatusIndicator = ({ status }) => (
     <div
       className={`inline-flex items-center px-3 py-1 rounded-full text-sm font-medium border ${
@@ -278,6 +322,7 @@ const KYCDetailsPage = () => {
     </div>
   );
 
+  // ---- Loading / Error
   if (isLoading) {
     return (
       <div className="bg-[#171717] min-h-screen flex items-center justify-center">
@@ -300,13 +345,14 @@ const KYCDetailsPage = () => {
     );
   }
 
+  // ---- UI
   return (
     <div className="bg-[#171717] py-12 2xl:py-16 px-4 min-h-screen">
       <div className="container mt-10 lg:mt-16 2xl:mt-20 max-w-7xl mx-auto">
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-          {/* Main Content - Left 2/3 */}
+          {/* Main Content */}
           <div className="lg:col-span-2 space-y-6">
-            {/* KYC Details Card */}
+            {/* KYC Details */}
             <motion.div
               initial={{ opacity: 0, x: -20 }}
               animate={{ opacity: 1, x: 0 }}
@@ -357,14 +403,13 @@ const KYCDetailsPage = () => {
               </div>
             </motion.div>
 
-            {/* Documents Section */}
+            {/* Documents */}
             <motion.div
               initial={{ opacity: 0, x: -20 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ delay: 0.1 }}
               className="space-y-6"
             >
-              {/* Talent Uploads */}
               {kycData.talentUploads?.length > 0 && (
                 <div className="bg-gradient-to-br from-[#1a1a1a] to-[#0d0d0d] rounded-2xl border border-white/10 p-6">
                   <h2 className="text-xl font-semibold text-white mb-4 flex items-center">
@@ -376,12 +421,19 @@ const KYCDetailsPage = () => {
                       <DocumentCard
                         key={document.id}
                         document={document}
-                        onApprove={() => handleDocumentVerification("VERIFIED")}
-                        onReject={() => handleDocumentVerification("REJECTED")}
+                        onApprove={() =>
+                          handleDocumentVerification(
+                            document.documentId,
+                            "VERIFIED"
+                          )
+                        }
+                        onReject={() => openRejectPopup(document.documentId)}
                         isVerifying={
-                          verifyingDocumentId === document.documentId
+                          verifyingDocumentId === document.documentId &&
+                          isVerifying
                         }
                         verificationStatus={document.verification?.status}
+                        onExpand={() => setSelectedImage(document)}
                       />
                     ))}
                   </div>
@@ -389,7 +441,7 @@ const KYCDetailsPage = () => {
               )}
             </motion.div>
 
-            {/* Messages Section */}
+            {/* Messages */}
             <motion.div
               initial={{ opacity: 0, x: -20 }}
               animate={{ opacity: 1, x: 0 }}
@@ -400,7 +452,6 @@ const KYCDetailsPage = () => {
                 Communication ({kycData.messages.length})
               </h2>
 
-              {/* Messages List */}
               <div className="space-y-4 mb-6 max-h-64 overflow-y-auto pr-2">
                 {kycData.messages.length > 0 ? (
                   kycData.messages.map((message) => (
@@ -413,23 +464,31 @@ const KYCDetailsPage = () => {
                 )}
               </div>
 
-              {/* Add Comment */}
               <div>
                 <h3 className="text-lg font-semibold text-white mb-3">
                   Reply / Send Message
                 </h3>
                 <div className="space-y-3">
                   <textarea
-                    value={comment}
-                    onChange={(e) => setComment(e.target.value)}
+                    value={formData.text}
+                    onChange={(e) => setFormData({ text: e.target.value })}
+                    rows={4}
+                    className={`w-full px-4 py-3 rounded-lg bg-white/5 ${theme.text} ${theme.border} outline-none`}
+                    style={{ boxShadow: `0 0 0 0px ${theme.primary}` }}
+                    onFocus={(e) =>
+                      (e.currentTarget.style.boxShadow = `0 0 0 2px ${theme.primary}`)
+                    }
+                    onBlur={(e) =>
+                      (e.currentTarget.style.boxShadow = `0 0 0 0px ${theme.primary}`)
+                    }
                     placeholder="Type your message here..."
-                    className="w-full px-4 py-3 bg-[#2a2a2a] border border-gray-600 rounded-lg focus:ring-2 focus:ring-[#a38b41] focus:border-transparent outline-none text-white resize-none"
-                    rows="3"
+                    // className="w-full px-4 py-3 bg-[#2a2a2a] border border-gray-600 rounded-lg focus:ring-2 focus:ring-[#a38b41] focus:border-transparent outline-none text-white resize-none"
+                    // rows="3"
                   />
                   <div className="flex justify-end items-center">
                     <button
                       onClick={handleSendComment}
-                      disabled={!comment.trim()}
+                      // disabled={!comment.trim()}
                       className="px-6 py-2 cursor-pointer bg-gradient-to-r from-[#a38b41] to-[#c2ab67] text-black rounded-lg hover:from-[#b59a4a] hover:to-[#d4bc7d] transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center space-x-2"
                     >
                       <FaPaperPlane />
@@ -441,9 +500,8 @@ const KYCDetailsPage = () => {
             </motion.div>
           </div>
 
-          {/* Sidebar - Right 1/3 */}
+          {/* Sidebar */}
           <div className="space-y-6">
-            {/* Status Card */}
             <motion.div
               initial={{ opacity: 0, x: 20 }}
               animate={{ opacity: 1, x: 0 }}
@@ -472,14 +530,12 @@ const KYCDetailsPage = () => {
                   </div>
                   <div className="flex justify-between items-center text-sm">
                     <span className="text-gray-400">KYC Verified</span>
-                    <span
-                      className={`font-medium ${
-                        kycData.status.isKYCVerified
-                          ? "text-green-400"
-                          : "text-red-400"
-                      }`}
-                    >
-                      {kycData.status.isKYCVerified ? "Yes" : "No"}
+                    <span>
+                      {kycData.status.isKYCVerified ? (
+                        <FaCheckCircle className="text-green-400 text-lg" />
+                      ) : (
+                        <FaTimesCircle className="text-red-400 text-lg" />
+                      )}
                     </span>
                   </div>
                 </div>
@@ -493,7 +549,7 @@ const KYCDetailsPage = () => {
                   </div>
                 )}
 
-                {/* KYC Verification Actions */}
+                {/* (Optional) Whole-KYC approve/reject */}
                 {/* <div className="pt-4 border-t border-white/10">
                   <h3 className="text-sm font-medium text-white mb-3">
                     Verify KYC Application
@@ -516,7 +572,7 @@ const KYCDetailsPage = () => {
                     </button>
 
                     <button
-                      onClick={() => handleKYCVerification("REJECTED")}
+                      onClick={() => openRejectPopup(null)} // null => whole KYC
                       disabled={
                         isVerifying || kycData.status.current === "rejected"
                       }
@@ -545,7 +601,8 @@ const KYCDetailsPage = () => {
               Rejection Reason
             </h3>
             <p className="text-gray-400 text-sm mb-4">
-              Please provide a reason for rejecting this document (optional):
+              Please provide a reason for rejecting{" "}
+              {verifyingDocumentId ? "this document" : "this KYC"} (optional):
             </p>
             <textarea
               value={rejectionReason}
@@ -566,7 +623,7 @@ const KYCDetailsPage = () => {
                 className="px-4 py-2 bg-red-600 hover:bg-red-700 text-white rounded-lg transition-colors flex items-center space-x-2"
               >
                 <FaTimes />
-                <span>Reject Document</span>
+                <span>Confirm Reject</span>
               </button>
             </div>
           </div>
@@ -605,7 +662,7 @@ const KYCDetailsPage = () => {
   );
 };
 
-// Reusable Components
+// ---------- Reusable components ----------
 const InfoField = ({ icon: Icon, label, value, colSpan }) => (
   <div className={colSpan === "full" ? "md:col-span-2" : ""}>
     <div className="flex items-center space-x-3 p-3 bg-[#2a2a2a] rounded-lg border border-gray-600">
@@ -657,48 +714,33 @@ const DocumentCard = ({
       <div className="p-4 flex justify-between items-center">
         <div className="flex-1">
           <div className="flex items-center space-x-3 mb-2">
-            {/* <div className="p-2 bg-[#a38b41]/10 rounded-lg">
-              <FaFile className="text-[#a38b41]" />
-            </div> */}
             <div>
               <a
                 href={imgSrc(document?.url)}
                 download
                 target="_blank"
+                rel="noreferrer"
                 className="text-blue-400 hover:text-blue-300 underline text-xs"
               >
                 <p className="text-blue-400 underline text-sm font-medium">
                   {document?.name}
                 </p>
               </a>
-              {/* <p className="text-gray-400 text-xs capitalize">
-                {document.type}
-              </p> */}
+              {/* Optional status display */}
+              {/* {verificationStatus && (
+                <span
+                  className={`text-xs font-medium ${getStatusColor(
+                    verificationStatus
+                  )}`}
+                >
+                  Status: {getStatusText(verificationStatus)}
+                </span>
+              )} */}
             </div>
-          </div>
-          <div className="flex items-center space-x-4">
-            {/* <a
-              href={imgSrc(document?.url)}
-              download
-              target="_blank"
-              className="text-blue-400 hover:text-blue-300 underline text-xs"
-            >
-              View/Download File
-            </a> */}
-            {/* {verificationStatus && (
-              <span
-                className={`text-xs font-medium ${getStatusColor(
-                  verificationStatus
-                )}`}
-              >
-                Status: {getStatusText(verificationStatus)}
-              </span>
-            )} */}
           </div>
         </div>
 
         <div className="flex items-center space-x-2 ml-4">
-          {/* Action Buttons */}
           <div className="flex space-x-2">
             <button
               onClick={onApprove}
@@ -727,7 +769,6 @@ const DocumentCard = ({
             </button>
           </div>
 
-          {/* Utility Buttons */}
           <div className="flex space-x-1 ml-2">
             {/* <button
               onClick={onExpand}
@@ -740,6 +781,7 @@ const DocumentCard = ({
               href={imgSrc(document?.url)}
               download
               target="_blank"
+              rel="noreferrer"
               className="p-2 bg-[#2a2a2a] hover:bg-[#3a3a3a] text-white rounded transition-colors"
               title="Download"
             >

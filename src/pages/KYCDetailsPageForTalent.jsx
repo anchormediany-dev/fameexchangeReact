@@ -11,6 +11,8 @@ import {
   FaFile,
   FaClock,
   FaSpinner,
+  FaCheckCircle,
+  FaTimesCircle,
 } from "react-icons/fa";
 import { imgSrc } from "../utils/imgSrc";
 
@@ -274,13 +276,16 @@ const KYCDetailsPageForTalent = ({ data: apiData, error, isLoading }) => {
               <StatusPill status={kyc.status.current} />
               <KV label="Request Started" value={kyc.status.requestStarted} />
               <KV label="Last Updated" value={kyc.status.lastUpdated} />
-              <KV
-                label="KYC Verified"
-                value={kyc.status.isVerified ? "Yes" : "No"}
-                valueClass={
-                  kyc.status.isVerified ? "text-green-400" : "text-red-400"
-                }
-              />
+              <div className="flex justify-between items-center text-sm">
+                <span className="text-gray-400">KYC Verified</span>
+                <span>
+                  {kyc.status.isKYCVerified ? (
+                    <FaCheckCircle className="text-green-400 text-lg" />
+                  ) : (
+                    <FaTimesCircle className="text-red-400 text-lg" />
+                  )}
+                </span>
+              </div>
               {!!kyc.status.rejectionReason && (
                 <div className="bg-red-500/10 border border-red-500/20 rounded-lg p-3">
                   <p className="text-red-400 text-sm">
@@ -395,7 +400,7 @@ const ImageDoc = ({ doc, onOpen }) => (
           target="_blank"
           className="p-2  hover:text-[#a38b41] transition-colors text-blue-400 underline text-sm font-medium truncate max-w-xs"
         >
-          {imgSrc(doc?.url)}
+          {doc?.name}
         </a>
       </p>
       {/* <p className="text-gray-400 text-xs capitalize">
@@ -407,31 +412,16 @@ const ImageDoc = ({ doc, onOpen }) => (
 
 const FileRow = ({ file }) => (
   <div className="flex items-center justify-between p-3 bg-[#2a2a2a] rounded-lg border border-gray-600 hover:border-[#a38b41] transition-all">
-    <div className="flex items-center gap-3">
-      <div
-        className="p-2 rounded-lg"
-        style={{ background: "rgba(163,139,65,.1)" }}
+    <p className="">
+      <a
+        href={imgSrc(file?.url)}
+        download
+        target="_blank"
+        className="p-2  hover:text-[#a38b41] transition-colors text-blue-400 underline text-sm font-medium truncate max-w-xs"
       >
-        <FaFile style={{ color: GOLD }} />
-      </div>
-      <div>
-        <p className="text-white text-sm font-medium truncate max-w-xs">
-          {file.name}
-        </p>
-        <p className="text-gray-400 text-xs capitalize">
-          {file.type} • {file.verification?.status || "—"}
-        </p>
-      </div>
-    </div>
-    <a
-      href={imgSrc(file.url)}
-      download
-      target="_blank"
-      rel="noreferrer"
-      className="p-2 text-gray-400 hover:text-[#a38b41]"
-    >
-      <FaDownload />
-    </a>
+        {file?.name}
+      </a>
+    </p>
   </div>
 );
 
