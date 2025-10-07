@@ -2,7 +2,13 @@
 import React, { useEffect, useRef, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
-import { FiEdit, FiLink, FiLogOut } from "react-icons/fi";
+import {
+  FiEdit,
+  FiExternalLink,
+  FiEye,
+  FiLink,
+  FiLogOut,
+} from "react-icons/fi";
 import { useAuth } from "../utils/auth/useAuth";
 export default function ProfileMenu({
   user = { name: "User", avatarUrl: "" },
@@ -157,6 +163,14 @@ export default function ProfileMenu({
                   {" "}
                   <FiEdit className="text-[18px]" />
                   <span className="text-sm font-medium">Update Profile</span>
+                </Link>
+                <Link
+                  to={`/verify-id`}
+                  className="flex gap-3 justify-center items-center"
+                >
+                  {" "}
+                  <FiExternalLink className="text-[18px]" />
+                  <span className="text-sm font-medium">KYC</span>
                 </Link>
               </div>
             )}
