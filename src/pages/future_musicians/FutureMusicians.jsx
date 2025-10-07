@@ -7,7 +7,7 @@ import {
   useDeferredValue,
   useState,
 } from "react";
-import { useSearchParams } from "react-router-dom";
+import { Link, useSearchParams } from "react-router-dom";
 import { useGetAllSponsorshipsQuery } from "../../app/authApi";
 import {
   FaSearch,
@@ -495,7 +495,8 @@ export default function FutureTalents() {
               if (category === "__none__" && cats.length > 0) return null;
 
               return (
-                <div
+                <Link
+                  to={`/talent-profile/${u?._id}`}
                   key={u._id}
                   className="grid grid-cols-4 items-center py-4 px-6 border-t border-gray-700 hover:bg-[#1f1f1f] transition"
                 >
@@ -540,7 +541,7 @@ export default function FutureTalents() {
                   <div className="text-center text-gray-200 text-sm">
                     {cats.length ? cats.join(", ") : "—"}
                   </div>
-                </div>
+                </Link>
               );
             })
           )}
