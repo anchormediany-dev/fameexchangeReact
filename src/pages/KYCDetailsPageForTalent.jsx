@@ -22,6 +22,7 @@ const KYCDetailsPageForTalent = ({ data: apiData, error, isLoading }) => {
   const [selectedImage, setSelectedImage] = useState(null);
 
   const talentMessages = apiData?.userDocument?.messages;
+  const isKYCVerified = apiData?.userDocument?.isKYCVerified;
   console.log(talentMessages, "api data here");
   const fmtDate = (d) =>
     d
@@ -338,7 +339,7 @@ const KYCDetailsPageForTalent = ({ data: apiData, error, isLoading }) => {
               <div className="flex justify-between items-center text-sm">
                 <span className="text-gray-400">KYC Verified</span>
                 <span>
-                  {kyc.status.isKYCVerified ? (
+                  {isKYCVerified === true ? (
                     <FaCheckCircle className="text-green-400 text-lg" />
                   ) : (
                     <FaTimesCircle className="text-red-400 text-lg" />
