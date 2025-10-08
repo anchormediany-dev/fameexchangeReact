@@ -5,6 +5,7 @@ import { useNavigate } from "react-router-dom";
 import { FiTrash2 } from "react-icons/fi";
 import { toast } from "react-toastify";
 import ConfirmDialog from "../../../utils/ConfirmDialog";
+import { imgSrc } from "../../../utils/imgSrc";
 
 const API_BASE = (import.meta.env?.VITE_API_URL || "").replace(/\/$/, "");
 
@@ -19,24 +20,6 @@ const chipVisible = (v) =>
   v
     ? "text-green-300 border-green-400/30 bg-green-400/10"
     : "text-yellow-300 border-yellow-400/30 bg-yellow-400/10";
-
-const FallbackBadge = ({ name = "?" }) => {
-  const letter = (name || "?").trim().charAt(0).toUpperCase() || "?";
-  return (
-    <div
-      className="w-10 h-10 rounded-xl border border-white/10 flex items-center justify-center text-sm font-semibold"
-      style={{
-        background:
-          "linear-gradient(135deg, rgba(163,139,65,.25), rgba(212,195,116,.15))",
-        color: "#d4c374",
-      }}
-      aria-label={name}
-      title={name}
-    >
-      {letter}
-    </div>
-  );
-};
 
 const AdminTeams = () => {
   const navigate = useNavigate();
@@ -188,19 +171,16 @@ const AdminTeams = () => {
 
                     <td className="p-3">
                       <div className="flex items-center gap-3 min-w-0">
-                        {showBadge ? (
-                          <FallbackBadge name={t?.name} />
-                        ) : (
-                          <div className="relative">
-                            <img
-                              src={img}
-                              alt={t?.name || "member"}
-                              className="w-10 h-10 rounded-xl object-cover border-2 border-white/10"
-                              onError={() => markBroken(t?._id)}
-                            />
-                            <div className="absolute inset-0 bg-gradient-to-t from-[#a38b41]/15 to-transparent rounded-xl opacity-0 group-hover:opacity-100 transition-opacity"></div>
-                          </div>
-                        )}
+                        <div className="relative">
+                          <img
+                            src={imgSrc(t?.imageUrl)}
+                            alt={t?.name || "member"}
+                            className="w-10 h-10 rounded-xl object-cover border-2 border-white/10"
+                            onError={() => markBroken(t?._id)}
+                          />
+                          <div className="absolute inset-0 bg-gradient-to-t from-[#a38b41]/15 to-transparent rounded-xl opacity-0 group-hover:opacity-100 transition-opacity"></div>
+                        </div>
+
                         <div className="min-w-0">
                           <div className="text-white text-sm font-medium truncate">
                             {t?.name || "—"}
