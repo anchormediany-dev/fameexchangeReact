@@ -1065,3 +1065,82 @@ ol.custom-golden-list > li::marker {
   font-weight: bold;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
 } */
+
+.custom-button-four {
+  display: inline-block;
+  width: 100%; /* Add this line */
+  padding: 8px 16px;
+  font-size: 14px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: #000000;
+  border: none;
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+  transition: all 0.3s ease;
+  background: linear-gradient(to bottom, #e2cb68 0%, #b8962d 100%);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3),
+    inset 0 1px 1px rgba(255, 255, 255, 0.4),
+    inset 0 -1px 1px rgba(0, 0, 0, 0.2);
+  text-shadow: 0 1px 1px rgba(255, 255, 255, 0.2);
+  box-sizing: border-box; /* Optional: ensures padding is included in width */
+}
+
+/* Border effect */
+.custom-button-four::before {
+  content: "";
+  position: absolute;
+  top: 1px;
+  left: 1px;
+  right: 1px;
+  bottom: 1px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  pointer-events: none;
+}
+
+/* Hover state */
+.custom-button-four:hover {
+  background: linear-gradient(to bottom, #f5dc6c 0%, #9e8649 100%);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4),
+    inset 0 1px 1px rgba(255, 255, 255, 0.6),
+    inset 0 -1px 1px rgba(0, 0, 0, 0.3);
+  transform: translateY(-1px);
+}
+
+/* Active state */
+.custom-button-four:active {
+  background: linear-gradient(to top, #cdae38 0%, #9e7e24 100%);
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.4), inset 0 1px 3px rgba(0, 0, 0, 0.3);
+  transform: translateY(1px);
+}
+
+/* Shine effect on hover */
+.custom-button-four::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    to right,
+    transparent 0%,
+    rgba(255, 255, 255, 0.2) 50%,
+    transparent 100%
+  );
+  transform: skewX(-25deg);
+  transition: all 0.75s ease;
+}
+
+.custom-button-four:hover::after {
+  left: 100%;
+}
+.custom-button-four {
+  width: 100%;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  padding: 8px 16px;
+}

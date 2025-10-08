@@ -279,7 +279,7 @@ const FanPendingRequestsList = ({ userData }) => {
                       {request?.status === "accepted" && (
                         <button
                           onClick={() => handleOpenFeedback(request)}
-                          className="custom-button-two bg-[#a38b41] hover:bg-[#8a7637] text-white font-medium py-2 px-4 rounded-lg transition-colors text-xs sm:text-sm"
+                          className="custom-button-four"
                         >
                           Add Feedback
                         </button>
