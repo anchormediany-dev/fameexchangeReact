@@ -364,7 +364,6 @@ const KYCUpload = () => {
           </form>
         </div>
       </div>
-      // )}
     </section>
   );
 };
