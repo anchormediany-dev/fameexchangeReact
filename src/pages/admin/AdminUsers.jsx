@@ -5,6 +5,7 @@ import { useGetUsersQuery, useDeleteUserMutation } from "../../app/authApi";
 
 import ConfirmDialog from "../../utils/ConfirmDialog";
 import { Link } from "react-router-dom";
+import { imgSrc } from "../../utils/imgSrc";
 
 const fallbackAvatar =
   "https://images.unsplash.com/photo-1502685104226-ee32379fefbe?w=200&auto=format&fit=crop&q=60";
@@ -31,18 +32,6 @@ const TabButton = ({ active, children, onClick }) => (
   >
     {children}
   </button>
-);
-
-const UserRowAvatar = ({ src, name }) => (
-  <div className="relative">
-    <img
-      src={src || fallbackAvatar}
-      alt={name || "user"}
-      className="w-10 h-10 rounded-xl object-cover border-2 border-white/10"
-      onError={(e) => (e.currentTarget.src = fallbackAvatar)}
-    />
-    <div className="absolute inset-0 bg-gradient-to-t from-[#a38b41]/10 to-transparent rounded-xl opacity-0 group-hover:opacity-100 transition-opacity"></div>
-  </div>
 );
 
 const AdminUsers = () => {
@@ -274,7 +263,14 @@ const AdminUsers = () => {
                 <div className="flex-1 space-y-2">
                   <div className="flex items-center justify-between">
                     <div className="flex items-center space-x-3">
-                      <UserRowAvatar src={u?.image} name={u?.name} />
+                      <div className="relative">
+                        <img
+                          src={imgSrc(u?.image)}
+                          alt={name || "user"}
+                          className="w-10 h-10 rounded-xl object-cover border-2 border-white/10"
+                        />
+                        <div className="absolute inset-0 bg-gradient-to-t from-[#a38b41]/10 to-transparent rounded-xl opacity-0 group-hover:opacity-100 transition-opacity"></div>
+                      </div>
                       <div>
                         <h4 className="font-semibold  text-white text-sm">
                           {u?.name || "Unnamed"}
@@ -357,7 +353,14 @@ const AdminUsers = () => {
 
                   <td className="p-3">
                     <div className="flex items-center space-x-3">
-                      <UserRowAvatar src={u?.image} name={u?.name} />
+                      <div className="relative">
+                        <img
+                          src={imgSrc(u?.image)}
+                          alt={u?.name || "user"}
+                          className="w-10 h-10 rounded-xl object-cover border-2 border-white/10"
+                        />
+                        <div className="absolute inset-0 bg-gradient-to-t from-[#a38b41]/10 to-transparent rounded-xl opacity-0 group-hover:opacity-100 transition-opacity"></div>
+                      </div>
                       <div>
                         {u?.role === "FAN" && (
                           <Link
