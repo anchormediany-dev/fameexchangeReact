@@ -3,6 +3,8 @@ import { FiUpload } from "react-icons/fi";
 import {
   FaCalendarAlt,
   FaMapMarkerAlt,
+  FaMapMarker,
+  FaDesktop,
   FaLink,
   FaPhone,
   FaDollarSign,
@@ -112,7 +114,7 @@ export default function EventCreateForm() {
     title: "",
     summary: "",
     details: "",
-    event_type: "live",
+    event_type: ["live"],
     status: "active",
     category: "",
     location: "",
@@ -172,6 +174,30 @@ export default function EventCreateForm() {
     } else {
       setForm((s) => ({ ...s, [name]: value }));
     }
+  };
+  const handleEventTypeChange = (type) => {
+    setForm((s) => {
+      const currentTypes = s.event_type || [];
+
+      if (currentTypes.includes(type)) {
+        // Remove type if already selected (but ensure at least one remains)
+        if (currentTypes.length > 1) {
+          return {
+            ...s,
+            event_type: currentTypes.filter((t) => t !== type),
+          };
+        }
+        return s;
+      } else {
+        return {
+          ...s,
+          event_type: [...currentTypes, type],
+        };
+      }
+    });
+  };
+  const isEventTypeSelected = (type) => {
+    return (form.event_type || []).includes(type);
   };
 
   const handleBoolean = (e) => {
@@ -290,12 +316,16 @@ export default function EventCreateForm() {
         discount_percent: Number(discount.discount_percent),
         discount_codes: discount.discount_codes.trim(),
       }));
-
+    const eventTypes = Array.isArray(form.event_type)
+      ? form.event_type
+      : [form.event_type].filter(Boolean);
+    const eventTypeString = eventTypes.join(",");
     Object.entries({
       datetime: form.datetime,
       title: form.title,
       summary: form.summary,
       details: form.details,
+      event_type: eventTypeString,
       event_type: form.event_type,
       status: form.status,
       category: form.category,
@@ -439,7 +469,7 @@ export default function EventCreateForm() {
                   </div>
                 </div>
 
-                <div>
+                {/* <div>
                   <label className="block text-white text-sm font-medium mb-2">
                     Event Type*
                   </label>
@@ -459,8 +489,62 @@ export default function EventCreateForm() {
                       </option>
                     </select>
                   </div>
-                </div>
+                </div> */}
+                {/* UPDATED: Event Type Selection */}
+                <div>
+                  <label className="block text-white text-sm font-medium mb-2">
+                    Event Type*
+                  </label>
+                  <div className="space-y-3">
+                    {/* Live Event Option */}
+                    <div className="flex items-center">
+                      <input
+                        id="event-type-live"
+                        type="checkbox"
+                        checked={isEventTypeSelected("live")}
+                        onChange={() => handleEventTypeChange("live")}
+                        className="rounded h-4 w-4 text-[#F3BA18] focus:ring-[#F3BA18] border-gray-600 bg-[#2d2d2d]"
+                      />
+                      <label
+                        htmlFor="event-type-live"
+                        className={`ml-2 flex items-center gap-2 text-sm ${
+                          isEventTypeSelected("live")
+                            ? "text-white"
+                            : "text-gray-400"
+                        }`}
+                      >
+                        <FaMapMarker className="w-3 h-3" />
+                        Live Event
+                      </label>
+                    </div>
 
+                    {/* Virtual Event Option */}
+                    <div className="flex items-center">
+                      <input
+                        id="event-type-virtual"
+                        type="checkbox"
+                        checked={isEventTypeSelected("virtual")}
+                        onChange={() => handleEventTypeChange("virtual")}
+                        className="rounded h-4 w-4 text-[#F3BA18] focus:ring-[#F3BA18] border-gray-600 bg-[#2d2d2d]"
+                      />
+                      <label
+                        htmlFor="event-type-virtual"
+                        className={`ml-2 flex items-center gap-2 text-sm ${
+                          isEventTypeSelected("virtual")
+                            ? "text-white"
+                            : "text-gray-400"
+                        }`}
+                      >
+                        <FaDesktop className="w-3 h-3" />
+                        Virtual Event
+                      </label>
+                    </div>
+
+                    {/* <p className="text-xs text-gray-500 mt-2">
+                      Select one or both event types
+                    </p> */}
+                  </div>
+                </div>
                 <div>
                   <label className="block text-white text-sm font-medium mb-2">
                     Status*
