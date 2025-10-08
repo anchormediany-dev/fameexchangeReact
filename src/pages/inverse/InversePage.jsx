@@ -147,7 +147,7 @@ const InversePage = () => {
                       </span>
                     </h2>
                     <a
-                      // href="#inverse-request-form"
+                      href="#inverse-request-form"
                       className="max-w-[80%] mx-auto flex items-center justify-center space-x-2 p-3 rounded-xl transition-all duration-300 font-semibold hover:scale-105 text-white"
                       style={{ backgroundColor: "#a38b41" }}
                     >
