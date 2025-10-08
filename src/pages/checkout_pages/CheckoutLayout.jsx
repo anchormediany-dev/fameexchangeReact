@@ -1,4 +1,4 @@
-import React, { useMemo } from "react";
+import React, { useMemo, useEffect } from "react";
 import {
   Outlet,
   NavLink,
@@ -42,7 +42,11 @@ export default function CheckoutLayout() {
   const navigate = useNavigate();
   const location = useLocation();
   const { id } = useParams();
-
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      window.scrollTo({ top: 0, left: 0, behavior: "auto" });
+    }
+  }, [location.pathname]);
   // Fetch event (for title, date/time, location, price summary)
   const { data, isLoading } = useGetEventByIdQuery(id, { skip: !id });
   const event = data?.data;
