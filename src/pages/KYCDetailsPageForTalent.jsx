@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { motion } from "framer-motion";
+import { toast } from "react-toastify";
 import {
   FaTimes,
   FaDownload,
@@ -13,16 +14,61 @@ import {
   FaSpinner,
   FaCheckCircle,
   FaTimesCircle,
+  FaPaperPlane,
 } from "react-icons/fa";
 import { imgSrc } from "../utils/imgSrc";
+import { useUploadKYCDocumentsMutation } from "../app/authApi";
 
 const GOLD = "#a38b41";
 
 const KYCDetailsPageForTalent = ({ data: apiData, error, isLoading }) => {
+  const kycStatus = apiData?.userDocument?.isKYCVerified;
   const [selectedImage, setSelectedImage] = useState(null);
+  const [formData, setFormData] = useState({ text: "" });
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [uploadKYCDocuments] = useUploadKYCDocumentsMutation();
 
   const talentMessages = apiData?.userDocument?.messages;
   const isKYCVerified = apiData?.userDocument?.isKYCVerified;
+  const talentDocumentId = apiData?.userDocument?._id;
+
+  const theme = {
+    primary: "#a38b41",
+    bg: "bg-[#171717]",
+    card: "bg-gradient-to-br from-[#1a1a1a] to-[#0d0d0d]",
+    border: "border border-white/10",
+    text: "text-white",
+    sub: "text-gray-400",
+  };
+
+  const handleSendComment = async (e) => {
+    e.preventDefault();
+    if (!formData.text.trim()) {
+      toast.error("Please enter a message");
+      return;
+    }
+
+    setIsSubmitting(true);
+    try {
+      const submitData = new FormData();
+      submitData.append("text", formData.text);
+      submitData.append("docId", talentDocumentId);
+      await uploadKYCDocuments(submitData).unwrap();
+      toast.success("Message sent successfully!");
+      setFormData({ text: "" });
+
+      // Refresh the data to show the new message
+      // You might want to add a refetch function here if needed
+    } catch (err) {
+      console.error(err);
+      toast.error(
+        err?.data?.message || "Failed to send message. Please try again."
+      );
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
   console.log(talentMessages, "api data here");
   const fmtDate = (d) =>
     d
@@ -72,6 +118,19 @@ const KYCDetailsPageForTalent = ({ data: apiData, error, isLoading }) => {
     if (!apiData?.success) return null;
     const { user, userDocument } = apiData;
     const { images, files } = splitUploads(userDocument?.uploads || []);
+
+    // Process messages to match admin format
+    const processedMessages =
+      userDocument?.messages?.map((msg) => ({
+        id: msg._id || Math.random(),
+        user: msg.role === "user" ? user?.name : "Admin",
+        text: msg.text,
+        time: fmtDT(msg.sentAt),
+        isAdmin: msg.role !== "user",
+        images: msg.images || [],
+        files: msg.files || [],
+      })) || [];
+
     return {
       user: {
         name: user?.name || "N/A",
@@ -89,7 +148,7 @@ const KYCDetailsPageForTalent = ({ data: apiData, error, isLoading }) => {
         isVerified: !!userDocument?.isKYCVerified,
         rejectionReason: userDocument?.rejectionReason || "",
       },
-      messages: [],
+      messages: processedMessages,
       docs: { images, files },
     };
   })();
@@ -136,6 +195,7 @@ const KYCDetailsPageForTalent = ({ data: apiData, error, isLoading }) => {
       isVerified: false,
       rejectionReason: "",
     },
+    messages: [],
     docs: { images: [], files: [] },
   };
 
@@ -264,7 +324,8 @@ const KYCDetailsPageForTalent = ({ data: apiData, error, isLoading }) => {
               </div>
             )}
           </motion.div>
-          
+
+          {/* Communication Section - Updated to match admin */}
           <motion.div
             initial={{ opacity: 0, x: -20 }}
             animate={{ opacity: 1, x: 0 }}
@@ -272,12 +333,12 @@ const KYCDetailsPageForTalent = ({ data: apiData, error, isLoading }) => {
             className="bg-gradient-to-br from-[#1a1a1a] to-[#0d0d0d] rounded-2xl border border-white/10 p-6"
           >
             <h2 className="text-xl font-semibold text-white mb-4">
-              Communication ({talentMessages?.length})
+              Communication ({kyc.messages.length})
             </h2>
 
             <div className="space-y-4 mb-6 max-h-64 overflow-y-auto pr-2">
-              {talentMessages?.length > 0 ? (
-                talentMessages?.map((message) => (
+              {kyc.messages.length > 0 ? (
+                kyc.messages.map((message) => (
                   <CommentBubble key={message.id} comment={message} />
                 ))
               ) : (
@@ -286,40 +347,43 @@ const KYCDetailsPageForTalent = ({ data: apiData, error, isLoading }) => {
                 </p>
               )}
             </div>
-
-            {/* <div>
-              <h3 className="text-lg font-semibold text-white mb-3">
-                Reply / Send Message
-              </h3>
-              <div className="space-y-3">
-                <textarea
-                  value={formData.text}
-                  onChange={(e) => setFormData({ text: e.target.value })}
-                  rows={4}
-                  className={`w-full px-4 py-3 rounded-lg bg-white/5 ${theme.text} ${theme.border} outline-none`}
-                  style={{ boxShadow: `0 0 0 0px ${theme.primary}` }}
-                  onFocus={(e) =>
-                    (e.currentTarget.style.boxShadow = `0 0 0 2px ${theme.primary}`)
-                  }
-                  onBlur={(e) =>
-                    (e.currentTarget.style.boxShadow = `0 0 0 0px ${theme.primary}`)
-                  }
-                  placeholder="Type your message here..."
-                  // className="w-full px-4 py-3 bg-[#2a2a2a] border border-gray-600 rounded-lg focus:ring-2 focus:ring-[#a38b41] focus:border-transparent outline-none text-white resize-none"
-                  // rows="3"
-                />
-                <div className="flex justify-end items-center">
-                  <button
-                    onClick={handleSendComment}
-                    // disabled={!comment.trim()}
-                    className="px-6 py-2 cursor-pointer bg-gradient-to-r from-[#a38b41] to-[#c2ab67] text-black rounded-lg hover:from-[#b59a4a] hover:to-[#d4bc7d] transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center space-x-2"
-                  >
-                    <FaPaperPlane />
-                    <span>Send</span>
-                  </button>
+            {kycStatus === false && (
+              <div>
+                <h3 className="text-lg font-semibold text-white mb-3">
+                  Reply / Send Message
+                </h3>
+                <div className="space-y-3">
+                  <textarea
+                    value={formData.text}
+                    onChange={(e) => setFormData({ text: e.target.value })}
+                    rows={4}
+                    className={`w-full px-4 py-3 rounded-lg bg-white/5 ${theme.text} ${theme.border} outline-none`}
+                    style={{ boxShadow: `0 0 0 0px ${theme.primary}` }}
+                    onFocus={(e) =>
+                      (e.currentTarget.style.boxShadow = `0 0 0 2px ${theme.primary}`)
+                    }
+                    onBlur={(e) =>
+                      (e.currentTarget.style.boxShadow = `0 0 0 0px ${theme.primary}`)
+                    }
+                    placeholder="Type your message here..."
+                  />
+                  <div className="flex justify-end items-center">
+                    <button
+                      onClick={handleSendComment}
+                      disabled={!formData.text.trim() || isSubmitting}
+                      className="px-6 py-2 cursor-pointer bg-gradient-to-r from-[#a38b41] to-[#c2ab67] text-black rounded-lg hover:from-[#b59a4a] hover:to-[#d4bc7d] transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center space-x-2"
+                    >
+                      {isSubmitting ? (
+                        <FaSpinner className="animate-spin" />
+                      ) : (
+                        <FaPaperPlane />
+                      )}
+                      <span>{isSubmitting ? "Sending..." : "Send"}</span>
+                    </button>
+                  </div>
                 </div>
               </div>
-            </div> */}
+            )}
           </motion.div>
         </div>
 
@@ -444,15 +508,6 @@ const InfoField = ({ icon: Icon, label, value, full }) => (
 
 const ImageDoc = ({ doc, onOpen }) => (
   <div className="group relative bg-[#2a2a2a] rounded-lg overflow-hidden border border-gray-600 hover:border-[#a38b41] transition-all">
-    {/* <div className="relative aspect-video">
-      <img
-        src={imgSrc(doc.url)}
-        alt={doc.name}
-        className="w-full h-full object-cover"
-        onClick={onOpen}
-      />
-      <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-all" />
-    </div> */}
     <div className="p-3">
       <p className="">
         <a
@@ -464,9 +519,6 @@ const ImageDoc = ({ doc, onOpen }) => (
           {doc?.name}
         </a>
       </p>
-      {/* <p className="text-gray-400 text-xs capitalize">
-        {doc.type} • {doc.verification?.status || "—"}
-      </p> */}
     </div>
   </div>
 );
@@ -492,6 +544,7 @@ const KV = ({ label, value, valueClass = "text-white" }) => (
     <span className={valueClass}>{value}</span>
   </div>
 );
+
 const CommentBubble = ({ comment }) => (
   <div className={`flex ${comment.isAdmin ? "justify-end" : "justify-start"}`}>
     <div
@@ -521,4 +574,5 @@ const CommentBubble = ({ comment }) => (
     </div>
   </div>
 );
+
 export default KYCDetailsPageForTalent;

@@ -32,6 +32,8 @@ const KYCDetailsPage = () => {
     error,
     refetch,
   } = useGetKYCDocumentsQuery(userId);
+  const kycStatusTalent = apiData?.userDocument?.isKYCVerified;
+  console.log(kycStatusTalent);
   const talentDocumentId = apiData?.userDocument?._id;
   const [adminKycConfirmation, { isLoading: isVerifying }] =
     useAdminKycConfirmationMutation();
@@ -423,6 +425,7 @@ const KYCDetailsPage = () => {
                       <DocumentCard
                         key={document.id}
                         document={document}
+                        kycStatusTalent={kycStatusTalent}
                         onApprove={() =>
                           handleDocumentVerification(
                             document.documentId,
@@ -688,6 +691,7 @@ const DocumentCard = ({
   onReject,
   isVerifying,
   verificationStatus,
+  kycStatusTalent,
 }) => {
   const getStatusColor = (status) => {
     switch (status) {
@@ -741,45 +745,45 @@ const DocumentCard = ({
             </div>
           </div>
         </div>
+        {kycStatusTalent === false && (
+          <div className="flex items-center space-x-2 ml-4">
+            <div className="flex space-x-2">
+              <button
+                onClick={onApprove}
+                disabled={isVerifying || verificationStatus === "approved"}
+                className="flex items-center space-x-1 px-3 py-2 cursor-pointer bg-green-600 hover:bg-green-700 disabled:bg-green-800 text-white rounded text-sm transition-colors disabled:cursor-not-allowed"
+              >
+                {isVerifying ? (
+                  <FaSpinner className="animate-spin" size={12} />
+                ) : (
+                  <FaCheck size={12} />
+                )}
+                <span>Approve</span>
+              </button>
 
-        <div className="flex items-center space-x-2 ml-4">
-          <div className="flex space-x-2">
-            <button
-              onClick={onApprove}
-              disabled={isVerifying || verificationStatus === "approved"}
-              className="flex items-center space-x-1 px-3 py-2 cursor-pointer bg-green-600 hover:bg-green-700 disabled:bg-green-800 text-white rounded text-sm transition-colors disabled:cursor-not-allowed"
-            >
-              {isVerifying ? (
-                <FaSpinner className="animate-spin" size={12} />
-              ) : (
-                <FaCheck size={12} />
-              )}
-              <span>Approve</span>
-            </button>
+              <button
+                onClick={onReject}
+                disabled={isVerifying || verificationStatus === "rejected"}
+                className="flex items-center cursor-pointer space-x-1 px-3 py-2 bg-red-600 hover:bg-red-700 disabled:bg-red-800 text-white rounded text-sm transition-colors disabled:cursor-not-allowed"
+              >
+                {isVerifying ? (
+                  <FaSpinner className="animate-spin" size={12} />
+                ) : (
+                  <FaTimes size={12} />
+                )}
+                <span>Reject</span>
+              </button>
+            </div>
 
-            <button
-              onClick={onReject}
-              disabled={isVerifying || verificationStatus === "rejected"}
-              className="flex items-center cursor-pointer space-x-1 px-3 py-2 bg-red-600 hover:bg-red-700 disabled:bg-red-800 text-white rounded text-sm transition-colors disabled:cursor-not-allowed"
-            >
-              {isVerifying ? (
-                <FaSpinner className="animate-spin" size={12} />
-              ) : (
-                <FaTimes size={12} />
-              )}
-              <span>Reject</span>
-            </button>
-          </div>
-
-          <div className="flex space-x-1 ml-2">
-            {/* <button
+            <div className="flex space-x-1 ml-2">
+              {/* <button
               onClick={onExpand}
               className="p-2 bg-[#a38b41] hover:bg-[#b59a4a] text-white rounded transition-colors"
               title="Expand"
             >
               <FaExpand size={14} />
             </button> */}
-            {/* <a
+              {/* <a
               href={imgSrc(document?.url)}
               download
               target="_blank"
@@ -789,8 +793,9 @@ const DocumentCard = ({
             >
               <FaDownload size={14} />
             </a> */}
+            </div>
           </div>
-        </div>
+        )}
       </div>
     </div>
   );
