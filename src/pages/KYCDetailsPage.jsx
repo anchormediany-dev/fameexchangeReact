@@ -812,7 +812,7 @@ const CommentBubble = ({ comment }) => (
     >
       <div className="flex items-center justify-between mb-1">
         <span
-          className={`text-sm font-medium ${
+          className={`text-sm mr-1 font-medium ${
             comment.isAdmin ? "text-black" : "text-[#a38b41]"
           }`}
         >

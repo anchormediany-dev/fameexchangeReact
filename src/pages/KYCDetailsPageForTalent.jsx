@@ -546,25 +546,25 @@ const KV = ({ label, value, valueClass = "text-white" }) => (
 );
 
 const CommentBubble = ({ comment }) => (
-  <div className={`flex ${comment.isAdmin ? "justify-end" : "justify-start"}`}>
+  <div className={`flex ${!comment.isAdmin ? "justify-end" : "justify-start"}`}>
     <div
       className={`max-w-xs lg:max-w-md rounded-2xl p-3 ${
-        comment.isAdmin
+        !comment.isAdmin
           ? "bg-gradient-to-r from-[#a38b41] to-[#c2ab67] text-black"
           : "bg-[#2a2a2a] text-white border border-gray-600"
       }`}
     >
       <div className="flex items-center justify-between mb-1">
         <span
-          className={`text-sm font-medium ${
-            comment.isAdmin ? "text-black" : "text-[#a38b41]"
+          className={`text-sm mr-1 font-medium ${
+            !comment.isAdmin ? "text-black" : "text-[#a38b41]"
           }`}
         >
           {comment.user}
         </span>
         <span
           className={`text-xs ${
-            comment.isAdmin ? "text-black/70" : "text-gray-400"
+            !comment.isAdmin ? "text-black/70" : "text-gray-400"
           }`}
         >
           {comment.time}
