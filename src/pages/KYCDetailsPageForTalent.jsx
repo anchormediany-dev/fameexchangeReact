@@ -347,7 +347,7 @@ const KYCDetailsPageForTalent = ({ data: apiData, error, isLoading }) => {
                 </p>
               )}
             </div>
-            {kycStatus === false && (
+            {/* {kycStatus === false && (
               <div>
                 <h3 className="text-lg font-semibold text-white mb-3">
                   Reply / Send Message
@@ -383,7 +383,7 @@ const KYCDetailsPageForTalent = ({ data: apiData, error, isLoading }) => {
                   </div>
                 </div>
               </div>
-            )}
+            )} */}
           </motion.div>
         </div>
 

@@ -726,9 +726,9 @@ const DocumentCard = ({
                 download
                 target="_blank"
                 rel="noreferrer"
-                className="text-blue-400 hover:text-blue-300 underline text-xs"
+                className=""
               >
-                <p className="text-blue-400 underline text-sm font-medium">
+                <p className="p-2  hover:text-[#a38b41] transition-colors text-blue-400 underline text-sm font-medium truncate max-w-xs">
                   {document?.name}
                 </p>
               </a>
