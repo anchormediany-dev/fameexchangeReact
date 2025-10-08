@@ -32,6 +32,7 @@ const KYCDetailsPage = () => {
     error,
     refetch,
   } = useGetKYCDocumentsQuery(userId);
+  const talentDocumentId = apiData?.userDocument?._id;
   const [adminKycConfirmation, { isLoading: isVerifying }] =
     useAdminKycConfirmationMutation();
   const [uploadKYCDocuments] = useUploadKYCDocumentsMutation();
@@ -62,6 +63,7 @@ const KYCDetailsPage = () => {
     try {
       const submitData = new FormData();
       submitData.append("text", formData.text);
+      submitData.append("docId", talentDocumentId);
       await uploadKYCDocuments(submitData).unwrap();
       toast.success("Message sent successfully!");
       setFormData({ text: "" });
