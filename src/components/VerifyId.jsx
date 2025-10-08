@@ -12,7 +12,9 @@ const KYCUpload = () => {
   const navigate = useNavigate();
   const { user } = useAuth();
   const { data, isLoading, error } = useGetKYCDocumentsQuery(user?.id);
-  const kycStatus = data?.userDocument?.isKYCVerified;
+  const kycStatus =
+    data?.userDocument?.isKYCVerified || data?.user?.KYC_Verified;
+    console.log(kycStatus)
   const [formData, setFormData] = useState({ text: "" });
   const [images, setImages] = useState([]);
   const [files, setFiles] = useState([]);
