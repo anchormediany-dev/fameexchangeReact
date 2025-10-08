@@ -66,6 +66,8 @@ const FriendsSection = ({
     }
   };
 
+  const showResults = Boolean(searchTerm.trim() && !selectedUser?._id);
+
   const removeMultipleFriends = async () => {
     try {
       const res = await deleteFriends({ friendIds: selected }).unwrap();
@@ -204,12 +206,15 @@ const FriendsSection = ({
                 type="text"
                 placeholder="Type a talent name..."
                 value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
+                onChange={(e) => {
+                  setSelectedUser(null);
+                  setSearchTerm(e.target.value);
+                }}
                 className="w-full px-3 py-2 bg-[#3d3d3d] text-white rounded-lg border border-gray-600 focus:outline-none focus:ring-2 focus:ring-yellow-500"
               />
 
               {/* Results */}
-              {searchTerm.trim() && (
+              {searchTerm.trim() && !selectedUser?._id && (
                 <div className="absolute z-20 mt-2 w-full max-h-64 overflow-y-auto bg-[#2b2b2b] border border-gray-700 rounded-lg shadow-lg">
                   {isUsersLoading ? (
                     <div className="px-3 py-2 text-gray-400 text-sm">
@@ -257,14 +262,14 @@ const FriendsSection = ({
             </div>
 
             {/* Selected user preview (optional) */}
-            {selectedUser?._id && (
+            {/* {selectedUser?._id && (
               <div className="mt-2 text-xs text-gray-300">
                 Selected:{" "}
                 <span className="font-semibold">
                   {firstWithLastInitial(selectedUser.name)}
                 </span>
               </div>
-            )}
+            )} */}
           </div>
 
           <div className="mb-4">
