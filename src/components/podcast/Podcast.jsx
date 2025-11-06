@@ -188,7 +188,7 @@ const Podcast = () => {
 
   return (
     <motion.section
-      className="relative h-[70vh] md:h-[80vh] bg-cover bg-center bg-no-repeat w-full flex items-center text-white px-4 sm:px-6 lg:px-8 overflow-hidden"
+      className="relative h-[60vh] md:h-[70vh] bg-cover bg-center bg-no-repeat w-full flex items-center text-white px-4 sm:px-6 lg:px-8 overflow-hidden"
       style={{
         backgroundImage: `url(${micImage})`,
       }}
