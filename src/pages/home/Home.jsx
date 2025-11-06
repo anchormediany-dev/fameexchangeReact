@@ -20,6 +20,7 @@ import CelebMerchandiseHero from "../../components/CelebMerchandiseHero";
 import { useGetTalentQuery } from "../../app/authApi";
 import React, { useMemo } from "react";
 import ProductSlider from "../../components/ProductSlider";
+import SectionDivider from "../../components/SectionDivider";
 const Home = () => {
   const { data, isLoading, isError, error, refetch, isFetching } =
     useGetTalentQuery();
@@ -65,6 +66,7 @@ const Home = () => {
         onRefresh={refetch}
         viewAll={true}
       />
+      <SectionDivider />
       <DownloadApp />
       <MeetAndGreet />
       <Podcast />
