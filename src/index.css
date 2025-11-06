@@ -72,7 +72,7 @@ body {
   background-repeat: no-repeat;
 }
 .bg-app-section {
-  background-image: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)),
+  background-image: linear-gradient(#e7c64c, rgba(0, 0, 0, 0.5)),
     url("./assets/images/mobile mockup image.jpg");
   background-size: cover;
 }
@@ -690,7 +690,7 @@ select {
 
 @media (min-width: 1024px) {
   .custom-heading-one {
-    font-size: 3rem; /* Large screens (48px) */
+    font-size: 2.8rem; /* Large screens (48px) */
   }
   .custom-heading-two {
     font-size: 2.5rem; /* Large screens (40px) */
@@ -714,7 +714,7 @@ select {
 
 @media (min-width: 1280px) {
   .custom-heading-one {
-    font-size: 3.25rem;
+    font-size: 3.1rem;
   }
   .custom-heading-two {
     font-size: 2.75rem;
@@ -738,7 +738,7 @@ select {
 
 @media (min-width: 1536px) {
   .custom-heading-one {
-    font-size: 3.5rem; /* Extra-Large screens (56px) */
+    font-size: 3.2rem; /* Extra-Large screens (56px) */
   }
   .custom-heading-two {
     font-size: 3rem; /* Extra-Large screens (56px) */
@@ -787,6 +787,12 @@ p {
   p {
     font-size: 1.125rem; /* Extra-large screens (18px) */
   }
+}
+.custom-heading2 {
+  font-size: 24px;
+  font-weight: 700;
+  line-height: 1.2;
+  margin-bottom: 1rem;
 }
 /* Custom Buttons */
 .custom-button-one {

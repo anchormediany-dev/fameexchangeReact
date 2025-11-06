@@ -1,12 +1,11 @@
 import { motion, useInView } from "framer-motion";
 import { useRef } from "react";
 import { GoArrowUpRight } from "react-icons/go";
-// import talentTradingImage from "../assets/images/talent-trading-image.png";
 import talentTradingImage from "../assets/images/talent-trading-bg.png";
 import imageText from "../assets/images/fame-exchange-image-text.png";
 import { useNavigate } from "react-router-dom";
+
 const TalentTradingSection = () => {
-  
   const navigate = useNavigate();
   const sectionRef = useRef(null);
   const isInView = useInView(sectionRef, { once: true, amount: 0.2 });
@@ -14,36 +13,33 @@ const TalentTradingSection = () => {
   return (
     <section
       ref={sectionRef}
-      className="bg-[#171717] text-white py-12 2xl:py-16 px-6 md:px-16 relative overflow-hidden"
+      className="bg-[#171717] text-white py-16 lg:py-20 2xl:py-24 px-4 sm:px-6 md:px-16 relative overflow-hidden"
     >
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
         transition={{ duration: 0.6, delay: 0.1 }}
-        className="mt-2 container"
+        className="mt-2 container mx-auto mb-12 lg:mb-16"
       >
         <img
-          style={{
-            width: "-webkit-fill-available",
-          }}
           src={imageText}
           alt="Graphic Text"
+          className="w-full max-w-3xl mx-auto"
         />
       </motion.div>
 
-      <div className="relative z-10 container grid 2xl:grid-cols-2 items-center gap-10">
-        {/* Image */}
-        <div className="rounded-2xl overflow-hidden">
+      <div className="relative z-10 container mx-auto grid lg:grid-cols-2 items-center gap-10 lg:gap-12 xl:gap-16">
+        {/* Image Section */}
+        <div className="rounded-2xl overflow-hidden order-1 lg:order-1">
           <motion.p
             initial={{ opacity: 0, y: 20 }}
             animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
             transition={{ duration: 0.6, delay: 0.2 }}
-            className="text-center mb-1 custom-heading-four"
+            className="text-center mb-4 lg:mb-6 custom-heading-four text-lg sm:text-xl md:text-2xl"
           >
             TALENT TRADING
           </motion.p>
-          <div className="max-h-[50%]">
-            {" "}
+          <div className="max-h-[280px] sm:max-h-[320px] md:max-h-[380px] lg:max-h-[420px] xl:max-h-[480px]">
             <motion.img
               initial={{ opacity: 0, scale: 1.05 }}
               animate={
@@ -54,51 +50,54 @@ const TalentTradingSection = () => {
               transition={{ duration: 0.7, delay: 0.3 }}
               src={talentTradingImage}
               alt="Talent Trading"
-              className="w-full  object-cover object-center rounded-2xl"
+              className="w-full h-full object-cover object-center rounded-2xl"
             />
           </div>
         </div>
 
         {/* Text Content */}
-        <div className="space-y-6">
+        <div className="space-y-8 lg:space-y-10 xl:space-y-12 order-2 lg:order-2">
           <motion.h3
             initial={{ opacity: 0, x: 20 }}
             animate={isInView ? { opacity: 1, x: 0 } : { opacity: 0, x: 20 }}
             transition={{ duration: 0.6, delay: 0.4 }}
-            className="custom-heading-one"
+            className="custom-heading-four text-xl sm:text-2xl md:text-3xl lg:text-4xl leading-tight"
           >
             TRANSFORMING FAN INTERACTION & TALENT MONETIZATION
           </motion.h3>
 
-          <div className="group h-40 w-96  flex justify-end items-center w-full transition-all duration-500 hover:scale-105">
+          <div className="flex flex-col lg:flex-row items-center gap-6 lg:gap-8 xl:gap-10 w-full transition-all duration-500">
             <motion.p
               initial={{ opacity: 0, y: 20 }}
               animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
               transition={{ duration: 0.6, delay: 0.5 }}
-              className="text-[#878787]"
+              className="text-[#878787] text-sm sm:text-base md:text-lg lg:text-base xl:text-lg flex-1 leading-relaxed"
             >
               Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
               eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut
               enim ad minim veniam, quis nostrud exercitation ullamco laboris
               nisi ut aliquip.
             </motion.p>
-            <img
-              src="/fame-gif.gif"
-              alt="fame coin"
-              className=" w-96 h-96   transition-transform duration-700 group-hover:scale-110"
-            />
+            <div className="flex-shrink-0">
+              <img
+                src="/fame-gif.gif"
+                alt="fame coin"
+                className="w-32 h-32 sm:w-40 sm:h-40 md:w-48 md:h-48 lg:w-56 lg:h-56 xl:w-64 xl:h-64 transition-transform duration-700"
+              />
+            </div>
           </div>
+
           <motion.button
             onClick={() => navigate("/all-talents")}
             initial={{ opacity: 0, y: 20 }}
             animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
             transition={{ duration: 0.6, delay: 0.6 }}
             whileHover={{ scale: 1.02 }}
-            className="mt-4 px-6 py-3 bg-gradient-to-r from-[#a18a3f] cursor-pointer to-[#e6ca7c] text-white rounded-lg flex items-center gap-2 hover:brightness-110 transition-all"
+            className="px-6 py-3 bg-gradient-to-r from-[#a18a3f] cursor-pointer to-[#e6ca7c] text-white rounded-lg flex items-center gap-2 hover:brightness-110 transition-all text-sm sm:text-base w-full sm:w-auto justify-center mt-4 lg:mt-6"
           >
             Read More
             <motion.div whileHover={{ x: 3, y: -3 }}>
-              <GoArrowUpRight size={24} />
+              <GoArrowUpRight size={20} className="sm:w-6 sm:h-6" />
             </motion.div>
           </motion.button>
         </div>
