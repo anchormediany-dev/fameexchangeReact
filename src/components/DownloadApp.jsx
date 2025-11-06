@@ -1,6 +1,6 @@
 import { motion, useInView } from "framer-motion";
 import { useRef } from "react";
-import phoneMockupImage from "../assets/images/phone_mockup_image.webp";
+import phoneMockupImage from "../assets/images/app-img.png";
 
 const AppShowcase = () => {
   const sectionRef = useRef(null);
@@ -89,15 +89,15 @@ const AppShowcase = () => {
                 <img
                   src={phoneMockupImage}
                   alt="Phone mockup"
-                  className="w-full rounded-[30px] sm:rounded-[40px] border-[6px] sm:border-[8px] border-white shadow-lg sm:shadow-2xl bg-black"
+                  className="w-full rounded-[30px] sm:rounded-[40px] border-[6px] sm:border-[8px] border-white shadow-lg sm:shadow-2xl bg-[#e2cb68]"
                 />
 
                 {/* Phone screen glow effect */}
                 <motion.div
                   initial={{ opacity: 0 }}
-                  animate={
-                    isInView ? { opacity: [0, 0.6, 0.3] } : { opacity: 0 }
-                  }
+                  // animate={
+                  //   isInView ? { opacity: [0, 0.6, 0.3] } : { opacity: 0 }
+                  // }
                   transition={{
                     duration: 2,
                     delay: 0.8,
@@ -105,7 +105,7 @@ const AppShowcase = () => {
                     repeat: Infinity,
                     repeatType: "reverse",
                   }}
-                  className="absolute inset-[8px] sm:inset-[10px] rounded-[22px] sm:rounded-[30px] bg-blue-500/20"
+                  className="absolute inset-[8px] sm:inset-[10px] rounded-[22px] sm:rounded-[30px] bg-[#e2cb68]"
                 />
               </div>
             </motion.div>
