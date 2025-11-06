@@ -6,7 +6,6 @@ import HeroSection from "../../components/HeroSection";
 import BrandedTalentShares from "../../components/BrandedTalentShares";
 import TalentTradingSection from "../../components/TalentTradingSection";
 import DownloadApp from "../../components/DownloadApp";
-import VideoBanner2 from "../../components/VideoBanner2";
 import GigsEvents from "../../components/GigsEvents";
 import MeetAndGreet from "../../components/MeetGreetSection";
 import TheFuturesSection from "../../components/TheFuturesSection";
