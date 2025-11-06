@@ -87,6 +87,7 @@ const TalentTradingSection = () => {
               <GoArrowUpRight size={24} />
             </motion.div>
           </motion.button>
+          {/* <img src="/fame-coin-flip-270-transparent.gif" alt="" /> */}
         </div>
       </div>
     </section>

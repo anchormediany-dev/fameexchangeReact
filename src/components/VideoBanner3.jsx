@@ -1,8 +1,12 @@
 import React, { useRef, useState, useEffect } from "react";
-
+import { GoMute, GoUnmute } from "react-icons/go";
+import { FaArrowRight } from "react-icons/fa6";
+import { FaPlay } from "react-icons/fa";
 const VideoBanner = () => {
   const videoRef = useRef(null);
   const [isVideoPlaying, setIsVideoPlaying] = useState(false);
+  const [isMuted, setIsMuted] = useState(true); // Start muted for autoplay
+  const [showUnmuteButton, setShowUnmuteButton] = useState(false);
 
   useEffect(() => {
     const video = videoRef.current;
@@ -13,6 +17,11 @@ const VideoBanner = () => {
         try {
           await video.play();
           setIsVideoPlaying(true);
+
+          // Show unmute button after video starts playing
+          setTimeout(() => {
+            setShowUnmuteButton(true);
+          }, 2000);
         } catch (error) {
           console.log("Auto-play was prevented:", error);
           // If auto-play fails, we'll still show the content
@@ -30,17 +39,35 @@ const VideoBanner = () => {
     }
   }, []);
 
+  const handleUnmute = () => {
+    const video = videoRef.current;
+    if (video) {
+      video.muted = false;
+      setIsMuted(false);
+      setShowUnmuteButton(false);
+    }
+  };
+
+  const handleMute = () => {
+    const video = videoRef.current;
+    if (video) {
+      video.muted = true;
+      setIsMuted(true);
+      setShowUnmuteButton(true);
+    }
+  };
+
   return (
     <section
       className="relative w-full h-[80vh] min-h-[500px] mt-10 lg:mt-16  max-h-[700px] overflow-hidden"
       style={{ backgroundColor: "#171717" }}
     >
-      {/* Video Background */}
+      {/* Video Background with Audio */}
       <video
         ref={videoRef}
         className="absolute inset-0 w-full h-full  object-cover opacity-30"
         autoPlay
-        muted
+        muted={isMuted} // Controlled by state
         loop
         playsInline
         preload="metadata"
@@ -48,39 +75,60 @@ const VideoBanner = () => {
         onPause={() => setIsVideoPlaying(false)}
       >
         {/* Multiple video sources for better compatibility */}
-        <source
-          src="https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4"
-          type="video/mp4"
-        />
-        <source
-          src="https://sample-videos.com/zip/10/mp4/SampleVideo_1280x720_1mb.mp4"
-          type="video/mp4"
-        />
+        <source src="/fame-video.mp4" type="video/mp4" />
+        {/* <source src="/fame-video.mp4" type="video/mp4" /> */}
       </video>
 
+      {/* Unmute/Mute Button */}
+      {showUnmuteButton && (
+        <button
+          onClick={handleUnmute}
+          className="absolute bottom-6 right-6 z-20 flex items-center gap-2 px-4 py-2 bg-black/50 hover:bg-black/70 text-white rounded-full transition-all duration-300 backdrop-blur-sm border border-white/20 hover:border-cyan-400/60 group"
+          title="Unmute video"
+        >
+          <GoUnmute />
+          <span className="text-sm font-medium">Unmute</span>
+        </button>
+      )}
+
+      {!isMuted && (
+        <button
+          onClick={handleMute}
+          className="absolute bottom-6 right-6 z-20 flex items-center gap-2 px-4 py-2 bg-black/50 hover:bg-black/70 text-white rounded-full transition-all duration-300 backdrop-blur-sm border border-white/20 hover:border-cyan-400/60 group"
+          title="Mute video"
+        >
+          <GoMute />
+          <span className="text-sm font-medium">Mute</span>
+        </button>
+      )}
+
       {/* Modern gradient overlay */}
-      <div className="absolute inset-0 bg-gradient-to-br from-gray-900/80 via-gray-800/60 to-gray-900/90" />
-      <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent" />
+      {/* <div className="absolute inset-0 bg-gradient-to-br from-gray-900/80 via-gray-800/60 to-gray-900/90" />
+      <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent" /> */}
 
       {/* Animated background elements with modern colors */}
-      <div className="absolute inset-0 overflow-hidden">
+      {/* <div className="absolute inset-0 overflow-hidden">
         <div className="absolute -top-32 -right-32 w-64 h-64 bg-blue-500/10 rounded-full blur-3xl animate-float" />
         <div className="absolute -bottom-32 -left-32 w-64 h-64 bg-cyan-400/8 rounded-full blur-3xl animate-float-delayed" />
         <div className="absolute top-1/3 right-1/4 w-48 h-48 bg-white/5 rounded-full blur-2xl animate-pulse-slow" />
-      </div>
+      </div> */}
 
       {/* Floating particles */}
-      <div className="absolute inset-0 overflow-hidden pointer-events-none">
+      {/* <div className="absolute inset-0 overflow-hidden pointer-events-none">
         <div className="absolute top-1/4 left-1/4 w-2 h-2 bg-blue-400/40 rounded-full animate-float-particle" />
         <div className="absolute top-3/4 right-1/3 w-1 h-1 bg-cyan-300/50 rounded-full animate-float-particle-2" />
         <div className="absolute top-1/2 left-3/4 w-1.5 h-1.5 bg-white/30 rounded-full animate-float-particle-3" />
-      </div>
+      </div> */}
 
       {/* Main Content */}
       <div className="relative z-10 flex  items-center justify-center h-full px-4 sm:px-6 lg:px-8 py-12">
         <div className="text-center text-white max-w-5xl mx-auto">
           {/* Modern Badge */}
-          <div className="inline-flex items-center px-4 py-2 mb-6 bg-gray-800/40 backdrop-blur-md rounded-full border border-gray-600/30 animate-fade-in-up shadow-xl">
+          <div
+            className="inline-flex items-center px-4 py-2 mb-6 bg-gray-800/40 backdrop-blur-md rounded-full border
+           border-gray-600/30
+            animate-fade-in-up shadow-xl"
+          >
             {/* <span className="w-2 h-2 bg-cyan-400 rounded-full mr-3 animate-pulse-glow" /> */}
             <span className="text-sm font-medium text-gray-200 tracking-wide">
               FAME EXCHANGE
@@ -114,19 +162,7 @@ const VideoBanner = () => {
             <button className="custom-button-two rounded-full">
               <span className="relative z-10 flex items-center justify-center">
                 Start Trading Now
-                <svg
-                  className="w-5 h-5 ml-3 transform group-hover:translate-x-2 transition-transform duration-300"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M13 7l5 5m0 0l-5 5m5-5H6"
-                  />
-                </svg>
+                <FaArrowRight />
               </span>
               <div className="absolute inset-0 bg-gradient-to-r from-cyan-400 to-blue-400 rounded-full opacity-0 group-hover:opacity-20 transition-opacity duration-500 blur-xl" />
               <div className="absolute inset-0 bg-white/10 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
@@ -136,13 +172,7 @@ const VideoBanner = () => {
             <button className="group px-8 py-4 border-2 cursor-pointer border-gray-600/50 hover:border-cyan-400/60 text-gray-200 hover:text-white font-medium rounded-full transform transition-all duration-500 hover:scale-105 hover:bg-gray-800/30 focus:outline-none focus:ring-4 focus:ring-gray-500/30 w-full sm:w-auto text-base min-w-[200px] backdrop-blur-sm">
               <span className="flex items-center justify-center">
                 Watch Demo
-                <svg
-                  className="w-5 h-5 ml-3 group-hover:scale-110 transition-transform duration-300"
-                  fill="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path d="M8 5v14l11-7z" />
-                </svg>
+                <FaPlay className="ml-3" />
               </span>
             </button>
           </div>
