@@ -6,6 +6,7 @@ import talentTradingImage from "../assets/images/talent-trading-bg.png";
 import imageText from "../assets/images/fame-exchange-image-text.png";
 import { useNavigate } from "react-router-dom";
 const TalentTradingSection = () => {
+  
   const navigate = useNavigate();
   const sectionRef = useRef(null);
   const isInView = useInView(sectionRef, { once: true, amount: 0.2 });

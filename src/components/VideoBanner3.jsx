@@ -7,7 +7,8 @@ const VideoBanner = () => {
   const [isVideoPlaying, setIsVideoPlaying] = useState(false);
   const [isMuted, setIsMuted] = useState(true); // Start muted for autoplay
   const [showUnmuteButton, setShowUnmuteButton] = useState(false);
-
+  const FRONTEND_BASE_URL = import.meta.env.VITE_FRONTEND_URL;
+  console.log(FRONTEND_BASE_URL);
   useEffect(() => {
     const video = videoRef.current;
 
@@ -75,7 +76,10 @@ const VideoBanner = () => {
         onPause={() => setIsVideoPlaying(false)}
       >
         {/* Multiple video sources for better compatibility */}
-        <source src="/fame-video.mp4" type="video/mp4" />
+        <source
+          src={`${FRONTEND_BASE_URL}/FAME-VIDEO-2024.mp4`}
+          type="video/mp4"
+        />
         {/* <source src="/fame-video.mp4" type="video/mp4" /> */}
       </video>
 
