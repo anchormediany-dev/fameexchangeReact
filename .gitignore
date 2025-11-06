@@ -31,3 +31,4 @@ dist-ssr
 
 # Ignore package.json
 package-lock.json
+public/*.mp4
