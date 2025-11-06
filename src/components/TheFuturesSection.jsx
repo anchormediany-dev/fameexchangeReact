@@ -1,7 +1,8 @@
 import React, { useRef } from "react";
 import { motion, useInView } from "framer-motion";
 // import futuresImage from "../assets/images/future-bg.png";
-import futuresImage from "../assets/images/futures-bg.png";
+// import futuresImage from "../assets/images/futures-bg.png";
+import futuresImage from "../assets/images/future-bg-2.png";
 import { useNavigate } from "react-router-dom";
 import { GoArrowUpRight } from "react-icons/go";
 import { FiMusic } from "react-icons/fi";
