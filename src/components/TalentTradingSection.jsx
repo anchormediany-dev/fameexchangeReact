@@ -29,7 +29,7 @@ const TalentTradingSection = () => {
         />
       </motion.div>
 
-      <div className="relative z-10 container grid md:grid-cols-2 items-center gap-10">
+      <div className="relative z-10 container grid 2xl:grid-cols-2 items-center gap-10">
         {/* Image */}
         <div className="rounded-2xl overflow-hidden">
           <motion.p
@@ -62,18 +62,25 @@ const TalentTradingSection = () => {
           >
             TRANSFORMING FAN INTERACTION & TALENT MONETIZATION
           </motion.h3>
-          <motion.p
-            initial={{ opacity: 0, y: 20 }}
-            animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
-            transition={{ duration: 0.6, delay: 0.5 }}
-            className="text-[#878787]"
-          >
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-            eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim
-            ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut
-            aliquip.
-          </motion.p>
 
+          <div className="group h-40 w-96  flex justify-end items-center w-full transition-all duration-500 hover:scale-105">
+            <motion.p
+              initial={{ opacity: 0, y: 20 }}
+              animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
+              transition={{ duration: 0.6, delay: 0.5 }}
+              className="text-[#878787]"
+            >
+              Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
+              eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut
+              enim ad minim veniam, quis nostrud exercitation ullamco laboris
+              nisi ut aliquip.
+            </motion.p>
+            <img
+              src="/fame-gif.gif"
+              alt="fame coin"
+              className=" w-96 h-96   transition-transform duration-700 group-hover:scale-110"
+            />
+          </div>
           <motion.button
             onClick={() => navigate("/all-talents")}
             initial={{ opacity: 0, y: 20 }}
@@ -87,7 +94,6 @@ const TalentTradingSection = () => {
               <GoArrowUpRight size={24} />
             </motion.div>
           </motion.button>
-          {/* <img src="/fame-coin-flip-270-transparent.gif" alt="" /> */}
         </div>
       </div>
     </section>
