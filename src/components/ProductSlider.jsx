@@ -82,11 +82,11 @@ const ProductSlider = () => {
         {/* Compact Header */}
         <div className="text-center mb-6">
           <h3 className="custom-heading-six text-[#a38b41] uppercase  mb-2">
-            FEATURED PRODUCTS
+            OUR PRODUCTS
           </h3>
-          <h2 className="text-3xl md:text-4xl font-bold text-white">
+          {/* <h2 className="text-3xl md:text-4xl font-bold text-white">
             Premium Collection
-          </h2>
+          </h2> */}
         </div>
 
         {/* Swiper Slider */}
