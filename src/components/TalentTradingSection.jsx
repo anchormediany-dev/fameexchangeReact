@@ -1,7 +1,8 @@
 import { motion, useInView } from "framer-motion";
 import { useRef } from "react";
 import { GoArrowUpRight } from "react-icons/go";
-import talentTradingImage from "../assets/images/talent-trading-image.png";
+// import talentTradingImage from "../assets/images/talent-trading-image.png";
+import talentTradingImage from "../assets/images/talent-trading-bg.png";
 import imageText from "../assets/images/fame-exchange-image-text.png";
 import { useNavigate } from "react-router-dom";
 const TalentTradingSection = () => {
@@ -40,16 +41,21 @@ const TalentTradingSection = () => {
           >
             TALENT TRADING
           </motion.p>
-          <motion.img
-            initial={{ opacity: 0, scale: 1.05 }}
-            animate={
-              isInView ? { opacity: 1, scale: 1 } : { opacity: 0, scale: 1.05 }
-            }
-            transition={{ duration: 0.7, delay: 0.3 }}
-            src="https://cdn.pixabay.com/photo/2021/08/08/15/01/trading-6531134_640.jpg"
-            alt="Talent Trading"
-            className="w-full h-full object-cover rounded-2xl"
-          />
+          <div className="max-h-[50%]">
+            {" "}
+            <motion.img
+              initial={{ opacity: 0, scale: 1.05 }}
+              animate={
+                isInView
+                  ? { opacity: 1, scale: 1 }
+                  : { opacity: 0, scale: 1.05 }
+              }
+              transition={{ duration: 0.7, delay: 0.3 }}
+              src={talentTradingImage}
+              alt="Talent Trading"
+              className="w-full  object-cover object-center rounded-2xl"
+            />
+          </div>
         </div>
 
         {/* Text Content */}
