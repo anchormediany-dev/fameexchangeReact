@@ -178,7 +178,7 @@ const Navbar = () => {
               setTimeout(() => setIgnoreScroll(false), 1000);
             }}
           >
-            <img src={siteLogo} alt="Logo" className="h-12" />
+            <img src={siteLogo} alt="Logo" className="h-20" />
           </Link>
 
           <div className="hidden xl:flex items-center gap-5 ml-4">
