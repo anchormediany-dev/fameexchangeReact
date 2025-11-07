@@ -8,7 +8,7 @@ const AddAdminTeam = () => {
   const [form, setForm] = useState({
     name: "",
     title: "",
-    bio: "",
+    // bio: "",
     isVisible: true,
   });
 
@@ -39,7 +39,7 @@ const AddAdminTeam = () => {
   const validate = () => {
     if (!form.name?.trim()) return "Name is required.";
     if (!form.title?.trim()) return "Title is required.";
-    if (!form.bio?.trim()) return "Bio is required.";
+    // if (!form.bio?.trim()) return "Bio is required.";
     return "";
   };
 
@@ -47,9 +47,9 @@ const AddAdminTeam = () => {
     const fd = new FormData();
     fd.append("name", form.name.trim());
     fd.append("title", form.title.trim());
-    fd.append("bio", form.bio.trim());
+    // fd.append("bio", form.bio.trim());
     fd.append("isVisible", String(form.isVisible));
-    if (file) fd.append("imageUrl", file); 
+    if (file) fd.append("imageUrl", file);
     return fd;
   };
 
@@ -68,7 +68,12 @@ const AddAdminTeam = () => {
       await createTeam(formData).unwrap();
       toast.success("Team member added!");
       // reset
-      setForm({ name: "", title: "", bio: "", isVisible: true });
+      setForm({
+        name: "",
+        title: "",
+        //  bio: "",
+        isVisible: true,
+      });
       setFile(null);
       navigate("/admin/teams");
     } catch (err) {
@@ -160,7 +165,7 @@ const AddAdminTeam = () => {
         </div>
 
         {/* Bio */}
-        <div className="grid grid-cols-1 gap-6">
+        {/* <div className="grid grid-cols-1 gap-6">
           <div>
             <label className="block text-white text-sm font-medium mb-2">
               Biography*
@@ -177,7 +182,7 @@ const AddAdminTeam = () => {
               />
             </div>
           </div>
-        </div>
+        </div> */}
 
         {/* Image */}
         <div className="grid grid-cols-1 gap-6">
