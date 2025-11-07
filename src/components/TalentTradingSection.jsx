@@ -19,16 +19,19 @@ const TalentTradingSection = () => {
         initial={{ opacity: 0, y: 20 }}
         animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
         transition={{ duration: 0.6, delay: 0.1 }}
-        className="mt-2 container mx-auto mb-12 lg:mb-16"
+        // className="mt-2 container mx-auto mb-12 lg:mb-16"
       >
         <img
           src={imageText}
           alt="Graphic Text"
-          className="w-full max-w-3xl mx-auto"
+          // className="w-full max-w-3xl mx-auto"
+          style={{
+            width: "-webkit-fill-available",
+          }}
         />
       </motion.div>
 
-      <div className="relative z-10 container mx-auto grid lg:grid-cols-2 items-center gap-10 lg:gap-12 xl:gap-16">
+      <div className="relative z-10 container mx-auto grid lg:grid-cols-2 items-center gap-10 lg:gap-12 xl:gap-16 mt-10 lg:mt-16 2xl:mt-20 px-4 ">
         {/* Image Section */}
         <div className="rounded-2xl overflow-hidden order-1 lg:order-1">
           <motion.p
@@ -66,7 +69,7 @@ const TalentTradingSection = () => {
             TRANSFORMING FAN INTERACTION & TALENT MONETIZATION
           </motion.h3>
 
-          <div className="flex flex-col lg:flex-row items-center gap-6 lg:gap-8 xl:gap-10 w-full transition-all duration-500">
+          <div className="flex flex-col lg:flex-row items-center gap-6  w-full transition-all duration-500">
             <motion.p
               initial={{ opacity: 0, y: 20 }}
               animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
