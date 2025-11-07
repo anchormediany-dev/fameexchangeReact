@@ -18,7 +18,7 @@ const OurTeam = ({ teamMembers: propTeamMembers }) => {
     : [];
 
   return (
-    <section className="py-12 2xl:py-16 bg-[#171717]">
+    <section className="py-12 2xl:py-16 mt-20 bg-[#171717]">
       <div className="container">
         <div className="text-center mb-12">
           <h3 className="custom-heading-six text-[#a38b41] uppercase mb-2">
@@ -47,7 +47,7 @@ const OurTeam = ({ teamMembers: propTeamMembers }) => {
                 key={member._id || member.id}
                 className="rounded-lg overflow-hidden transition-transform duration-300 hover:scale-105 h-full flex flex-col"
               >
-                <div className="h-64 overflow-hidden">
+                <div className="h-[450px] overflow-hidden">
                   <img
                     src={imgSrc(member.imageUrl, FALLBACK_IMG)}
                     alt={member.name || "Team member"}
