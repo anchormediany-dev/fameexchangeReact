@@ -4,7 +4,7 @@ import Footer from "../../components/Footer";
 
 const PrivacyPolicy = () => {
   return (
-    <div className="min-h-screen bg-[#0A0B0E] text-white relative overflow-hidden">
+    <div className="min-h-screen bg-[#0A0B0E] text-white relative overflow-hidden mt-12 md:mt-16">
       {/* Animated background elements */}
       <div className="fixed inset-0 overflow-hidden pointer-events-none">
         <div className="absolute top-0 left-1/4 w-64 h-64 bg-[#b8962d]/10 rounded-full filter blur-3xl opacity-20"></div>

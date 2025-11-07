@@ -95,7 +95,7 @@ const OurTeam = () => {
             {teamMembers.map((member) => (
               <SwiperSlide key={member._id || member.id}>
                 <div className=" rounded-lg overflow-hidden transition-transform duration-300 hover:scale-105 h-full flex flex-col">
-                  <div className="h-64 overflow-hidden">
+                  <div className="h-96 overflow-hidden">
                     <img
                       src={imgSrc(member.imageUrl, FALLBACK_IMG)}
                       alt={member.name || "Team member"}

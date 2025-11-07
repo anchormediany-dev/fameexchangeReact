@@ -135,10 +135,10 @@ const ProductSlider = () => {
           </Swiper>
 
           {/* Navigation Buttons */}
-          <button className="swiper-button-prev-compact absolute left-0 top-1/2 -translate-y-1/2 z-10 w-10 h-10 bg-white/10 hover:bg-white/20 rounded-lg flex items-center justify-center transition-all duration-300 hover:scale-110 group">
+          <button className="swiper-button-prev-compact absolute left-0 top-1/2 -translate-y-1/2 z-10 w-10 h-10 bg-[#e2cb68]  rounded-lg flex items-center justify-center transition-all duration-300 hover:scale-110 group">
             <FiChevronLeft className="w-5 h-5 text-white group-hover:-translate-x-0.5 transition-transform" />
           </button>
-          <button className="swiper-button-next-compact absolute right-0 top-1/2 -translate-y-1/2 z-10 w-10 h-10 bg-white/10 hover:bg-white/20 rounded-lg flex items-center justify-center transition-all duration-300 hover:scale-110 group">
+          <button className="swiper-button-next-compact absolute right-0 top-1/2 -translate-y-1/2 z-10 w-10 h-10 bg-[#e2cb68]  rounded-lg flex items-center justify-center transition-all duration-300 hover:scale-110 group">
             <FiChevronRight className="w-5 h-5 text-white group-hover:translate-x-0.5 transition-transform" />
           </button>
         </div>

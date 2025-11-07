@@ -83,7 +83,7 @@ const AppShowcase = () => {
               initial="hidden"
               animate={isInView ? "visible" : "hidden"}
               variants={phoneVariant}
-              className="absolute left-[10%] sm:left-[15%] top-[10%] sm:top-[15%] w-[80%] sm:w-[65%] transform -rotate-12 z-10"
+              className="absolute left-[10%] sm:left-[15%] top-[18%] sm:top-[14%] md:top-[22%]  lg:top-[5%] w-[80%] sm:w-[65%] transform -rotate-12 z-10"
             >
               <div className="relative">
                 <img

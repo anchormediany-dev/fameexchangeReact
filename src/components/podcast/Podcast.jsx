@@ -101,7 +101,7 @@
 
 // export default Podcast;
 import { motion } from "framer-motion";
-import micImage from "../../assets/images/podcast-bg.png";
+import micImage from "../../assets/images/podcast-bg3.png";
 
 const Podcast = () => {
   // Animation variants

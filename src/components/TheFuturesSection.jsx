@@ -188,7 +188,7 @@ const TheFuturesSection = () => {
           </motion.h1>
 
           <motion.p
-            className="text-white tracking-wider text-center uppercase mt-2"
+            className="text-white tracking-wider  uppercase mt-2"
             variants={subtitleVariants}
             whileHover={{
               scale: 1.02,
@@ -231,7 +231,7 @@ const TheFuturesSection = () => {
             animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
             transition={{ duration: 0.6, delay: 0.6 }}
             whileHover={{ scale: 1.02 }}
-            className="mt-4 px-4 py-2 cursor-pointer bg-gradient-to-r from-[#a18a3f] to-[#e6ca7c] text-white rounded-lg flex items-center gap-2 hover:brightness-110 transition-all mx-auto"
+            className="mt-4 px-4 py-2  cursor-pointer bg-gradient-to-r from-[#a18a3f] w-fit to-[#e6ca7c] text-white rounded-lg flex items-center gap-2 hover:brightness-110 transition-all"
           >
             The Fame Collective
             <motion.div whileHover={{ x: 3, y: -3 }}>
