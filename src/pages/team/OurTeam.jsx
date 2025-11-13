@@ -47,11 +47,11 @@ const OurTeam = ({ teamMembers: propTeamMembers }) => {
                 key={member._id || member.id}
                 className="rounded-lg overflow-hidden transition-transform duration-300 hover:scale-105 h-full flex flex-col"
               >
-                <div className="h-[450px] overflow-hidden">
+                  <div className="aspect-square overflow-hidden">
                   <img
                     src={imgSrc(member.imageUrl, FALLBACK_IMG)}
                     alt={member.name || "Team member"}
-                    className="w-full h-full object-cover"
+                    className="w-full h-full object-contain"
                     loading="lazy"
                   />
                 </div>

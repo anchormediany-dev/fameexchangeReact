@@ -352,7 +352,7 @@ const TalentTokenTicker = ({
             initial="hidden"
             animate={controls}
             transition={{ delay: 0.2 }}
-            className="custom-heading-two mb-8 flex-grow text-center" // flex-grow ensures it takes available space
+            className="custom-heading-two text-[#a38b41] mb-8 flex-grow text-center" // flex-grow ensures it takes available space
           >
             Top Branded Talent Shares (BTS)
           </motion.h1>

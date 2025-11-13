@@ -1,7 +1,7 @@
 import { motion, useInView } from "framer-motion";
 import { useRef } from "react";
 import { GoArrowUpRight } from "react-icons/go";
-import talentTradingImage from "../assets/images/talentTradingImage2.png";
+import talentTradingImage from "../assets/home/talent-trading.jpg";
 import imageText from "../assets/images/fame-exchange-image-text.png";
 import { useNavigate } from "react-router-dom";
 
@@ -21,24 +21,24 @@ const TalentTradingSection = () => {
         transition={{ duration: 0.6, delay: 0.1 }}
         // className="mt-2 container mx-auto mb-12 lg:mb-16"
       >
-        <img
+        {/* <img
           src={imageText}
           alt="Graphic Text"
           // className="w-full max-w-3xl mx-auto"
           style={{
             width: "-webkit-fill-available",
           }}
-        />
+        /> */}
       </motion.div>
 
-      <div className="relative z-10 container mx-auto grid lg:grid-cols-2 items-center gap-10 lg:gap-12 xl:gap-16 mt-10 lg:mt-16 2xl:mt-20 px-4 ">
+      <div className="relative z-10 container mx-auto grid lg:grid-cols-2 items-center gap-10 lg:gap-12 xl:gap-16  px-4 ">
         {/* Image Section */}
         <div className="rounded-2xl overflow-hidden order-1 lg:order-1">
           <motion.p
             initial={{ opacity: 0, y: 20 }}
             animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
             transition={{ duration: 0.6, delay: 0.2 }}
-            className="text-center mb-4 lg:mb-6 custom-heading-four text-lg sm:text-xl md:text-2xl"
+            className="text-center mb-4 lg:mb-6 custom-heading-four text-[#a38b41] text-lg sm:text-xl md:text-2xl"
           >
             TALENT TRADING
           </motion.p>

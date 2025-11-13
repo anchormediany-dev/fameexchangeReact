@@ -95,11 +95,13 @@ const OurTeam = () => {
             {teamMembers.map((member) => (
               <SwiperSlide key={member._id || member.id}>
                 <div className=" rounded-lg overflow-hidden transition-transform duration-300 hover:scale-105 h-full flex flex-col">
-                  <div className="h-96 overflow-hidden">
+                  <div className="aspect-square overflow-hidden">
+                    {" "}
+                    {/* or aspect-video, aspect-[4/3] */}
                     <img
                       src={imgSrc(member.imageUrl, FALLBACK_IMG)}
                       alt={member.name || "Team member"}
-                      className="w-full h-full object-cover"
+                       className="w-full h-full object-contain"
                       loading="lazy"
                     />
                   </div>
