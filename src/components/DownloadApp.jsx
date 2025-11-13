@@ -1,6 +1,6 @@
 import { motion, useInView } from "framer-motion";
 import { useRef } from "react";
-import phoneMockupImage from "../assets/images/app-img.png";
+import phoneMockupImage from "../assets/images/app-phones.png";
 
 const AppShowcase = () => {
   const sectionRef = useRef(null);
@@ -89,7 +89,7 @@ const AppShowcase = () => {
                 <img
                   src={phoneMockupImage}
                   alt="Phone mockup"
-                  className="w-full rounded-[30px] sm:rounded-[40px] border-[6px] sm:border-[8px] border-white shadow-lg sm:shadow-2xl bg-[#e2cb68]"
+                  className="w-full rounded-[30px] sm:rounded-[40px]  shadow-lg sm:shadow-2xl bg-[#e2cb68]"
                 />
 
                 {/* Phone screen glow effect */}
