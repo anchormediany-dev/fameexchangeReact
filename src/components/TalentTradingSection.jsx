@@ -1,8 +1,9 @@
 import { motion, useInView } from "framer-motion";
 import { useRef } from "react";
 import { GoArrowUpRight } from "react-icons/go";
-import talentTradingImage from "../assets/home/talent-trading.jpg";
+import talentTradingImage from "../assets/images/talentTradingImage2.png";
 import imageText from "../assets/images/fame-exchange-image-text.png";
+import coin from "../assets/home/coin.png";
 import { useNavigate } from "react-router-dom";
 
 const TalentTradingSection = () => {
@@ -84,7 +85,7 @@ const TalentTradingSection = () => {
             </motion.p>
             <div className="flex-shrink-0">
               <img
-                src="/fame-gif.gif"
+                src={coin}
                 alt="fame coin"
                 className="w-32 h-32 sm:w-40 sm:h-40 md:w-48 md:h-48 lg:w-56 lg:h-56 xl:w-64 xl:h-64 transition-transform duration-700"
               />
