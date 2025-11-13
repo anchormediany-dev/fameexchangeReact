@@ -418,7 +418,7 @@ const TalentListing = () => {
             THE INVERSE
           </p>
           <h2 className="text-3xl md:text-4xl font-bold">
-            MEET & GREET WITH YOUR FAVOURITE TALENT
+            MEET & GREET WITH YOUR FAVORITE TALENT
           </h2>
         </motion.div>
 

@@ -175,7 +175,7 @@ export default function BrandedTokens() {
           </span>
           <input
             type="text"
-            placeholder="Search Your Favourite Talent"
+            placeholder="Search Your favorite Talent"
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
             className="w-[75%] pl-10 pr-4 py-3 rounded-[13px] placeholder:text-[#454545] heading-400-15 placeholder:font-normal placeholder:text-xs bg-transparent text-white border border-[#808080] focus:outline-none focus:ring-2 focus:ring-primary"

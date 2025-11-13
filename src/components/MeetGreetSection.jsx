@@ -96,7 +96,7 @@ const MeetAndGreet = () => {
         >
           <p className="custom-heading-six text-[#a38b41]">THE INVERSE</p>
           <h2 className="custom-heading-one">
-            MEET & GREET WITH YOUR FAVOURITE TALENT
+            MEET & GREET WITH YOUR FAVORITE TALENT
           </h2>
         </motion.div>
 

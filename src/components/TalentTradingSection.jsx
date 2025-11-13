@@ -76,10 +76,11 @@ const TalentTradingSection = () => {
               transition={{ duration: 0.6, delay: 0.5 }}
               className="text-[#878787] text-sm sm:text-base md:text-lg lg:text-base xl:text-lg flex-1 leading-relaxed"
             >
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-              eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut
-              enim ad minim veniam, quis nostrud exercitation ullamco laboris
-              nisi ut aliquip.
+              Through our innovative Talent Trading platform, fans can now buy,
+              sell, and hold Branded Talent Shares—creating a new level of
+              engagement where support becomes real investment. For talent, this
+              unlocks a powerful revenue stream and deeper fan loyalty, turning
+              fame into measurable value.
             </motion.p>
             <div className="flex-shrink-0">
               <img

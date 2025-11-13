@@ -195,7 +195,7 @@ const Footer = () => {
             >
               Fan Engagement with Real Benefits: Fans are not just spectators
               but active participants. Beyond intrinsic value. "THE FAME
-              EXCHANGE" allows Fans to actively support their favourite Talent,
+              EXCHANGE" allows Fans to actively support theirfavorite Talent,
               offering tangible benefits that go beyond the virtual realm.
             </motion.p>
             <motion.div className="flex justify-center" variants={itemVariants}>
