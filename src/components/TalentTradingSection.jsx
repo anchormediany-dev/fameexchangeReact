@@ -3,7 +3,7 @@ import { useRef } from "react";
 import { GoArrowUpRight } from "react-icons/go";
 import talentTradingImage from "../assets/images/talentTradingImage2.png";
 import imageText from "../assets/images/fame-exchange-image-text.png";
-import coin from "../assets/home/coin.png";
+import coin from "../assets/home/coin.gif";
 import { useNavigate } from "react-router-dom";
 
 const TalentTradingSection = () => {

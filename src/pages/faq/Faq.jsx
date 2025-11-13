@@ -64,9 +64,9 @@ const FAQ = () => {
         id="faqs"
       >
         <div className="container max-w-screen-xl mx-auto flex flex-col gap-12 px-4 sm:px-6 lg:px-8">
-          <h2 className="gredient-text text-center text-3xl sm:text-4xl lg:text-5xl font-bold">
+          {/* <h2 className="gredient-text text-center text-3xl sm:text-4xl lg:text-5xl font-bold">
             Frequently Asked Questions
-          </h2>
+          </h2> */}
           {isError ? (
             <div
               style={{
@@ -80,7 +80,10 @@ const FAQ = () => {
                 : "No frequently asked questions available."}
             </div>
           ) : (
-            <div className="max-w-2xl mx-auto">
+            <div className=" mx-auto">
+              <h2 className="gredient-text text-center text-3xl sm:text-4xl lg:text-5xl font-bold">
+                GENERAL QUESTIONS ABOUT THE FAME EXCHANGE
+              </h2>
               {data?.data?.map((faq, index) => (
                 <FAQItem
                   key={index}
