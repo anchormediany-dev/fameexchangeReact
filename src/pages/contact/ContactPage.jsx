@@ -290,6 +290,10 @@ const ContactPage = () => {
                 </motion.button>
               </motion.div>
             </motion.div> */}
+            <div className="text-3xl font-bold  text-center text-[#a38b41] mt-4">
+              Have something to say? <br />
+              Tell us, we appreciate your feedback.
+            </div>
           </div>
         </motion.div>
       </div>

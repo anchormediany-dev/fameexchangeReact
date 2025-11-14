@@ -1,7 +1,7 @@
 import { motion, useInView } from "framer-motion";
 import { useRef } from "react";
 import { GoArrowUpRight } from "react-icons/go";
-import talentTradingImage from "../assets/images/talentTradingImage2.png";
+import talentTradingImage from "../assets/home/talent-trading-1.png";
 import imageText from "../assets/images/fame-exchange-image-text.png";
 import coin from "../assets/home/coin.gif";
 import { useNavigate } from "react-router-dom";
