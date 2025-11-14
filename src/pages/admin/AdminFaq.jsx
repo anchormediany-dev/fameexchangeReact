@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useState, useMemo } from "react";
 import { useForm } from "react-hook-form";
 import { motion } from "framer-motion";
 import { toast } from "react-toastify";
@@ -11,6 +11,16 @@ import {
 import { FiRefreshCcw, FiEdit2, FiTrash2, FiX, FiSave } from "react-icons/fi";
 import ConfirmDialog from "../../utils/ConfirmDialog";
 
+// 🔹 All allowed FAQ types (used in dropdown)
+const FAQ_TYPES = [
+  "GENERAL QUESTIONS ABOUT THE FAME EXCHANGE",
+  "FANS / INVESTORS",
+  "TALENT / ATHLETES / INFLUENCERS",
+  "BUSINESS / PARTNERSHIPS",
+  "SECURITY / LEGAL / COMPLIANCE",
+  "SUPPORT & CONTACT",
+];
+
 export default function AdminFaq() {
   const { data, isLoading, isError, error, refetch, isFetching } =
     useGetAllFaqsQuery();
@@ -19,8 +29,35 @@ export default function AdminFaq() {
   const [updateFaq, { isLoading: isUpdating }] = useUpdateFaqMutation();
   const [deleteFaq, { isLoading: isDeleting }] = useDeleteFaqMutation();
 
-  const rows = Array.isArray(data?.data) ? data.data : [];
-  const total = data?.total ?? rows.length;
+  /**
+   * ✅ Integrate GET API shape:
+   * {
+   *   success: true,
+   *   result: [
+   *     { type: "...", questions: [ { _id, question, answer, type, ... }, ... ], count },
+   *     ...
+   *   ],
+   *   totalFaqs: 11,
+   *   totalTypes: 6
+   * }
+   *
+   * We flatten `result[].questions` into a single `rows` array.
+   */
+  const rows = useMemo(() => {
+    if (!data?.result || !Array.isArray(data.result)) return [];
+
+    return data.result.flatMap((group) => {
+      const groupType = group.type;
+      const questions = Array.isArray(group.questions) ? group.questions : [];
+      return questions.map((q) => ({
+        ...q,
+        // Ensure type is always present, prefer question.type then group.type
+        type: q.type || groupType || "—",
+      }));
+    });
+  }, [data]);
+
+  const total = data?.totalFaqs ?? rows.length;
 
   const {
     register,
@@ -29,7 +66,11 @@ export default function AdminFaq() {
     setValue,
     formState: { errors, isSubmitting },
   } = useForm({
-    defaultValues: { question: "", answer: "" },
+    defaultValues: {
+      question: "",
+      answer: "",
+      type: FAQ_TYPES[0], // 🔹 default type
+    },
   });
 
   const [editingId, setEditingId] = useState(null);
@@ -41,16 +82,21 @@ export default function AdminFaq() {
   const onSubmit = async (form) => {
     try {
       if (editingId) {
+        // 🔹 send type + question + answer on update
         await updateFaq({ id: editingId, ...form }).unwrap();
         toast.success("FAQ updated.");
       } else {
+        // 🔹 send type + question + answer on create
         await createFaq(form).unwrap();
         toast.success("FAQ created.");
       }
-      reset({ question: "", answer: "" });
+
+      reset({ question: "", answer: "", type: FAQ_TYPES[0] });
       setEditingId(null);
     } catch (e) {
-      // handled by error UI; optionally console.error(e)
+      toast.error(
+        e?.data?.message || e?.error || e?.message || "Failed to save FAQ."
+      );
     }
   };
 
@@ -58,11 +104,16 @@ export default function AdminFaq() {
     setEditingId(faq._id);
     setValue("question", faq.question || "");
     setValue("answer", faq.answer || "");
+    // 🔹 set existing type or fall back to first option
+    setValue(
+      "type",
+      faq.type && FAQ_TYPES.includes(faq.type) ? faq.type : FAQ_TYPES[0]
+    );
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
   const onCancelEdit = () => {
-    reset({ question: "", answer: "" });
+    reset({ question: "", answer: "", type: FAQ_TYPES[0] });
     setEditingId(null);
   };
 
@@ -131,6 +182,7 @@ export default function AdminFaq() {
         </motion.button>
       </div>
 
+      {/* Form Card */}
       <div className="bg-white/5 border border-white/10 rounded-xl p-4">
         <div className="flex items-center justify-between mb-3">
           <div className="text-white font-semibold">
@@ -150,6 +202,26 @@ export default function AdminFaq() {
         </div>
 
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-3">
+          {/* Type dropdown */}
+          <div>
+            <label className="block text-sm text-gray-300 mb-1">Type</label>
+            <select
+              className="w-full rounded-lg bg-white/10 text-white placeholder:text-white/50 border border-white/10 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#a38b41]/40"
+              {...register("type", {
+                required: "Type is required",
+              })}
+            >
+              {FAQ_TYPES.map((t) => (
+                <option className="text-black" key={t} value={t}>
+                  {t}
+                </option>
+              ))}
+            </select>
+            {errors.type && (
+              <p className="mt-1 text-xs text-red-300">{errors.type.message}</p>
+            )}
+          </div>
+
           <div>
             <label className="block text-sm text-gray-300 mb-1">Question</label>
             <input
@@ -212,7 +284,13 @@ export default function AdminFaq() {
             {!editingId && (
               <button
                 type="button"
-                onClick={() => reset({ question: "", answer: "" })}
+                onClick={() =>
+                  reset({
+                    question: "",
+                    answer: "",
+                    type: FAQ_TYPES[0],
+                  })
+                }
                 className="text-sm text-white/80 hover:text-white"
               >
                 Reset
@@ -234,6 +312,9 @@ export default function AdminFaq() {
               <tr className="border-b border-white/10">
                 <th className="text-left p-3 text-gray-300 font-semibold text-sm">
                   S.No
+                </th>
+                <th className="text-left p-3 text-gray-300 font-semibold text-sm">
+                  Type
                 </th>
                 <th className="text-left p-3 text-gray-300 font-semibold text-sm">
                   Question
@@ -259,6 +340,9 @@ export default function AdminFaq() {
                       <div className="h-6 w-10 bg-white/10 animate-pulse rounded" />
                     </td>
                     <td className="p-3">
+                      <div className="h-5 w-40 bg-white/10 animate-pulse rounded" />
+                    </td>
+                    <td className="p-3">
                       <div className="h-5 w-56 bg-white/10 animate-pulse rounded" />
                     </td>
                     <td className="p-3">
@@ -274,7 +358,7 @@ export default function AdminFaq() {
             ) : isError ? (
               <tbody>
                 <tr>
-                  <td colSpan={4} className="p-6 text-center text-red-300">
+                  <td colSpan={5} className="p-6 text-center text-red-300">
                     {error?.data?.error ||
                       error?.data?.message ||
                       error?.error ||
@@ -285,7 +369,7 @@ export default function AdminFaq() {
             ) : rows.length === 0 ? (
               <tbody>
                 <tr>
-                  <td colSpan={4} className="p-6 text-center text-gray-300">
+                  <td colSpan={5} className="p-6 text-center text-gray-300">
                     No FAQs yet.
                   </td>
                 </tr>
@@ -298,6 +382,11 @@ export default function AdminFaq() {
                       ? r.answer.slice(0, 140) + "…"
                       : r.answer || "—";
 
+                  const typeLabel =
+                    r.type && FAQ_TYPES.includes(r.type)
+                      ? r.type
+                      : r.type || "—";
+
                   return (
                     <tr
                       key={r._id}
@@ -307,6 +396,9 @@ export default function AdminFaq() {
                         <span className="inline-flex w-7 h-7 items-center justify-center rounded-md bg-[#a38b41] text-white text-xs font-bold">
                           {idx + 1}
                         </span>
+                      </td>
+                      <td className="p-3 text-[#f5e2a0] text-xs sm:text-sm">
+                        {typeLabel}
                       </td>
                       <td className="p-3 text-white text-sm">{r.question}</td>
                       <td className="p-3 text-gray-300 text-sm">
@@ -325,7 +417,7 @@ export default function AdminFaq() {
                           </button>
                           <button
                             type="button"
-                            onClick={() => askDelete(r)} // 👈 open confirm modal
+                            onClick={() => askDelete(r)}
                             disabled={isDeleting}
                             className="inline-flex items-center gap-1 text-xs px-3 py-1.5 rounded-md bg-red-500/20 text-red-200 hover:bg-red-500/30 transition disabled:opacity-60"
                             title="Delete"
@@ -353,13 +445,6 @@ export default function AdminFaq() {
         pending={isDeleting}
         variant="danger"
         title="Delete this FAQ?"
-        // description={
-        //   target
-        //     ? `You’re about to delete “${
-        //         target.question || "this FAQ"
-        //       }”. This action cannot be undone.`
-        //     : ""
-        // }
       />
     </div>
   );

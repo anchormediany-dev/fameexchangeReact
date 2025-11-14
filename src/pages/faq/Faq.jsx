@@ -75,13 +75,13 @@ const FAQ = () => {
   const supportFaqs = allFaqs.slice(50, 53); // 50–53
 
   return (
-    <section className="flex flex-col min-h-screen">
+    <section className="flex flex-col min-h-screen ">
       <Navbar />
       <div
-        className="flex-grow mt-10 lg:mt-16 2xl:mt-20 py-12 2xl:py-16 bg-gradient-custom-vertical2 bg-gradient-custom-horizontal2"
+        className="flex-grow mt-10 lg:mt-16 2xl:mt-20 py-12 2xl:py-16 bg-gradient-custom-vertical2 bg-gradient-custom-horizontal2 pt-[120px]"
         id="faqs"
       >
-        <div className="container max-w-screen-xl mx-auto flex flex-col gap-12 px-4 sm:px-6 lg:px-8">
+        <div className=" flex flex-col gap-12 px-4 sm:px-6 lg:px-8">
           {isLoading ? (
             <div
               style={{
@@ -113,7 +113,7 @@ const FAQ = () => {
               No frequently asked questions available.
             </div>
           ) : (
-            <div className="mx-auto max-w-4xl space-y-10">
+            <div className="container space-y-10">
               {/* 01–20 GENERAL QUESTIONS */}
               {generalFaqs.length > 0 && (
                 <div>
