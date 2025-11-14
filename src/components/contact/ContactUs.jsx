@@ -278,7 +278,7 @@ const ContactForm = () => {
           </motion.div>
         </motion.div>
 
-        <motion.div
+        {/* <motion.div
           className="max-w-full lg:block hidden"
           variants={fadeInRightVariants}
         >
@@ -303,7 +303,7 @@ const ContactForm = () => {
               OPEN IN APP
             </motion.button>
           </motion.div>
-        </motion.div>
+        </motion.div> */}
       </div>
     </motion.div>
   );

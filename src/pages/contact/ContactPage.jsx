@@ -265,7 +265,7 @@ const ContactPage = () => {
               </motion.div>
             </motion.div>
 
-            <motion.div
+            {/* <motion.div
               className="max-w-full lg:block hidden"
               variants={fadeInRightVariants}
             >
@@ -289,7 +289,7 @@ const ContactPage = () => {
                   OPEN IN APP
                 </motion.button>
               </motion.div>
-            </motion.div>
+            </motion.div> */}
           </div>
         </motion.div>
       </div>
