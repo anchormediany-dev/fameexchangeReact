@@ -155,7 +155,9 @@ const ContactForm = () => {
       });
     }
   };
-
+  const handleOpenApp = () => {
+    window.open("https://your-app-link-or-store-url.com", "_blank");
+  };
   return (
     <motion.div
       id="contact_us"
@@ -288,6 +290,19 @@ const ContactForm = () => {
               transition: { duration: 0.3, ease: "easeOut" },
             }}
           />
+          <motion.div className="flex justify-center items-center">
+            {" "}
+            <motion.button
+              className="custom-button-two"
+              variants={buttonVariants}
+              initial="idle"
+              whileHover="hover"
+              whileTap="tap"
+              onClick={handleOpenApp}
+            >
+              OPEN IN APP
+            </motion.button>
+          </motion.div>
         </motion.div>
       </div>
     </motion.div>

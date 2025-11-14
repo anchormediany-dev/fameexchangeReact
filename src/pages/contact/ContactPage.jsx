@@ -156,7 +156,9 @@ const ContactPage = () => {
       });
     }
   };
-
+  const handleOpenApp = () => {
+    window.open("https://your-app-link-or-store-url.com", "_blank");
+  };
   return (
     <section className="w-full z-50 bg-gradient-to-br py-12 2xl:py-16 flex flex-col 2xl:gap-16 gap-12 px-4 sm:px-6 lg:px-8">
       <div className="2xl:gap-16 gap-12  mt-10 lg:mt-16 2xl:mt-20">
@@ -275,6 +277,18 @@ const ContactPage = () => {
                   transition: { duration: 0.3, ease: "easeOut" },
                 }}
               />
+              <motion.div className="flex justify-center items-center">
+                <motion.button
+                  className="custom-button-two mt-4"
+                  variants={buttonVariants}
+                  initial="idle"
+                  whileHover="hover"
+                  whileTap="tap"
+                  onClick={handleOpenApp}
+                >
+                  OPEN IN APP
+                </motion.button>
+              </motion.div>
             </motion.div>
           </div>
         </motion.div>

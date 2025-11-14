@@ -37,7 +37,7 @@ const ProductSlider = () => {
       <div className="container mx-auto px-4">
         {/* Compact Header */}
         <div className="text-center mb-6">
-          <h3 className="custom-heading-six text-[#a38b41] uppercase mb-2">
+          <h3 className="custom-heading-two text-[#a38b41] mb-8 flex-grow text-center mb-2">
             CELEBRITY MERCHANDISE
           </h3>
           {isLoading ? (
