@@ -7,7 +7,8 @@ import faqItems from "../../data/faqData";
 import { useGetAllFaqsQuery } from "../../app/authApi";
 const Faq = () => {
   const { data, isLoading, isError, error } = useGetAllFaqsQuery();
-  console.log(data);
+  const faqData = data?.result;
+  console.log(faqData);
   const [openFaq, setOpenFaq] = useState(null);
   const navigate = useNavigate();
 
@@ -68,7 +69,7 @@ const Faq = () => {
             )}
 
             {/* Error or Empty */}
-            {!isLoading && (isError || data.data.length === 0) && (
+            {!isLoading && (isError || faqData?.length === 0) && (
               <div
                 style={{
                   textAlign: "center",
@@ -85,7 +86,7 @@ const Faq = () => {
             {/* Data */}
             {!isLoading &&
               !isError &&
-              data?.data?.slice(0, 4).map((faq, index) => (
+              faqData[0]?.questions?.slice(0, 4).map((faq, index) => (
                 <div
                   key={index}
                   style={{ border: borderStyle, borderRadius: 0 }}
