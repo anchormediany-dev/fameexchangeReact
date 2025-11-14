@@ -1,6 +1,5 @@
 import React, { useState } from "react";
-import { FiGlobe, FiPhone, FiTrash2 } from "react-icons/fi";
-import { IoLocationOutline } from "react-icons/io5";
+import { FiEdit, FiTrash2 } from "react-icons/fi";
 import { useNavigate } from "react-router-dom";
 import {
   useGetProductsQuery,
@@ -10,17 +9,6 @@ import { toast } from "react-toastify";
 
 import ConfirmDialog from "../../utils/ConfirmDialog";
 import { imgSrc } from "../../utils/imgSrc";
-
-const API_BASE = (import.meta.env?.VITE_API_URL || "").replace(/\/$/, "");
-const fallbackLogo =
-  "https://images.unsplash.com/photo-1531058020387-3be344556be6?w=500&auto=format&fit=crop&q=60";
-
-const toAbsolute = (p) => {
-  if (!p) return "";
-  if (/^https?:\/\//i.test(p)) return p;
-  if (!API_BASE) return p.startsWith("/") ? p : `/${p}`;
-  return p.startsWith("/") ? `${API_BASE}${p}` : `${API_BASE}/${p}`;
-};
 
 const AdminProductsListings = () => {
   const navigate = useNavigate();
@@ -57,7 +45,7 @@ const AdminProductsListings = () => {
       setPendingId(id);
       await deleteProduct(id).unwrap();
       toast.success("Product deleted");
-      refetch(); // stay in sync
+      refetch();
     } catch (err) {
       toast.error(err?.data?.message || err?.error || "Failed to delete");
     } finally {
@@ -176,9 +164,6 @@ const AdminProductsListings = () => {
       {!isLoading && !isFetching && !isError && empty && (
         <div className="text-center text-gray-300 py-10">
           <p className="text-lg font-medium">No products found</p>
-          <p className="text-sm opacity-70">
-            Products you create will appear here.
-          </p>
         </div>
       )}
 
@@ -274,17 +259,27 @@ const AdminProductsListings = () => {
 
                   {/* Actions */}
                   <td className="p-3" onClick={(ev) => ev.stopPropagation()}>
-                    <button
-                      onClick={(ev) => askDelete(ev, e)}
-                      disabled={pendingId === e?._id}
-                      className="px-2 py-1 rounded-lg bg-red-500/20 text-red-200 hover:bg-red-500/30 transition flex items-center gap-1 disabled:opacity-60"
-                      title="Delete product"
-                    >
-                      <FiTrash2 className="w-4 h-4" />
-                      <span className="text-xs">
-                        {pendingId === e?._id ? "Deleting..." : "Delete"}
-                      </span>
-                    </button>
+                    <div className="flex gap-3">
+                      <button
+                        className="px-2 py-1 rounded-lg bg-red-500/20 text-red-200 hover:bg-red-500/30 transition flex items-center gap-1 disabled:opacity-60"
+                        onClick={() =>
+                          navigate(`/admin/edit-product/${e?._id}`)
+                        }
+                      >
+                        <FiEdit className="w-4 h-4" />
+                      </button>{" "}
+                      <button
+                        onClick={(ev) => askDelete(ev, e)}
+                        disabled={pendingId === e?._id}
+                        className="px-2 py-1 rounded-lg bg-red-500/20 text-red-200 hover:bg-red-500/30 transition flex items-center gap-1 disabled:opacity-60"
+                        title="Delete product"
+                      >
+                        <FiTrash2 className="w-4 h-4" />
+                        <span className="text-xs">
+                          {pendingId === e?._id ? "Deleting..." : "Delete"}
+                        </span>
+                      </button>
+                    </div>
                   </td>
                 </tr>
               ))}

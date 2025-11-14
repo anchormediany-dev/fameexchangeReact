@@ -75,6 +75,7 @@ import PaymentStep from "./pages/checkout_pages/steps/PaymentStep";
 import ConfirmationStep from "./pages/checkout_pages/steps/ConfirmationStep";
 import CheckoutLayout from "./pages/checkout_pages/CheckoutLayout";
 import AdminProductsListings from "./pages/admin/AdminProductsListings";
+import AddProduct from "./pages/admin/AddProduct";
 
 // Simple Black Header Component
 const SimpleHeader = () => {
@@ -100,7 +101,7 @@ const SimpleHeader = () => {
           <div className="flex items-center space-x-6">
             <Link
               to="/"
-              className="text-white hover:text-[#a38b41] transition-colors duration-200 font-medium"
+              className="text-white  transition-colors duration-200 font-medium"
             >
               Home
             </Link>
@@ -375,6 +376,22 @@ export default function App() {
                 element={
                   <MotionPageWrapper>
                     <AdminProductsListings />
+                  </MotionPageWrapper>
+                }
+              />
+              <Route
+                path="add-product"
+                element={
+                  <MotionPageWrapper>
+                    <AddProduct />
+                  </MotionPageWrapper>
+                }
+              />
+              <Route
+                path="edit-product/:id"
+                element={
+                  <MotionPageWrapper>
+                    <AddProduct />
                   </MotionPageWrapper>
                 }
               />

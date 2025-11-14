@@ -374,6 +374,37 @@ export const authApi = api.injectEndpoints({
       }),
       invalidatesTags: ["Products"],
     }),
+    // SINGLE PRODUCT
+    getProductById: builder.query({
+      query: (id) => ({
+        url: `/products/${id}`,
+        method: "GET",
+      }),
+      providesTags: (result, error, id) => [{ type: "Products", id }],
+    }),
+
+    // CREATE PRODUCT (POST /api/products)
+    createProduct: builder.mutation({
+      query: (formData) => ({
+        url: "/products",
+        method: "POST",
+        body: formData, // FormData with title, description, price, image
+      }),
+      invalidatesTags: ["Products"],
+    }),
+
+    // UPDATE PRODUCT (PATCH /api/products/:id)
+    updateProduct: builder.mutation({
+      query: ({ id, formData }) => ({
+        url: `/products/${id}`,
+        method: "PATCH",
+        body: formData, // FormData with title, description, price, image
+      }),
+      invalidatesTags: (result, error, { id }) => [
+        "Products",
+        { type: "Products", id },
+      ],
+    }),
     //  our team API's
     getTeam: builder.query({
       query: () => ({
@@ -567,4 +598,7 @@ export const {
   // Products
   useGetProductsQuery,
   useDeleteProductMutation,
+  useGetProductByIdQuery,
+  useCreateProductMutation,
+  useUpdateProductMutation,
 } = authApi;
