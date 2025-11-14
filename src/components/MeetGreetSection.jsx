@@ -9,6 +9,7 @@ import "swiper/css/pagination";
 import "swiper/css/navigation";
 import styles from "../styles/MeetAndGreet.module.css";
 import { Link } from "react-router-dom";
+import actorPlaceholder from "../assets/home/actor-placeholder.jpg";
 const MeetAndGreet = () => {
   const sectionRef = useRef(null);
   const isInView = useInView(sectionRef, { once: true, amount: 0.2 });
@@ -176,7 +177,7 @@ const MeetAndGreet = () => {
                         }}
                       >
                         <img
-                          src={src}
+                          src={src || actorPlaceholder}
                           alt={
                             talentData?.stageName ||
                             talentData?.name ||
