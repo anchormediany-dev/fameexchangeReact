@@ -51,28 +51,41 @@ const FAQItem = ({ faq, index, isOpen, toggleOpen }) => {
 };
 
 const FAQ = () => {
-  const [openIndex, setOpenIndex] = useState(null);
+  const [openKey, setOpenKey] = useState(null);
   const { data, isLoading, error, isError } = useGetAllFaqsQuery();
 
-  const toggleOpen = (index) => {
-    setOpenIndex(openIndex === index ? null : index);
+  const toggleOpen = (key) => {
+    setOpenKey(openKey === key ? null : key);
   };
 
-  // ---- sort + slice ----
-  const allFaqsRaw = data?.data || [];
+  // ---- map API response (grouped by "type") ----
+  const faqGroups = data?.result || [];
 
-  // first sort api data (assuming there is an "order" field)
-  const allFaqs = [...allFaqsRaw].sort((a, b) => {
-    if (a.order != null && b.order != null) return a.order - b.order;
-    return 0; // fallback: keep original order
-  });
+  const getFaqsByType = (typeName) => {
+    const group = faqGroups.find((g) => g.type === typeName);
+    if (!group || !group.questions) return [];
+    // sort inside each type (by createdAt, oldest → newest)
+    const list = [...group.questions];
+    list.sort((a, b) => {
+      const da = new Date(a.createdAt).getTime();
+      const db = new Date(b.createdAt).getTime();
+      return da - db;
+    });
+    return list;
+  };
 
-  const generalFaqs = allFaqs.slice(0, 20); // 01–20
-  const fansFaqs = allFaqs.slice(20, 30); // 20–30
-  const talentFaqs = allFaqs.slice(30, 40); // 30–40
-  const businessFaqs = allFaqs.slice(40, 45); // 40–45
-  const securityFaqs = allFaqs.slice(45, 50); // 45–50
-  const supportFaqs = allFaqs.slice(50, 53); // 50–53
+  const generalFaqs = getFaqsByType(
+    "GENERAL QUESTIONS ABOUT THE FAME EXCHANGE"
+  );
+  const fansFaqs = getFaqsByType("FANS / INVESTORS");
+  const talentFaqs = getFaqsByType("TALENT / ATHLETES / INFLUENCERS");
+  const businessFaqs = getFaqsByType("BUSINESS / PARTNERSHIPS");
+  const securityFaqs = getFaqsByType("SECURITY / LEGAL / COMPLIANCE");
+  const supportFaqs = getFaqsByType("SUPPORT & CONTACT"); // will render when backend adds this type
+
+  const hasFaqs = faqGroups.some(
+    (group) => group.questions && group.questions.length > 0
+  );
 
   return (
     <section className="flex flex-col min-h-screen ">
@@ -102,7 +115,7 @@ const FAQ = () => {
             >
               Failed to load FAQs. Please try again.
             </div>
-          ) : !allFaqs.length ? (
+          ) : !hasFaqs ? (
             <div
               style={{
                 textAlign: "center",
@@ -114,20 +127,20 @@ const FAQ = () => {
             </div>
           ) : (
             <div className="container space-y-10">
-              {/* 01–20 GENERAL QUESTIONS */}
+              {/* GENERAL QUESTIONS ABOUT THE FAME EXCHANGE */}
               {generalFaqs.length > 0 && (
                 <div>
                   <h2 className="gredient-text text-center text-3xl sm:text-4xl lg:text-5xl font-bold mb-6">
                     GENERAL QUESTIONS ABOUT THE FAME EXCHANGE
                   </h2>
                   {generalFaqs.map((faq, idx) => {
-                    const globalIndex = 0 + idx;
+                    const key = `general-${faq._id || idx}`;
                     return (
                       <FAQItem
-                        key={globalIndex}
+                        key={key}
                         faq={faq}
-                        index={globalIndex}
-                        isOpen={openIndex === globalIndex}
+                        index={key}
+                        isOpen={openKey === key}
                         toggleOpen={toggleOpen}
                       />
                     );
@@ -135,20 +148,20 @@ const FAQ = () => {
                 </div>
               )}
 
-              {/* 20–30 FANS / INVESTORS */}
+              {/* FANS / INVESTORS */}
               {fansFaqs.length > 0 && (
                 <div className="mt-10">
                   <h2 className="gredient-text text-center text-2xl sm:text-3xl lg:text-4xl font-bold mb-6">
                     FANS / INVESTORS
                   </h2>
                   {fansFaqs.map((faq, idx) => {
-                    const globalIndex = 20 + idx;
+                    const key = `fans-${faq._id || idx}`;
                     return (
                       <FAQItem
-                        key={globalIndex}
+                        key={key}
                         faq={faq}
-                        index={globalIndex}
-                        isOpen={openIndex === globalIndex}
+                        index={key}
+                        isOpen={openKey === key}
                         toggleOpen={toggleOpen}
                       />
                     );
@@ -156,20 +169,20 @@ const FAQ = () => {
                 </div>
               )}
 
-              {/* 30–40 TALENT / ATHLETES / INFLUENCERS */}
+              {/* TALENT / ATHLETES / INFLUENCERS */}
               {talentFaqs.length > 0 && (
                 <div className="mt-10">
                   <h2 className="gredient-text text-center text-2xl sm:text-3xl lg:text-4xl font-bold mb-6">
                     TALENT / ATHLETES / INFLUENCERS
                   </h2>
                   {talentFaqs.map((faq, idx) => {
-                    const globalIndex = 30 + idx;
+                    const key = `talent-${faq._id || idx}`;
                     return (
                       <FAQItem
-                        key={globalIndex}
+                        key={key}
                         faq={faq}
-                        index={globalIndex}
-                        isOpen={openIndex === globalIndex}
+                        index={key}
+                        isOpen={openKey === key}
                         toggleOpen={toggleOpen}
                       />
                     );
@@ -177,20 +190,20 @@ const FAQ = () => {
                 </div>
               )}
 
-              {/* 40–45 BUSINESS / PARTNERSHIPS */}
+              {/* BUSINESS / PARTNERSHIPS */}
               {businessFaqs.length > 0 && (
                 <div className="mt-10">
                   <h2 className="gredient-text text-center text-2xl sm:text-3xl lg:text-4xl font-bold mb-6">
                     BUSINESS / PARTNERSHIPS
                   </h2>
                   {businessFaqs.map((faq, idx) => {
-                    const globalIndex = 40 + idx;
+                    const key = `business-${faq._id || idx}`;
                     return (
                       <FAQItem
-                        key={globalIndex}
+                        key={key}
                         faq={faq}
-                        index={globalIndex}
-                        isOpen={openIndex === globalIndex}
+                        index={key}
+                        isOpen={openKey === key}
                         toggleOpen={toggleOpen}
                       />
                     );
@@ -198,20 +211,20 @@ const FAQ = () => {
                 </div>
               )}
 
-              {/* 45–50 SECURITY / LEGAL / COMPLIANCE */}
+              {/* SECURITY / LEGAL / COMPLIANCE */}
               {securityFaqs.length > 0 && (
                 <div className="mt-10">
                   <h2 className="gredient-text text-center text-2xl sm:text-3xl lg:text-4xl font-bold mb-6">
                     SECURITY / LEGAL / COMPLIANCE
                   </h2>
                   {securityFaqs.map((faq, idx) => {
-                    const globalIndex = 45 + idx;
+                    const key = `security-${faq._id || idx}`;
                     return (
                       <FAQItem
-                        key={globalIndex}
+                        key={key}
                         faq={faq}
-                        index={globalIndex}
-                        isOpen={openIndex === globalIndex}
+                        index={key}
+                        isOpen={openKey === key}
                         toggleOpen={toggleOpen}
                       />
                     );
@@ -219,20 +232,20 @@ const FAQ = () => {
                 </div>
               )}
 
-              {/* 50–53 SUPPORT & CONTACT */}
+              {/* SUPPORT & CONTACT (when backend provides this type) */}
               {supportFaqs.length > 0 && (
                 <div className="mt-10">
                   <h2 className="gredient-text text-center text-2xl sm:text-3xl lg:text-4xl font-bold mb-6">
                     SUPPORT & CONTACT
                   </h2>
                   {supportFaqs.map((faq, idx) => {
-                    const globalIndex = 50 + idx;
+                    const key = `support-${faq._id || idx}`;
                     return (
                       <FAQItem
-                        key={globalIndex}
+                        key={key}
                         faq={faq}
-                        index={globalIndex}
-                        isOpen={openIndex === globalIndex}
+                        index={key}
+                        isOpen={openKey === key}
                         toggleOpen={toggleOpen}
                       />
                     );
