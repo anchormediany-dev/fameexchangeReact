@@ -1,5 +1,5 @@
 import React, { useRef, useState, useEffect } from "react";
-import { GoMute, GoUnmute } from "react-icons/go";
+import { GoMute } from "react-icons/go";
 import { FaArrowRight } from "react-icons/fa6";
 import { FaPlay, FaPause, FaTimes } from "react-icons/fa";
 
@@ -45,7 +45,6 @@ const VideoBanner = () => {
     const popupVideo = popupVideoRef.current;
 
     const handleVideoEnd = () => {
-      // Automatically restart the video when it ends
       if (popupVideo) {
         popupVideo.currentTime = 0;
         popupVideo
@@ -61,7 +60,7 @@ const VideoBanner = () => {
 
     if (popupVideo && showVideoPopup) {
       popupVideo.currentTime = 0;
-      popupVideo.loop = false; // We handle loop manually
+      popupVideo.loop = false;
 
       const playPopupVideo = async () => {
         try {
@@ -72,13 +71,10 @@ const VideoBanner = () => {
         }
       };
 
-      // Add event listener for video end
       popupVideo.addEventListener("ended", handleVideoEnd);
-
       playPopupVideo();
     }
 
-    // Cleanup event listener
     return () => {
       if (popupVideo) {
         popupVideo.removeEventListener("ended", handleVideoEnd);
@@ -152,7 +148,6 @@ const VideoBanner = () => {
     }
   };
 
-  // Close popup when clicking outside the video
   const handlePopupBackdropClick = (e) => {
     if (e.target === e.currentTarget) {
       handleClosePopup();
@@ -161,10 +156,8 @@ const VideoBanner = () => {
 
   return (
     <div>
-      <section
-        className="relative w-full h-[85vh] min-h-[600px] max-h-[900px] overflow-hidden"
-        // style={{ backgroundColor: "#171717" }}
-      >
+      {/* Banner adjusted for 120px header */}
+      <section className="relative w-full h-[85vh] min-h-[600px] max-h-[900px] overflow-hidden pt-[120px]">
         {/* Video Background with Audio */}
         <video
           ref={videoRef}
@@ -198,14 +191,12 @@ const VideoBanner = () => {
         {/* Main Content */}
         <div className="relative z-10 flex items-center justify-center w-full h-full px-4 sm:px-6 lg:px-8 py-8 sm:py-12">
           <div className="text-center text-white max-w-5xl mx-auto w-full">
-            {/* Modern Badge */}
             <div className="inline-flex items-center px-3 py-1.5 sm:px-4 sm:py-2 mb-4 sm:mb-6 bg-gray-800/40 backdrop-blur-md rounded-full border border-gray-600/30 animate-fade-in-up shadow-xl">
               <span className="text-xs sm:text-sm font-medium text-gray-200 tracking-wide">
                 FAME EXCHANGE
               </span>
             </div>
 
-            {/* Animated Main Title */}
             <div className="mb-4 sm:mb-6 md:mb-8">
               <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-bold leading-tight">
                 <span className="block animate-text-reveal bg-gradient-to-r from-white via-cyan-100 to-white bg-clip-text text-transparent drop-shadow-2xl mb-1 sm:mb-2">
@@ -220,15 +211,12 @@ const VideoBanner = () => {
               </h1>
             </div>
 
-            {/* Enhanced Subtitle with typing effect */}
             <p className="text-sm sm:text-base md:text-lg text-gray-300 mb-6 sm:mb-8 max-w-2xl sm:max-w-3xl mx-auto leading-relaxed animate-typewriter font-light px-2">
               Transform your passion into profit. Invest in celebrities,
               athletes, and creators like never before.
             </p>
 
-            {/* Modern Action Buttons */}
             <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 md:gap-6 justify-center items-center animate-slide-up-stagger px-2">
-              {/* Primary CTA Button */}
               <button className="custom-button-two rounded-full w-full sm:w-auto min-w-[200px] px-6 py-3 sm:px-8 sm:py-4 text-sm sm:text-base">
                 <span className="relative z-10 flex items-center justify-center gap-2">
                   Start Trading Now
@@ -238,7 +226,6 @@ const VideoBanner = () => {
                 <div className="absolute inset-0 bg-white/10 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
               </button>
 
-              {/* Watch Demo Button - Opens Video Popup */}
               <button
                 onClick={handleWatchDemo}
                 className="group px-6 py-3 sm:px-8 sm:py-4 border-2 cursor-pointer border-gray-600/50 text-gray-200 hover:text-white font-medium rounded-full transform transition-all duration-500 hover:scale-105 hover:bg-gray-800/30 focus:outline-none focus:ring-4 focus:ring-gray-500/30 w-full sm:w-auto text-sm sm:text-base min-w-[160px] sm:min-w-[200px] backdrop-blur-sm"
@@ -252,7 +239,6 @@ const VideoBanner = () => {
           </div>
         </div>
 
-        {/* Keep all the existing styles */}
         <style jsx>{`
           @keyframes fade-in-up {
             from {
@@ -329,7 +315,6 @@ const VideoBanner = () => {
             animation: pulse-glow 2s ease-in-out infinite;
           }
 
-          /* Mobile-specific adjustments */
           @media (max-width: 640px) {
             .custom-button-two {
               padding: 12px 24px;
@@ -354,13 +339,13 @@ const VideoBanner = () => {
         `}</style>
       </section>
 
-      {/* Video Popup Modal */}
+      {/* Video Popup Modal – adjusted for header + smaller height */}
       {showVideoPopup && (
         <div
-          className="fixed inset-0 z-50 flex items-center justify-center bg-black/90 backdrop-blur-md transition-all duration-300 p-4"
+          className="fixed inset-0 z-50 flex items-start justify-center bg-black/90 backdrop-blur-md transition-all duration-300 p-4 pt-[130px]"
           onClick={handlePopupBackdropClick}
         >
-          <div className="relative w-full max-w-4xl lg:max-w-6xl xl:max-w-[1580px] mx-auto aspect-video bg-black rounded-xl sm:rounded-2xl overflow-hidden shadow-2xl">
+          <div className="relative w-full max-w-3xl lg:max-w-4xl xl:max-w-5xl mx-auto bg-black rounded-xl sm:rounded-2xl overflow-hidden shadow-2xl h-[80vh]">
             {/* Close Button */}
             <button
               onClick={handleClosePopup}
@@ -373,7 +358,7 @@ const VideoBanner = () => {
             {/* Popup Video */}
             <video
               ref={popupVideoRef}
-              className="w-full h-full object-contain"
+              className="w-full h-full object-cover"
               controls={false}
               muted={false}
               loop={false}
@@ -386,7 +371,7 @@ const VideoBanner = () => {
               Your browser does not support the video tag.
             </video>
 
-            {/* Popup Play/Pause Overlay Button - Shows when video is paused */}
+            {/* Play overlay when paused */}
             {!isPopupVideoPlaying && (
               <button
                 onClick={handlePopupPlayPause}
@@ -398,10 +383,10 @@ const VideoBanner = () => {
               </button>
             )}
 
-            {/* Popup Play/Pause Control */}
+            {/* Bottom Play/Pause Control */}
             <button
               onClick={handlePopupPlayPause}
-              className="absolute bottom-3 left-3 sm:bottom-6 sm:left-6 z-30 flex items-center gap-2 sm:gap-3 px-4 py-2 sm:px-6 sm:py-3 bg-black/50 hover:bg-black/70 text-white rounded-full transition-all duration-300 backdrop-blur-sm border border-white/20 cursor-pointer group"
+              className="absolute bottom-3 left-3 sm:bottom-4 sm:left-4 z-30 flex items-center gap-2 sm:gap-3 px-4 py-2 sm:px-6 sm:py-3 bg-black/50 hover:bg-black/70 text-white rounded-full transition-all duration-300 backdrop-blur-sm border border-white/20 cursor-pointer group"
             >
               {isPopupVideoPlaying ? (
                 <>
@@ -416,8 +401,8 @@ const VideoBanner = () => {
               )}
             </button>
 
-            {/* Video Title */}
-            <div className="absolute top-3 left-3 sm:top-6 sm:left-6 z-30">
+            {/* Video Title Badge */}
+            <div className="absolute top-3 left-3 sm:top-4 sm:left-4 z-30">
               <div className="px-3 py-1.5 sm:px-4 sm:py-2 bg-black/50 backdrop-blur-md rounded-full border border-primary">
                 <span className="text-xs sm:text-sm font-medium text-primary tracking-wide">
                   FAME EXCHANGE
