@@ -76,6 +76,7 @@ import ConfirmationStep from "./pages/checkout_pages/steps/ConfirmationStep";
 import CheckoutLayout from "./pages/checkout_pages/CheckoutLayout";
 import AdminProductsListings from "./pages/admin/AdminProductsListings";
 import AddProduct from "./pages/admin/AddProduct";
+import AllProducts from "./pages/AllProducts";
 
 // Simple Black Header Component
 const SimpleHeader = () => {
@@ -698,6 +699,14 @@ export default function App() {
           element={
             <MotionPageWrapper>
               <AboutUs />
+            </MotionPageWrapper>
+          }
+        />
+        <Route
+          path="products"
+          element={
+            <MotionPageWrapper>
+              <AllProducts />
             </MotionPageWrapper>
           }
         />

@@ -360,13 +360,27 @@ export const authApi = api.injectEndpoints({
       providesTags: ["OverviewForFan"],
     }),
     // Get Products API
+    // getProducts: builder.query({
+    //   query: () => ({
+    //     url: "/products",
+    //     method: "GET",
+    //   }),
+    //   providesTags: ["Products"],
+    // }),
+    // in authApi.js (or wherever your api slice is)
     getProducts: builder.query({
-      query: () => ({
+      query: ({ page = 1, limit = 8, search = "" } = {}) => ({
         url: "/products",
         method: "GET",
+        params: {
+          page,
+          limit,
+          search: search && search.trim() ? search.trim() : undefined,
+        },
       }),
       providesTags: ["Products"],
     }),
+
     deleteProduct: builder.mutation({
       query: (id) => ({
         url: `/products/${id}`,
