@@ -19,83 +19,19 @@ import { useGetProductsQuery } from "../app/authApi";
 import { imgSrc } from "../utils/imgSrc";
 const ProductSlider = () => {
   const { data, error, isError, isLoading } = useGetProductsQuery();
-  const products = [
-    {
-      id: 5,
-      name: "6th GENERATION BLACK BARREL MUGS",
-      image: image5,
-      price: "$129.99",
-    },
-    {
-      id: 6,
-      name: "6th GENERATION WHITE BARREL MUGS",
-      image: image6,
-      price: "$129.99",
-    },
-    {
-      id: 7,
-      name: "6th GENERATION/ FRONT ZIPPER HOODIES BLACK",
-      image: image7,
-      price: "$129.99",
-    },
-    {
-      id: 8,
-      name: "6th GENERATION/ FRONT ZIPPER HOODIES WHITE",
-      image: image8,
-      price: "$129.99",
-    },
-    {
-      id: 9,
-      name: "6th GENERATION/ BLACK PULL OVER HOODIES",
-      image: image9,
-      price: "$129.99",
-    },
-    {
-      id: 10,
-      name: "6th GENERATION/ WHITE PULL OVER HOODIES",
-      image: image10,
-      price: "$129.99",
-    },
-    {
-      id: 11,
-      name: "5th GENERATION/ BULL & BEAR T-SHIRT (BLK)",
-      image: image11,
-      price: "$129.99",
-    },
-    {
-      id: 12,
-      name: "6th GENERATION/ FAME DESIGN T-SHIRT (BLK)",
-      image: image12,
-      price: "$129.99",
-    },
-    {
-      id: 13,
-      name: "5th GENERATION/ BULL & BEAR T-SHIRT (WHITE)",
-      image: image13,
-      price: "$129.99",
-    },
-    {
-      id: 14,
-      name: "6th GENERATION/ FAME DESIGN T-SHIRT (WHITE)",
-      image: image14,
-      price: "$129.99",
-    },
-  ];
-
   const [slidesPerView, setSlidesPerView] = useState(4);
-
   useEffect(() => {
     const updateSlidesPerView = () => {
       if (window.innerWidth < 640) setSlidesPerView(1);
       else if (window.innerWidth < 1024) setSlidesPerView(2);
       else setSlidesPerView(4);
     };
-
     updateSlidesPerView();
     window.addEventListener("resize", updateSlidesPerView);
     return () => window.removeEventListener("resize", updateSlidesPerView);
   }, []);
-
+  const apiProducts = data?.data ?? [];
+  const isEmpty = !isLoading && !isError && apiProducts.length === 0;
   return (
     <section className="w-full py-8 shadow-2xl">
       <div className="container mx-auto px-4">
@@ -104,76 +40,89 @@ const ProductSlider = () => {
           <h3 className="custom-heading-six text-[#a38b41] uppercase mb-2">
             CELEBRITY MERCHANDISE
           </h3>
-          {/* <h2 className="text-3xl md:text-4xl font-bold text-white">
-            Premium Collection
-          </h2> */}
+          {isLoading ? (
+            <div className="flex justify-center items-center py-12">
+              <p className="text-sm text-gray-300">Loading products...</p>
+            </div>
+          ) : isError ? (
+            <div className="w-full rounded-xl overflow-hidden h-[400px] lg:h-[650px] flex items-center justify-center">
+              <div className="text-sm text-red-600">
+                Failed to load products. Please try again later.
+              </div>
+            </div>
+          ) : isEmpty ? (
+            <div className="flex justify-center items-center py-12">
+              <p className="text-sm text-gray-300">No products found.</p>
+            </div>
+          ) : (
+            <div className="relative">
+              <Swiper
+                modules={[Navigation, Autoplay]}
+                spaceBetween={20}
+                slidesPerView={slidesPerView}
+                navigation={{
+                  nextEl: ".swiper-button-next-compact",
+                  prevEl: ".swiper-button-prev-compact",
+                }}
+                autoplay={{ delay: 3000 }}
+                loop={true}
+              >
+                {data?.data?.map((product) => (
+                  <SwiperSlide key={product._id}>
+                    <div className="group relative bg-[#171717] backdrop-blur-sm border border-white/10 rounded-xl hover:border-[#a38b41]/30 transition-all duration-300 overflow-hidden">
+                      {/* Product Image */}
+                      <div className=" w-full rounded-md  object-cover overflow-hidden">
+                        <img
+                          src={imgSrc(product.image)}
+                          alt={product.title}
+                          className="w-full h-full object-cover group-hover:opacity-75  lg:h-80"
+                        />
+                      </div>
+
+                      {/* Product Info - New Layout */}
+                      <div className="mt-4 flex justify-between p-4">
+                        <div className="flex-1 min-w-0 pr-2">
+                          <h3 className="text-sm text-white truncate">
+                            <a href="#" className="block truncate">
+                              <span
+                                aria-hidden="true"
+                                className="absolute inset-0"
+                              ></span>
+                              {product.title}
+                            </a>
+                          </h3>
+                          {/* You can add color/variant info here if needed */}
+                          {/* <p className="mt-1 text-sm text-gray-400 truncate">Black</p> */}
+                        </div>
+                        <p className="text-sm font-medium text-[#a38b41] flex-shrink-0 whitespace-nowrap">
+                          {product.price}
+                        </p>
+                      </div>
+
+                      {/* Buy Now Button */}
+                      <div className="p-4 pt-0">
+                        <button className="w-full cursor-pointer bg-[#a38b41] hover:bg-[#8a7738] text-white font-medium py-2 px-4 rounded-lg transition-all duration-200 flex items-center justify-center gap-2 text-sm hover:scale-105 active:scale-95">
+                          <FiShoppingCart className="w-4 h-4" />
+                          Buy Now
+                        </button>
+                      </div>
+                    </div>
+                  </SwiperSlide>
+                ))}
+              </Swiper>
+
+              {/* Navigation Buttons */}
+              <button className="swiper-button-prev-compact absolute left-0 top-1/2 -translate-y-1/2 z-10 w-10 h-10 bg-[#e2cb68] rounded-lg flex items-center justify-center transition-all duration-300 hover:scale-110 group">
+                <FiChevronLeft className="w-5 h-5 text-white group-hover:-translate-x-0.5 transition-transform" />
+              </button>
+              <button className="swiper-button-next-compact absolute right-0 top-1/2 -translate-y-1/2 z-10 w-10 h-10 bg-[#e2cb68] rounded-lg flex items-center justify-center transition-all duration-300 hover:scale-110 group">
+                <FiChevronRight className="w-5 h-5 text-white group-hover:translate-x-0.5 transition-transform" />
+              </button>
+            </div>
+          )}
         </div>
 
         {/* Swiper Slider */}
-        <div className="relative">
-          <Swiper
-            modules={[Navigation, Autoplay]}
-            spaceBetween={20}
-            slidesPerView={slidesPerView}
-            navigation={{
-              nextEl: ".swiper-button-next-compact",
-              prevEl: ".swiper-button-prev-compact",
-            }}
-            autoplay={{ delay: 3000 }}
-            loop={true}
-          >
-            {data?.data?.map((product) => (
-              <SwiperSlide key={product._id}>
-                <div className="group relative bg-[#171717] backdrop-blur-sm border border-white/10 rounded-xl hover:border-[#a38b41]/30 transition-all duration-300 overflow-hidden">
-                  {/* Product Image */}
-                  <div className=" w-full rounded-md  object-cover overflow-hidden">
-                    <img
-                      src={imgSrc(product.image)}
-                      alt={product.title}
-                      className="w-full h-full object-cover group-hover:opacity-75  lg:h-80"
-                    />
-                  </div>
-
-                  {/* Product Info - New Layout */}
-                  <div className="mt-4 flex justify-between p-4">
-                    <div className="flex-1 min-w-0 pr-2">
-                      <h3 className="text-sm text-white truncate">
-                        <a href="#" className="block truncate">
-                          <span
-                            aria-hidden="true"
-                            className="absolute inset-0"
-                          ></span>
-                          {product.title}
-                        </a>
-                      </h3>
-                      {/* You can add color/variant info here if needed */}
-                      {/* <p className="mt-1 text-sm text-gray-400 truncate">Black</p> */}
-                    </div>
-                    <p className="text-sm font-medium text-[#a38b41] flex-shrink-0 whitespace-nowrap">
-                      {product.price}
-                    </p>
-                  </div>
-
-                  {/* Buy Now Button */}
-                  <div className="p-4 pt-0">
-                    <button className="w-full cursor-pointer bg-[#a38b41] hover:bg-[#8a7738] text-white font-medium py-2 px-4 rounded-lg transition-all duration-200 flex items-center justify-center gap-2 text-sm hover:scale-105 active:scale-95">
-                      <FiShoppingCart className="w-4 h-4" />
-                      Buy Now
-                    </button>
-                  </div>
-                </div>
-              </SwiperSlide>
-            ))}
-          </Swiper>
-
-          {/* Navigation Buttons */}
-          <button className="swiper-button-prev-compact absolute left-0 top-1/2 -translate-y-1/2 z-10 w-10 h-10 bg-[#e2cb68] rounded-lg flex items-center justify-center transition-all duration-300 hover:scale-110 group">
-            <FiChevronLeft className="w-5 h-5 text-white group-hover:-translate-x-0.5 transition-transform" />
-          </button>
-          <button className="swiper-button-next-compact absolute right-0 top-1/2 -translate-y-1/2 z-10 w-10 h-10 bg-[#e2cb68] rounded-lg flex items-center justify-center transition-all duration-300 hover:scale-110 group">
-            <FiChevronRight className="w-5 h-5 text-white group-hover:translate-x-0.5 transition-transform" />
-          </button>
-        </div>
       </div>
     </section>
   );

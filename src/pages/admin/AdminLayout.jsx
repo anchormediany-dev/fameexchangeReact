@@ -37,6 +37,18 @@ export default function AdminLayout() {
                 Users
               </NavLink>
               <NavLink
+                to="/admin/products"
+                className={({ isActive }) =>
+                  `px-3 py-2 rounded-md ${
+                    isActive
+                      ? "bg-white/10 text-white"
+                      : "text-gray-300 hover:bg-white/5"
+                  }`
+                }
+              >
+                Products
+              </NavLink>
+              <NavLink
                 to="/admin/kyc-requests"
                 className={({ isActive }) =>
                   `px-3 py-2 rounded-md ${

@@ -367,6 +367,13 @@ export const authApi = api.injectEndpoints({
       }),
       providesTags: ["Products"],
     }),
+    deleteProduct: builder.mutation({
+      query: (id) => ({
+        url: `/products/${id}`,
+        method: "DELETE",
+      }),
+      invalidatesTags: ["Products"],
+    }),
     //  our team API's
     getTeam: builder.query({
       query: () => ({
@@ -559,4 +566,5 @@ export const {
   useGetContactsQuery,
   // Products
   useGetProductsQuery,
+  useDeleteProductMutation,
 } = authApi;
