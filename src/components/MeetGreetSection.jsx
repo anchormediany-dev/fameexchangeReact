@@ -16,8 +16,10 @@ const MeetAndGreet = () => {
   const { data, isLoading, isError, error, refetch, isFetching } =
     useGetTalentQuery();
 
-  const talents = data?.taleUsers ?? [];
-
+  const rawTalents = data?.taleUsers ?? [];
+  const talents = rawTalents.filter((t) => !t?.isDeleted);
+  console.log(talents, "talent data");
+  console.log(talents);
   // ---- UI helpers ----
   const ErrorBlock = () => (
     <div className="flex flex-col items-center justify-center gap-3 rounded-xl border border-red-500/30 bg-red-500/5 px-6 py-10 text-center">

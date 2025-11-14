@@ -359,6 +359,14 @@ export const authApi = api.injectEndpoints({
       query: (id) => `/user/${id}/fan/overview`,
       providesTags: ["OverviewForFan"],
     }),
+    // Get Products API
+    getProducts: builder.query({
+      query: () => ({
+        url: "/products",
+        method: "GET",
+      }),
+      providesTags: ["Products"],
+    }),
     //  our team API's
     getTeam: builder.query({
       query: () => ({
@@ -549,4 +557,6 @@ export const {
   // contact us
   useContactUsMutation,
   useGetContactsQuery,
+  // Products
+  useGetProductsQuery,
 } = authApi;

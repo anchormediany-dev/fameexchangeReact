@@ -15,8 +15,10 @@ import image14 from "../assets/our-products/14.jpg";
 // Import Swiper styles
 import "swiper/css";
 import "swiper/css/navigation";
-
+import { useGetProductsQuery } from "../app/authApi";
+import { imgSrc } from "../utils/imgSrc";
 const ProductSlider = () => {
+  const { data, error, isError, isLoading } = useGetProductsQuery();
   const products = [
     {
       id: 5,
@@ -120,14 +122,14 @@ const ProductSlider = () => {
             autoplay={{ delay: 3000 }}
             loop={true}
           >
-            {products.map((product) => (
-              <SwiperSlide key={product.id}>
+            {data?.data?.map((product) => (
+              <SwiperSlide key={product._id}>
                 <div className="group relative bg-[#171717] backdrop-blur-sm border border-white/10 rounded-xl hover:border-[#a38b41]/30 transition-all duration-300 overflow-hidden">
                   {/* Product Image */}
                   <div className=" w-full rounded-md  object-cover overflow-hidden">
                     <img
-                      src={product.image}
-                      alt={product.name}
+                      src={imgSrc(product.image)}
+                      alt={product.title}
                       className="w-full h-full object-cover group-hover:opacity-75  lg:h-80"
                     />
                   </div>
@@ -141,7 +143,7 @@ const ProductSlider = () => {
                             aria-hidden="true"
                             className="absolute inset-0"
                           ></span>
-                          {product.name}
+                          {product.title}
                         </a>
                       </h3>
                       {/* You can add color/variant info here if needed */}
