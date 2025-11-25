@@ -53,6 +53,7 @@ const AppShowcase = () => {
   return (
     <div
       ref={sectionRef}
+      id="app"
       className="relative w-full overflow-hidden bg-black py-12 2xl:py-16"
     >
       {/* Background grid and effects */}
