@@ -30,7 +30,7 @@ const FAQItem = ({ faq, index, isOpen, toggleOpen }) => {
         variants={questionVariants}
         animate={isOpen ? "open" : "closed"}
       >
-        <h3 className=" text-xl font-medium text-[#595959]">{faq.question}</h3>
+        <h3 className=" text-xl font-medium text-white">{faq.question}</h3>
         <motion.div
           className="text-white"
           variants={iconVariants}
