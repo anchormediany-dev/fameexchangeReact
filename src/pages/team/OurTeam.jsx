@@ -56,13 +56,13 @@ const OurTeam = ({ teamMembers: propTeamMembers }) => {
                 member.linkedin ||
                 member.linkedin_link ||
                 member.linkedinProfile ||
-                "";
+                "https://www.linkedin.com";
               const websiteUrl =
                 member.websiteUrl ||
                 member.website ||
                 member.site ||
                 member.website_link ||
-                "";
+                "https://thefameexchange.com";
 
               return (
                 <div

@@ -15,9 +15,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { useGetFeaturedEventsQuery } from "../../app/authApi";
 import { truncate } from "../../utils/truncate";
 
-import hollywoodImage from "../../assets/images/hollywood-sign-night_Fotor.jpg";
-import pop1 from "../../assets/images/pop1.jpg";
-import pop2 from "../../assets/images/pop2.jpg";
+import hollywoodImage from "../../assets/home/HOLLYWOOD-NOSTALGIA.png";
 
 const CDN_BASE = import.meta.env.VITE_API_IMAGE_BASE_URL || "";
 const FALLBACK_COVER =
@@ -48,41 +46,6 @@ const EventsSectionWrapper = styled.section`
   background-attachment: fixed;
   position: relative;
   overflow: hidden;
-
-  &::before,
-  &::after {
-    content: "";
-    position: absolute;
-    z-index: 1;
-    width: 500px;
-    height: 500px;
-    background: no-repeat;
-    background-size: contain;
-    background-position: center;
-    opacity: 0.5;
-  }
-
-  &::before {
-    top: 0;
-    left: 0;
-    background-image: url(${pop2});
-    background-position: left center;
-  }
-
-  &::after {
-    top: 0;
-    right: 0;
-    background-image: url(${pop1});
-    background-position: right center;
-  }
-
-  @media (max-width: 768px) {
-    &::before,
-    &::after {
-      width: 120px;
-      opacity: 0.15;
-    }
-  }
 `;
 
 const SectionTitle = styled.h2`
