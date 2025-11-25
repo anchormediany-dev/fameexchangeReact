@@ -65,7 +65,7 @@ const Home = () => {
         onRefresh={refetch}
         viewAll={true}
       />
-      <SectionDivider />
+      {/* <SectionDivider /> */}
       <DownloadApp />
       <MeetAndGreet />
       <Podcast />
