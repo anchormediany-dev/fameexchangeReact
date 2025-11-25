@@ -1,107 +1,5 @@
-// import { motion } from "framer-motion";
-// import micImage from "../../assets/images/podcast-bg.png";
-
-// const Podcast = () => {
-//   // Simple, reliable animation variants
-//   const fadeInUp = {
-//     hidden: {
-//       opacity: 0,
-//       y: 30,
-//     },
-//     visible: {
-//       opacity: 1,
-//       y: 0,
-//       transition: {
-//         duration: 0.8,
-//         ease: "easeOut",
-//       },
-//     },
-//   };
-
-//   const fadeIn = {
-//     hidden: { opacity: 0 },
-//     visible: {
-//       opacity: 1,
-//       transition: {
-//         duration: 1,
-//         ease: "easeOut",
-//       },
-//     },
-//   };
-
-//   const staggerContainer = {
-//     hidden: { opacity: 0 },
-//     visible: {
-//       opacity: 1,
-//       transition: {
-//         staggerChildren: 0.3,
-//         delayChildren: 0.2,
-//       },
-//     },
-//   };
-
-//   return (
-//     <motion.div
-//       className="min-h-screen bg-cover bg-center bg-no-repeat w-full relative flex items-center justify-center text-white px-4"
-//       style={{
-//         backgroundImage: `url(${micImage})`,
-//       }}
-//       initial="hidden"
-//       whileInView="visible"
-//       viewport={{ once: true, amount: 0.2 }}
-//       variants={fadeIn}
-//     >
-//       <motion.div
-//         className="absolute z-50 top-10 left-[50%] md:left-[60%] -translate-x-1/2"
-//         variants={staggerContainer}
-//       >
-//         <motion.h1
-//           className="custom-heading-one mb-4 sm:mb-6"
-//           variants={fadeInUp}
-//         >
-//           FAMEX <span className="text-[#a38b41]">PODCAST</span>
-//         </motion.h1>
-
-//         <motion.p variants={fadeInUp}>
-//           The experience that will be sure to give you exposure to spot light
-//           your career
-//         </motion.p>
-//       </motion.div>
-
-//       <motion.div
-//         className="flex md:justify-between md:flex-row flex-col gap-3 container z-50 absolute bottom-10"
-//         variants={staggerContainer}
-//       >
-//         <motion.div className="" variants={fadeInUp}>
-//           <motion.button
-//             className="custom-button-two"
-//             whileHover={{ scale: 1.05 }}
-//             whileTap={{ scale: 0.95 }}
-//             transition={{ duration: 0.2 }}
-//           >
-//             BE INTERVIEWED
-//           </motion.button>
-//         </motion.div>
-
-//         <motion.a
-//           className="text-gray-400"
-//           href="mailto:info@FAMEXPODCAST.com"
-//           variants={fadeInUp}
-//           whileHover={{
-//             color: "#a38b41",
-//             transition: { duration: 0.2 },
-//           }}
-//         >
-//           info@FAMEXPODCAST.com
-//         </motion.a>
-//       </motion.div>
-//     </motion.div>
-//   );
-// };
-
-// export default Podcast;
 import { motion } from "framer-motion";
-import micImage from "../../assets/images/podcast-bg3.png";
+import micImage from "../../assets/home/micsectionFameX.png";
 
 const Podcast = () => {
   // Animation variants
@@ -189,7 +87,7 @@ const Podcast = () => {
   return (
     <motion.section
       id="podcast"
-      className="relative h-[60vh] md:h-[70vh] bg-cover bg-center bg-no-repeat w-full flex items-center text-white px-4 sm:px-6 lg:px-8 overflow-hidden"
+      className="relative h-[30vh] sm:h-[40vh] md:h-[50vh] lg:h-[50vh] xl:h-[80vh] bg-cover bg-center bg-no-repeat w-full flex items-center text-white px-4 sm:px-6 lg:px-8 overflow-hidden"
       style={{
         backgroundImage: `url(${micImage})`,
       }}
@@ -252,8 +150,7 @@ const Podcast = () => {
             </motion.div> */}
 
             {/* Animated Heading */}
-            <div className="mb-8">
-              {/* FAMEX */}
+            {/* <div className="mb-8">
               <motion.h1 className="custom-heading-one">
                 <motion.div
                   className="inline-block"
@@ -278,7 +175,7 @@ const Podcast = () => {
                   ))}
                 </motion.div>
                 <br />
-                {/* PODCAST */}
+
                 <motion.div
                   className="inline-block text-[#a38b41]"
                   initial="hidden"
@@ -302,10 +199,10 @@ const Podcast = () => {
                   ))}
                 </motion.div>
               </motion.h1>
-            </div>
+            </div> */}
 
             {/* Animated Paragraph */}
-            <motion.div
+            {/* <motion.div
               className="text-lg md:text-xl lg:text-2xl text-gray-300 leading-relaxed mb-10 max-w-2xl mx-auto lg:mx-0"
               initial="hidden"
               whileInView="visible"
@@ -332,11 +229,11 @@ const Podcast = () => {
                   {word}
                 </motion.span>
               ))}
-            </motion.div>
+            </motion.div> */}
 
             {/* CTA Section */}
             <motion.div
-              className="flex flex-col sm:flex-row gap-6 justify-center lg:justify-start items-center"
+              className="lg:flex hidden flex-col  sm:flex-row gap-6 justify-center lg:justify-start items-center"
               variants={fadeInUp}
             >
               {/* Interview Button */}
@@ -354,7 +251,7 @@ const Podcast = () => {
                 style={{ transitionDelay: "2s" }}
               >
                 <motion.div className="absolute  inset-0 bg-white/20 translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-700" />
-                <span className="relative z-10">BE INTERVIEWED</span>
+                <span className="relative z-10 ">BE INTERVIEWED</span>
               </motion.button>
 
               {/* Email Contact */}
@@ -377,7 +274,7 @@ const Podcast = () => {
           </motion.div>
 
           {/* Right Visual Element */}
-          <motion.div
+          {/* <motion.div
             className="lg:col-span-4 hidden lg:flex justify-center items-center"
             variants={fadeInRight}
           >
@@ -392,7 +289,6 @@ const Podcast = () => {
                 ease: "easeInOut",
               }}
             >
-              {/* Main Circle */}
               <motion.div
                 className="w-56 h-56 border-2 border-[#a38b41]/30 rounded-full flex items-center justify-center backdrop-blur-sm"
                 whileHover={{
@@ -405,7 +301,6 @@ const Podcast = () => {
                 viewport={{ once: true }}
                 style={{ transitionDelay: "1.8s" }}
               >
-                {/* Microphone */}
                 <motion.div
                   className="w-16 h-24 bg-gradient-to-b from-[#a38b41]/40 to-[#a38b41]/20 rounded-t-full border border-[#a38b41]/40"
                   animate={{
@@ -419,7 +314,6 @@ const Podcast = () => {
                 />
               </motion.div>
 
-              {/* Sound Waves */}
               <motion.div className="absolute inset-0 flex items-center justify-center">
                 {[1, 2, 3].map((i) => (
                   <motion.div
@@ -443,12 +337,11 @@ const Podcast = () => {
                 ))}
               </motion.div>
             </motion.div>
-          </motion.div>
+          </motion.div> */}
         </div>
       </div>
 
-      {/* Corner Decorations */}
-      <motion.div
+      {/* <motion.div
         className="absolute top-8 right-8 w-3 h-3 bg-[#a38b41]/60 rounded-full"
         animate={{
           scale: [1, 1.5, 1],
@@ -459,9 +352,9 @@ const Podcast = () => {
           repeat: Infinity,
           ease: "easeInOut",
         }}
-      />
+      /> */}
 
-      <motion.div
+      {/* <motion.div
         className="absolute bottom-8 left-8 w-2 h-2 bg-[#a38b41]/40 rounded-full"
         animate={{
           scale: [1, 2, 1],
@@ -473,7 +366,7 @@ const Podcast = () => {
           ease: "easeInOut",
           delay: 1,
         }}
-      />
+      /> */}
     </motion.section>
   );
 };

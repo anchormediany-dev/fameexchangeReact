@@ -4,6 +4,7 @@ import * as d3 from "d3";
 import imageText from "../assets/images/fame-exchange-image-text.png";
 import { Link } from "react-router-dom";
 import { imgSrc } from "../utils/imgSrc";
+import SectionDivider from "./SectionDivider";
 const TalentTokenTicker = ({
   talent,
   isLoading,
@@ -330,19 +331,21 @@ const TalentTokenTicker = ({
       id="top-talent"
       className="bg-[#171717] text-white  py-12 2xl:py-16"
     >
+       <SectionDivider />
       <motion.div
         variants={fadeInUpVariant}
         initial="hidden"
         animate={controls}
         className="mt-2 container"
       >
-        <img
+        {/* <img
           style={{
             width: "-webkit-fill-available",
           }}
           src={imageText}
           alt="Graphic Text"
-        />
+        /> */}
+       
       </motion.div>
 
       <div className="container mt-10 lg:mt-16 2xl:mt-20 px-4 relative z-10">
