@@ -25,8 +25,8 @@ const navLinks = [
   // This is comment.
   { name: "Gigs & Events", path: "/events", isRoute: true },
   { name: "Merchandise", path: "/products", isRoute: true },
-  { name: "About Us", path: "/about-us", isRoute: true },
-  { name: "Contact us", path: "/contact-us", isRoute: true },
+  { name: "About", path: "/about-us", isRoute: true },
+  { name: "Contact", path: "/contact-us", isRoute: true },
 ];
 
 const history = { scrollTarget: null };
@@ -215,7 +215,7 @@ const Navbar = () => {
             ))}
 
             <div className="flex items-center gap-5 ml-4">
-              <form onSubmit={handleSearch} className="relative w-44">
+              <form onSubmit={handleSearch} className="relative w-30">
                 <input
                   type="text"
                   value={searchQuery}

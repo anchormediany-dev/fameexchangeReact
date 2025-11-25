@@ -7,15 +7,10 @@ import gifTwo from "../assets/gifs/gif2.gif";
 import gifThree from "../assets/gifs/gif3.gif";
 import gifFour from "../assets/gifs/gif4.gif";
 const VideoBanner = () => {
-  const videoRef = useRef(null);
   const popupVideoRef = useRef(null);
-  const [isVideoPlaying, setIsVideoPlaying] = useState(true);
-  const [isMuted, setIsMuted] = useState(true);
-  const [showUnmuteButton, setShowUnmuteButton] = useState(false);
   const [showVideoPopup, setShowVideoPopup] = useState(false);
   const [isPopupVideoPlaying, setIsPopupVideoPlaying] = useState(false);
   const [currentGifIndex, setCurrentGifIndex] = useState(0);
-  const FRONTEND_BASE_URL = import.meta.env.VITE_FRONTEND_URL;
 
   const gifs = [gifOne, gifTwo, gifThree, gifFour];
 
@@ -27,33 +22,6 @@ const VideoBanner = () => {
 
     return () => clearInterval(interval);
   }, [gifs.length]);
-
-  useEffect(() => {
-    const video = videoRef.current;
-
-    if (video) {
-      const playVideo = async () => {
-        try {
-          await video.play();
-          setIsVideoPlaying(true);
-          setTimeout(() => {
-            setShowUnmuteButton(true);
-          }, 2000);
-        } catch (error) {
-          console.log("Auto-play was prevented:", error);
-          setIsVideoPlaying(false);
-        }
-      };
-
-      video.addEventListener("loadeddata", playVideo);
-      video.addEventListener("canplay", playVideo);
-
-      return () => {
-        video.removeEventListener("loadeddata", playVideo);
-        video.removeEventListener("canplay", playVideo);
-      };
-    }
-  }, []);
 
   // Handle popup video
   useEffect(() => {
@@ -96,41 +64,6 @@ const VideoBanner = () => {
       }
     };
   }, [showVideoPopup]);
-
-  const handlePlayPause = async () => {
-    const video = videoRef.current;
-    if (video) {
-      if (isVideoPlaying) {
-        video.pause();
-        setIsVideoPlaying(false);
-      } else {
-        try {
-          await video.play();
-          setIsVideoPlaying(true);
-        } catch (error) {
-          console.log("Play failed:", error);
-        }
-      }
-    }
-  };
-
-  const handleUnmute = () => {
-    const video = videoRef.current;
-    if (video) {
-      video.muted = false;
-      setIsMuted(false);
-      setShowUnmuteButton(true);
-    }
-  };
-
-  const handleMute = () => {
-    const video = videoRef.current;
-    if (video) {
-      video.muted = true;
-      setIsMuted(true);
-      setShowUnmuteButton(true);
-    }
-  };
 
   const handleWatchDemo = () => {
     setShowVideoPopup(true);
@@ -187,36 +120,6 @@ const VideoBanner = () => {
             />
           ))}
         </div>
-
-        {/* Video Background with Audio */}
-        <video
-          ref={videoRef}
-          className="absolute inset-0 w-full h-full object-cover opacity-30"
-          autoPlay
-          muted={isMuted}
-          loop
-          playsInline
-          preload="metadata"
-          onPlay={() => setIsVideoPlaying(true)}
-          onPause={() => setIsVideoPlaying(false)}
-        >
-          <source
-            src={`${FRONTEND_BASE_URL}/FAME-VIDEO-2024.mp4`}
-            type="video/mp4"
-          />
-        </video>
-
-        {/* Mute/Unmute Button - Bottom Right */}
-        {showUnmuteButton && !isMuted && (
-          <button
-            onClick={handleMute}
-            className="absolute bottom-4 right-4 sm:bottom-6 sm:right-6 z-20 flex items-center gap-2 px-3 py-2 sm:px-4 sm:py-2 bg-black/50 hover:bg-black/70 text-white rounded-full transition-all duration-300 backdrop-blur-sm border border-white/20 hover:border-cyan-400/60 group"
-            title="Mute video"
-          >
-            <GoMute className="text-sm sm:text-base" />
-            <span className="text-xs sm:text-sm font-medium">Mute</span>
-          </button>
-        )}
 
         {/* Main Content */}
         <div className="relative z-10 flex items-center justify-center w-full h-full px-4 sm:px-6 lg:px-8 py-8 sm:py-12">
@@ -369,13 +272,13 @@ const VideoBanner = () => {
         `}</style>
       </section>
 
-      {/* Video Popup Modal – adjusted for header + smaller height */}
+      {/* Video Popup Modal – Full Width */}
       {showVideoPopup && (
         <div
-          className="fixed inset-0 z-50 flex items-start justify-center bg-black/90 backdrop-blur-md transition-all duration-300 p-4 pt-[130px]"
+          className="fixed inset-0 z-50 flex items-start justify-center bg-black/90 backdrop-blur-md transition-all duration-300 p-[5px] pt-[5px]"
           onClick={handlePopupBackdropClick}
         >
-          <div className="relative w-full max-w-3xl lg:max-w-4xl xl:max-w-5xl mx-auto bg-black rounded-xl sm:rounded-2xl overflow-hidden shadow-2xl h-[80vh]">
+          <div className="relative w-full h-full bg-black overflow-hidden shadow-2xl">
             {/* Close Button */}
             <button
               onClick={handleClosePopup}
@@ -395,7 +298,7 @@ const VideoBanner = () => {
               playsInline
             >
               <source
-                src={`${FRONTEND_BASE_URL}/FAME-VIDEO-2024.mp4`}
+                src="/FAME-VIDEO-2024.mp4"
                 type="video/mp4"
               />
               Your browser does not support the video tag.

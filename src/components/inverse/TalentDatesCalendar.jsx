@@ -291,8 +291,16 @@ function SessionsTable({ sessions, onSelectSession, onClose }) {
                 <Td>{len != null ? `${len} min` : "—"}</Td>
                 <Td>{buf != null ? `${buf} min` : "—"}</Td>
                 <Td>{s.timeZone || "—"}</Td>
-                <Td className="capitalize">{s.accessType || "—"}</Td>
-                <Td>{money(s.price)}</Td>
+                <Td className="capitalize">
+                  {Array.isArray(s.accessType) 
+                    ? s.accessType.map(at => at.type).join(", ") 
+                    : s.accessType || "—"}
+                </Td>
+                <Td>
+                  {Array.isArray(s.accessType) 
+                    ? s.accessType.map(at => `$${at.price}`).join(", ")
+                    : money(s.price)}
+                </Td>
                 <Td>
                   <span
                     className={`px-2 py-0.5 rounded-md text-xs ${

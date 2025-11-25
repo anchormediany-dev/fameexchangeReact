@@ -107,15 +107,15 @@ export default function ProfileMenu({
             animate={{ opacity: 1, y: 8, scale: 1 }}
             exit={{ opacity: 0, y: -8, scale: 0.98 }}
             transition={{ type: "spring", stiffness: 260, damping: 22 }}
-            className="absolute right-0 z-50 mt-2 w-64 rounded-2xl border border-white/20 bg-white/90 p-2 shadow-2xl backdrop-blur-xl ring-1 ring-black/5 dark:border-white/10 dark:bg-neutral-900/80"
+            className="absolute right-0 z-50 mt-2 w-64 rounded-xl border border-gray-700 bg-[#2a2a2a] p-3 shadow-2xl"
           >
             {/* Header */}
-            <div className="mb-1 flex items-center gap-3 rounded-xl px-3 py-3">
+            <div className="mb-3 flex items-center gap-3 rounded-lg bg-[#1f1f1f] px-3 py-3 border border-gray-700">
               {user?.avatarUrl ? (
                 <img
                   src={user?.avatarUrl}
                   alt={user?.name || "User"}
-                  className="h-10 w-10 rounded-full object-cover ring-2 ring-white/60 dark:ring-white/10"
+                  className="h-10 w-10 rounded-full object-cover ring-2 ring-primary/50"
                 />
               ) : (
                 <Initial name={user?.name} />
@@ -123,19 +123,19 @@ export default function ProfileMenu({
 
               {/* Text block can shrink & wrap */}
               <div className="min-w-0 flex-1">
-                <p className="truncate text-sm font-semibold text-neutral-800 dark:text-neutral-100">
+                <p className="truncate text-sm font-semibold text-white">
                   {user?.name || "User"}
                 </p>
                 <div className="flex items-center gap-2 mt-1">
                   <span
                     className={`inline-flex items-center px-2 py-1 rounded-full text-xs font-medium ${
                       userDetails?.role === "ADMIN"
-                        ? "bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200"
+                        ? "bg-red-500/20 text-red-300 border border-red-500/30"
                         : userDetails?.role === "TALENT"
-                        ? "bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200"
+                        ? "bg-blue-500/20 text-blue-300 border border-blue-500/30"
                         : userDetails?.role === "FAN"
-                        ? "bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200"
-                        : "bg-gray-100 text-gray-800 dark:bg-gray-900 dark:text-gray-200"
+                        ? "bg-green-500/20 text-green-300 border border-green-500/30"
+                        : "bg-gray-500/20 text-gray-300 border border-gray-500/30"
                     }`}
                   >
                     {userDetails?.role?.toUpperCase() || "USER"}
@@ -144,66 +144,60 @@ export default function ProfileMenu({
               </div>
             </div>
 
-            <div className="my-1 h-px bg-gradient-to-r from-transparent via-black/10 to-transparent dark:via-white/10" />
+            <div className="my-2 h-px bg-gradient-to-r from-transparent via-gray-700 to-transparent" />
             {isRoleTalent && (
-              <div className="flex flex-col gap-3">
-                {" "}
+              <div className="flex flex-col gap-2 mb-2">
                 <Link
                   to={`/talent/${roleId}`}
-                  className="flex gap-3 justify-center items-center"
+                  className="flex gap-3 items-center px-3 py-2.5 rounded-lg text-white hover:bg-[#1f1f1f] transition-colors border border-transparent hover:border-gray-700"
                 >
-                  {" "}
-                  <FiLink className="text-[18px]" />
+                  <FiLink className="text-[18px] text-primary" />
                   <span className="text-sm font-medium">View Profile</span>
                 </Link>
                 <Link
                   to={`/update-profile/${roleId}`}
-                  className="flex gap-3 justify-center items-center"
+                  className="flex gap-3 items-center px-3 py-2.5 rounded-lg text-white hover:bg-[#1f1f1f] transition-colors border border-transparent hover:border-gray-700"
                 >
-                  {" "}
-                  <FiEdit className="text-[18px]" />
+                  <FiEdit className="text-[18px] text-primary" />
                   <span className="text-sm font-medium">Update Profile</span>
                 </Link>
                 <Link
                   to={`/verify-id`}
-                  className="flex gap-3 justify-center items-center"
+                  className="flex gap-3 items-center px-3 py-2.5 rounded-lg text-white hover:bg-[#1f1f1f] transition-colors border border-transparent hover:border-gray-700"
                 >
-                  {" "}
-                  <FiExternalLink className="text-[18px]" />
+                  <FiExternalLink className="text-[18px] text-primary" />
                   <span className="text-sm font-medium">KYC</span>
                 </Link>
               </div>
             )}
             {isRoleFan && (
-              <div className="flex flex-col gap-3">
-                {" "}
+              <div className="flex flex-col gap-2 mb-2">
                 <Link
                   to={`/fan/${roleId}`}
-                  className="flex gap-3 justify-center items-center"
+                  className="flex gap-3 items-center px-3 py-2.5 rounded-lg text-white hover:bg-[#1f1f1f] transition-colors border border-transparent hover:border-gray-700"
                 >
-                  {" "}
-                  <FiLink className="text-[18px]" />
+                  <FiLink className="text-[18px] text-primary" />
                   <span className="text-sm font-medium">View Profile</span>
                 </Link>
                 <Link
                   to={`/update-profile/${roleId}`}
-                  className="flex gap-3 justify-center items-center"
+                  className="flex gap-3 items-center px-3 py-2.5 rounded-lg text-white hover:bg-[#1f1f1f] transition-colors border border-transparent hover:border-gray-700"
                 >
-                  {" "}
-                  <FiEdit className="text-[18px]" />
+                  <FiEdit className="text-[18px] text-primary" />
                   <span className="text-sm font-medium">Update Profile</span>
                 </Link>
               </div>
             )}
             {isRoleAdmin && (
-              <Link
-                to={`/admin`}
-                className="flex gap-3 justify-center items-center"
-              >
-                {" "}
-                <FiLink className="text-[18px]" />
-                <span className="text-sm font-medium">Admin Dashboard</span>
-              </Link>
+              <div className="mb-2">
+                <Link
+                  to={`/admin`}
+                  className="flex gap-3 items-center px-3 py-2.5 rounded-lg text-white hover:bg-[#1f1f1f] transition-colors border border-transparent hover:border-gray-700"
+                >
+                  <FiLink className="text-[18px] text-primary" />
+                  <span className="text-sm font-medium">Admin Dashboard</span>
+                </Link>
+              </div>
             )}
             {/* {isRoleFan && (
               <Link
@@ -215,6 +209,9 @@ export default function ProfileMenu({
                 <span className="text-sm font-medium">Open Profile</span>
               </Link>
             )} */}
+            {/* Divider before logout */}
+            <div className="my-2 h-px bg-gradient-to-r from-transparent via-gray-700 to-transparent" />
+            
             {/* Items */}
             <ul className="space-y-1">
               {items.map(({ label, icon: Icon, action, danger }) => (
@@ -222,20 +219,13 @@ export default function ProfileMenu({
                   <button
                     onClick={action}
                     className={[
-                      "group flex w-full cursor-pointer items-center justify-center gap-3 px-3 py-2.5 text-left transition",
+                      "group flex w-full cursor-pointer items-center gap-3 px-3 py-2.5 rounded-lg text-left transition",
                       danger
-                        ? "text-gray-800  dark:hover:bg-red-500/10"
-                        : "text-neutral-700 hover:bg-black/5 dark:text-neutral-200 dark:hover:bg-white/5",
+                        ? "text-red-300 hover:bg-red-500/10 hover:text-red-200 border border-transparent hover:border-red-500/30"
+                        : "text-white hover:bg-[#1f1f1f] border border-transparent hover:border-gray-700",
                     ].join(" ")}
                   >
-                    <span
-                      className={[
-                        "grid h-4 w-4 place-items-center",
-                        danger
-                          ? ""
-                          : "bg-white/70 dark:bg-neutral-800/80 dark:ring-white/10",
-                      ].join(" ")}
-                    >
+                    <span className="grid h-4 w-4 place-items-center">
                       <Icon className="text-[18px]" />
                     </span>
                     <span className="text-sm font-medium">{label}</span>

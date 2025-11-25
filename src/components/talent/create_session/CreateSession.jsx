@@ -1,4 +1,5 @@
 import { useForm } from "react-hook-form";
+import { useState } from "react";
 import moment from "moment-timezone";
 import { Calendar, momentLocalizer } from "react-big-calendar";
 import "react-big-calendar/lib/css/react-big-calendar.css";
@@ -17,6 +18,14 @@ const localizer = momentLocalizer(moment);
 const CreateSession = () => {
   const [createSession, { isLoading, error }] = useCreateSessionMutation();
 
+  // State for access types with prices
+  const [accessTypes, setAccessTypes] = useState({
+    Metaverse: { selected: false, price: "" },
+    Virtual: { selected: false, price: "" },
+    Facetime: { selected: false, price: "" },
+    Hologram: { selected: false, price: "" },
+  });
+
   const {
     register,
     handleSubmit,
@@ -25,33 +34,61 @@ const CreateSession = () => {
   } = useForm({
     defaultValues: {
       sessionLength: 30,
-      price: "50",
       bufferTime: 15,
       timeZone: DEFAULT_TZ,
-      accessType: "online",
       where: "",
       sessionDate: "",
       sessionTime: "",
     },
   });
 
+  const handleAccessTypeChange = (type, field, value) => {
+    setAccessTypes(prev => ({
+      ...prev,
+      [type]: {
+        ...prev[type],
+        [field]: value
+      }
+    }));
+  };
+
   const onSubmit = async (data) => {
     try {
+      // Build accessType array from selected options
+      const accessTypeArray = Object.entries(accessTypes)
+        .filter(([type, config]) => config.selected && config.price)
+        .map(([type, config]) => ({
+          type,
+          price: parseFloat(config.price)
+        }));
+
+      // Validate at least one access type is selected
+      if (accessTypeArray.length === 0) {
+        toast.error("Please select at least one access type with a price");
+        return;
+      }
+
       const sessionData = {
         sessionLength: data.sessionLength,
-        price: data.price,
-        bufferTime: data.bufferTime,
-        timeZone: data.timeZone,
-        accessType: data.accessType,
-        where: data.where,
         sessionDate: data.sessionDate,
         sessionTime: data.sessionTime,
+        bufferTime: data.bufferTime,
+        timeZone: data.timeZone,
+        accessType: accessTypeArray,
+        where: data.where,
       };
 
       await createSession(sessionData).unwrap();
 
       toast.success("Session created successfully!");
       reset();
+      // Reset access types
+      setAccessTypes({
+        Metaverse: { selected: false, price: "" },
+        Virtual: { selected: false, price: "" },
+        Facetime: { selected: false, price: "" },
+        Hologram: { selected: false, price: "" },
+      });
     } catch (err) {
       const errorMessage =
         error?.data?.message ||
@@ -119,26 +156,60 @@ const CreateSession = () => {
               )}
             </div>
 
-            {/* Price */}
+            {/* Meeting Location */}
             <div>
               <label className="block text-sm text-white mb-2">
-                Price per Session ($)
+                Meeting Location
               </label>
               <input
-                type="number"
-                {...register("price", {
-                  required: "Price is required",
-                  min: { value: 1, message: "Minimum price is $1" },
-                  max: { value: 1000, message: "Maximum price is $1000" },
-                  valueAsNumber: true,
+                type="text"
+                {...register("where", {
+                  required: "Meeting Location is required",
                 })}
                 className="w-full bg-[#2d2d2d] gredient-border text-white rounded-lg py-3 px-4 placeholder-gray-400"
               />
-              {errors.price && (
+              {errors.where && (
                 <p className="text-red-500 text-xs mt-1">
-                  {errors.price.message}
+                  {errors.where.message}
                 </p>
               )}
+            </div>
+
+            {/* Access Type with Prices */}
+            <div className="md:col-span-2">
+              <label className="block text-sm text-white mb-3">
+                Access Types & Pricing ($)
+              </label>
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                {Object.entries(accessTypes).map(([type, config]) => (
+                  <div key={type} className="bg-[#1a1a1a] rounded-lg p-4 border border-[#333333]">
+                    <div className="flex items-center gap-3 mb-3">
+                      <input
+                        type="checkbox"
+                        checked={config.selected}
+                        onChange={(e) => handleAccessTypeChange(type, 'selected', e.target.checked)}
+                        className="w-4 h-4 accent-primary cursor-pointer"
+                        id={`access-${type}`}
+                      />
+                      <label htmlFor={`access-${type}`} className="text-white font-medium cursor-pointer">
+                        {type}
+                      </label>
+                    </div>
+                    <input
+                      type="number"
+                      placeholder="Price"
+                      value={config.price}
+                      onChange={(e) => handleAccessTypeChange(type, 'price', e.target.value)}
+                      disabled={!config.selected}
+                      min="1"
+                      max="1000"
+                      className={`w-full bg-[#2d2d2d] text-white rounded-lg py-2 px-3 placeholder-gray-400 ${
+                        !config.selected ? 'opacity-50 cursor-not-allowed' : 'gredient-border'
+                      }`}
+                    />
+                  </div>
+                ))}
+              </div>
             </div>
 
             {/* Session Date */}
@@ -220,53 +291,6 @@ const CreateSession = () => {
               {errors.timeZone && (
                 <p className="text-red-500 text-xs mt-1">
                   {errors.timeZone.message}
-                </p>
-              )}
-            </div>
-
-            {/* Access Type */}
-            <div className="col-span-1">
-              <label className="block text-sm text-white mb-2">
-                Access Type
-              </label>
-              <div className="flex gap-4">
-                {["online", "onsite"].map((type) => (
-                  <label key={type} className="flex items-center gap-2">
-                    <input
-                      type="radio"
-                      value={type}
-                      {...register("accessType", {
-                        required: "Access type is required",
-                      })}
-                      className="gredient-text bg-transparent"
-                    />
-                    <span className="capitalize text-white">
-                      {type === "online" ? "Online" : "Onsite"}
-                    </span>
-                  </label>
-                ))}
-              </div>
-              {errors.accessType && (
-                <p className="text-red-500 text-xs mt-1">
-                  {errors.accessType.message}
-                </p>
-              )}
-            </div>
-            {/* Meeting Location */}
-            <div>
-              <label className="block text-sm text-white mb-2">
-                Meeting Location
-              </label>
-              <input
-                type="text"
-                {...register("where", {
-                  required: "Meeting Location is required",
-                })}
-                className="w-full bg-[#2d2d2d] gredient-border text-white rounded-lg py-3 px-4 placeholder-gray-400"
-              />
-              {errors.where && (
-                <p className="text-red-500 text-xs mt-1">
-                  {errors.where.message}
                 </p>
               )}
             </div>

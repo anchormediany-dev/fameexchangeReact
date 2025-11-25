@@ -3,11 +3,24 @@ import { useLocation } from "react-router-dom";
 import { useFanInverseRequestMutation } from "../../app/authApi";
 import { toast } from "react-toastify";
 import { animate } from "framer-motion";
+
+// Format date to MM/DD/YYYY
+const formatDate = (dateString) => {
+  if (!dateString) return "";
+  const date = new Date(dateString);
+  const month = String(date.getMonth() + 1).padStart(2, '0');
+  const day = String(date.getDate()).padStart(2, '0');
+  const year = date.getFullYear();
+  return `${month}/${day}/${year}`;
+};
 const FanInverseRequestForm = ({
   isTalentName,
   sessionsData,
   selectedSession,
 }) => {
+  const [selectedAccessType, setSelectedAccessType] = useState("");
+  const [selectedPrice, setSelectedPrice] = useState("");
+
   const [fanRequest, setFanRequest] = useState({
     talentName: isTalentName ? isTalentName : "",
     date: selectedSession?.data?.sessionDate,
@@ -20,10 +33,32 @@ const FanInverseRequestForm = ({
     cardName: "",
   });
 
+  // Get access types from session data
+  const accessTypes = selectedSession?.data?.accessType || [];
+
   const location = useLocation();
 
   const [sendFanRequest, { isLoading, isError, error }] =
     useFanInverseRequestMutation();
+  // Handle access type selection
+  const handleAccessTypeChange = (e) => {
+    const selectedType = e.target.value;
+    setSelectedAccessType(selectedType);
+    
+    // Find the selected access type and set its price
+    const accessTypeObj = accessTypes.find(at => at.type === selectedType);
+    if (accessTypeObj) {
+      setSelectedPrice(accessTypeObj.price);
+      // Update desired location with the selected type
+      setFanRequest((prev) => ({
+        ...prev,
+        desiredLocation: selectedType,
+      }));
+    } else {
+      setSelectedPrice("");
+    }
+  };
+
   // Handle fan request form changes
   const handleFanRequestChange = (field, value) => {
     setFanRequest((prev) => ({
@@ -34,6 +69,8 @@ const FanInverseRequestForm = ({
 
   // Clear form
   const handleClear = () => {
+    setSelectedAccessType("");
+    setSelectedPrice("");
     setFanRequest({
       // talentName: "",
       date: "",
@@ -168,8 +205,7 @@ const FanInverseRequestForm = ({
               type="text"
               readOnly
               placeholder="Date"
-              value={selectedSession?.data?.sessionDate}
-              // onChange={(e) => handleFanRequestChange("date", e.target.value)}
+              value={formatDate(selectedSession?.data?.sessionDate)}
               className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition-all"
             />
           </div>
@@ -183,35 +219,62 @@ const FanInverseRequestForm = ({
               readOnly
               placeholder="Time"
               value={selectedSession?.data?.sessionTime}
-              // onChange={(e) => handleFanRequestChange("time", e.target.value)}
               className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition-all"
             />
           </div>
-          <div>
-            <label className="block text-sm font-medium text-gray-400 mb-2">
-              Price (USD)
-            </label>
-            <input
-              type="text"
-              readOnly
-              placeholder="Price"
-              value={`${selectedSession?.data?.price || 0}`}
-              // onChange={(e) => handleFanRequestChange("time", e.target.value)}
-              className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition-all"
-            />
+
+          {/* Access Type and Price in a row */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div>
+              <label className="block text-sm font-medium text-gray-400 mb-2">
+                Access Type
+              </label>
+              <select
+                value={selectedAccessType}
+                onChange={handleAccessTypeChange}
+                className="w-full px-4 py-3 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition-all bg-[#1a1a1a] text-white appearance-none cursor-pointer"
+                style={{
+                  border: '1px solid #d1d5db',
+                  backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3E%3Cpath stroke='%23ffffff' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3E%3C/svg%3E")`,
+                  backgroundPosition: 'right 0.5rem center',
+                  backgroundRepeat: 'no-repeat',
+                  backgroundSize: '1.5em 1.5em',
+                  paddingRight: '2.5rem'
+                }}
+              >
+                <option value="">Select Access Type</option>
+                {accessTypes.map((accessType) => (
+                  <option key={accessType._id} value={accessType.type}>
+                    {accessType.type}
+                  </option>
+                ))}
+              </select>
+            </div>
+
+            <div>
+              <label className="block text-sm font-medium text-gray-400 mb-2">
+                Price (USD)
+              </label>
+              <input
+                type="text"
+                readOnly
+                placeholder="Select access type first"
+                value={selectedPrice ? `$${selectedPrice}` : ""}
+                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition-all bg-[#1a1a1a] text-white"
+              />
+            </div>
           </div>
+
           <div>
             <label className="block text-sm font-medium text-gray-400 mb-2">
               Desired Location
             </label>
             <input
               type="text"
-              value={selectedSession?.data?.where}
-              // onChange={(e) =>
-              //   handleFanRequestChange("desiredLocation", e.target.value)
-              // }
-              className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition-all"
-              placeholder="Enter desired location"
+              readOnly
+              value={selectedAccessType || ""}
+              className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition-all bg-[#1a1a1a] text-white"
+              placeholder="Will be set based on access type selection"
             />
           </div>
           {/* Payment Information Section */}
