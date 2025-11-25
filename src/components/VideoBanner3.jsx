@@ -14,7 +14,19 @@ const VideoBanner = () => {
   const [showUnmuteButton, setShowUnmuteButton] = useState(false);
   const [showVideoPopup, setShowVideoPopup] = useState(false);
   const [isPopupVideoPlaying, setIsPopupVideoPlaying] = useState(false);
+  const [currentGifIndex, setCurrentGifIndex] = useState(0);
   const FRONTEND_BASE_URL = import.meta.env.VITE_FRONTEND_URL;
+
+  const gifs = [gifOne, gifTwo, gifThree, gifFour];
+
+  // Rotate GIFs every 3 seconds
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setCurrentGifIndex((prevIndex) => (prevIndex + 1) % gifs.length);
+    }, 3000);
+
+    return () => clearInterval(interval);
+  }, [gifs.length]);
 
   useEffect(() => {
     const video = videoRef.current;
@@ -161,6 +173,21 @@ const VideoBanner = () => {
     <div>
       {/* Banner adjusted for 120px header */}
       <section className="relative w-full h-[85vh] min-h-[600px] max-h-[900px] overflow-hidden pt-[120px]">
+        {/* Rotating GIF Background */}
+        <div className="absolute inset-0 w-full h-full">
+          {gifs.map((gif, index) => (
+            <img
+              key={index}
+              src={gif}
+              alt={`Background ${index + 1}`}
+              className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-1000 ${
+                index === currentGifIndex ? 'opacity-20' : 'opacity-0'
+              }`}
+              style={{ pointerEvents: 'none' }}
+            />
+          ))}
+        </div>
+
         {/* Video Background with Audio */}
         <video
           ref={videoRef}
