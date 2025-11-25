@@ -1,64 +1,116 @@
 import React, { useRef, useState, useEffect } from "react";
-import { GoMute } from "react-icons/go";
+// import { GoMute } from "react-icons/go";
 import { FaArrowRight } from "react-icons/fa6";
 import { FaPlay, FaPause, FaTimes } from "react-icons/fa";
+const FRONTEND_BASE_URL = import.meta.env.VITE_FRONTEND_URL;
+const GIF_DEMOS = [
+  {
+    id: 1,
+    url: `${FRONTEND_BASE_URL}/images/E91bITZEXEiQAAdVzodZzcPtqg.gif`,
+    label: "Discover & Explore Talent",
+  },
+  {
+    id: 2,
+    url: `${FRONTEND_BASE_URL}/images/dFhkEqAnNzFAilL0NdoJOmzXI.gif`,
+    label: "Buy & Trade Talent Shares",
+  },
+  {
+    id: 3,
+    url: `${FRONTEND_BASE_URL}/images/rwxr66Kjr42TDJyvhstwibJVje4.gif`,
+    label: "Track Performance & Rewards",
+  },
+];
+
+const GIF_DURATION_MS = 5000;
 
 const VideoBanner = () => {
   const videoRef = useRef(null);
   const popupVideoRef = useRef(null);
-  const [isVideoPlaying, setIsVideoPlaying] = useState(true);
+
+  const [mode, setMode] = useState("video"); // "video" | "gifs"
   const [isMuted, setIsMuted] = useState(true);
   const [showUnmuteButton, setShowUnmuteButton] = useState(false);
+
   const [showVideoPopup, setShowVideoPopup] = useState(false);
   const [isPopupVideoPlaying, setIsPopupVideoPlaying] = useState(false);
-  const FRONTEND_BASE_URL = import.meta.env.VITE_FRONTEND_URL;
 
+  const [activeGifIndex, setActiveGifIndex] = useState(0);
+
+  console.log("FRONTEND_BASE_URL:", FRONTEND_BASE_URL);
+
+  // 🔊 Auto-play hero video whenever mode === "video"
   useEffect(() => {
     const video = videoRef.current;
+    if (!video || mode !== "video") return;
 
-    if (video) {
-      const playVideo = async () => {
-        try {
-          await video.play();
-          setIsVideoPlaying(true);
-          setTimeout(() => {
-            setShowUnmuteButton(true);
-          }, 2000);
-        } catch (error) {
-          console.log("Auto-play was prevented:", error);
-          setIsVideoPlaying(false);
-        }
-      };
-
-      video.addEventListener("loadeddata", playVideo);
-      video.addEventListener("canplay", playVideo);
-
-      return () => {
-        video.removeEventListener("loadeddata", playVideo);
-        video.removeEventListener("canplay", playVideo);
-      };
-    }
-  }, []);
-
-  // Handle popup video
-  useEffect(() => {
-    const popupVideo = popupVideoRef.current;
-
-    const handleVideoEnd = () => {
-      if (popupVideo) {
-        popupVideo.currentTime = 0;
-        popupVideo
-          .play()
-          .then(() => {
-            setIsPopupVideoPlaying(true);
-          })
-          .catch((error) => {
-            console.log("Video restart failed:", error);
-          });
+    const playVideo = async () => {
+      try {
+        await video.play();
+        setTimeout(() => {
+          setShowUnmuteButton(true);
+        }, 2000);
+      } catch (error) {
+        console.log("Auto-play was prevented:", error);
+        // If autoplay fails, you *could* jump straight to GIFs:
+        // setMode("gifs");
       }
     };
 
-    if (popupVideo && showVideoPopup) {
+    if (video.readyState >= 2) {
+      playVideo();
+    } else {
+      video.addEventListener("loadeddata", playVideo);
+      return () => video.removeEventListener("loadeddata", playVideo);
+    }
+  }, [mode]);
+
+  // 🎞 GIF sequence: when mode === "gifs", show each GIF, then go back to video
+  useEffect(() => {
+    if (mode !== "gifs" || GIF_DEMOS.length === 0) return;
+
+    // Start from first GIF when entering GIF mode
+    setActiveGifIndex(0);
+    let currentIndex = 0;
+
+    const timer = setInterval(() => {
+      currentIndex += 1;
+
+      if (currentIndex < GIF_DEMOS.length) {
+        setActiveGifIndex(currentIndex);
+      } else {
+        clearInterval(timer);
+
+        // After last GIF → go back to video and restart the loop
+        setMode("video");
+        const v = videoRef.current;
+        if (v) {
+          v.currentTime = 0;
+          v.play()
+            .then(() => {
+              // ok
+            })
+            .catch((err) => console.log("Replay video failed:", err));
+        }
+      }
+    }, GIF_DURATION_MS);
+
+    return () => clearInterval(timer);
+  }, [mode]);
+
+  // Popup video logic
+  useEffect(() => {
+    const popupVideo = popupVideoRef.current;
+    if (!popupVideo) return;
+
+    const handleVideoEnd = () => {
+      popupVideo.currentTime = 0;
+      popupVideo
+        .play()
+        .then(() => setIsPopupVideoPlaying(true))
+        .catch((error) => console.log("Video restart failed:", error));
+    };
+
+    if (showVideoPopup) {
       popupVideo.currentTime = 0;
       popupVideo.loop = false;
 
@@ -73,29 +125,19 @@ const VideoBanner = () => {
 
       popupVideo.addEventListener("ended", handleVideoEnd);
       playPopupVideo();
-    }
 
-    return () => {
-      if (popupVideo) {
+      return () => {
         popupVideo.removeEventListener("ended", handleVideoEnd);
-      }
-    };
+      };
+    }
   }, [showVideoPopup]);
 
-  const handlePlayPause = async () => {
+  const handleMute = () => {
     const video = videoRef.current;
     if (video) {
-      if (isVideoPlaying) {
-        video.pause();
-        setIsVideoPlaying(false);
-      } else {
-        try {
-          await video.play();
-          setIsVideoPlaying(true);
-        } catch (error) {
-          console.log("Play failed:", error);
-        }
-      }
+      video.muted = true;
+      setIsMuted(true);
+      setShowUnmuteButton(true);
     }
   };
 
@@ -108,18 +150,13 @@ const VideoBanner = () => {
     }
   };
 
-  const handleMute = () => {
-    const video = videoRef.current;
-    if (video) {
-      video.muted = true;
-      setIsMuted(true);
-      setShowUnmuteButton(true);
-    }
-  };
-
   const handleWatchDemo = () => {
-    setShowVideoPopup(true);
-    setIsPopupVideoPlaying(true);
+    const youtubeUrl = `${FRONTEND_BASE_URL}/assets/Oeu3Q0gopGi7ZOX7kyiAeqbAX7s.mp4`;
+
+    window.open(youtubeUrl, "_blank", "noopener,noreferrer");
+
+    // setShowVideoPopup(true);
+    // setIsPopupVideoPlaying(true);
   };
 
   const handleClosePopup = () => {
@@ -133,17 +170,17 @@ const VideoBanner = () => {
 
   const handlePopupPlayPause = async () => {
     const popupVideo = popupVideoRef.current;
-    if (popupVideo) {
-      if (isPopupVideoPlaying) {
-        popupVideo.pause();
-        setIsPopupVideoPlaying(false);
-      } else {
-        try {
-          await popupVideo.play();
-          setIsPopupVideoPlaying(true);
-        } catch (error) {
-          console.log("Popup play failed:", error);
-        }
+    if (!popupVideo) return;
+
+    if (isPopupVideoPlaying) {
+      popupVideo.pause();
+      setIsPopupVideoPlaying(false);
+    } else {
+      try {
+        await popupVideo.play();
+        setIsPopupVideoPlaying(true);
+      } catch (error) {
+        console.log("Popup play failed:", error);
       }
     }
   };
@@ -158,35 +195,46 @@ const VideoBanner = () => {
     <div>
       {/* Banner adjusted for 120px header */}
       <section className="relative w-full h-[85vh] min-h-[600px] max-h-[900px] overflow-hidden pt-[120px]">
-        {/* Video Background with Audio */}
-        <video
-          ref={videoRef}
-          className="absolute inset-0 w-full h-full object-cover opacity-30"
-          autoPlay
-          muted={isMuted}
-          loop
-          playsInline
-          preload="metadata"
-          onPlay={() => setIsVideoPlaying(true)}
-          onPause={() => setIsVideoPlaying(false)}
-        >
-          <source
-            src={`${FRONTEND_BASE_URL}/FAME-VIDEO-2024.mp4`}
-            type="video/mp4"
+        {/* Background layer: either video OR GIF, same size */}
+        {mode === "video" ? (
+          <video
+            ref={videoRef}
+            className="absolute inset-0 w-full h-full object-cover opacity-30"
+            autoPlay
+            muted={isMuted}
+            playsInline
+            preload="metadata"
+            // No loop, so ended fires → switch to GIFs
+            onEnded={() => {
+              setMode("gifs");
+            }}
+          >
+            <source
+              src={`${FRONTEND_BASE_URL}/assets/Oeu3Q0gopGi7ZOX7kyiAeqbAX7s.mp4`}
+              type="video/mp4"
+            />
+          </video>
+        ) : (
+          <img
+            src={GIF_DEMOS[activeGifIndex].url}
+            alt={GIF_DEMOS[activeGifIndex].label}
+            className="absolute inset-0 w-full h-full object-cover opacity-30"
           />
-        </video>
+        )}
 
-        {/* Mute/Unmute Button - Bottom Right */}
-        {showUnmuteButton && !isMuted && (
+        {/* Mute / Unmute button – only while video is active */}
+        {/* {showUnmuteButton && mode === "video" && (
           <button
-            onClick={handleMute}
+            onClick={isMuted ? handleUnmute : handleMute}
             className="absolute bottom-4 right-4 sm:bottom-6 sm:right-6 z-20 flex items-center gap-2 px-3 py-2 sm:px-4 sm:py-2 bg-black/50 hover:bg-black/70 text-white rounded-full transition-all duration-300 backdrop-blur-sm border border-white/20 hover:border-cyan-400/60 group"
-            title="Mute video"
+            title={isMuted ? "Unmute video" : "Mute video"}
           >
             <GoMute className="text-sm sm:text-base" />
-            <span className="text-xs sm:text-sm font-medium">Mute</span>
+            <span className="text-xs sm:text-sm font-medium">
+              {isMuted ? "Unmute" : "Mute"}
+            </span>
           </button>
-        )}
+        )} */}
 
         {/* Main Content */}
         <div className="relative z-10 flex items-center justify-center w-full h-full px-4 sm:px-6 lg:px-8 py-8 sm:py-12">
@@ -216,6 +264,7 @@ const VideoBanner = () => {
               athletes, and creators like never before.
             </p>
 
+            {/* CTAs */}
             <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 md:gap-6 justify-center items-center animate-slide-up-stagger px-2">
               <button className="custom-button-two rounded-full w-full sm:w-auto min-w-[200px] px-6 py-3 sm:px-8 sm:py-4 text-sm sm:text-base">
                 <span className="relative z-10 flex items-center justify-center gap-2">
@@ -339,7 +388,7 @@ const VideoBanner = () => {
         `}</style>
       </section>
 
-      {/* Video Popup Modal – adjusted for header + smaller height */}
+      {/* Video Popup Modal */}
       {showVideoPopup && (
         <div
           className="fixed inset-0 z-50 flex items-start justify-center bg-black/90 backdrop-blur-md transition-all duration-300 p-4 pt-[130px]"
