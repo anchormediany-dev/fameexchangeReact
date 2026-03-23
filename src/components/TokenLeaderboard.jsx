@@ -109,7 +109,7 @@ const TokenLeaderboard = () => {
       <div className="container">
         <h2 className=" py-5 font-heading-hero text-center text-primary">
           20
-          <span className="text-white"> TOP BRANDED TALENT TOKENS</span>
+          <span className="text-white"> TOP BRANDED TALENT SHARES</span>
         </h2>
 
         <div className="space-y-6">
@@ -169,7 +169,7 @@ const TokenLeaderboard = () => {
 
         <div className="mt-12 flex justify-center">
           <Link
-            to="/talent-tokens"
+            to="/branded-tokens-shares"
             className="bg-lightYellow font-button-xl-alt hover:scale-105 cursor-pointer text-black px-6 py-3 rounded-md transition-all duration-300 relative group "
           >
             Discover More

@@ -380,7 +380,7 @@ const TalentTokenTicker = ({
           <div className="min-w-[1000px] bg-gradient-to-br from-[#1a1a1a]/90 to-[#252525]/90 backdrop-blur-xl rounded-3xl border border-gray-600/30 overflow-hidden shadow-2xl">
             {/* Table Header */}
             <div className="grid grid-cols-10 gap-2 md:gap-4 py-5 px-6 bg-gradient-to-r from-[#2d2d2d] via-[#353535] to-[#2d2d2d] text-sm text-gray-200 font-bold border-b border-gray-500/40 backdrop-blur-sm">
-              <div className="col-span-2 text-left">TALENT TOKEN</div>
+              <div className="col-span-2 text-left">TALENT SHARE</div>
               <div className="text-center">BTS Worth</div>
               <div className="text-center">COMPRISED VALUE</div>
               <div className="text-center">AVAILABLE UNITS</div>

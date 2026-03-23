@@ -157,6 +157,32 @@ const RepresentationSection = ({ onFormChange }) => {
 
           {showDropdown && !isConfirmed && (
             <div className="absolute z-10 mt-1 w-full bg-[#2d2d2d] rounded-lg shadow-lg max-h-60 overflow-auto">
+              {/* Select All Option */}
+              <div className="px-4 py-2 hover:bg-[#3d3d3d] border-b border-gray-600/30">
+                <label className="flex items-center space-x-2 cursor-pointer text-sm text-white font-semibold">
+                  <input
+                    type="checkbox"
+                    checked={selectedTypes.length === REP_OPTIONS.length}
+                    onChange={() => {
+                      if (selectedTypes.length === REP_OPTIONS.length) {
+                        setSelectedTypes([]);
+                        setRepDetails([]);
+                      } else {
+                        setSelectedTypes([...REP_OPTIONS]);
+                        setRepDetails(
+                          REP_OPTIONS.map((role) => {
+                            const existing = repDetails.find((r) => r.type === role);
+                            return existing || { type: role, name: "", email: "", phone: "" };
+                          })
+                        );
+                      }
+                      setIsConfirmed(false);
+                    }}
+                    className="h-4 w-4 text-[#F3BA18] border-[#F3BA18] focus:ring-[#F3BA18] rounded"
+                  />
+                  <span>Select All</span>
+                </label>
+              </div>
               {REP_OPTIONS.map((type) => (
                 <div key={type} className="px-4 py-2 hover:bg-[#3d3d3d]">
                   <label className="flex items-center space-x-2 cursor-pointer text-sm text-white">

@@ -57,7 +57,7 @@ const CongratulationsPopup = ({ onClose }) => {
           </p>
           <p className="heading-500-30 text-white mb-4">{savedNetWorth}</p>
           <p className="heading-400-20 text-gray-300 mb-6">
-            Get The Word Out There And Share Your Coin With The World By
+            Get The Word Out There And Share Your Profile With The World By
             Clicking The Share Button In Your Dashboard!
           </p>
           <button

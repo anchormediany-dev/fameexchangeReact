@@ -184,7 +184,7 @@ const Footer = () => {
             >
               <img
                 src={siteLogo}
-                alt="Coin Logo"
+                alt="TFE Logo"
                 className="bottom-3 right-10 h-auto"
               />
             </motion.div>

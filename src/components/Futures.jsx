@@ -83,9 +83,9 @@ const Futures = () => {
           </button>
         </div>
 
-        {/* Import Famecoin Heading */}
+        {/* Fund Your Account Heading */}
         <h2 className="relative z-10 font-heading-display pb-12 text-center text-primary">
-          <span className="text-white">Import Your</span> Famecoin
+          <span className="text-white">Fund Your</span> Trading Account
         </h2>
       </section>{" "}
       {/* Login Modal */}

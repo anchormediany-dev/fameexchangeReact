@@ -157,21 +157,21 @@ const NetworthCalculator = () => {
               )}
             </div>
 
-            {/* Token Brand */}
+            {/* Talent Brand */}
             <div className="md:col-span-2">
-              <h2 className="text-white heading-500-30 mb-3">Token Brand</h2>
+              <h2 className="text-white heading-500-30 mb-3">Talent Brand</h2>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
                   <label
                     htmlFor="tokenBrandName"
                     className="text-white block mb-1"
                   >
-                    Token Brand Name
+                    Talent Brand Name
                   </label>
                   <input
                     type="text"
                     id="tokenBrandName"
-                    placeholder="Token Brand Name"
+                    placeholder="Talent Brand Name"
                     className={`bg-transparent border  rounded-xl heading-400-15 px-4 py-2 w-full text-white placeholder:text-text-gray-400 focus:outline-none focus:border-[2px] ${
                       errors.tokenBrandName ? "border-red-500" : ""
                     }`}
@@ -187,11 +187,11 @@ const NetworthCalculator = () => {
 
                 <div>
                   <label htmlFor="tokenName" className="text-white block mb-1">
-                    Token Name
+                    Ticker Symbol
                   </label>
                   <input
                     id="tokenName"
-                    placeholder="Token Name"
+                    placeholder="Ticker Symbol"
                     className={`bg-transparent border heading-400-15  rounded-xl px-4 py-2 w-full text-white placeholder:text-text-gray-400 focus:outline-none focus:border-[2px] ${
                       errors.tokenName ? "border-red-500" : ""
                     }`}
@@ -210,12 +210,12 @@ const NetworthCalculator = () => {
                     htmlFor="tokenSupply"
                     className="text-white block mb-1"
                   >
-                    Token Supply
+                    Total Share Supply
                   </label>
                   <input
                     type="text"
                     id="tokenSupply"
-                    placeholder="Token Supply"
+                    placeholder="Total Share Supply"
                     className={`bg-transparent border heading-400-15  rounded-xl px-4 py-2 w-full text-white placeholder:text-text-gray-400 focus:outline-none focus:border-[2px] ${
                       errors.tokenSupply ? "border-red-500" : ""
                     }`}

@@ -26,7 +26,7 @@ const Process = () => {
               The Process
             </h1>
             <p className="text-center font-button-xl-alt mt-8 text-primary">
-              Reverse this process to convers your Famecoin into Fiat Currency
+              Reverse this process to withdraw your funds as cash
             </p>
           </div>
           <div>

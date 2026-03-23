@@ -26,6 +26,7 @@ import InversePage from "./pages/inverse/InversePage";
 import EventsPage from "./pages/events/EventsPage";
 import FutureMusicians from "./pages/future_musicians/FutureMusicians";
 import TradingAccountPage from "./pages/trading_account/TradingAccountPage";
+import TradeTalentPage from "./pages/trade_talent/TradeTalentPage";
 import Home from "./pages/home/Home";
 import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
@@ -490,6 +491,15 @@ export default function App() {
             element={
               <MotionPageWrapper>
                 <TradingAccountPage />
+              </MotionPageWrapper>
+            }
+          />
+          {/* trade-talent Page */}
+          <Route
+            path="trade-talent"
+            element={
+              <MotionPageWrapper>
+                <TradeTalentPage />
               </MotionPageWrapper>
             }
           />

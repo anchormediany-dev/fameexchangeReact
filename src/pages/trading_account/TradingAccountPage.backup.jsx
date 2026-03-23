@@ -372,7 +372,7 @@ const TalentTokenDashboard = () => {
 
                 <div>
                   <label className="block text-sm font-medium text-gray-400 mb-2">
-                    Talent Ticker Symbol
+                    Talent Token Brand
                   </label>
                   <input
                     type="text"
@@ -441,7 +441,7 @@ const TalentTokenDashboard = () => {
               {/* Token Price */}
               <div className="mb-6">
                 <div className="flex justify-between items-center text-sm">
-                  <span className="text-gray-300">Est. Share Price</span>
+                  <span className="text-gray-300">Est Talent Token Price</span>
                   <span className="font-bold text-white">
                     ${currentData.price.toFixed(2)}
                   </span>
@@ -766,15 +766,15 @@ const TalentTokenDashboard = () => {
             <div className="lg:col-span-2 flex flex-col space-y-3 h-full">
               <div className="bg-gradient-to-br from-[#1a1a1a]/90 to-[#252525]/90 backdrop-blur-xl border border-gray-600/30 rounded-3xl p-4 flex-1 h-full">
                 <h3 className="text-2xl font-bold text-primary2 mb-6 text-center">
-                  Talent Shares Total Held (
+                  Talent Tokens Total Held (
                   {holdingsData.reduce((sum, h) => sum + h.amount, 0)})
                 </h3>
 
                 {/* Table Header */}
                 <div className="grid grid-cols-3 gap-4 py-4 px-4 bg-gradient-to-r from-[#2d2d2d] via-[#353535] to-[#2d2d2d] text-sm text-gray-200 font-bold border-b border-gray-500/40 backdrop-blur-sm rounded-t-2xl">
                   <div className="text-left">Talent Name</div>
-                  <div className="text-left">Ticker</div>
-                  <div className="text-left">Holdings</div>
+                  <div className="text-left">Token Name</div>
+                  <div className="text-left">Holding Amount</div>
                 </div>
 
                 {/* Table Rows */}

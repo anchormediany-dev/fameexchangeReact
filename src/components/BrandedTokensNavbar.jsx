@@ -13,16 +13,16 @@ const navLinks = [
     scrollTo: "trade",
   },
   {
-    name: "BRANDED TALENT TOKENS",
-    scrollTo: "branded-talent-tokens",
+    name: "BRANDED TALENT SHARES",
+    scrollTo: "branded-talent-shares",
     hasDropdown: true,
     categories: {
-      "TOP 20 TOKENS": {
-        path: "/top-tokens",
+      "TOP 20 SHARES": {
+        path: "/top-shares",
         subCategories: [
-          { name: "DeFi", path: "/top-tokens/defi" },
-          { name: "NFTs", path: "/top-tokens/nfts" },
-          { name: "Gaming", path: "/top-tokens/gaming" },
+          { name: "Trending", path: "/top-shares/trending" },
+          { name: "Most Active", path: "/top-shares/most-active" },
+          { name: "New Listings", path: "/top-shares/new-listings" },
         ],
       },
       INFLUENCERS: {
@@ -98,7 +98,7 @@ const navLinks = [
 const BrandedTokensNavbar = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [isOpenDropdown, setIsOpenDropdown] = useState(false);
-  const [activeCategory, setActiveCategory] = useState("TOP 20 TOKENS");
+  const [activeCategory, setActiveCategory] = useState("TOP 20 SHARES");
   const [mobileActiveCategory, setMobileActiveCategory] = useState(null);
   const [dropdownTimeout, setDropdownTimeout] = useState(null);
   const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
@@ -234,7 +234,7 @@ const BrandedTokensNavbar = () => {
           onClick={toggleTalentTokens}
           className="flex justify-between items-center px-4 py-3 bg-[#222] rounded-lg cursor-pointer"
         >
-          <span className="font-normal text-white">BRANDED TALENT TOKENS</span>
+          <span className="font-normal text-white">BRANDED TALENT SHARES</span>
           <FaChevronDown
             className={`text-white transition-transform ${
               showTalentTokens ? "transform rotate-180" : ""

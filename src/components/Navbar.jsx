@@ -11,22 +11,14 @@ import { logout } from "../features/auth/authSlice";
 import { openSignupModal as openSignupModalAction } from "../features/auth/signupModalSlice";
 import ProfileMenu from "./ProfileMenu";
 const navLinks = [
-  { name: "Home", path: "/", isRoute: true },
+  { name: "Talent Trading", path: "/trade-talent", isRoute: true },
   { name: "Top BTS", path: "/branded-tokens-shares", isRoute: true },
-  { name: "Talent Trading", scrollTo: "talent-trading" },
-  { name: "Inverse", path: "/inverse", isRoute: true },
-  { name: "Futures", path: "/future", isRoute: true },
   { name: "App", scrollTo: "app" },
+  { name: "Inverse", path: "/inverse", isRoute: true },
   { name: "Podcast", scrollTo: "podcast" },
-  // { name: "Stocks", scrollTo: "stocks" },
-  // { name: "Brands", scrollTo: "brands" },
-  // { name: "Meet & Greet", scrollTo: "meet_greet" },
-  // { name: "Advertising", scrollTo: "advertising" },
-  // This is comment.
-  { name: "Gigs & Events", path: "/events", isRoute: true },
+  { name: "Futures", path: "/future", isRoute: true },
   { name: "Merchandise", path: "/products", isRoute: true },
-  { name: "About", path: "/about-us", isRoute: true },
-  { name: "Contact", path: "/contact-us", isRoute: true },
+  { name: "Gigs & Events", path: "/events", isRoute: true },
 ];
 
 const history = { scrollTarget: null };

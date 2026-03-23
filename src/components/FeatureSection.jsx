@@ -7,7 +7,7 @@ import checkoutOurInVerse from "../assets/images/checkout-our-in-verse.png";
 const FeatureSection = () => {
   return (
     <section
-      id="nft"
+      id="features"
       className="relative text-white px-4 py-12 overflow-hidden"
     >
       {/* Main Content */}
@@ -21,7 +21,7 @@ const FeatureSection = () => {
           />
           <h3 className="font-heading-xl text-primary mt-4">Fans Get To</h3>
           <p className="text-grayLight font-paragraph-xl mt-1">
-            Earn With Athlete/ Artists & Personalities Talent Token
+            Earn With Athlete, Artists & Personalities Talent Shares
           </p>
         </div>
 
@@ -34,7 +34,7 @@ const FeatureSection = () => {
           />
           <h3 className="font-heading-xl text-primary mt-4">Easy To Trade</h3>
           <p className="text-grayLight font-paragraph-xl mt-1">
-            Famecoin For Branded Talent Token
+            Buy & Sell Branded Talent Shares
           </p>
         </div>
 
@@ -43,7 +43,7 @@ const FeatureSection = () => {
           <img src={easyToTrade} alt="Woman with glasses" className="w-full" />
           <h3 className="font-heading-xl text-primary mt-4">Personalities</h3>
           <p className="text-grayLight font-paragraph-xl mt-1">
-            Get Evaluated And Receive Talent Token To BRAND
+            Get Evaluated And List Your Talent Shares
           </p>
         </div>
 

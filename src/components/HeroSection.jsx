@@ -100,9 +100,9 @@ const HeroSection = () => {
           transition={{ duration: 0.8, delay: 0.8 }}
           style={{ y: y2 }}
         >
-          Lorem Ipsum is simply dummy text of the printing and typesetting
-          industry. Lorem Ipsum has been the industry's standard dummy text ever
-          since the 1500s, when an
+          The Fame Exchange is the premier platform where fans invest in the
+          success of their favorite athletes, artists, and entertainers through
+          branded talent shares.
         </motion.p>
 
         {/* CTA Button with parallax effect */}
