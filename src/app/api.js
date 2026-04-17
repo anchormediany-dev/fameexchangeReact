@@ -29,6 +29,17 @@ const baseQuery = fetchBaseQuery({
 export const api = createApi({
   reducerPath: "api",
   baseQuery,
-  tagTypes: ["Auth"],
+  tagTypes: [
+    "Auth",
+    "Wallet",
+    "WalletTransactions",
+    "MarketTalents",
+    "TopTalents",
+    "TalentDetail",
+    "TalentStats",
+    "TradeHistory",
+    "OpenPositions",
+    "Position",
+  ],
   endpoints: () => ({}),
 });

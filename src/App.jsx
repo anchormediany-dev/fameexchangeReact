@@ -27,6 +27,7 @@ import EventsPage from "./pages/events/EventsPage";
 import FutureMusicians from "./pages/future_musicians/FutureMusicians";
 import TradingAccountPage from "./pages/trading_account/TradingAccountPage";
 import TradeTalentPage from "./pages/trade_talent/TradeTalentPage";
+import TradingDashboard from "./pages/trade_talent/TradingDashboard";
 import Home from "./pages/home/Home";
 import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
@@ -494,12 +495,29 @@ export default function App() {
               </MotionPageWrapper>
             }
           />
-          {/* trade-talent Page */}
+          {/* trade-talent Pages */}
           <Route
             path="trade-talent"
             element={
               <MotionPageWrapper>
                 <TradeTalentPage />
+              </MotionPageWrapper>
+            }
+          />
+          <Route
+            path="trade-talent/:id"
+            element={
+              <MotionPageWrapper>
+                <TradeTalentPage />
+              </MotionPageWrapper>
+            }
+          />
+          {/* Trading Dashboard */}
+          <Route
+            path="trading-dashboard"
+            element={
+              <MotionPageWrapper>
+                <TradingDashboard />
               </MotionPageWrapper>
             }
           />

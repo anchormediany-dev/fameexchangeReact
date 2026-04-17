@@ -1,0 +1,178 @@
+import { api } from "./api";
+
+export const tradingApi = api.injectEndpoints({
+  endpoints: (builder) => ({
+    // ── Wallet ──────────────────────────────────────────────
+    getWallet: builder.query({
+      query: () => "/wallet",
+      providesTags: ["Wallet"],
+    }),
+
+    getWalletTransactions: builder.query({
+      query: ({ page = 1, limit = 20, type = "" } = {}) => ({
+        url: "/wallet/transactions",
+        params: {
+          page,
+          limit,
+          ...(type ? { type } : {}),
+        },
+      }),
+      providesTags: ["WalletTransactions"],
+    }),
+
+    depositFunds: builder.mutation({
+      query: (amount) => ({
+        url: "/wallet/deposit",
+        method: "POST",
+        body: { amount },
+      }),
+      invalidatesTags: ["Wallet", "WalletTransactions"],
+    }),
+
+    // ── Talents / Market ────────────────────────────────────
+    getMarketTalents: builder.query({
+      query: ({ page = 1, limit = 20, search = "" } = {}) => ({
+        url: "/talents",
+        params: {
+          page,
+          limit,
+          ...(search ? { search } : {}),
+        },
+      }),
+      providesTags: ["MarketTalents"],
+    }),
+
+    getTopTalents: builder.query({
+      query: ({ limit = 10, sort = "price" } = {}) => ({
+        url: "/talents/top",
+        params: { limit, sort },
+      }),
+      providesTags: ["TopTalents"],
+    }),
+
+    getTalentById: builder.query({
+      query: (id) => `/talents/${id}`,
+      providesTags: (_result, _error, id) => [{ type: "TalentDetail", id }],
+    }),
+
+    getTalentQuote: builder.query({
+      query: (id) => `/talents/${id}/quote`,
+    }),
+
+    getTalentChart: builder.query({
+      query: ({ id, range = "1D" }) => ({
+        url: `/talents/${id}/chart`,
+        params: { range },
+      }),
+    }),
+
+    getTalentStats: builder.query({
+      query: (id) => `/talents/${id}/stats`,
+      providesTags: (_result, _error, id) => [{ type: "TalentStats", id }],
+    }),
+
+    // ── Trading ─────────────────────────────────────────────
+    tradePreview: builder.mutation({
+      query: ({ talent_id, side, amount }) => ({
+        url: "/trades/preview",
+        method: "POST",
+        body: { talent_id, side, amount },
+      }),
+    }),
+
+    tradeOpen: builder.mutation({
+      query: ({ talent_id, side, amount, quote_price, idempotency_key }) => ({
+        url: "/trades/open",
+        method: "POST",
+        body: { talent_id, side, amount, quote_price, idempotency_key },
+      }),
+      invalidatesTags: [
+        "Wallet",
+        "OpenPositions",
+        "TradeHistory",
+        "WalletTransactions",
+      ],
+    }),
+
+    getTradeHistory: builder.query({
+      query: (params = {}) => {
+        const filtered = Object.fromEntries(
+          Object.entries(params).filter(
+            ([, v]) => v !== undefined && v !== null && v !== ""
+          )
+        );
+        return {
+          url: "/trades/history",
+          params: filtered,
+        };
+      },
+      providesTags: ["TradeHistory"],
+    }),
+
+    getTradeDetail: builder.query({
+      query: (tradeId) => `/trades/history/${tradeId}`,
+    }),
+
+    // ── Positions ───────────────────────────────────────────
+    getOpenPositions: builder.query({
+      query: ({ page = 1, limit = 20, talent_id } = {}) => ({
+        url: "/positions/open",
+        params: {
+          page,
+          limit,
+          ...(talent_id ? { talent_id } : {}),
+        },
+      }),
+      providesTags: ["OpenPositions"],
+    }),
+
+    getPosition: builder.query({
+      query: (id) => `/positions/${id}`,
+      providesTags: (_result, _error, id) => [{ type: "Position", id }],
+    }),
+
+    closePositionPreview: builder.mutation({
+      query: (id) => ({
+        url: `/positions/${id}/close-preview`,
+        method: "POST",
+      }),
+    }),
+
+    closePosition: builder.mutation({
+      query: (id) => ({
+        url: `/positions/${id}/close`,
+        method: "POST",
+      }),
+      invalidatesTags: [
+        "Wallet",
+        "OpenPositions",
+        "TradeHistory",
+        "WalletTransactions",
+      ],
+    }),
+  }),
+});
+
+export const {
+  // Wallet
+  useGetWalletQuery,
+  useGetWalletTransactionsQuery,
+  useDepositFundsMutation,
+  // Talents
+  useGetMarketTalentsQuery,
+  useGetTopTalentsQuery,
+  useGetTalentByIdQuery,
+  useGetTalentQuoteQuery,
+  useGetTalentChartQuery,
+  useGetTalentStatsQuery,
+  // Trading
+  useTradePreviewMutation,
+  useTradeOpenMutation,
+  useGetTradeHistoryQuery,
+  useGetTradeDetailQuery,
+  // Positions
+  useGetOpenPositionsQuery,
+  useGetPositionQuery,
+  useClosePositionPreviewMutation,
+  useClosePositionMutation,
+} = tradingApi;
