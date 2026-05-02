@@ -24,10 +24,10 @@ dist-ssr
 *.sw?
 
 # Environment files
-# .env
-# .env.local
-# .env.development
-# .env.production
+.env
+.env.local
+.env.development
+.env.production
 
 # Ignore package.json
 package-lock.json
