@@ -1,25 +1,30 @@
 import { useLocation } from "react-router-dom";
-import { useState, useEffect } from "react";
+import { useState, useEffect, lazy, Suspense } from "react";
 import CalculatingNetworthPopup from "../../components/CalculatingNetworthPopup";
 import CongratulationsPopup from "../../components/CongratulationsPopup";
-import HeroSection from "../../components/HeroSection";
+// Above-the-fold (eager): hero + first interactive section
 import BrandedTalentShares from "../../components/BrandedTalentShares";
 import TalentTradingSection from "../../components/TalentTradingSection";
-import DownloadApp from "../../components/DownloadApp";
-import GigsEvents from "../../components/GigsEvents";
-import MeetAndGreet from "../../components/MeetGreetSection";
-import TheFuturesSection from "../../components/TheFuturesSection";
-import OurTeam from "../../components/our_team/OurTeam";
-import ContactUs from "../../components/contact/ContactUs";
-import Podcast from "../../components/podcast/Podcast";
-import Faq from "../../components/faq/Faq";
-import CustomerReview from "../../components/customer_review/CustomerReview";
 import VideoBanner3 from "../../components/VideoBanner3";
-import CelebMerchandiseHero from "../../components/CelebMerchandiseHero";
 import { useGetTalentQuery } from "../../app/authApi";
 import React, { useMemo } from "react";
-import ProductSlider from "../../components/ProductSlider";
-import SectionDivider from "../../components/SectionDivider";
+
+// Below-the-fold (lazy): split into separate chunks, fetched as the user scrolls
+const DownloadApp = lazy(() => import("../../components/DownloadApp"));
+const GigsEvents = lazy(() => import("../../components/GigsEvents"));
+const MeetAndGreet = lazy(() => import("../../components/MeetGreetSection"));
+const TheFuturesSection = lazy(() => import("../../components/TheFuturesSection"));
+const OurTeam = lazy(() => import("../../components/our_team/OurTeam"));
+const ContactUs = lazy(() => import("../../components/contact/ContactUs"));
+const Podcast = lazy(() => import("../../components/podcast/Podcast"));
+const Faq = lazy(() => import("../../components/faq/Faq"));
+const CustomerReview = lazy(() => import("../../components/customer_review/CustomerReview"));
+const CelebMerchandiseHero = lazy(() => import("../../components/CelebMerchandiseHero"));
+const ProductSlider = lazy(() => import("../../components/ProductSlider"));
+
+const SectionFallback = () => (
+  <div className="min-h-[200px] w-full" aria-hidden="true" />
+);
 const Home = () => {
   const { data, isLoading, isError, error, refetch, isFetching } =
     useGetTalentQuery();
@@ -65,18 +70,19 @@ const Home = () => {
         onRefresh={refetch}
         viewAll={true}
       />
-      {/* <SectionDivider /> */}
-      <DownloadApp />
-      <MeetAndGreet />
-      <Podcast />
-      <CustomerReview />
-      <TheFuturesSection />
-      <GigsEvents />
-      <CelebMerchandiseHero />
-      <ProductSlider />
-      <OurTeam />
-      <Faq />
-      <ContactUs />
+      <Suspense fallback={<SectionFallback />}>
+        <DownloadApp />
+        <MeetAndGreet />
+        <Podcast />
+        <CustomerReview />
+        <TheFuturesSection />
+        <GigsEvents />
+        <CelebMerchandiseHero />
+        <ProductSlider />
+        <OurTeam />
+        <Faq />
+        <ContactUs />
+      </Suspense>
       {isCalculatingNetworthOpen && <CalculatingNetworthPopup />}
       {showCongratulationsPopup && <CongratulationsPopup />}
     </div>

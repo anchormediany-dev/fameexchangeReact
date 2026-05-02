@@ -23,6 +23,7 @@ import { motion } from "framer-motion";
 import siteLogo from "./assets/images/site-logo.png";
 // import MeetGreetPage from "./pages/meet_greet/MeetGreetPage";
 import InversePage from "./pages/inverse/InversePage";
+import InverseCheckoutPage from "./pages/inverse/InverseCheckoutPage";
 import EventsPage from "./pages/events/EventsPage";
 import FutureMusicians from "./pages/future_musicians/FutureMusicians";
 import TradingAccountPage from "./pages/trading_account/TradingAccountPage";
@@ -604,6 +605,14 @@ export default function App() {
             element={
               <MotionPageWrapper>
                 <InversePage />
+              </MotionPageWrapper>
+            }
+          />
+          <Route
+            path="inverse-checkout/:sessionId"
+            element={
+              <MotionPageWrapper>
+                <InverseCheckoutPage />
               </MotionPageWrapper>
             }
           />

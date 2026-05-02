@@ -233,6 +233,21 @@ export default function EventDetails() {
                         ))}
                       </div>
                     )}
+                    {/* Buy Tickets — routes to multi-step Stripe checkout */}
+                    <button
+                      onClick={() => {
+                        if (!isAuthenticated) {
+                          navigate("/login", {
+                            state: { from: `/checkout/${event?._id}` },
+                          });
+                          return;
+                        }
+                        navigate(`/checkout/${event?._id}`);
+                      }}
+                      className="mt-5 w-full bg-gradient-to-r from-[#F3BA18] to-[#FF9900] hover:from-[#FF9900] hover:to-[#F3BA18] text-black font-bold py-3 px-4 rounded-lg transition-all duration-300 cursor-pointer"
+                    >
+                      Buy Tickets
+                    </button>
                   </div>
                 )}
                 {event?.details && (

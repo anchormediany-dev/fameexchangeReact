@@ -326,7 +326,6 @@ export default function EventCreateForm() {
       summary: form.summary,
       details: form.details,
       event_type: eventTypeString,
-      event_type: form.event_type,
       status: form.status,
       category: form.category,
       location: form.location,

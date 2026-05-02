@@ -503,7 +503,7 @@ const TalentTokenTicker = ({
                     >
                       <div className="flex flex-col gap-3">
                         <Link
-                          to="/trading-account"
+                          to={`/trade-talent/${token?._id}`}
                           className="flex justify-center"
                         >
                           <motion.button

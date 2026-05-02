@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import {
   FaChevronLeft,
   FaChevronRight,
@@ -24,7 +25,10 @@ const TalentDatesCalendar = ({
   isLoading,
   isError,
   error,
+  selectedSearchuser,
+  talentName,
 }) => {
+  const navigate = useNavigate();
   const [currentDate, setCurrentDate] = useState(new Date());
   const [selectedDate, setSelectedDate] = useState(null);
   const [openModalFor, setOpenModalFor] = useState(null); // Date object for which modal is open
@@ -227,6 +231,9 @@ const TalentDatesCalendar = ({
                 onSelectSession={onSelectSession}
                 sessions={sessionsForDate(openModalFor)}
                 onClose={closeModal}
+                talentId={selectedSearchuser}
+                talentName={talentName}
+                navigate={navigate}
               />
             </div>
 
@@ -246,7 +253,14 @@ const TalentDatesCalendar = ({
 };
 
 /* ---------- Table that shows EXACT payload fields ---------- */
-function SessionsTable({ sessions, onSelectSession, onClose }) {
+function SessionsTable({
+  sessions,
+  onSelectSession,
+  onClose,
+  talentId,
+  talentName,
+  navigate,
+}) {
   if (!Array.isArray(sessions) || sessions.length === 0) {
     return (
       <div className="text-sm text-white/80">
@@ -313,27 +327,57 @@ function SessionsTable({ sessions, onSelectSession, onClose }) {
                   </span>
                 </Td>
                 <Td>
-                  <button
-                    type="button"
-                    onClick={() => {
-                      console.log("[CHILD] clicked:", { s });
-                      try {
-                        if (!onSelectSession) {
-                          throw new Error(
-                            "onSelectSession prop is missing in TalentDatesCalendar"
-                          );
+                  <div className="flex flex-col gap-2 min-w-[170px]">
+                    <button
+                      type="button"
+                      onClick={() => {
+                        try {
+                          if (!onSelectSession) {
+                            throw new Error(
+                              "onSelectSession prop is missing in TalentDatesCalendar"
+                            );
+                          }
+                          const id = s?.s_id ?? s?._id;
+                          const data = s?.sessionData ?? s;
+                          onSelectSession(id, data);
+                        } finally {
+                          onClose?.();
                         }
-                        const id = s?.s_id ?? s?._id;
-                        const data = s?.sessionData ?? s;
-                        onSelectSession(id, data);
-                      } finally {
-                        onClose?.();
-                      }
-                    }}
-                    className="bg-[#a38b41] py-1 px-3 rounded-md cursor-pointer whitespace-nowrap"
-                  >
-                    inverse Request
-                  </button>
+                      }}
+                      className="bg-[#a38b41]/80 hover:bg-[#a38b41] text-white py-1.5 px-3 rounded-md cursor-pointer whitespace-nowrap text-xs font-medium transition"
+                    >
+                      Inverse Request
+                    </button>
+                    {talentId && (
+                      <button
+                        type="button"
+                        onClick={() => {
+                          const sid = s?._id;
+                          if (!sid) {
+                            toast.error("Session id missing");
+                            return;
+                          }
+                          navigate?.(`/inverse-checkout/${sid}`, {
+                            state: {
+                              talentId,
+                              talentName,
+                              date: s.sessionDate
+                                ? format(new Date(s.sessionDate), "yyyy-MM-dd")
+                                : undefined,
+                              time: s.sessionTime,
+                              where: s.where,
+                              accessTypes: s.accessType,
+                              sessionLength: s.sessionLength,
+                            },
+                          });
+                          onClose?.();
+                        }}
+                        className="bg-gradient-to-r from-[#F3BA18] to-[#FF9900] text-black py-1.5 px-3 rounded-md cursor-pointer whitespace-nowrap text-xs font-bold transition hover:opacity-95"
+                      >
+                        Book &amp; Pay
+                      </button>
+                    )}
+                  </div>
                 </Td>
               </tr>
             );

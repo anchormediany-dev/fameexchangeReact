@@ -29,6 +29,53 @@ export const tradingApi = api.injectEndpoints({
       invalidatesTags: ["Wallet", "WalletTransactions"],
     }),
 
+    // ── Stripe-funded wallet deposits ───────────────────────
+    createDepositIntent: builder.mutation({
+      query: ({ amount, currency = "usd" }) => ({
+        url: "/wallet/deposit-intent",
+        method: "POST",
+        body: { amount, currency },
+      }),
+    }),
+
+    confirmDeposit: builder.mutation({
+      query: ({ paymentIntentId }) => ({
+        url: "/wallet/deposit-confirm",
+        method: "POST",
+        body: { paymentIntentId },
+      }),
+      invalidatesTags: ["Wallet", "WalletTransactions"],
+    }),
+
+    // ── Inverse Session Stripe Fast-Checkout ────────────────
+    getInverseSessionQuote: builder.query({
+      query: (sessionId) => ({
+        url: "/billing/inverse-session/quote",
+        params: { sessionId },
+      }),
+    }),
+
+    createInverseSessionIntent: builder.mutation({
+      query: ({ sessionId, talentId, currency = "usd", fanRequestId } = {}) => ({
+        url: "/billing/inverse-session/payment-intent",
+        method: "POST",
+        body: {
+          sessionId,
+          talentId,
+          currency,
+          ...(fanRequestId ? { fanRequestId } : {}),
+        },
+      }),
+    }),
+
+    confirmInverseSession: builder.mutation({
+      query: (body) => ({
+        url: "/billing/inverse-session/confirm",
+        method: "POST",
+        body,
+      }),
+    }),
+
     // ── Talents / Market ────────────────────────────────────
     getMarketTalents: builder.query({
       query: ({ page = 1, limit = 20, search = "" } = {}) => ({
@@ -158,6 +205,12 @@ export const {
   useGetWalletQuery,
   useGetWalletTransactionsQuery,
   useDepositFundsMutation,
+  useCreateDepositIntentMutation,
+  useConfirmDepositMutation,
+  // Inverse Session Stripe Checkout
+  useGetInverseSessionQuoteQuery,
+  useCreateInverseSessionIntentMutation,
+  useConfirmInverseSessionMutation,
   // Talents
   useGetMarketTalentsQuery,
   useGetTopTalentsQuery,

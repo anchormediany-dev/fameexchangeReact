@@ -11,7 +11,6 @@ import {
   ResponsiveContainer,
 } from "recharts";
 import {
-  useGetMarketTalentsQuery,
   useGetTalentByIdQuery,
   useGetTalentQuoteQuery,
   useGetTalentChartQuery,
@@ -21,6 +20,7 @@ import {
   useTradePreviewMutation,
   useTradeOpenMutation,
 } from "../../app/tradingApi";
+import { useGetTalentQuery } from "../../app/authApi";
 import TradeSuccessModal from "../../components/trading/TradeSuccessModal";
 import ClosePositionModal from "../../components/trading/ClosePositionModal";
 import DepositModal from "../../components/trading/DepositModal";
@@ -60,10 +60,18 @@ const TradeTalentPage = () => {
   }, [talentIdParam]);
 
   // â”€â”€ API queries â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
-  const { data: talentsData } = useGetMarketTalentsQuery(
-    { page: 1, limit: 50, search: talentSearch },
-    { pollingInterval: 30000 }
-  );
+  // ── API queries ──────────────────────────────────────────────────────────
+  // Use the SAME talent listing endpoint as /inverse so the dropdown is
+  // populated by /user/getusers (taleUsers). Filtered to TALENT role and
+  // searched client-side.
+  const { data: usersData } = useGetTalentQuery();
+  const talentList = (usersData?.taleUsers || [])
+    .filter((u) => (u.role || "").toUpperCase() === "TALENT")
+    .filter((u) =>
+      talentSearch
+        ? (u.name || "").toLowerCase().includes(talentSearch.toLowerCase())
+        : true
+    );
 
   const { data: talentDetail } = useGetTalentByIdQuery(selectedTalentId, {
     skip: !selectedTalentId,
@@ -265,10 +273,14 @@ const TradeTalentPage = () => {
                   }}
                   className="w-full p-2.5 border border-[#2a2a2a] bg-[#0f0f0f] text-white rounded-lg focus:ring-2 focus:ring-[#c9a227] text-sm"
                 >
-                  <option value="">â€” Choose a talent â€”</option>
-                  {(talentsData?.talents || []).map((t) => (
+                  <option value="">— Choose a talent —</option>
+                  {talentList.map((t) => (
                     <option key={t._id} value={t._id}>
-                      {t.name} ({t.symbol}) â€” ${fmt(t.current_price)}
+                      {t.name}
+                      {t.symbol ? ` (${t.symbol})` : ""}
+                      {t.current_price != null
+                        ? ` — $${fmt(t.current_price)}`
+                        : ""}
                     </option>
                   ))}
                 </select>
