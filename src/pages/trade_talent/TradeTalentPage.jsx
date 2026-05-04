@@ -52,12 +52,29 @@ const TradeTalentPage = () => {
   const [showDepositModal, setShowDepositModal] = useState(false);
   const [previewData, setPreviewData] = useState(null);
   const [quoteExpiry, setQuoteExpiry] = useState(null);
+  const [talentDropdownOpen, setTalentDropdownOpen] = useState(false);
   const previewTimer = useRef(null);
   const expiryInterval = useRef(null);
+  const talentSelectRef = useRef(null);
 
   useEffect(() => {
     if (talentIdParam) setSelectedTalentId(talentIdParam);
   }, [talentIdParam]);
+
+  // Close talent dropdown on outside click
+  useEffect(() => {
+    if (!talentDropdownOpen) return;
+    const handler = (e) => {
+      if (
+        talentSelectRef.current &&
+        !talentSelectRef.current.contains(e.target)
+      ) {
+        setTalentDropdownOpen(false);
+      }
+    };
+    document.addEventListener("mousedown", handler);
+    return () => document.removeEventListener("mousedown", handler);
+  }, [talentDropdownOpen]);
 
   // â”€â”€ API queries â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
   // ── API queries ──────────────────────────────────────────────────────────
@@ -65,22 +82,31 @@ const TradeTalentPage = () => {
   // populated by /user/getusers (taleUsers). Filtered to TALENT role and
   // searched client-side.
   const { data: usersData } = useGetTalentQuery();
-  const talentList = (usersData?.taleUsers || [])
-    .filter((u) => (u.role || "").toUpperCase() === "TALENT")
-    .filter((u) =>
-      talentSearch
-        ? (u.name || "").toLowerCase().includes(talentSearch.toLowerCase())
-        : true
-    );
+  const allTalents = (usersData?.taleUsers || []).filter(
+    (u) => (u.role || "").toUpperCase() === "TALENT"
+  );
+  const talentList = allTalents.filter((u) =>
+    talentSearch
+      ? (u.name || "").toLowerCase().includes(talentSearch.toLowerCase())
+      : true
+  );
+  const selectedTalent = allTalents.find((t) => t._id === selectedTalentId);
 
   const { data: talentDetail } = useGetTalentByIdQuery(selectedTalentId, {
     skip: !selectedTalentId,
   });
 
-  const { data: quoteData } = useGetTalentQuoteQuery(selectedTalentId, {
-    skip: !selectedTalentId,
-    pollingInterval: 5000,
-  });
+  // Use `currentData` (not `data`) so the quote panel goes blank while a
+  // new talent's quote is loading — otherwise RTK Query keeps showing the
+  // previously selected talent's bid/ask, which makes every talent look
+  // like it has the same numbers.
+  const { currentData: quoteData } = useGetTalentQuoteQuery(
+    selectedTalentId,
+    {
+      skip: !selectedTalentId,
+      pollingInterval: 5000,
+    }
+  );
 
   const { data: chartData } = useGetTalentChartQuery(
     { id: selectedTalentId, range: chartRange },
@@ -249,41 +275,103 @@ const TradeTalentPage = () => {
                 </button>
               </div>
 
-              {/* Talent selector */}
-              <div className="mb-4">
+              {/* Talent selector (single combined search + select) */}
+              <div className="mb-4" ref={talentSelectRef}>
                 <label className="block text-xs font-medium text-gray-500 mb-1.5 uppercase tracking-wider">
                   Select Talent
                 </label>
-                <input
-                  type="text"
-                  value={talentSearch}
-                  onChange={(e) => setTalentSearch(e.target.value)}
-                  placeholder="Search talents..."
-                  className="w-full p-2.5 border border-[#2a2a2a] bg-[#0f0f0f] text-white rounded-lg focus:ring-2 focus:ring-[#c9a227] text-sm mb-2"
-                />
-                <select
-                  value={selectedTalentId}
-                  onChange={(e) => {
-                    setSelectedTalentId(e.target.value);
-                    setPreviewData(null);
-                    setAmount("");
-                    navigate(`/trade-talent/${e.target.value}`, {
-                      replace: true,
-                    });
-                  }}
-                  className="w-full p-2.5 border border-[#2a2a2a] bg-[#0f0f0f] text-white rounded-lg focus:ring-2 focus:ring-[#c9a227] text-sm"
-                >
-                  <option value="">— Choose a talent —</option>
-                  {talentList.map((t) => (
-                    <option key={t._id} value={t._id}>
-                      {t.name}
-                      {t.symbol ? ` (${t.symbol})` : ""}
-                      {t.current_price != null
-                        ? ` — $${fmt(t.current_price)}`
-                        : ""}
-                    </option>
-                  ))}
-                </select>
+                <div className="relative">
+                  <button
+                    type="button"
+                    onClick={() => setTalentDropdownOpen((o) => !o)}
+                    className="w-full flex items-center justify-between p-2.5 border border-[#2a2a2a] bg-[#0f0f0f] text-white rounded-lg focus:ring-2 focus:ring-[#c9a227] text-sm cursor-pointer"
+                  >
+                    <span
+                      className={`truncate text-left ${
+                        selectedTalent ? "text-white" : "text-gray-500"
+                      }`}
+                    >
+                      {selectedTalent
+                        ? `${selectedTalent.name}${
+                            selectedTalent.symbol
+                              ? ` (${selectedTalent.symbol})`
+                              : ""
+                          }${
+                            selectedTalent.current_price != null
+                              ? ` — $${fmt(selectedTalent.current_price)}`
+                              : ""
+                          }`
+                        : "— Choose a talent —"}
+                    </span>
+                    <span
+                      className={`ml-2 text-gray-500 transition-transform ${
+                        talentDropdownOpen ? "rotate-180" : ""
+                      }`}
+                    >
+                      ▾
+                    </span>
+                  </button>
+
+                  {talentDropdownOpen && (
+                    <div className="absolute z-30 mt-1 w-full bg-[#0f0f0f] border border-[#2a2a2a] rounded-lg shadow-xl overflow-hidden">
+                      <div className="p-2 border-b border-[#1f1f1f]">
+                        <input
+                          type="text"
+                          autoFocus
+                          value={talentSearch}
+                          onChange={(e) => setTalentSearch(e.target.value)}
+                          placeholder="Search talents..."
+                          className="w-full p-2 border border-[#2a2a2a] bg-[#0a0a0a] text-white rounded-md focus:ring-2 focus:ring-[#c9a227] text-sm"
+                        />
+                      </div>
+                      <ul className="max-h-60 overflow-y-auto py-1">
+                        {talentList.length === 0 ? (
+                          <li className="px-3 py-2 text-sm text-gray-500">
+                            No talents found
+                          </li>
+                        ) : (
+                          talentList.map((t) => {
+                            const isSelected = t._id === selectedTalentId;
+                            return (
+                              <li key={t._id}>
+                                <button
+                                  type="button"
+                                  onClick={() => {
+                                    setSelectedTalentId(t._id);
+                                    setPreviewData(null);
+                                    setAmount("");
+                                    setTalentSearch("");
+                                    setTalentDropdownOpen(false);
+                                    navigate(`/trade-talent/${t._id}`, {
+                                      replace: true,
+                                    });
+                                  }}
+                                  className={`w-full text-left px-3 py-2 text-sm cursor-pointer transition-colors ${
+                                    isSelected
+                                      ? "bg-[#c9a227]/15 text-[#c9a227]"
+                                      : "text-white hover:bg-[#1a1a1a]"
+                                  }`}
+                                >
+                                  <span className="font-medium">{t.name}</span>
+                                  {t.symbol && (
+                                    <span className="text-gray-500 font-mono ml-2">
+                                      ({t.symbol})
+                                    </span>
+                                  )}
+                                  {t.current_price != null && (
+                                    <span className="text-gray-400 font-mono float-right">
+                                      ${fmt(t.current_price)}
+                                    </span>
+                                  )}
+                                </button>
+                              </li>
+                            );
+                          })
+                        )}
+                      </ul>
+                    </div>
+                  )}
+                </div>
               </div>
 
               {/* Quote display */}

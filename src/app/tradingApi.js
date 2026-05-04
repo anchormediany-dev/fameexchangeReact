@@ -133,6 +133,28 @@ export const tradingApi = api.injectEndpoints({
         method: "POST",
         body: { talent_id, side, amount, quote_price, idempotency_key },
       }),
+      // The trade response already carries the updated wallet snapshot
+      // (response.wallet). Patch the GET /wallet cache immediately so the
+      // headline balance updates without an extra round-trip; tag
+      // invalidation still triggers a background refetch as a safety net.
+      async onQueryStarted(_arg, { dispatch, queryFulfilled }) {
+        try {
+          const { data } = await queryFulfilled;
+          if (data?.wallet) {
+            dispatch(
+              tradingApi.util.updateQueryData(
+                "getWallet",
+                undefined,
+                (draft) => {
+                  draft.wallet = { ...(draft.wallet || {}), ...data.wallet };
+                }
+              )
+            );
+          }
+        } catch {
+          /* error path handled by caller */
+        }
+      },
       invalidatesTags: [
         "Wallet",
         "OpenPositions",
@@ -190,6 +212,24 @@ export const tradingApi = api.injectEndpoints({
         url: `/positions/${id}/close`,
         method: "POST",
       }),
+      async onQueryStarted(_arg, { dispatch, queryFulfilled }) {
+        try {
+          const { data } = await queryFulfilled;
+          if (data?.wallet) {
+            dispatch(
+              tradingApi.util.updateQueryData(
+                "getWallet",
+                undefined,
+                (draft) => {
+                  draft.wallet = { ...(draft.wallet || {}), ...data.wallet };
+                }
+              )
+            );
+          }
+        } catch {
+          /* error path handled by caller */
+        }
+      },
       invalidatesTags: [
         "Wallet",
         "OpenPositions",

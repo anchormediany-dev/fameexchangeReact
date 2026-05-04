@@ -8,6 +8,7 @@ import {
   FiEye,
   FiLink,
   FiLogOut,
+  FiCreditCard,
 } from "react-icons/fi";
 import { useAuth } from "../utils/auth/useAuth";
 export default function ProfileMenu({
@@ -168,6 +169,16 @@ export default function ProfileMenu({
                   <FiExternalLink className="text-[18px] text-primary" />
                   <span className="text-sm font-medium">KYC</span>
                 </Link>
+                <Link
+                  to="/trading-dashboard"
+                  onClick={close}
+                  className="flex gap-3 items-center px-3 py-2.5 rounded-lg text-white hover:bg-[#1f1f1f] transition-colors border border-transparent hover:border-gray-700"
+                >
+                  <FiCreditCard className="text-[18px] text-primary" />
+                  <span className="text-sm font-medium">
+                    Wallet &amp; Transactions
+                  </span>
+                </Link>
               </div>
             )}
             {isRoleFan && (
@@ -185,6 +196,16 @@ export default function ProfileMenu({
                 >
                   <FiEdit className="text-[18px] text-primary" />
                   <span className="text-sm font-medium">Update Profile</span>
+                </Link>
+                <Link
+                  to="/trading-dashboard"
+                  onClick={close}
+                  className="flex gap-3 items-center px-3 py-2.5 rounded-lg text-white hover:bg-[#1f1f1f] transition-colors border border-transparent hover:border-gray-700"
+                >
+                  <FiCreditCard className="text-[18px] text-primary" />
+                  <span className="text-sm font-medium">
+                    Wallet &amp; Transactions
+                  </span>
                 </Link>
               </div>
             )}

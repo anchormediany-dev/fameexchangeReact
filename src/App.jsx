@@ -80,6 +80,7 @@ import CheckoutLayout from "./pages/checkout_pages/CheckoutLayout";
 import AdminProductsListings from "./pages/admin/AdminProductsListings";
 import AddProduct from "./pages/admin/AddProduct";
 import AllProducts from "./pages/AllProducts";
+import SessionExpiredModal from "./components/SessionExpiredModal";
 
 // Simple Black Header Component
 const SimpleHeader = () => {
@@ -804,6 +805,7 @@ export default function App() {
         pauseOnHover
         theme="dark"
       />
+      <SessionExpiredModal />
     </AnimatePresence>
   );
 }
