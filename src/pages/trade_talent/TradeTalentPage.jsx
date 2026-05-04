@@ -27,6 +27,14 @@ import DepositModal from "../../components/trading/DepositModal";
 
 // â”€â”€ helpers â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 const fmt = (n, d = 2) => Number(n || 0).toFixed(d);
+// Safe bid/ask formatter: returns the API value when present and non-zero,
+// otherwise the minimum tick of $0.01 so the two boxes are never identical
+// just because the backend hasn't computed a spread yet.
+const fmtQuote = (n) => {
+  const v = parseFloat(n);
+  if (isNaN(v) || v <= 0) return "0.0100";
+  return v.toFixed(4);
+};
 const fmtPnl = (v) => (v >= 0 ? `+$${fmt(v)}` : `-$${fmt(Math.abs(v))}`);
 const pnlClass = (v) =>
   v > 0 ? "text-green-400" : v < 0 ? "text-red-400" : "text-gray-400";
@@ -374,15 +382,17 @@ const TradeTalentPage = () => {
                 </div>
               </div>
 
-              {/* Quote display */}
-              {quote && (
+              {/* Quote display — shown as soon as a talent is selected.
+                  Values come from the live /quote API; fall back to $0.0100
+                  if the API hasn't returned a spread yet. */}
+              {selectedTalentId && (
                 <div className="grid grid-cols-2 gap-3 mb-4">
                   <div className="bg-[#0a0a0a] rounded-lg p-3 text-center">
                     <div className="text-[10px] text-gray-500 uppercase mb-1">
                       Bid
                     </div>
                     <div className="text-green-400 font-mono font-semibold">
-                      ${fmt(quote.bid, 4)}
+                      ${fmtQuote(quote?.bid)}
                     </div>
                   </div>
                   <div className="bg-[#0a0a0a] rounded-lg p-3 text-center">
@@ -390,7 +400,7 @@ const TradeTalentPage = () => {
                       Ask
                     </div>
                     <div className="text-red-400 font-mono font-semibold">
-                      ${fmt(quote.ask, 4)}
+                      ${fmtQuote(quote?.ask)}
                     </div>
                   </div>
                 </div>
