@@ -7,14 +7,7 @@ import { toast } from "react-toastify";
 import ConfirmDialog from "../../../utils/ConfirmDialog";
 import { imgSrc } from "../../../utils/imgSrc";
 
-const API_BASE = (import.meta.env?.VITE_API_URL || "").replace(/\/$/, "");
-
-const toAbsolute = (p) => {
-  if (!p) return "";
-  if (/^https?:\/\//i.test(p)) return p;
-  if (!API_BASE) return p.startsWith("/") ? p : `/${p}`;
-  return p.startsWith("/") ? `${API_BASE}${p}` : `${API_BASE}/${p}`;
-};
+const toAbsolute = (p) => imgSrc(p);
 
 const chipVisible = (v) =>
   v

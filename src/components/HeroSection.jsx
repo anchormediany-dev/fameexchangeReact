@@ -1,7 +1,9 @@
 import { motion, useScroll, useTransform } from "framer-motion";
 import { useRef } from "react";
+import { useNavigate } from "react-router-dom";
 
 const HeroSection = () => {
+  const navigate = useNavigate();
   // Ref for the section to track scroll position
   const sectionRef = useRef(null);
 
@@ -114,6 +116,7 @@ const HeroSection = () => {
           style={{ y: y3 }}
         >
           <motion.button
+            onClick={() => navigate("/trade-talent")}
             className="bg-[#e0aa0d] cursor-pointer text-white py-3 px-6 sm:py-4 sm:px-8 rounded-md transition-all duration-300"
             whileHover={{
               scale: 1.05,
@@ -121,7 +124,7 @@ const HeroSection = () => {
             }}
             whileTap={{ scale: 0.98 }}
           >
-            Start Investment
+            Start Trading Now
           </motion.button>
         </motion.div>
       </motion.div>

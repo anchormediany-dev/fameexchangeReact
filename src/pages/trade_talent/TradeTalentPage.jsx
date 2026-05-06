@@ -21,18 +21,19 @@ import {
   useTradeOpenMutation,
 } from "../../app/tradingApi";
 import { useGetTalentQuery } from "../../app/authApi";
+import { imgSrc } from "../../utils/imgSrc";
 import TradeSuccessModal from "../../components/trading/TradeSuccessModal";
 import ClosePositionModal from "../../components/trading/ClosePositionModal";
 import DepositModal from "../../components/trading/DepositModal";
 
 // â”€â”€ helpers â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 const fmt = (n, d = 2) => Number(n || 0).toFixed(d);
-// Safe bid/ask formatter: returns the API value when present and non-zero,
-// otherwise the minimum tick of $0.01 so the two boxes are never identical
-// just because the backend hasn't computed a spread yet.
+// Bid/Ask formatter: prefer the live API value when present and > 0;
+// otherwise show 0.1000 instead of leaving the box blank or pre-filled
+// with a stale equal value.
 const fmtQuote = (n) => {
   const v = parseFloat(n);
-  if (isNaN(v) || v <= 0) return "0.0100";
+  if (isNaN(v) || v <= 0) return "0.1000";
   return v.toFixed(4);
 };
 const fmtPnl = (v) => (v >= 0 ? `+$${fmt(v)}` : `-$${fmt(Math.abs(v))}`);
@@ -584,13 +585,24 @@ const TradeTalentPage = () => {
                   <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-4">
                     <div>
                       <div className="flex items-center gap-3 mb-1">
-                        {talent.image && (
-                          <img
-                            src={talent.image}
-                            alt={talent.name}
-                            className="w-10 h-10 rounded-full object-cover"
-                          />
-                        )}
+                        {(() => {
+                          const rawImg =
+                            talent?.image ||
+                            talent?.images?.find?.((x) => x?.fileUrl)?.fileUrl ||
+                            selectedTalent?.images?.find?.((x) => x?.fileUrl)
+                              ?.fileUrl;
+                          const resolved = imgSrc(rawImg);
+                          return resolved ? (
+                            <img
+                              src={resolved}
+                              alt={talent.name}
+                              className="w-10 h-10 rounded-full object-cover"
+                              onError={(e) => {
+                                e.currentTarget.style.display = "none";
+                              }}
+                            />
+                          ) : null;
+                        })()}
                         <h2 className="text-xl font-bold text-white">
                           {talent.name}
                         </h2>

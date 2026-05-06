@@ -1,8 +1,15 @@
 // src/features/auth/Signup.js
 import { useState } from "react";
 import { FaEnvelope, FaLock, FaUser } from "react-icons/fa";
+import {
+  FaFacebookF,
+  FaInstagram,
+  FaTwitter,
+  FaYoutube,
+  FaTiktok,
+  FaSnapchatGhost,
+} from "react-icons/fa";
 import { FcGoogle } from "react-icons/fc";
-import { FaFacebookF } from "react-icons/fa";
 import { IoEyeOffSharp, IoEyeSharp } from "react-icons/io5";
 import MotionPageWrapper from "../../components/MotionPageWrapper";
 import { Link } from "react-router-dom";
@@ -44,6 +51,20 @@ const SignupTalent = () => {
   const [isRepHave, setIsRepHave] = useState(false);
   const [selectedReps, setSelectedReps] = useState([]);
   const [representationData, setRepresentationData] = useState([]);
+
+  // Social media profile data (all optional)
+  const [socials, setSocials] = useState({
+    social_facebook: "",
+    social_insta: "",
+    social_twitter: "",
+    social_youtube: "",
+    social_tiktok: "",
+    social_snap: "",
+  });
+  const handleSocialChange = (e) => {
+    const { name, value } = e.target;
+    setSocials((prev) => ({ ...prev, [name]: value }));
+  };
 
   // Validation
   const isEmailValid = formData.email.includes("@");
@@ -109,6 +130,10 @@ const SignupTalent = () => {
       is_rep_have: isRepHave,
       selected_reps: selectedReps,
       representation: representationData,
+      // Optional social media profiles - empty strings are dropped
+      ...Object.fromEntries(
+        Object.entries(socials).filter(([, v]) => String(v).trim() !== "")
+      ),
     };
 
     try {
@@ -369,6 +394,71 @@ const SignupTalent = () => {
                 <RepresentationSection
                   onFormChange={handleRepresentationChange}
                 />
+
+                {/* Social Media Profiles (optional) */}
+                <div className="pt-2">
+                  <h3 className="text-white font-semibold mb-1">
+                    Social Media Profiles
+                  </h3>
+                  <p className="text-gray-400 text-xs mb-4">
+                    Optional - help fans discover you across platforms.
+                  </p>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    {[
+                      {
+                        name: "social_insta",
+                        placeholder: "Instagram URL or @handle",
+                        Icon: FaInstagram,
+                        color: "text-pink-400",
+                      },
+                      {
+                        name: "social_facebook",
+                        placeholder: "Facebook URL",
+                        Icon: FaFacebookF,
+                        color: "text-[#1877F2]",
+                      },
+                      {
+                        name: "social_twitter",
+                        placeholder: "Twitter / X URL or @handle",
+                        Icon: FaTwitter,
+                        color: "text-sky-400",
+                      },
+                      {
+                        name: "social_youtube",
+                        placeholder: "YouTube channel URL",
+                        Icon: FaYoutube,
+                        color: "text-red-500",
+                      },
+                      {
+                        name: "social_tiktok",
+                        placeholder: "TikTok URL or @handle",
+                        Icon: FaTiktok,
+                        color: "text-white",
+                      },
+                      {
+                        name: "social_snap",
+                        placeholder: "Snapchat username",
+                        Icon: FaSnapchatGhost,
+                        color: "text-yellow-300",
+                      },
+                    ].map(({ name, placeholder, Icon, color }) => (
+                      <div
+                        key={name}
+                        className="flex items-center border border-none rounded-lg px-4 py-3 bg-[#2d2d2d]"
+                      >
+                        <Icon className={`${color} mr-3`} />
+                        <input
+                          type="text"
+                          name={name}
+                          placeholder={placeholder}
+                          value={socials[name]}
+                          onChange={handleSocialChange}
+                          className="bg-transparent outline-none w-full text-white placeholder-gray-400"
+                        />
+                      </div>
+                    ))}
+                  </div>
+                </div>
 
                 {/* Age Checkbox */}
                 <div className="flex items-center space-x-3">

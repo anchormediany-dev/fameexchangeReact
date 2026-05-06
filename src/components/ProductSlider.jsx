@@ -17,9 +17,14 @@ import "swiper/css";
 import "swiper/css/navigation";
 import { useGetProductsQuery } from "../app/authApi";
 import { imgSrc } from "../utils/imgSrc";
+import ImageLightbox from "./ImageLightbox";
+import ProductCheckoutModal from "./ProductCheckoutModal";
 const ProductSlider = () => {
   const { data, error, isError, isLoading } = useGetProductsQuery();
   const [slidesPerView, setSlidesPerView] = useState(4);
+  const [previewSrc, setPreviewSrc] = useState(null);
+  const [previewAlt, setPreviewAlt] = useState("");
+  const [checkoutProduct, setCheckoutProduct] = useState(null);
   useEffect(() => {
     const updateSlidesPerView = () => {
       if (window.innerWidth < 640) setSlidesPerView(1);
@@ -70,38 +75,44 @@ const ProductSlider = () => {
                 {data?.data?.map((product) => (
                   <SwiperSlide key={product._id}>
                     <div className="group relative bg-[#171717] backdrop-blur-sm border border-white/10 rounded-xl hover:border-[#a38b41]/30 transition-all duration-300 overflow-hidden">
-                      {/* Product Image */}
-                      <div className=" w-full rounded-md  object-cover overflow-hidden">
+                      {/* Product Image (click to preview) */}
+                      <button
+                        type="button"
+                        onClick={() => {
+                          setPreviewSrc(imgSrc(product.image));
+                          setPreviewAlt(product.title || "product");
+                        }}
+                        className="w-full bg-[#0a0a0a] aspect-square flex items-center justify-center overflow-hidden cursor-zoom-in"
+                        aria-label={`Preview ${product.title}`}
+                      >
                         <img
                           src={imgSrc(product.image)}
                           alt={product.title}
-                          className="w-full h-full object-cover group-hover:opacity-75  lg:h-80"
+                          className="max-w-full max-h-full object-contain p-3 group-hover:opacity-90 transition-transform duration-500 group-hover:scale-105"
                         />
-                      </div>
+                      </button>
 
                       {/* Product Info - New Layout */}
                       <div className="mt-4 flex justify-between p-4">
                         <div className="flex-1 min-w-0 pr-2">
                           <h3 className="text-sm text-white truncate">
-                            <a href="#" className="block truncate">
-                              <span
-                                aria-hidden="true"
-                                className="absolute inset-0"
-                              ></span>
+                            <span className="block truncate text-left">
                               {product.title}
-                            </a>
+                            </span>
                           </h3>
-                          {/* You can add color/variant info here if needed */}
-                          {/* <p className="mt-1 text-sm text-gray-400 truncate">Black</p> */}
                         </div>
                         <p className="text-sm font-medium text-[#a38b41] flex-shrink-0 whitespace-nowrap">
-                          {product.price}
+                          ${product.price}
                         </p>
                       </div>
 
                       {/* Buy Now Button */}
                       <div className="p-4 pt-0">
-                        <button className="w-full cursor-pointer bg-[#a38b41] hover:bg-[#8a7738] text-white font-medium py-2 px-4 rounded-lg transition-all duration-200 flex items-center justify-center gap-2 text-sm hover:scale-105 active:scale-95">
+                        <button
+                          type="button"
+                          onClick={() => setCheckoutProduct(product)}
+                          className="w-full cursor-pointer bg-[#a38b41] hover:bg-[#8a7738] text-white font-medium py-2 px-4 rounded-lg transition-all duration-200 flex items-center justify-center gap-2 text-sm hover:scale-105 active:scale-95"
+                        >
                           <FiShoppingCart className="w-4 h-4" />
                           Buy Now
                         </button>
@@ -124,6 +135,16 @@ const ProductSlider = () => {
 
         {/* Swiper Slider */}
       </div>
+
+      <ImageLightbox
+        src={previewSrc}
+        alt={previewAlt}
+        onClose={() => setPreviewSrc(null)}
+      />
+      <ProductCheckoutModal
+        product={checkoutProduct}
+        onClose={() => setCheckoutProduct(null)}
+      />
     </section>
   );
 };

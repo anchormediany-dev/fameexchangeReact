@@ -3,12 +3,17 @@ import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 import { useGetProductsQuery } from "../app/authApi";
 import { imgSrc } from "../utils/imgSrc";
+import ImageLightbox from "../components/ImageLightbox";
+import ProductCheckoutModal from "../components/ProductCheckoutModal";
 import { FiShoppingCart, FiSearch, FiX } from "react-icons/fi";
 
 const AllProducts = () => {
   const [page, setPage] = useState(1);
   const [searchTerm, setSearchTerm] = useState("");
   const [appliedSearch, setAppliedSearch] = useState("");
+  const [previewSrc, setPreviewSrc] = useState(null);
+  const [previewAlt, setPreviewAlt] = useState("");
+  const [checkoutProduct, setCheckoutProduct] = useState(null);
 
   const limit = 8;
 
@@ -129,15 +134,22 @@ const AllProducts = () => {
                       key={product._id}
                       className="group flex flex-col bg-[#111111]/95 backdrop-blur-sm border border-white/10 rounded-xl hover:border-[#a38b41]/50 hover:shadow-[0_0_25px_rgba(163,139,65,0.45)] transition-all duration-300 overflow-hidden"
                     >
-                      {/* Product Image */}
-                      <div className="relative w-full aspect-[4/3] overflow-hidden">
+                      {/* Product Image (click to preview) */}
+                      <button
+                        type="button"
+                        onClick={() => {
+                          setPreviewSrc(imgSrc(product.image));
+                          setPreviewAlt(product.title || "product");
+                        }}
+                        className="relative w-full aspect-square bg-[#0a0a0a] overflow-hidden flex items-center justify-center cursor-zoom-in"
+                        aria-label={`Preview ${product.title}`}
+                      >
                         <img
                           src={imgSrc(product.image)}
                           alt={product.title}
-                          className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105 group-hover:opacity-90"
+                          className="max-w-full max-h-full object-contain p-3 transition-transform duration-500 group-hover:scale-105"
                         />
-                        <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent" />
-                      </div>
+                      </button>
 
                       {/* Product Info (no description) */}
                       <div className="flex flex-col flex-1 p-4 gap-3">
@@ -150,7 +162,11 @@ const AllProducts = () => {
                           </p>
                         </div>
 
-                        <button className="mt-auto w-full cursor-pointer bg-[#a38b41] hover:bg-[#8a7738] text-white font-medium py-2.5 px-4 rounded-lg transition-all duration-200 flex items-center justify-center gap-2 text-xs sm:text-sm hover:scale-[1.02] active:scale-95">
+                        <button
+                          type="button"
+                          onClick={() => setCheckoutProduct(product)}
+                          className="mt-auto w-full cursor-pointer bg-[#a38b41] hover:bg-[#8a7738] text-white font-medium py-2.5 px-4 rounded-lg transition-all duration-200 flex items-center justify-center gap-2 text-xs sm:text-sm hover:scale-[1.02] active:scale-95"
+                        >
                           <FiShoppingCart className="w-4 h-4" />
                           Buy Now
                         </button>
@@ -226,6 +242,16 @@ const AllProducts = () => {
       </div>
 
       <Footer />
+
+      <ImageLightbox
+        src={previewSrc}
+        alt={previewAlt}
+        onClose={() => setPreviewSrc(null)}
+      />
+      <ProductCheckoutModal
+        product={checkoutProduct}
+        onClose={() => setCheckoutProduct(null)}
+      />
     </div>
   );
 };

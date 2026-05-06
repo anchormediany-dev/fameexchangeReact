@@ -10,20 +10,15 @@ import {
 import { toast } from "react-toastify";
 
 import ConfirmDialog from "../../utils/ConfirmDialog";
+import { imgSrc } from "../../utils/imgSrc";
 
-const API_BASE = (import.meta.env?.VITE_API_URL || "").replace(/\/$/, "");
 const fallbackLogo =
   "https://images.unsplash.com/photo-1531058020387-3be344556be6?w=500&auto=format&fit=crop&q=60";
 
 const normalizeUrl = (u) =>
   !u ? "#" : /^https?:\/\//i.test(u) ? u : `https://${u}`;
 
-const toAbsolute = (p) => {
-  if (!p) return "";
-  if (/^https?:\/\//i.test(p)) return p;
-  if (!API_BASE) return p.startsWith("/") ? p : `/${p}`;
-  return p.startsWith("/") ? `${API_BASE}${p}` : `${API_BASE}/${p}`;
-};
+const toAbsolute = (p) => imgSrc(p);
 
 const getThumb = (e) =>
   toAbsolute(e.logo) ||

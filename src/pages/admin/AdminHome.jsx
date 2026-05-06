@@ -8,15 +8,8 @@ import { useNavigate } from "react-router-dom";
 import { FiTrash2 } from "react-icons/fi";
 import ConfirmDialog from "../../utils/ConfirmDialog";
 import { toast } from "react-toastify";
-const API_BASE = (import.meta.env?.VITE_API_URL || "").replace(/\/$/, "");
-const toAbsolute = (pathOrUrl) => {
-  if (!pathOrUrl) return "";
-  if (/^https?:\/\//i.test(pathOrUrl)) return pathOrUrl;
-  if (!API_BASE) return pathOrUrl.startsWith("/") ? pathOrUrl : `/${pathOrUrl}`;
-  return pathOrUrl.startsWith("/")
-    ? `${API_BASE}${pathOrUrl}`
-    : `${API_BASE}/${pathOrUrl}`;
-};
+import { imgSrc } from "../../utils/imgSrc";
+const toAbsolute = (pathOrUrl) => imgSrc(pathOrUrl);
 
 const Section = ({ title, right }) => (
   <div className="flex items-center justify-between mb-3">
@@ -199,9 +192,7 @@ const AdminDashboard = () => {
     try {
       const result = await deleteSession(id).unwrap();
       toast.success(result?.message || "Session deleted successfully");
-      // Optimistic local removal
-      setUsersLocal((prev) => prev.filter((u) => u._id !== id));
-      // Optional full sync:
+      // Refresh dashboard data after deletion
       refetch();
     } catch (err) {
       // console.log("error", { deleteSessionError });
@@ -439,7 +430,33 @@ const AdminDashboard = () => {
                     </span>
                   </td>
                   <td className="p-3">
-                    <Chip>{s?.accessType || "—"}</Chip>
+                    <div className="flex flex-wrap gap-1">
+                      {Array.isArray(s?.accessType) && s.accessType.length
+                        ? s.accessType.map((a, i) => {
+                            // Some legacy rows store access type as a
+                            // character-indexed object (e.g. {0:"o",1:"n",...})
+                            // instead of {type, price}. Normalize both shapes.
+                            let label = "";
+                            if (a && typeof a === "object") {
+                              if (typeof a.type === "string" && a.type) {
+                                label = a.type;
+                              } else {
+                                const chars = Object.keys(a)
+                                  .filter((k) => /^\d+$/.test(k))
+                                  .sort((x, y) => Number(x) - Number(y))
+                                  .map((k) => a[k]);
+                                if (chars.length) label = chars.join("");
+                              }
+                              if (label && typeof a.price === "number") {
+                                label = `${label} • $${a.price}`;
+                              }
+                            } else if (typeof a === "string") {
+                              label = a;
+                            }
+                            return <Chip key={a?._id || i}>{label || "—"}</Chip>;
+                          })
+                        : <Chip>—</Chip>}
+                    </div>
                   </td>
                   <td className="p-3">
                     <span className="text-gray-300 text-sm">

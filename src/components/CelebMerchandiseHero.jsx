@@ -1,7 +1,9 @@
 import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import merchandiseImage from "../assets/images/merchandise.avif";
 
 const CelebMerchandiseHero = () => {
+  const navigate = useNavigate();
   const [isLoaded, setIsLoaded] = useState(false);
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
 
@@ -66,8 +68,10 @@ const CelebMerchandiseHero = () => {
             </div>
 
             <button
+              type="button"
+              onClick={() => navigate("/products")}
               className={`
-                inline-flex items-center 
+                inline-flex items-center cursor-pointer
               custom-button-two
                 ${
                   isLoaded

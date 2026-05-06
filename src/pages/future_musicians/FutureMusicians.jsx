@@ -468,84 +468,110 @@ export default function FutureTalents() {
           </p>
         </div>
 
-        {/* Table */}
-        <div className="overflow-x-auto rounded-xl border border-gray-700 shadow-xl">
-          <div className="grid grid-cols-4 text-sm font-semibold bg-[#2d2d2d] text-gray-300 py-4 px-6">
-            <div>TALENT</div>
-            <div className="text-center">EMAIL</div>
-            <div className="text-center">TOKEN BRAND</div>
-            <div className="text-center">CATEGORIES</div>
+        {/* Card Grid */}
+        {isLoading ? (
+          <div className="py-12 text-center text-gray-400">Loading…</div>
+        ) : isError ? (
+          <div className="py-12 text-center text-red-300">
+            {error?.data?.message || error?.error || "Something went wrong."}
           </div>
-
-          {isLoading ? (
-            <div className="py-8 text-center text-gray-400">Loading…</div>
-          ) : isError ? (
-            <div className="py-8 text-center text-red-300">
-              {error?.data?.message || error?.error || "Something went wrong."}
-            </div>
-          ) : filtered.length === 0 ? (
-            <div className="py-8 text-center text-gray-500">
-              No matching talents found.
-            </div>
-          ) : (
-            filtered.map((u) => {
+        ) : filtered.length === 0 ? (
+          <div className="py-12 text-center text-gray-500">
+            No matching talents found.
+          </div>
+        ) : (
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5 lg:gap-6">
+            {filtered.map((u) => {
               const img = firstImageUrl(u);
               const cats = userCategories(u);
-              // Special handling: "__none__" filter
               if (category === "__none__" && cats.length > 0) return null;
+
+              const brand =
+                u?.token_brand_name ||
+                u?.token_name ||
+                u?.token?.symbol ||
+                u?.token?.ticker ||
+                u?.tokenSymbol ||
+                u?.tokenTicker ||
+                "—";
 
               return (
                 <Link
                   to={`/talent-profile/${u?._id}`}
                   key={u._id}
-                  className="grid grid-cols-4 items-center py-4 px-6 border-t border-gray-700 hover:bg-[#1f1f1f] transition"
+                  className="group relative overflow-hidden rounded-2xl bg-gradient-to-b from-[#1f1f1f] to-[#141414] border border-white/10 hover:border-[#a38b41]/60 transition-all duration-300 hover:-translate-y-1 hover:shadow-2xl hover:shadow-[#a38b41]/20 flex flex-col"
                 >
-                  {/* TALENT */}
-                  <div className="flex items-center gap-4">
+                  {/* Image area */}
+                  <div className="relative w-full aspect-[4/5] bg-[#0a0a0a] overflow-hidden">
                     {img ? (
                       <img
                         src={imgSrc(img)}
                         alt={u?.name || "talent"}
-                        className="w-10 h-10 rounded-full object-cover border border-gray-600"
+                        loading="lazy"
+                        className="w-full h-full object-cover object-center transition-transform duration-500 group-hover:scale-105"
+                        onError={(e) => {
+                          e.currentTarget.style.display = "none";
+                        }}
                       />
                     ) : (
-                      <div className="w-10 h-10 rounded-full bg-[#2d2d2d] border border-gray-600 flex items-center justify-center text-sm">
+                      <div className="w-full h-full flex items-center justify-center text-5xl text-gray-600 bg-gradient-to-br from-[#2d2d2d] to-[#1a1a1a]">
                         {u?.name?.[0]?.toUpperCase() || "?"}
                       </div>
                     )}
-                    <div>
-                      <div className="font-bold">{u?.name || "—"}</div>
-                      <div className="text-xs text-gray-400">
-                        {u?.role || "—"}
+                    {/* Gradient overlay for legibility */}
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/30 to-transparent" />
+
+                    {/* Categories chips */}
+                    {cats.length > 0 && (
+                      <div className="absolute top-3 left-3 right-3 flex flex-wrap gap-1.5">
+                        {cats.slice(0, 2).map((c) => (
+                          <span
+                            key={c}
+                            className="px-2 py-0.5 text-[10px] uppercase tracking-wider rounded-full bg-black/60 backdrop-blur border border-white/10 text-[#d4c374]"
+                          >
+                            {c}
+                          </span>
+                        ))}
+                        {cats.length > 2 && (
+                          <span className="px-2 py-0.5 text-[10px] rounded-full bg-black/60 backdrop-blur border border-white/10 text-gray-300">
+                            +{cats.length - 2}
+                          </span>
+                        )}
+                      </div>
+                    )}
+
+                    {/* Name + brand pinned to bottom of image */}
+                    <div className="absolute bottom-0 left-0 right-0 p-4">
+                      <div className="text-lg font-bold text-white leading-tight truncate">
+                        {u?.name || "—"}
+                      </div>
+                      <div className="mt-1 text-xs text-[#d4c374] uppercase tracking-wider truncate">
+                        {brand}
                       </div>
                     </div>
                   </div>
 
-                  {/* EMAIL */}
-                  <div className="text-center text-gray-200 text-sm break-all">
-                    {u?.email || "—"}
-                  </div>
-
-                  {/* TOKEN BRAND */}
-                  <div className="text-center text-white text-sm">
-                    {u?.token_brand_name ||
-                      u?.token_name ||
-                      u?.token?.symbol ||
-                      u?.token?.ticker ||
-                      u?.tokenSymbol ||
-                      u?.tokenTicker ||
-                      "—"}
-                  </div>
-
-                  {/* CATEGORIES */}
-                  <div className="text-center text-gray-200 text-sm">
-                    {cats.length ? cats.join(", ") : "—"}
+                  {/* Footer / categories full list */}
+                  <div className="p-4 flex flex-col gap-3 flex-1">
+                    <div className="text-xs text-gray-400">
+                      <span className="text-gray-500 uppercase tracking-wider mr-2">
+                        Category
+                      </span>
+                      <span className="text-gray-200">
+                        {cats.length ? cats.join(", ") : "—"}
+                      </span>
+                    </div>
+                    <div className="mt-auto">
+                      <span className="inline-flex items-center justify-center w-full px-3 py-2 rounded-lg text-xs font-semibold uppercase tracking-wider bg-[#a38b41]/10 text-[#d4c374] border border-[#a38b41]/30 group-hover:bg-[#a38b41] group-hover:text-black transition-colors">
+                        View Profile
+                      </span>
+                    </div>
                   </div>
                 </Link>
               );
-            })
-          )}
-        </div>
+            })}
+          </div>
+        )}
 
         {/* Pagination */}
         {pagination && (
