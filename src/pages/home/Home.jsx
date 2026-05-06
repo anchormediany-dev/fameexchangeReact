@@ -7,6 +7,7 @@ import BrandedTalentShares from "../../components/BrandedTalentShares";
 import TalentTradingSection from "../../components/TalentTradingSection";
 import VideoBanner3 from "../../components/VideoBanner3";
 import { useGetTalentQuery } from "../../app/authApi";
+import { useGetTopTalentsQuery } from "../../app/tradingApi";
 import React, { useMemo } from "react";
 
 // Below-the-fold (lazy): split into separate chunks, fetched as the user scrolls
@@ -36,6 +37,24 @@ const Home = () => {
       .map((u) => ({ ...u, _net: toNum(u.networth) }))
       .sort((a, b) => b._net - a._net);
   }, [data]);
+
+  // Top BTS leaderboard - backend confirmed: GET /api/talents/top?sort=bts
+  const {
+    data: topBtsData,
+    isLoading: btsLoading,
+    isFetching: btsFetching,
+    isError: btsError,
+    error: btsErrObj,
+    refetch: refetchBts,
+  } = useGetTopTalentsQuery({ sort: "bts", limit: 10 });
+  const btsTalent = useMemo(() => {
+    const arr =
+      topBtsData?.talents ||
+      topBtsData?.data?.talents ||
+      topBtsData?.data ||
+      [];
+    return Array.isArray(arr) ? arr : [];
+  }, [topBtsData]);
   const location = useLocation();
   const [isCalculatingNetworthOpen, setIsCalculatingNetworthOpen] =
     useState(false);
@@ -63,11 +82,14 @@ const Home = () => {
       <VideoBanner3 />
       <TalentTradingSection />
       <BrandedTalentShares
-        talent={sortedTalent ?? []}
-        isLoading={isLoading || isFetching}
-        isError={isError}
-        error={error}
-        onRefresh={refetch}
+        talent={btsTalent.length ? btsTalent : sortedTalent}
+        isLoading={btsLoading || btsFetching || isLoading || isFetching}
+        isError={btsError || isError}
+        error={btsErrObj || error}
+        onRefresh={() => {
+          refetch();
+          refetchBts();
+        }}
         viewAll={true}
       />
       <Suspense fallback={<SectionFallback />}>

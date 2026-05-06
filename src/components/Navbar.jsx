@@ -1,7 +1,7 @@
 import { useEffect, useState, useMemo } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
-import { FaBars, FaTimes, FaSearch } from "react-icons/fa";
+import { FaBars, FaTimes } from "react-icons/fa";
 import { MdOutlinePerson } from "react-icons/md";
 import siteLogo from "../assets/images/site-logo.png";
 import LoginModal from "./LoginModal";
@@ -31,7 +31,6 @@ const Navbar = () => {
   const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
   const [isSignupModalOpen, setIsSignupModalOpen] = useState(false);
   const [activeSection, setActiveSection] = useState("home");
-  const [searchQuery, setSearchQuery] = useState("");
   const [ignoreScroll, setIgnoreScroll] = useState(false);
   const location = useLocation();
   const navigate = useNavigate();
@@ -51,10 +50,6 @@ const Navbar = () => {
     dispatch(logout());
     navigate("/login"); // or your login/homepage
   };
-  const handleSearch = (e) => {
-    e.preventDefault();
-    setIsOpen(false);
-  };
 
   const handleScroll = (id) => {
     const element = document.getElementById(id);
@@ -63,7 +58,23 @@ const Navbar = () => {
       const y =
         element.getBoundingClientRect().top + window.pageYOffset + yOffset;
       window.scrollTo({ top: y, behavior: "smooth" });
+      return true;
     }
+    return false;
+  };
+
+  // Lazy-loaded sections may not be mounted at navigation time -
+  // poll for the target element for up to ~3s before giving up.
+  const scrollToWhenReady = (id) => {
+    if (!id) return;
+    if (handleScroll(id)) return;
+    let tries = 0;
+    const interval = setInterval(() => {
+      tries += 1;
+      if (handleScroll(id) || tries > 30) {
+        clearInterval(interval);
+      }
+    }, 100);
   };
 
   const handleNavClick = ({ scrollTo, path, isRoute }) => {
@@ -85,7 +96,7 @@ const Navbar = () => {
         history.scrollTarget = scrollTo;
         navigate("/");
       } else {
-        handleScroll(scrollTo);
+        scrollToWhenReady(scrollTo);
       }
     }
   };
@@ -104,8 +115,9 @@ const Navbar = () => {
 
   useEffect(() => {
     if (location.pathname === "/" && history.scrollTarget) {
-      setTimeout(() => handleScroll(history.scrollTarget), 200);
+      const target = history.scrollTarget;
       history.scrollTarget = null;
+      scrollToWhenReady(target);
     }
   }, [location]);
 
@@ -207,25 +219,6 @@ const Navbar = () => {
             ))}
 
             <div className="flex items-center gap-5 ml-4">
-              <form onSubmit={handleSearch} className="relative w-30">
-                <input
-                  type="text"
-                  value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
-                  placeholder="Search..."
-                  className="w-full px-8 py-1.5 rounded-full text-xs text-black bg-white focus:outline-none focus:ring-2 focus:ring-yellow-400 transition-all duration-300"
-                />
-                <FaSearch className="absolute left-2.5 top-2 text-gray-400 text-sm" />
-                {searchQuery && (
-                  <button
-                    type="button"
-                    onClick={() => setSearchQuery("")}
-                    className="absolute right-2.5 top-2 text-gray-400 hover:text-gray-600 text-sm transition-colors duration-200"
-                  >
-                    &#x2715;
-                  </button>
-                )}
-              </form>
               {userId ? (
                 <>
                   {" "}
@@ -291,26 +284,6 @@ const Navbar = () => {
               transition={{ duration: 0.3 }}
               className="xl:hidden bg-black px-4 pt-2 pb-4 space-y-3 overflow-hidden"
             >
-              <form onSubmit={handleSearch} className="relative w-full">
-                <input
-                  type="text"
-                  value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
-                  placeholder="Search..."
-                  className="w-full px-8 py-2 rounded text-sm text-black bg-white focus:outline-none focus:ring-2 focus:ring-yellow-400 transition-all duration-300"
-                />
-                <FaSearch className="absolute left-2.5 top-2.5 text-gray-400 text-sm" />
-                {searchQuery && (
-                  <button
-                    type="button"
-                    onClick={() => setSearchQuery("")}
-                    className="absolute right-2.5 top-2.5 text-gray-400 hover:text-gray-600 text-sm transition-colors duration-200"
-                  >
-                    &#x2715;
-                  </button>
-                )}
-              </form>
-
               <div className="grid grid-cols-2 gap-3">
                 {navLinks.map((link) => (
                   <motion.div

@@ -25,6 +25,7 @@ import EventsSection from "../../components/talent_profile/EventsSection";
 import FriendsSection from "../../components/talent_profile/FriendsSection";
 import Notifications from "../../components/talent_profile/Notifications";
 import TalentLinks from "../../components/talent_profile/TalentLinks";
+import SocialProfilesEditor from "../../components/talent_profile/SocialProfilesEditor";
 import ConfirmedRequestsCalendar from "../../components/talent_profile/ConfirmedRequestsCalendar";
 import PendingRequestsList from "../../components/talent_profile/PendingRequestsList";
 import { toast } from "react-toastify";
@@ -372,6 +373,9 @@ const TalentProfile = () => {
           />
           <TalentLinks userData={data} />
         </div>{" "}
+        <div className="mt-6">
+          <SocialProfilesEditor userData={data} />
+        </div>
       </div>
       <section className=" px-4 md:px-8 container mx-auto ">
         <div className="rounded-xl p-6 bg-[#1f1f1f]">

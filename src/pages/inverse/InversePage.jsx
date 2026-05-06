@@ -1,5 +1,5 @@
 ﻿import { useState, useEffect, useMemo, useCallback } from "react";
-import { useLocation, useParams } from "react-router-dom";
+import { Link, useLocation, useParams } from "react-router-dom";
 import { FiCalendar, FiUserCheck, FiCreditCard, FiSearch } from "react-icons/fi";
 import TalentDatesCalendar from "../../components/inverse/TalentDatesCalendar";
 import FanInverseRequestForm from "../../components/inverse/FanInverseRequestForm";
@@ -80,7 +80,7 @@ const InversePage = () => {
   const showSearch = userDetails?.role === "ADMIN" || userDetails?.role === "FAN";
 
   return (
-    <section className="w-full bg-gradient-to-br from-[#0a0a0a] via-[#0d0d0d] to-[#0a0a0a] min-h-screen pt-24 lg:pt-28 pb-16">
+    <section className="w-full bg-gradient-to-br from-[#0a0a0a] via-[#0d0d0d] to-[#0a0a0a] min-h-screen pt-32 lg:pt-36 2xl:pt-40 pb-16">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         {/* â”€â”€ Hero â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */}
         <div className="text-center mb-10 lg:mb-12">
@@ -198,8 +198,16 @@ const InversePage = () => {
             </div>
 
             {!isAuthenticated && (
-              <div className="bg-yellow-900/15 border border-yellow-800/40 rounded-2xl p-4 text-sm text-yellow-200">
-                Please sign in to book a session or send a request.
+              <div className="bg-yellow-900/15 border border-yellow-800/40 rounded-2xl p-4 space-y-3">
+                <p className="text-sm text-yellow-200">
+                  Please sign in to book a session or send a request.
+                </p>
+                <Link
+                  to="/login"
+                  className="block text-center bg-[#a38b41] hover:bg-[#8a7738] text-white font-semibold py-2.5 px-4 rounded-lg transition-colors duration-200 text-sm"
+                >
+                  Sign In to Book a Session
+                </Link>
               </div>
             )}
           </aside>

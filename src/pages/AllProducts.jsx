@@ -3,17 +3,18 @@ import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 import { useGetProductsQuery } from "../app/authApi";
 import { imgSrc } from "../utils/imgSrc";
+import { handleImageError } from "../utils/imagePlaceholder";
 import ImageLightbox from "../components/ImageLightbox";
-import ProductCheckoutModal from "../components/ProductCheckoutModal";
+import { useNavigate } from "react-router-dom";
 import { FiShoppingCart, FiSearch, FiX } from "react-icons/fi";
 
 const AllProducts = () => {
+  const navigate = useNavigate();
   const [page, setPage] = useState(1);
   const [searchTerm, setSearchTerm] = useState("");
   const [appliedSearch, setAppliedSearch] = useState("");
   const [previewSrc, setPreviewSrc] = useState(null);
   const [previewAlt, setPreviewAlt] = useState("");
-  const [checkoutProduct, setCheckoutProduct] = useState(null);
 
   const limit = 8;
 
@@ -147,6 +148,7 @@ const AllProducts = () => {
                         <img
                           src={imgSrc(product.image)}
                           alt={product.title}
+                          onError={handleImageError}
                           className="max-w-full max-h-full object-contain p-3 transition-transform duration-500 group-hover:scale-105"
                         />
                       </button>
@@ -164,7 +166,11 @@ const AllProducts = () => {
 
                         <button
                           type="button"
-                          onClick={() => setCheckoutProduct(product)}
+                          onClick={() =>
+                            navigate("/product-checkout", {
+                              state: { product },
+                            })
+                          }
                           className="mt-auto w-full cursor-pointer bg-[#a38b41] hover:bg-[#8a7738] text-white font-medium py-2.5 px-4 rounded-lg transition-all duration-200 flex items-center justify-center gap-2 text-xs sm:text-sm hover:scale-[1.02] active:scale-95"
                         >
                           <FiShoppingCart className="w-4 h-4" />
@@ -247,10 +253,6 @@ const AllProducts = () => {
         src={previewSrc}
         alt={previewAlt}
         onClose={() => setPreviewSrc(null)}
-      />
-      <ProductCheckoutModal
-        product={checkoutProduct}
-        onClose={() => setCheckoutProduct(null)}
       />
     </div>
   );

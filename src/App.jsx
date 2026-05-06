@@ -80,6 +80,7 @@ import CheckoutLayout from "./pages/checkout_pages/CheckoutLayout";
 import AdminProductsListings from "./pages/admin/AdminProductsListings";
 import AddProduct from "./pages/admin/AddProduct";
 import AllProducts from "./pages/AllProducts";
+import ProductCheckoutPage from "./pages/product_checkout/ProductCheckoutPage";
 import SessionExpiredModal from "./components/SessionExpiredModal";
 
 // Simple Black Header Component
@@ -745,6 +746,14 @@ export default function App() {
           element={
             <MotionPageWrapper>
               <AllProducts />
+            </MotionPageWrapper>
+          }
+        />
+        <Route
+          path="product-checkout"
+          element={
+            <MotionPageWrapper>
+              <ProductCheckoutPage />
             </MotionPageWrapper>
           }
         />

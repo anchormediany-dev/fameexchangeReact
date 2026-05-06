@@ -4,7 +4,42 @@ import * as d3 from "d3";
 import imageText from "../assets/images/fame-exchange-image-text.png";
 import { Link } from "react-router-dom";
 import { imgSrc } from "../utils/imgSrc";
+import { handleImageError } from "../utils/imagePlaceholder";
 import SectionDivider from "./SectionDivider";
+
+// ----- formatting helpers -----
+const toNum = (v) => {
+  if (v === 0) return 0;
+  if (v === null || v === undefined || v === "") return null;
+  const n = Number(String(v).replace(/[, $]/g, ""));
+  return Number.isFinite(n) ? n : null;
+};
+const fmtMoney = (v) => {
+  const n = toNum(v);
+  return n === null
+    ? "___"
+    : n.toLocaleString("en-US", {
+        style: "currency",
+        currency: "USD",
+        maximumFractionDigits: n >= 100 ? 0 : 2,
+      });
+};
+const fmtNumber = (v) => {
+  const n = toNum(v);
+  return n === null ? "___" : n.toLocaleString("en-US");
+};
+const fmtPct = (v) => {
+  const n = toNum(v);
+  if (n === null) return "";
+  const sign = n >= 0 ? "+" : "";
+  return `${sign}${n.toFixed(2)}%`;
+};
+const fmtChange = (v) => {
+  const n = toNum(v);
+  if (n === null) return "___";
+  const sign = n >= 0 ? "+" : "";
+  return `${sign}${n.toFixed(2)}`;
+};
 const TalentTokenTicker = ({
   talent,
   isLoading,
@@ -399,7 +434,18 @@ const TalentTokenTicker = ({
             >
               {(talent ?? [])
                 .slice(0, viewAll ? 10 : talent.length)
-                .map((token, index) => (
+                .map((token, index) => {
+                  const change = toNum(token?.change);
+                  const isPositive =
+                    typeof token?.isPositive === "boolean"
+                      ? token.isPositive
+                      : (change ?? 0) >= 0;
+                  const imageUrl =
+                    token?.image ||
+                    token?.images?.[0]?.fileUrl ||
+                    token?.profile_picture ||
+                    "";
+                  return (
                   <motion.div
                     key={token?._id || index}
                     custom={token?._id || index}
@@ -415,64 +461,69 @@ const TalentTokenTicker = ({
                   >
                     {/* Talent Token Image + Name */}
                     <div className="col-span-2 flex items-center gap-3 md:gap-4">
-                      {/* <div > */}
                       <motion.div
                         whileHover={{ scale: 1.1, rotate: 3 }}
                         transition={{ duration: 0.3 }}
                         className="relative"
                       >
                         <img
-                          src={imgSrc(token?.images?.[0]?.fileUrl)}
-                          alt={token?.name}
-                          className="w-12 h-12 md:w-16 md:h-16 rounded-full object-cover border-2 border-gray-600 group-hover:border-gray-400 transition-all duration-300 shadow-lg"
+                          src={imgSrc(imageUrl)}
+                          alt={token?.name || token?.token_brand_name || "talent"}
+                          onError={handleImageError}
+                          className="w-12 h-12 md:w-16 md:h-16 rounded-full object-cover border-2 border-gray-600 group-hover:border-gray-400 transition-all duration-300 shadow-lg bg-[#1f1f1f]"
                         />
                         <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent rounded-full"></div>
                       </motion.div>
                       <div className="min-w-0">
                         <Link
                           to={`/talent-profile/${token?._id}`}
-                          className="text-sm md:text-base cursor-pointer font-bold text-white group-hover:text-gray-200 transition-colors duration-300 truncate"
+                          className="text-sm md:text-base cursor-pointer font-bold text-white group-hover:text-gray-200 transition-colors duration-300 truncate block"
                         >
-                          {token?.name || "___"}
+                          {token?.name || token?.token_brand_name || "___"}
                         </Link>
                         <div className="text-xs text-gray-400 group-hover:text-gray-300 transition-colors duration-300 truncate">
-                          {token?.token_name || "___"}
+                          {token?.token_name || token?.token_brand_name || "___"}
                         </div>
                       </div>
-                      {/* </div> */}
                     </div>
                     <div className="text-center text-xs md:text-sm font-medium text-gray-200 group-hover:text-white transition-colors duration-300">
-                      {token?.networth || "___"}
+                      {fmtMoney(token?.bts_worth ?? token?.networth)}
                     </div>
                     {/* Comprised Value */}
                     <div className="text-center text-xs md:text-sm font-medium text-gray-200 group-hover:text-white transition-colors duration-300">
-                      ___
+                      {fmtMoney(token?.comprised_value)}
                     </div>
 
                     {/* Available Talent Tokens */}
                     <div className="text-center text-xs md:text-sm text-gray-200 group-hover:text-white transition-colors duration-300">
-                      ___
+                      {fmtNumber(token?.available_units)}
                     </div>
 
                     {/* Cost per Talent Token */}
                     <div className="text-center text-xs md:text-sm font-semibold text-gray-100 group-hover:text-white transition-colors duration-300">
-                      ___
+                      {fmtMoney(token?.cost_per_unit)}
                     </div>
 
                     {/* Change */}
                     <div
                       className={`text-center text-xs md:text-sm font-bold transition-all duration-300 ${
-                        token.isPositive
+                        isPositive
                           ? "text-[#1fbaa1] group-hover:text-emerald-300"
                           : "text-[#e3495d] group-hover:text-red-300"
                       }`}
                     >
-                      ___
+                      <div>{fmtChange(token?.change)}</div>
+                      {token?.change_percent !== undefined &&
+                        token?.change_percent !== null && (
+                          <div className="text-[10px] opacity-80">
+                            {fmtPct(token?.change_percent)}
+                          </div>
+                        )}
                     </div>
 
                     {/* Volume */}
                     <div className="text-center text-xs md:text-sm text-gray-200 group-hover:text-white transition-colors duration-300">
-                      ___
+                      {fmtNumber(token?.volume)}
                     </div>
 
                     {/* Chart Column */}
@@ -485,14 +536,18 @@ const TalentTokenTicker = ({
                         whileHover={{ scale: 1.08 }}
                         className="w-24 h-12 md:w-28 md:h-14  rounded-xl p-2  flex items-center justify-center"
                       >
-                        {/* <D3Chart
-                        data={token.graphData}
-                        color={token.isPositive ? "#1fbaa1" : "#e3495d"}
-                        width={112}
-                        height={56}
-                        index={index}
-                      /> */}
-                        ___
+                        {Array.isArray(token?.performance) &&
+                        token.performance.length > 0 ? (
+                          <D3Chart
+                            data={token.performance}
+                            color={isPositive ? "#1fbaa1" : "#e3495d"}
+                            width={112}
+                            height={56}
+                            index={index}
+                          />
+                        ) : (
+                          <span className="text-gray-500 text-xs">___</span>
+                        )}
                       </motion.div>
                     </div>
                     <motion.div
@@ -530,7 +585,8 @@ const TalentTokenTicker = ({
                       </div>
                     </motion.div>
                   </motion.div>
-                ))}
+                  );
+                })}
             </div>
           </div>
         </motion.div>

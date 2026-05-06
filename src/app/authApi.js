@@ -520,6 +520,15 @@ export const authApi = api.injectEndpoints({
         body,
       }),
     }),
+    // Talent social profiles editor (PATCH only - sparse update)
+    updateSocialProfiles: builder.mutation({
+      query: (body) => ({
+        url: "/user/social-profiles",
+        method: "PATCH",
+        body,
+      }),
+      invalidatesTags: ["Users"],
+    }),
     getUsers: builder.query({
       query: () => "/user/getusers",
       providesTags: ["Users"],
@@ -573,6 +582,8 @@ export const {
   // Stripe API
   useAddIntentMutation,
   useConfirmPaymentMutation,
+  // Talent social profiles editor
+  useUpdateSocialProfilesMutation,
   // Notifications
   useGetNotificationsQuery,
   // Confirmed talent requests

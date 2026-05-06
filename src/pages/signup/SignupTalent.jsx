@@ -31,8 +31,9 @@ const SignupTalent = () => {
     email: "",
     password: "",
     confirmPassword: "",
-    stage_name: "",
+    full_name: "",
     token_brand_name: "",
+    token_name: "",
   });
   const [touched, setTouched] = useState({
     name: false,
@@ -121,9 +122,10 @@ const SignupTalent = () => {
       name: formData.name,
       email: formData.email,
       password: formData.password,
-      stage_name: formData.stage_name,
+      full_name: formData.full_name,
       role: "TALENT",
       token_brand_name: formData.token_brand_name,
+      token_name: formData.token_name,
       is_over_18: isOver18,
       agreed_terms: agreedTerms,
       talent: formattedTalentData,
@@ -247,10 +249,10 @@ const SignupTalent = () => {
 
                 {/* Second row - Stage Name and Brand Name */}
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                  {/* Stage Name */}
+                  {/* Stage Name (full_name on backend) */}
                   <div>
                     <label
-                      htmlFor="stage_name"
+                      htmlFor="full_name"
                       className="block text-white text-sm font-medium mb-2"
                     >
                       Stage Name
@@ -259,10 +261,10 @@ const SignupTalent = () => {
                       <FaUser className="text-gray-400 mr-3" />
                       <input
                         type="text"
-                        id="stage_name"
-                        name="stage_name"
+                        id="full_name"
+                        name="full_name"
                         placeholder="Stage Name"
-                        value={formData.stage_name}
+                        value={formData.full_name}
                         onChange={handleChange}
                         className="bg-transparent outline-none w-full text-white placeholder-gray-400"
                       />
@@ -287,6 +289,30 @@ const SignupTalent = () => {
                         value={formData.token_brand_name}
                         onChange={handleChange}
                         className="bg-transparent outline-none w-full text-white placeholder-gray-400"
+                      />
+                    </div>
+                  </div>
+                </div>
+
+                {/* Token Symbol */}
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  <div>
+                    <label
+                      htmlFor="token_name"
+                      className="block text-white text-sm font-medium mb-2"
+                    >
+                      Token Symbol
+                    </label>
+                    <div className="flex items-center border border-none rounded-lg px-4 py-3 bg-[#2d2d2d]">
+                      <FaUser className="text-gray-400 mr-3" />
+                      <input
+                        type="text"
+                        id="token_name"
+                        name="token_name"
+                        placeholder="e.g. BRND"
+                        value={formData.token_name}
+                        onChange={handleChange}
+                        className="bg-transparent outline-none w-full text-white placeholder-gray-400 uppercase"
                       />
                     </div>
                   </div>

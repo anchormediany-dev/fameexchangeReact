@@ -17,14 +17,15 @@ import "swiper/css";
 import "swiper/css/navigation";
 import { useGetProductsQuery } from "../app/authApi";
 import { imgSrc } from "../utils/imgSrc";
+import { handleImageError } from "../utils/imagePlaceholder";
+import { useNavigate } from "react-router-dom";
 import ImageLightbox from "./ImageLightbox";
-import ProductCheckoutModal from "./ProductCheckoutModal";
 const ProductSlider = () => {
+  const navigate = useNavigate();
   const { data, error, isError, isLoading } = useGetProductsQuery();
   const [slidesPerView, setSlidesPerView] = useState(4);
   const [previewSrc, setPreviewSrc] = useState(null);
   const [previewAlt, setPreviewAlt] = useState("");
-  const [checkoutProduct, setCheckoutProduct] = useState(null);
   useEffect(() => {
     const updateSlidesPerView = () => {
       if (window.innerWidth < 640) setSlidesPerView(1);
@@ -88,6 +89,7 @@ const ProductSlider = () => {
                         <img
                           src={imgSrc(product.image)}
                           alt={product.title}
+                          onError={handleImageError}
                           className="max-w-full max-h-full object-contain p-3 group-hover:opacity-90 transition-transform duration-500 group-hover:scale-105"
                         />
                       </button>
@@ -110,7 +112,11 @@ const ProductSlider = () => {
                       <div className="p-4 pt-0">
                         <button
                           type="button"
-                          onClick={() => setCheckoutProduct(product)}
+                          onClick={() =>
+                            navigate("/product-checkout", {
+                              state: { product },
+                            })
+                          }
                           className="w-full cursor-pointer bg-[#a38b41] hover:bg-[#8a7738] text-white font-medium py-2 px-4 rounded-lg transition-all duration-200 flex items-center justify-center gap-2 text-sm hover:scale-105 active:scale-95"
                         >
                           <FiShoppingCart className="w-4 h-4" />
@@ -140,10 +146,6 @@ const ProductSlider = () => {
         src={previewSrc}
         alt={previewAlt}
         onClose={() => setPreviewSrc(null)}
-      />
-      <ProductCheckoutModal
-        product={checkoutProduct}
-        onClose={() => setCheckoutProduct(null)}
       />
     </section>
   );

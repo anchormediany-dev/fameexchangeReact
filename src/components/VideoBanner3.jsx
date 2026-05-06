@@ -1,4 +1,5 @@
 import React, { useRef, useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import { GoMute } from "react-icons/go";
 import { FaArrowRight } from "react-icons/fa6";
 import { FaPlay, FaPause, FaTimes } from "react-icons/fa";
@@ -7,6 +8,7 @@ import gifTwo from "../assets/gifs/gif2.gif";
 import gifThree from "../assets/gifs/gif3.gif";
 import gifFour from "../assets/gifs/gif4.gif";
 const VideoBanner = () => {
+  const navigate = useNavigate();
   const popupVideoRef = useRef(null);
   const [showVideoPopup, setShowVideoPopup] = useState(false);
   const [isPopupVideoPlaying, setIsPopupVideoPlaying] = useState(false);
@@ -150,7 +152,11 @@ const VideoBanner = () => {
             </p>
 
             <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 md:gap-6 justify-center items-center animate-slide-up-stagger px-2">
-              <button className="custom-button-two rounded-full w-full sm:w-auto min-w-[200px] px-6 py-3 sm:px-8 sm:py-4 text-sm sm:text-base">
+              <button
+                type="button"
+                onClick={() => navigate("/trade-talent")}
+                className="custom-button-two cursor-pointer rounded-full w-full sm:w-auto min-w-[200px] px-6 py-3 sm:px-8 sm:py-4 text-sm sm:text-base"
+              >
                 <span className="relative z-10 flex items-center justify-center gap-2">
                   Start Trading Now
                   <FaArrowRight className="text-xs sm:text-sm" />
