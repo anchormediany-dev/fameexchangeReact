@@ -237,7 +237,7 @@ const NetworthCalculator = () => {
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
                   <label htmlFor="twitter" className="text-white block mb-1">
-                    Twitter
+                    X
                   </label>
                   <input
                     type="url"

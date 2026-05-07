@@ -30,7 +30,7 @@ const navLinks = [
         subCategories: [
           { name: "Instagram Influencers", path: "/influencers/instagram" },
           { name: "TikTok Stars", path: "/influencers/tiktok" },
-          { name: "Twitter Personalities", path: "/influencers/twitter" },
+          { name: "X Personalities", path: "/influencers/twitter" },
         ],
       },
       ATHLETES: {

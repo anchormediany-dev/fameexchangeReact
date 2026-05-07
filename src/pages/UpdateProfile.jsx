@@ -507,7 +507,7 @@ export default function UpdateProfile() {
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-3 text-sm">
                   {[
                     { label: "YouTube", value: user?.social_youtube },
-                    { label: "Twitter", value: user?.social_twitter },
+                    { label: "X", value: user?.social_twitter },
                     { label: "TikTok", value: user?.social_tiktok },
                     { label: "Facebook", value: user?.social_facebook },
                     { label: "Instagram", value: user?.social_insta },

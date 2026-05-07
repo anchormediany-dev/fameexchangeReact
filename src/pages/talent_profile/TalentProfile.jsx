@@ -55,18 +55,33 @@ const TalentProfile = () => {
   const [networthError, setNetworthError] = useState(null);
   const buildPayloadFromGet = (root) => {
     const d = root?.data ?? root;
-    const sm = d?.socialMedia || {};
+    const profile = d?.profile || {};
+    const sm = d?.networth?.[0]?.socialMedia || d?.socialMedia || {};
+
+    // Prefer signup-saved profile.social_* values; fall back to networth URLs.
+    const pick = (smKey, profKey) =>
+      profile?.[profKey] || d?.[profKey] || sm?.[smKey]?.url || "";
 
     return {
-      fullName: d?.fullName || "",
-      tokenBrandName: d?.tokenBrand?.brandName || "",
-      tokenName: d?.tokenBrand?.tokenName || "",
-      youtube: sm?.youtube?.url || "",
-      twitter: sm?.twitter?.url || "",
-      instagram: sm?.instagram?.url || "",
-      facebook: sm?.facebook?.url || "",
-      tiktok: sm?.tiktok?.url || "",
-      snapchat: sm?.snapchat?.url || "",
+      userId:
+        profile?._id || d?._id || profile?.userId || userId || "",
+      fullName:
+        profile?.full_name ||
+        profile?.name ||
+        d?.fullName ||
+        userLocalData?.full_name ||
+        userLocalData?.name ||
+        "",
+      tokenBrandName:
+        profile?.token_brand_name || d?.tokenBrand?.brandName || "",
+      tokenName:
+        profile?.token_name || d?.tokenBrand?.tokenName || "",
+      youtube: pick("youtube", "social_youtube"),
+      twitter: pick("twitter", "social_twitter"),
+      instagram: pick("instagram", "social_insta"),
+      facebook: pick("facebook", "social_facebook"),
+      tiktok: pick("tiktok", "social_tiktok"),
+      snapchat: pick("snapchat", "social_snap"),
     };
   };
   const handleGetNetworthAndSave = async () => {
@@ -87,6 +102,23 @@ const TalentProfile = () => {
       }
 
       const payload = buildPayloadFromGet(source);
+
+      // Friendly client-side guard so user gets a clear hint instead of the
+      // raw backend "User ID and Full Name are required" message.
+      if (!payload.userId || !payload.fullName) {
+        const missing = [
+          !payload.userId && "User ID",
+          !payload.fullName && "Full Name",
+        ]
+          .filter(Boolean)
+          .join(" and ");
+        throw new Error(
+          `${missing} ${
+            missing.includes("and") ? "are" : "is"
+          } missing on your profile. Please update your profile (Settings → Update Profile) and try again.`
+        );
+      }
+
       setBuiltPayload(payload);
 
       setStatusMsg("Saving networth…");
@@ -96,12 +128,12 @@ const TalentProfile = () => {
       toast.success("Networth ReCalculated Successfully");
       setNetworthResult(saved?.data ?? saved);
     } catch (err) {
-      toast.error("Error while Recalculating networth", err);
-      setStatusMsg(
+      const message =
         typeof err === "string"
           ? err
-          : err?.data?.message || err?.message || "Failed to save networth."
-      );
+          : err?.data?.message || err?.message || "Failed to save networth.";
+      toast.error(message);
+      setStatusMsg(message);
       setNetworthError(err);
       setShowNetworthPopup(true);
     }

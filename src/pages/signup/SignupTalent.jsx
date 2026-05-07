@@ -4,11 +4,11 @@ import { FaEnvelope, FaLock, FaUser } from "react-icons/fa";
 import {
   FaFacebookF,
   FaInstagram,
-  FaTwitter,
   FaYoutube,
   FaTiktok,
   FaSnapchatGhost,
 } from "react-icons/fa";
+import { FaXTwitter } from "react-icons/fa6";
 import { FcGoogle } from "react-icons/fc";
 import { IoEyeOffSharp, IoEyeSharp } from "react-icons/io5";
 import MotionPageWrapper from "../../components/MotionPageWrapper";
@@ -67,6 +67,45 @@ const SignupTalent = () => {
     setSocials((prev) => ({ ...prev, [name]: value }));
   };
 
+  // Lenient social profile validators. Empty is always valid (optional).
+  // Accept either a full URL or an @handle / plain handle.
+  const handleRe = /^@?[A-Za-z0-9._-]{1,40}$/;
+  const urlRe = /^(https?:\/\/)?[\w-]+(\.[\w-]+)+([\/?#][^\s]*)?$/i;
+  const validateSocial = (name, raw) => {
+    const value = String(raw || "").trim();
+    if (!value) return "";
+    const isUrl = urlRe.test(value);
+    const isHandle = handleRe.test(value);
+    switch (name) {
+      case "social_insta":
+        return isUrl || isHandle
+          ? ""
+          : "Use https://instagram.com/yourname or @yourname";
+      case "social_facebook":
+        return isUrl
+          ? ""
+          : "Use full URL e.g. https://facebook.com/yourpage";
+      case "social_twitter":
+        return isUrl || isHandle
+          ? ""
+          : "Use https://x.com/yourname or @yourname";
+      case "social_youtube":
+        return isUrl
+          ? ""
+          : "Use full URL e.g. https://youtube.com/@yourchannel";
+      case "social_tiktok":
+        return isUrl || isHandle
+          ? ""
+          : "Use https://tiktok.com/@yourname or @yourname";
+      case "social_snap":
+        return isHandle
+          ? ""
+          : "Use your Snapchat username (letters, numbers, . _ -)";
+      default:
+        return "";
+    }
+  };
+
   // Validation
   const isEmailValid = formData.email.includes("@");
   const isPasswordValid = formData.password.length >= 6;
@@ -102,6 +141,17 @@ const SignupTalent = () => {
       !isOver18 ||
       !agreedTerms
     ) {
+      return;
+    }
+
+    // Block submit if any provided social profile is invalid
+    const socialErrors = Object.entries(socials)
+      .map(([k, v]) => [k, validateSocial(k, v)])
+      .filter(([, msg]) => msg);
+    if (socialErrors.length) {
+      toast.error(
+        `Please fix social profile fields: ${socialErrors[0][1]}`
+      );
       return;
     }
 
@@ -427,62 +477,87 @@ const SignupTalent = () => {
                     Social Media Profiles
                   </h3>
                   <p className="text-gray-400 text-xs mb-4">
-                    Optional - help fans discover you across platforms.
+                    Optional - help fans discover you across platforms. Paste
+                    a profile URL or your @handle.
                   </p>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     {[
                       {
                         name: "social_insta",
-                        placeholder: "Instagram URL or @handle",
+                        label: "Instagram",
+                        placeholder: "https://instagram.com/yourname or @yourname",
                         Icon: FaInstagram,
                         color: "text-pink-400",
                       },
                       {
                         name: "social_facebook",
-                        placeholder: "Facebook URL",
+                        label: "Facebook",
+                        placeholder: "https://facebook.com/yourpage",
                         Icon: FaFacebookF,
                         color: "text-[#1877F2]",
                       },
                       {
                         name: "social_twitter",
-                        placeholder: "Twitter / X URL or @handle",
-                        Icon: FaTwitter,
-                        color: "text-sky-400",
+                        label: "X",
+                        placeholder: "https://x.com/yourname or @yourname",
+                        Icon: FaXTwitter,
+                        color: "text-white",
                       },
                       {
                         name: "social_youtube",
-                        placeholder: "YouTube channel URL",
+                        label: "YouTube",
+                        placeholder: "https://youtube.com/@yourchannel",
                         Icon: FaYoutube,
                         color: "text-red-500",
                       },
                       {
                         name: "social_tiktok",
-                        placeholder: "TikTok URL or @handle",
+                        label: "TikTok",
+                        placeholder: "https://tiktok.com/@yourname or @yourname",
                         Icon: FaTiktok,
                         color: "text-white",
                       },
                       {
                         name: "social_snap",
-                        placeholder: "Snapchat username",
+                        label: "Snapchat",
+                        placeholder: "yoursnapusername",
                         Icon: FaSnapchatGhost,
                         color: "text-yellow-300",
                       },
-                    ].map(({ name, placeholder, Icon, color }) => (
-                      <div
-                        key={name}
-                        className="flex items-center border border-none rounded-lg px-4 py-3 bg-[#2d2d2d]"
-                      >
-                        <Icon className={`${color} mr-3`} />
-                        <input
-                          type="text"
-                          name={name}
-                          placeholder={placeholder}
-                          value={socials[name]}
-                          onChange={handleSocialChange}
-                          className="bg-transparent outline-none w-full text-white placeholder-gray-400"
-                        />
-                      </div>
-                    ))}
+                    ].map(({ name, label, placeholder, Icon, color }) => {
+                      const errorMsg = validateSocial(name, socials[name]);
+                      return (
+                        <div key={name}>
+                          <label
+                            htmlFor={name}
+                            className="block text-[11px] uppercase tracking-wider text-gray-400 mb-1"
+                          >
+                            {label}
+                          </label>
+                          <div
+                            className={`flex items-center border rounded-lg px-4 py-3 bg-[#2d2d2d] ${
+                              errorMsg ? "border-red-500" : "border-transparent"
+                            }`}
+                          >
+                            <Icon className={`${color} mr-3`} />
+                            <input
+                              id={name}
+                              type="text"
+                              name={name}
+                              placeholder={placeholder}
+                              value={socials[name]}
+                              onChange={handleSocialChange}
+                              className="bg-transparent outline-none w-full text-white placeholder-gray-500 text-sm"
+                            />
+                          </div>
+                          {errorMsg ? (
+                            <p className="text-red-400 text-[11px] mt-1">
+                              {errorMsg}
+                            </p>
+                          ) : null}
+                        </div>
+                      );
+                    })}
                   </div>
                 </div>
 

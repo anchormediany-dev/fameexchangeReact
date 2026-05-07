@@ -6,18 +6,28 @@ import {
   FaTiktok,
   FaSnapchatGhost,
   FaDiscord,
-  FaTwitter,
   FaReddit,
   FaExternalLinkAlt,
 } from "react-icons/fa";
+import { FaXTwitter } from "react-icons/fa6";
 
 const TalentLinks = ({ userData: user }) => {
-  const youtube = user?.data?.networth[0]?.socialMedia?.youtube?.url;
-  const facebook = user?.data?.networth[0]?.socialMedia?.facebook?.url;
-  const instagram = user?.data?.networth[0]?.socialMedia?.instagram?.url;
-  const snapchat = user?.data?.networth[0]?.socialMedia?.snapchat?.url;
-  const tiktok = user?.data?.networth[0]?.socialMedia?.tiktok?.url;
-  const twitter = user?.data?.networth[0]?.socialMedia?.twitter?.url;
+  const root = user?.data ?? user ?? {};
+  const profile = root?.profile || {};
+  const sm = root?.networth?.[0]?.socialMedia || root?.socialMedia || {};
+
+  // Prefer signup-saved profile.social_* values, fall back to networth
+  // socialMedia URLs and finally any top-level social_* fields.
+  const pick = (smKey, profKey) =>
+    profile?.[profKey] || root?.[profKey] || sm?.[smKey]?.url || "";
+
+  const youtube = pick("youtube", "social_youtube");
+  const facebook = pick("facebook", "social_facebook");
+  const instagram = pick("instagram", "social_insta");
+  const snapchat = pick("snapchat", "social_snap");
+  const tiktok = pick("tiktok", "social_tiktok");
+  const x = pick("twitter", "social_twitter");
+
   const socialLinks = [
     youtube && {
       name: "YouTube",
@@ -44,10 +54,10 @@ const TalentLinks = ({ userData: user }) => {
       icon: <FaSnapchatGhost />,
       url: snapchat,
     },
-    twitter && {
-      name: "Twitter",
-      icon: <FaTwitter />,
-      url: twitter,
+    x && {
+      name: "X",
+      icon: <FaXTwitter />,
+      url: x,
     },
   ].filter(Boolean);
 

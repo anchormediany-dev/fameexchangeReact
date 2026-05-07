@@ -6,10 +6,10 @@ import {
   FaTiktok,
   FaSnapchatGhost,
   FaDiscord,
-  FaTwitter,
   FaReddit,
   FaExternalLinkAlt,
 } from "react-icons/fa";
+import { FaXTwitter } from "react-icons/fa6";
 
 const TalentLinksFan = ({ userData }) => {
   return (
@@ -155,13 +155,13 @@ const TalentLinksFan = ({ userData }) => {
                   Visit
                 </a>
               </div>
-              {/* Twitter */}
+              {/* X */}
               <div className="flex justify-between items-center space-x-3 bg-[#2a2a2a] text-sm text-gray-300 p-4 rounded-md border border-gray-600 hover:bg-[#333] transition duration-200">
                 <div className="flex items-center space-x-4">
                   <span className="text-yellow-400">
-                    <FaYoutube />
+                    <FaXTwitter />
                   </span>
-                  <span>Twitter</span>
+                  <span>X</span>
                   <a
                     href={userData?.data?.profile?.social_twitter}
                     target="_blank"

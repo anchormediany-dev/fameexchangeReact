@@ -1,4 +1,5 @@
-import { FaFacebookF, FaTwitter, FaInstagram, FaYoutube } from "react-icons/fa";
+import { FaFacebookF, FaInstagram, FaYoutube } from "react-icons/fa";
+import { FaXTwitter } from "react-icons/fa6";
 import { motion } from "framer-motion";
 import siteLogo from "../assets/images/site-logo.png";
 import googlePlay from "../assets/images/google-play.png";
@@ -336,7 +337,7 @@ const Footer = () => {
                 whileHover="hover"
                 whileTap={{ scale: 0.9 }}
               >
-                <FaTwitter className="cursor-pointer" size={20} />
+                <FaXTwitter className="cursor-pointer" size={20} />
               </motion.div>
               <motion.div
                 variants={socialIconVariants}
