@@ -64,17 +64,34 @@ const Navbar = () => {
   };
 
   // Lazy-loaded sections may not be mounted at navigation time -
-  // poll for the target element for up to ~3s before giving up.
+  // wait via MutationObserver (and a polling fallback) until the
+  // target element appears, then scroll. Times out after ~12s.
   const scrollToWhenReady = (id) => {
     if (!id) return;
     if (handleScroll(id)) return;
-    let tries = 0;
-    const interval = setInterval(() => {
-      tries += 1;
-      if (handleScroll(id) || tries > 30) {
-        clearInterval(interval);
-      }
-    }, 100);
+
+    let done = false;
+    const finish = () => {
+      if (done) return;
+      done = true;
+      observer.disconnect();
+      clearInterval(interval);
+      clearTimeout(timeout);
+    };
+
+    const tryScroll = () => {
+      if (done) return;
+      if (handleScroll(id)) finish();
+    };
+
+    const observer = new MutationObserver(tryScroll);
+    observer.observe(document.body, { childList: true, subtree: true });
+
+    // Polling fallback for cases where MutationObserver missed late layout.
+    const interval = setInterval(tryScroll, 150);
+
+    // Hard timeout to avoid leaks.
+    const timeout = setTimeout(finish, 12000);
   };
 
   const handleNavClick = ({ scrollTo, path, isRoute }) => {

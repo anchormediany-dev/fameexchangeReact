@@ -1,13 +1,9 @@
 import { motion, useInView } from "framer-motion";
 import { useRef } from "react";
-import { GoArrowUpRight } from "react-icons/go";
 import talentTradingImage from "../assets/home/talent-trading-1.png";
 import imageText from "../assets/images/fame-exchange-image-text.png";
-import coin from "../assets/home/coin.gif";
-import { useNavigate } from "react-router-dom";
 
 const TalentTradingSection = () => {
-  const navigate = useNavigate();
   const sectionRef = useRef(null);
   const isInView = useInView(sectionRef, { once: true, amount: 0.2 });
 
@@ -65,17 +61,17 @@ const TalentTradingSection = () => {
             initial={{ opacity: 0, x: 20 }}
             animate={isInView ? { opacity: 1, x: 0 } : { opacity: 0, x: 20 }}
             transition={{ duration: 0.6, delay: 0.4 }}
-            className="custom-heading-four text-xl sm:text-2xl md:text-3xl lg:text-4xl leading-tight"
+            className="custom-heading-four text-[#a38b41] text-xl sm:text-2xl md:text-3xl lg:text-4xl leading-tight"
           >
             TRANSFORMING FAN INTERACTION & TALENT MONETIZATION
           </motion.h3>
 
-          <div className="flex flex-col lg:flex-row items-center gap-6  w-full transition-all duration-500">
+          <div className="w-full transition-all duration-500">
             <motion.p
               initial={{ opacity: 0, y: 20 }}
               animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
               transition={{ duration: 0.6, delay: 0.5 }}
-              className="text-[#878787] text-sm sm:text-base md:text-lg lg:text-base xl:text-lg flex-1 leading-relaxed"
+              className="text-[#878787] text-sm sm:text-base md:text-lg lg:text-base xl:text-lg leading-relaxed"
             >
               Through our innovative Talent Trading platform, fans can now buy,
               sell, and hold Branded Talent Shares—creating a new level of
@@ -83,28 +79,7 @@ const TalentTradingSection = () => {
               unlocks a powerful revenue stream and deeper fan loyalty, turning
               fame into measurable value.
             </motion.p>
-            <div className="flex-shrink-0">
-              <img
-                src={coin}
-                alt="fame coin"
-                className="w-32 h-32 sm:w-40 sm:h-40 md:w-48 md:h-48 lg:w-56 lg:h-56 xl:w-64 xl:h-64 transition-transform duration-700"
-              />
-            </div>
           </div>
-
-          <motion.button
-            onClick={() => navigate("/all-talents")}
-            initial={{ opacity: 0, y: 20 }}
-            animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
-            transition={{ duration: 0.6, delay: 0.6 }}
-            whileHover={{ scale: 1.02 }}
-            className="px-6 py-3 bg-gradient-to-r from-[#a18a3f] cursor-pointer to-[#e6ca7c] text-white rounded-lg flex items-center gap-2 hover:brightness-110 transition-all text-sm sm:text-base w-full sm:w-auto justify-center mt-4 lg:mt-6"
-          >
-            Read More
-            <motion.div whileHover={{ x: 3, y: -3 }}>
-              <GoArrowUpRight size={20} className="sm:w-6 sm:h-6" />
-            </motion.div>
-          </motion.button>
         </div>
       </div>
     </section>

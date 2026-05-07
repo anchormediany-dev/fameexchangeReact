@@ -7,6 +7,7 @@ import gifOne from "../assets/gifs/gif1.gif";
 import gifTwo from "../assets/gifs/gif2.gif";
 import gifThree from "../assets/gifs/gif3.gif";
 import gifFour from "../assets/gifs/gif4.gif";
+import coin from "../assets/home/coin.gif";
 const VideoBanner = () => {
   const navigate = useNavigate();
   const popupVideoRef = useRef(null);
@@ -122,6 +123,13 @@ const VideoBanner = () => {
             />
           ))}
         </div>
+
+        {/* Floating coin on the left side of the banner */}
+        <img
+          src={coin}
+          alt="fame coin"
+          className="hidden md:block absolute left-4 lg:left-10 xl:left-16 top-1/2 -translate-y-1/2 z-10 w-32 h-32 lg:w-44 lg:h-44 xl:w-56 xl:h-56 pointer-events-none drop-shadow-[0_10px_30px_rgba(163,139,65,0.45)]"
+        />
 
         {/* Main Content */}
         <div className="relative z-10 flex items-center justify-center w-full h-full px-4 sm:px-6 lg:px-8 py-8 sm:py-12">

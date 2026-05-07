@@ -455,7 +455,7 @@ export default function FutureTalents() {
               ? `${category} Talents`
               : category === "__none__"
               ? "Talents Without Category"
-              : "All Talents"}
+              : "Futures"}
           </h2>
           <p className="text-gray-400 mt-2">
             {isLoading

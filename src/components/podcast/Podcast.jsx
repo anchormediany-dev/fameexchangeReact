@@ -231,6 +231,20 @@ const Podcast = () => {
               ))}
             </motion.div> */}
 
+            {/* Tagline above CTA */}
+            <motion.div
+              className="hidden lg:block mb-6 text-center lg:text-left"
+              variants={fadeInUp}
+            >
+              <p className="text-2xl md:text-3xl font-semibold text-white leading-tight">
+                Give us 15 minutes
+              </p>
+              <p className="text-lg md:text-xl text-gray-300 mt-1">
+                Tell us about you the{" "}
+                <span className="text-[#a38b41] font-semibold">BRAND</span>.
+              </p>
+            </motion.div>
+
             {/* CTA Section */}
             <motion.div
               className="lg:flex hidden flex-col  sm:flex-row gap-6 justify-center lg:justify-start items-center"
