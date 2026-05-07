@@ -404,11 +404,11 @@ const TalentTokenTicker = ({
             </Link>
           )}
         </div>
-        {/* Table / Cards Container */}
+        {/* Table Container */}
         {(() => {
           const items = (talent ?? []).slice(0, viewAll ? 8 : talent.length);
 
-          const renderTableRow = (token, index) => {
+          const renderTableRow = (token, index, compact = false) => {
             const change = toNum(token?.change);
             const isPositive =
               typeof token?.isPositive === "boolean"
@@ -431,10 +431,12 @@ const TalentTokenTicker = ({
                   scale: 1.01,
                   transition: { duration: 0.3 },
                 }}
-                className="grid grid-cols-8 gap-2 md:gap-4 items-center py-5 px-6 hover:shadow-lg transition-all duration-300 group"
+                className={`grid grid-cols-8 gap-2 ${
+                  compact ? "py-3 px-3" : "md:gap-4 py-5 px-6"
+                } items-center hover:shadow-lg transition-all duration-300 group`}
               >
                 {/* Talent Token Image + Name */}
-                <div className="col-span-2 flex items-center gap-3 md:gap-4">
+                <div className="col-span-2 flex items-center gap-2 md:gap-3">
                   <motion.div
                     whileHover={{ scale: 1.1, rotate: 3 }}
                     transition={{ duration: 0.3 }}
@@ -444,30 +446,46 @@ const TalentTokenTicker = ({
                       src={imgSrc(imageUrl)}
                       alt={token?.name || token?.token_brand_name || "talent"}
                       onError={handleImageError}
-                      className="w-12 h-12 md:w-16 md:h-16 rounded-full object-cover border-2 border-gray-600 group-hover:border-gray-400 transition-all duration-300 shadow-lg bg-[#1f1f1f]"
+                      className={`${
+                        compact
+                          ? "w-10 h-10"
+                          : "w-12 h-12 md:w-16 md:h-16"
+                      } rounded-full object-cover border-2 border-gray-600 group-hover:border-gray-400 transition-all duration-300 shadow-lg bg-[#1f1f1f]`}
                     />
                     <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent rounded-full"></div>
                   </motion.div>
                   <div className="min-w-0">
                     <Link
                       to={`/talent-profile/${token?._id}`}
-                      className="text-sm md:text-base cursor-pointer font-bold text-white group-hover:text-gray-200 transition-colors duration-300 truncate block"
+                      className={`${
+                        compact ? "text-xs" : "text-sm md:text-base"
+                      } cursor-pointer font-bold text-white group-hover:text-gray-200 transition-colors duration-300 truncate block`}
                     >
                       {token?.name || token?.token_brand_name || "___"}
                     </Link>
-                    <div className="text-xs text-gray-400 group-hover:text-gray-300 transition-colors duration-300 truncate">
+                    <div className="text-[10px] md:text-xs text-gray-400 group-hover:text-gray-300 transition-colors duration-300 truncate">
                       {token?.token_name || token?.token_brand_name || "___"}
                     </div>
                   </div>
                 </div>
-                <div className="text-center text-xs md:text-sm font-medium text-gray-200 group-hover:text-white transition-colors duration-300">
+                <div
+                  className={`text-center ${
+                    compact ? "text-[11px]" : "text-xs md:text-sm"
+                  } font-medium text-gray-200 group-hover:text-white transition-colors duration-300`}
+                >
                   {fmtMoney(token?.bts_worth ?? token?.networth)}
                 </div>
-                <div className="text-center text-xs md:text-sm font-semibold text-gray-100 group-hover:text-white transition-colors duration-300">
+                <div
+                  className={`text-center ${
+                    compact ? "text-[11px]" : "text-xs md:text-sm"
+                  } font-semibold text-gray-100 group-hover:text-white transition-colors duration-300`}
+                >
                   {fmtMoney(token?.cost_per_unit)}
                 </div>
                 <div
-                  className={`text-center text-xs md:text-sm font-bold transition-all duration-300 ${
+                  className={`text-center ${
+                    compact ? "text-[11px]" : "text-xs md:text-sm"
+                  } font-bold transition-all duration-300 ${
                     isPositive
                       ? "text-[#1fbaa1] group-hover:text-emerald-300"
                       : "text-[#e3495d] group-hover:text-red-300"
@@ -481,7 +499,11 @@ const TalentTokenTicker = ({
                       </div>
                     )}
                 </div>
-                <div className="text-center text-xs md:text-sm text-gray-200 group-hover:text-white transition-colors duration-300">
+                <div
+                  className={`text-center ${
+                    compact ? "text-[11px]" : "text-xs md:text-sm"
+                  } text-gray-200 group-hover:text-white transition-colors duration-300`}
+                >
                   {fmtNumber(token?.volume)}
                 </div>
                 <div className="flex justify-center">
@@ -491,15 +513,17 @@ const TalentTokenTicker = ({
                     initial="hidden"
                     animate={controls}
                     whileHover={{ scale: 1.08 }}
-                    className="w-24 h-12 md:w-28 md:h-14 rounded-xl p-2 flex items-center justify-center"
+                    className={`${
+                      compact ? "w-16 h-8" : "w-24 h-12 md:w-28 md:h-14"
+                    } rounded-xl p-1 flex items-center justify-center`}
                   >
                     {Array.isArray(token?.performance) &&
                     token.performance.length > 0 ? (
                       <D3Chart
                         data={token.performance}
                         color={isPositive ? "#1fbaa1" : "#e3495d"}
-                        width={112}
-                        height={56}
+                        width={compact ? 64 : 112}
+                        height={compact ? 32 : 56}
                         index={index}
                       />
                     ) : (
@@ -513,7 +537,7 @@ const TalentTokenTicker = ({
                   viewport={{ once: true }}
                   transition={{ duration: 0.6, delay: 0.6 }}
                 >
-                  <div className="flex flex-col gap-3">
+                  <div className="flex flex-col gap-2">
                     <Link
                       to={`/trade-talent/${token?._id}`}
                       className="flex justify-center"
@@ -531,7 +555,9 @@ const TalentTokenTicker = ({
                       className="flex justify-center"
                     >
                       <motion.button
-                        className="underline cursor-pointer"
+                        className={`${
+                          compact ? "text-[10px]" : "text-xs"
+                        } underline cursor-pointer`}
                         whileHover={{ scale: 1.02 }}
                         transition={{ duration: 0.2 }}
                       >
@@ -544,151 +570,46 @@ const TalentTokenTicker = ({
             );
           };
 
-          const renderCard = (token, index) => {
-            const change = toNum(token?.change);
-            const isPositive =
-              typeof token?.isPositive === "boolean"
-                ? token.isPositive
-                : (change ?? 0) >= 0;
-            const imageUrl =
-              token?.image ||
-              token?.images?.[0]?.fileUrl ||
-              token?.profile_picture ||
-              "";
-            return (
-              <motion.div
-                key={token?._id || index}
-                custom={token?._id || index}
-                variants={tableRowVariant}
-                initial="hidden"
-                animate={controls}
-                whileHover={{
-                  backgroundColor: "rgba(255,255,255,0.05)",
-                  scale: 1.01,
-                  transition: { duration: 0.3 },
-                }}
-                className="bg-gradient-to-br from-[#1a1a1a]/90 to-[#252525]/90 backdrop-blur-xl rounded-2xl border border-gray-600/30 p-4 md:p-5 shadow-xl group"
-              >
-                <div className="flex items-center gap-3 mb-4">
-                  <img
-                    src={imgSrc(imageUrl)}
-                    alt={token?.name || token?.token_brand_name || "talent"}
-                    onError={handleImageError}
-                    className="w-12 h-12 md:w-14 md:h-14 rounded-full object-cover border-2 border-gray-600 group-hover:border-gray-400 transition-all duration-300 shadow-lg bg-[#1f1f1f]"
-                  />
-                  <div className="min-w-0 flex-1">
-                    <Link
-                      to={`/talent-profile/${token?._id}`}
-                      className="text-sm md:text-base cursor-pointer font-bold text-white truncate block"
-                    >
-                      {token?.name || token?.token_brand_name || "___"}
-                    </Link>
-                    <div className="text-xs text-gray-400 truncate">
-                      {token?.token_name || token?.token_brand_name || "___"}
-                    </div>
-                  </div>
-                  <motion.div
-                    custom={index}
-                    variants={chartVariant}
-                    initial="hidden"
-                    animate={controls}
-                    className="flex-shrink-0"
-                  >
-                    {Array.isArray(token?.performance) &&
-                    token.performance.length > 0 ? (
-                      <D3Chart
-                        data={token.performance}
-                        color={isPositive ? "#1fbaa1" : "#e3495d"}
-                        width={88}
-                        height={40}
-                        index={index}
-                      />
-                    ) : (
-                      <span className="text-gray-500 text-xs">___</span>
-                    )}
-                  </motion.div>
-                </div>
-
-                <div className="grid grid-cols-2 gap-3 text-xs md:text-sm mb-4">
-                  <div>
-                    <div className="text-[10px] uppercase tracking-wide text-gray-400">
-                      BTS Worth
-                    </div>
-                    <div className="font-medium text-gray-100">
-                      {fmtMoney(token?.bts_worth ?? token?.networth)}
-                    </div>
-                  </div>
-                  <div>
-                    <div className="text-[10px] uppercase tracking-wide text-gray-400">
-                      Cost / Unit
-                    </div>
-                    <div className="font-semibold text-gray-100">
-                      {fmtMoney(token?.cost_per_unit)}
-                    </div>
-                  </div>
-                  <div>
-                    <div className="text-[10px] uppercase tracking-wide text-gray-400">
-                      Change
-                    </div>
-                    <div
-                      className={`font-bold ${
-                        isPositive ? "text-[#1fbaa1]" : "text-[#e3495d]"
-                      }`}
-                    >
-                      {fmtChange(token?.change)}
-                      {token?.change_percent !== undefined &&
-                        token?.change_percent !== null && (
-                          <span className="ml-1 text-[10px] opacity-80">
-                            ({fmtPct(token?.change_percent)})
-                          </span>
-                        )}
-                    </div>
-                  </div>
-                  <div>
-                    <div className="text-[10px] uppercase tracking-wide text-gray-400">
-                      Volume
-                    </div>
-                    <div className="text-gray-100">
-                      {fmtNumber(token?.volume)}
-                    </div>
-                  </div>
-                </div>
-
-                <div className="flex items-center gap-3">
-                  <Link
-                    to={`/trade-talent/${token?._id}`}
-                    className="flex-1"
-                  >
-                    <motion.button
-                      className="custom-button-two w-full"
-                      whileHover={{ scale: 1.02 }}
-                      transition={{ duration: 0.2 }}
-                    >
-                      TRADE
-                    </motion.button>
-                  </Link>
-                  <Link
-                    to={`/talent-profile/${token?._id}`}
-                    className="text-xs underline whitespace-nowrap"
-                  >
-                    View Profile
-                  </Link>
-                </div>
-              </motion.div>
-            );
-          };
+          const renderTableHeader = (compact = false) => (
+            <div
+              className={`grid grid-cols-8 gap-2 ${
+                compact ? "py-3 px-3 text-[10px]" : "md:gap-4 py-5 px-6 text-sm"
+              } bg-gradient-to-r from-[#2d2d2d] via-[#353535] to-[#2d2d2d] text-gray-200 font-bold border-b border-gray-500/40 backdrop-blur-sm uppercase tracking-wide`}
+            >
+              <div className="col-span-2 text-left">Talent Share</div>
+              <div className="text-center">BTS Worth</div>
+              <div className="text-center">Cost / Unit</div>
+              <div className="text-center">Change</div>
+              <div className="text-center">Volume</div>
+              <div className="text-center">Performance</div>
+              <div className="text-center">Action</div>
+            </div>
+          );
 
           if (viewAll) {
-            // Home page: split 8 items into 2 columns × 4 rows of cards
+            // Home page: split 8 items into two compact tables side-by-side
+            const left = items.slice(0, 4);
+            const right = items.slice(4, 8);
+            const renderColumn = (rows) => (
+              <div className="bg-gradient-to-br from-[#1a1a1a]/90 to-[#252525]/90 backdrop-blur-xl rounded-3xl border border-gray-600/30 overflow-hidden shadow-2xl">
+                {renderTableHeader(true)}
+                <div className="divide-y divide-gray-700/30">
+                  {rows.map((token, index) =>
+                    renderTableRow(token, index, true)
+                  )}
+                </div>
+              </div>
+            );
             return (
               <motion.div
                 variants={fadeInUpVariant}
                 initial="hidden"
                 animate={controls}
                 transition={{ delay: 0.3 }}
-                className="grid grid-cols-1 lg:grid-cols-2 gap-4 md:gap-6"
+                className="grid grid-cols-1 xl:grid-cols-2 gap-4 md:gap-6"
               >
-                {items.map((token, index) => renderCard(token, index))}
+                {renderColumn(left)}
+                {renderColumn(right)}
               </motion.div>
             );
           }
@@ -703,16 +624,7 @@ const TalentTokenTicker = ({
               className="overflow-x-auto"
             >
               <div className="min-w-[1000px] bg-gradient-to-br from-[#1a1a1a]/90 to-[#252525]/90 backdrop-blur-xl rounded-3xl border border-gray-600/30 overflow-hidden shadow-2xl">
-                {/* Table Header */}
-                <div className="grid grid-cols-8 gap-2 md:gap-4 py-5 px-6 bg-gradient-to-r from-[#2d2d2d] via-[#353535] to-[#2d2d2d] text-sm text-gray-200 font-bold border-b border-gray-500/40 backdrop-blur-sm">
-                  <div className="col-span-2 text-left">TALENT SHARE</div>
-                  <div className="text-center">BTS Worth</div>
-                  <div className="text-center">COST / UNIT</div>
-                  <div className="text-center">CHANGE</div>
-                  <div className="text-center">VOLUME</div>
-                  <div className="text-center">PERFORMANCE</div>
-                  <div className="text-center">ACTION</div>
-                </div>
+                {renderTableHeader(false)}
 
                 {/* Table Body */}
                 <div className="divide-y divide-gray-700/30 h-[1000px] overflow-y-auto overflow-x-hidden">
