@@ -4,11 +4,8 @@ const SectionDivider = () => {
   return (
     <section className="bg-[#171717] text-white relative overflow-hidden">
       <img
-        style={{
-          width: "-webkit-fill-available",
-        }}
         src={dividerImage}
-        className=" object-center h-[540px]"
+        className="w-full h-auto object-center"
         alt="The Fame Exchange"
       />
     </section>
