@@ -13,7 +13,7 @@ import ProfileMenu from "./ProfileMenu";
 const navLinks = [
   { name: "Talent Trading", path: "/trade-talent", isRoute: true },
   { name: "Top BTS", path: "/branded-tokens-shares", isRoute: true },
-  { name: "App", scrollTo: "app" },
+  { name: "App", scrollTo: "mobileapp" },
   { name: "Inverse", path: "/inverse", isRoute: true },
   { name: "Podcast", scrollTo: "podcast" },
   { name: "Futures", path: "/future", isRoute: true },
@@ -109,10 +109,16 @@ const Navbar = () => {
     if (isRoute && path) {
       navigate(path);
     } else {
+      // Use URL hash so deep links like /#podcast or /#mobileapp work
+      // even when the user is currently on a non-home route.
       if (location.pathname !== "/") {
         history.scrollTarget = scrollTo;
-        navigate("/");
+        navigate(`/#${scrollTo}`);
       } else {
+        // Reflect the hash in the URL so it can be shared/bookmarked.
+        if (window.history.replaceState) {
+          window.history.replaceState(null, "", `#${scrollTo}`);
+        }
         scrollToWhenReady(scrollTo);
       }
     }
@@ -131,8 +137,11 @@ const Navbar = () => {
   const closeSignupModal = () => setIsSignupModalOpen(false);
 
   useEffect(() => {
-    if (location.pathname === "/" && history.scrollTarget) {
-      const target = history.scrollTarget;
+    if (location.pathname !== "/") return;
+    // Prefer an explicit hash (e.g. /#podcast) so external/deep links work.
+    const hashTarget = location.hash ? location.hash.replace(/^#/, "") : null;
+    const target = hashTarget || history.scrollTarget;
+    if (target) {
       history.scrollTarget = null;
       scrollToWhenReady(target);
     }

@@ -96,7 +96,8 @@ const Home = () => {
         <DownloadApp />
         <MeetAndGreet />
         <Podcast />
-        <CustomerReview />
+        {/* CustomerReview hidden per request - keep import for future use */}
+        {/* <CustomerReview /> */}
         <TheFuturesSection />
         <GigsEvents />
         <CelebMerchandiseHero />
