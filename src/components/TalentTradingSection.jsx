@@ -1,6 +1,7 @@
 import { motion, useInView } from "framer-motion";
 import { useRef } from "react";
 import talentTradingImage from "../assets/home/talent-trading-1.png";
+import theCoin from "../assets/home/thecoin.png";
 import imageText from "../assets/images/fame-exchange-image-text.png";
 
 const TalentTradingSection = () => {
@@ -57,14 +58,24 @@ const TalentTradingSection = () => {
 
         {/* Text Content */}
         <div className="space-y-8 lg:space-y-10 xl:space-y-12 order-2 lg:order-2">
-          <motion.h3
-            initial={{ opacity: 0, x: 20 }}
-            animate={isInView ? { opacity: 1, x: 0 } : { opacity: 0, x: 20 }}
-            transition={{ duration: 0.6, delay: 0.4 }}
-            className="custom-heading-four text-[#a38b41] text-xl sm:text-2xl md:text-3xl lg:text-4xl leading-tight"
-          >
-            TRANSFORMING FAN INTERACTION & TALENT MONETIZATION
-          </motion.h3>
+          <div className="flex items-center gap-4 lg:gap-6">
+            <motion.h3
+              initial={{ opacity: 0, x: 20 }}
+              animate={isInView ? { opacity: 1, x: 0 } : { opacity: 0, x: 20 }}
+              transition={{ duration: 0.6, delay: 0.4 }}
+              className="custom-heading-four text-[#a38b41] text-xl sm:text-2xl md:text-3xl lg:text-4xl leading-tight flex-1"
+            >
+              TRANSFORMING FAN INTERACTION & TALENT MONETIZATION
+            </motion.h3>
+            <motion.img
+              src={theCoin}
+              alt="Fame Coin"
+              initial={{ opacity: 0, scale: 0.6, rotate: -15 }}
+              animate={isInView ? { opacity: 1, scale: 1, rotate: 0 } : { opacity: 0, scale: 0.6, rotate: -15 }}
+              transition={{ duration: 0.7, delay: 0.5 }}
+              className="hidden sm:block w-20 h-20 md:w-28 md:h-28 lg:w-32 lg:h-32 xl:w-40 xl:h-40 object-contain shrink-0 drop-shadow-[0_10px_30px_rgba(163,139,65,0.45)]"
+            />
+          </div>
 
           <div className="w-full transition-all duration-500">
             <motion.p
