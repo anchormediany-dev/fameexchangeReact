@@ -1,6 +1,7 @@
-import React, { useState } from "react";
+import React, { useState, useMemo } from "react";
 import { motion } from "framer-motion";
 import { FaChevronDown } from "react-icons/fa";
+import { FiSearch, FiX } from "react-icons/fi";
 import Footer from "../../components/Footer";
 import Navbar from "../../components/Navbar";
 // import faqItems from "../../data/faqData"; // not used now
@@ -52,6 +53,7 @@ const FAQItem = ({ faq, index, isOpen, toggleOpen }) => {
 
 const FAQ = () => {
   const [openKey, setOpenKey] = useState(null);
+  const [searchQuery, setSearchQuery] = useState("");
   const { data, isLoading, error, isError } = useGetAllFaqsQuery();
 
   const toggleOpen = (key) => {
@@ -61,11 +63,30 @@ const FAQ = () => {
   // ---- map API response (grouped by "type") ----
   const faqGroups = data?.result || [];
 
+  // Keyword-based search (case-insensitive, partial-token match).
+  // Splits the query into tokens and an FAQ matches if ANY token
+  // appears in its question, answer, or type — no exact-string needed.
+  const tokens = useMemo(
+    () =>
+      searchQuery
+        .toLowerCase()
+        .split(/[^a-z0-9]+/i)
+        .map((t) => t.trim())
+        .filter(Boolean),
+    [searchQuery]
+  );
+
+  const matchesSearch = (faq, typeName) => {
+    if (tokens.length === 0) return true;
+    const haystack = `${faq?.question || ""} ${faq?.answer || ""} ${typeName || ""}`.toLowerCase();
+    return tokens.some((t) => haystack.includes(t));
+  };
+
   const getFaqsByType = (typeName) => {
     const group = faqGroups.find((g) => g.type === typeName);
     if (!group || !group.questions) return [];
     // sort inside each type (by createdAt, oldest → newest)
-    const list = [...group.questions];
+    const list = [...group.questions].filter((f) => matchesSearch(f, typeName));
     list.sort((a, b) => {
       const da = new Date(a.createdAt).getTime();
       const db = new Date(b.createdAt).getTime();
@@ -87,6 +108,14 @@ const FAQ = () => {
     (group) => group.questions && group.questions.length > 0
   );
 
+  const totalVisible =
+    generalFaqs.length +
+    fansFaqs.length +
+    talentFaqs.length +
+    businessFaqs.length +
+    securityFaqs.length +
+    supportFaqs.length;
+
   return (
     <section className="flex flex-col min-h-screen ">
       <Navbar />
@@ -95,6 +124,36 @@ const FAQ = () => {
         id="faqs"
       >
         <div className=" flex flex-col gap-12 px-4 sm:px-6 lg:px-8">
+          {/* Search bar */}
+          <div className="container">
+            <div className="max-w-2xl mx-auto relative">
+              <FiSearch className="absolute left-4 top-1/2 -translate-y-1/2 text-[#a38b41] text-xl" />
+              <input
+                type="text"
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                placeholder="Search FAQs by keyword (e.g. trading, fees, kyc)..."
+                className="w-full pl-12 pr-12 py-4 bg-white/5 border border-[#a38b41]/40 rounded-xl text-white placeholder-gray-400 outline-none focus:border-[#a38b41] transition"
+              />
+              {searchQuery && (
+                <button
+                  type="button"
+                  onClick={() => setSearchQuery("")}
+                  aria-label="Clear search"
+                  className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 hover:text-white transition"
+                >
+                  <FiX className="text-xl" />
+                </button>
+              )}
+            </div>
+            {searchQuery && (
+              <p className="text-center text-gray-400 text-sm mt-3">
+                {totalVisible === 0
+                  ? "No FAQs match your search."
+                  : `Showing ${totalVisible} matching ${totalVisible === 1 ? "FAQ" : "FAQs"}.`}
+              </p>
+            )}
+          </div>
           {isLoading ? (
             <div
               style={{

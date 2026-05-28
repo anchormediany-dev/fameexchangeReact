@@ -29,6 +29,7 @@ import FutureMusicians from "./pages/future_musicians/FutureMusicians";
 import TradingAccountPage from "./pages/trading_account/TradingAccountPage";
 import TradeTalentPage from "./pages/trade_talent/TradeTalentPage";
 import TradingDashboard from "./pages/trade_talent/TradingDashboard";
+import AuthGate from "./components/AuthGate";
 import Home from "./pages/home/Home";
 import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
@@ -55,6 +56,8 @@ import ResetPassword from "./components/ResetPassword";
 import TalentProfileForFan from "./pages/talent_profile_fan/TalentProfileForFan";
 import TalentCompactList from "./pages/TalentsListForFan";
 import AdminFaq from "./pages/admin/AdminFaq";
+import AdminInverseFeatured from "./pages/admin/AdminInverseFeatured";
+import AdminPageVisibility from "./pages/admin/AdminPageVisibility";
 import AdminEventsListings from "./pages/admin/AdminEventsListings";
 import AdminInverse from "./pages/admin/AdminInverse";
 import AdminUsers from "./pages/admin/AdminUsers";
@@ -457,6 +460,22 @@ export default function App() {
                   </MotionPageWrapper>
                 }
               />
+              <Route
+                path="inverse-featured"
+                element={
+                  <MotionPageWrapper>
+                    <AdminInverseFeatured />
+                  </MotionPageWrapper>
+                }
+              />
+              <Route
+                path="page-visibility"
+                element={
+                  <MotionPageWrapper>
+                    <AdminPageVisibility />
+                  </MotionPageWrapper>
+                }
+              />
             </Route>
           </Route>
           {/* Create event */}
@@ -503,7 +522,12 @@ export default function App() {
             path="trade-talent"
             element={
               <MotionPageWrapper>
-                <TradeTalentPage />
+                <AuthGate
+                  title="Sign in to trade"
+                  message="Talent trading requires an active Fame Exchange account. Sign in or create one to access the trading desk."
+                >
+                  <TradeTalentPage />
+                </AuthGate>
               </MotionPageWrapper>
             }
           />
@@ -511,7 +535,12 @@ export default function App() {
             path="trade-talent/:id"
             element={
               <MotionPageWrapper>
-                <TradeTalentPage />
+                <AuthGate
+                  title="Sign in to trade"
+                  message="Talent trading requires an active Fame Exchange account. Sign in or create one to access the trading desk."
+                >
+                  <TradeTalentPage />
+                </AuthGate>
               </MotionPageWrapper>
             }
           />

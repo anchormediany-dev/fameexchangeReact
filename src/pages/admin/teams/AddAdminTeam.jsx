@@ -10,6 +10,7 @@ const AddAdminTeam = () => {
     title: "",
     // bio: "",
     isVisible: true,
+    order: 0,
   });
 
   const [file, setFile] = useState(null);
@@ -49,6 +50,7 @@ const AddAdminTeam = () => {
     fd.append("title", form.title.trim());
     // fd.append("bio", form.bio.trim());
     fd.append("isVisible", String(form.isVisible));
+    fd.append("order", String(Number(form.order) || 0));
     if (file) fd.append("imageUrl", file);
     return fd;
   };
@@ -73,6 +75,7 @@ const AddAdminTeam = () => {
         title: "",
         //  bio: "",
         isVisible: true,
+        order: 0,
       });
       setFile(null);
       navigate("/admin/teams");
@@ -161,6 +164,26 @@ const AddAdminTeam = () => {
             >
               Visible on site
             </label>
+          </div>
+
+          {/* Order */}
+          <div>
+            <label className="block text-white text-sm font-medium mb-2">
+              Display Order
+            </label>
+            <div className="flex items-center border rounded-lg px-4 py-3 bg-[#2d2d2d]">
+              <input
+                type="number"
+                name="order"
+                value={form.order}
+                onChange={handleChange}
+                placeholder="0"
+                className="bg-transparent outline-none w-full text-white placeholder-gray-400"
+              />
+            </div>
+            <p className="text-xs text-gray-500 mt-1">
+              Lower numbers appear first on the public site.
+            </p>
           </div>
         </div>
 

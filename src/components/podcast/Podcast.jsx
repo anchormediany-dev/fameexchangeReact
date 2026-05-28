@@ -1,7 +1,10 @@
 import { motion } from "framer-motion";
-import micImage from "../../assets/home/micsectionFameX.png";
+import { useNavigate } from "react-router-dom";
+import micImage from "../../assets/home/thefamepodcast.png";
 
 const Podcast = () => {
+  const navigate = useNavigate();
+  const handlePodcastClick = () => navigate("/signup/fan");
   // Animation variants
   const fadeInUp = {
     hidden: {
@@ -87,7 +90,11 @@ const Podcast = () => {
   return (
     <motion.section
       id="podcast"
-      className="relative h-[30vh] sm:h-[40vh] md:h-[50vh] lg:h-[50vh] xl:h-[80vh] bg-cover bg-center bg-no-repeat w-full flex items-center text-white px-4 sm:px-6 lg:px-8 overflow-hidden"
+      onClick={handlePodcastClick}
+      role="button"
+      tabIndex={0}
+      onKeyDown={(e) => { if (e.key === "Enter" || e.key === " ") handlePodcastClick(); }}
+      className="relative cursor-pointer h-[30vh] sm:h-[40vh] md:h-[50vh] lg:h-[50vh] xl:h-[80vh] bg-cover bg-center bg-no-repeat w-full flex items-center text-white px-4 sm:px-6 lg:px-8 overflow-hidden"
       style={{
         backgroundImage: `url(${micImage})`,
       }}

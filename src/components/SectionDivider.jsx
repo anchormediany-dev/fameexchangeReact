@@ -1,5 +1,5 @@
 import React from "react";
-import dividerImage from "../assets/home/BTSEXPEOPLE.png";
+import dividerImage from "../assets/home/btsbanner.png";
 const SectionDivider = () => {
   return (
     <section className="bg-[#171717] text-white relative overflow-hidden">

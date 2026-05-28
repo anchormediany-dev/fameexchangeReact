@@ -10,7 +10,8 @@ import { useDispatch } from "react-redux";
 import { logout } from "../features/auth/authSlice";
 import { openSignupModal as openSignupModalAction } from "../features/auth/signupModalSlice";
 import ProfileMenu from "./ProfileMenu";
-const navLinks = [
+import { useGetSiteSettingsQuery } from "../app/authApi";
+const defaultNavLinks = [
   { name: "Talent Trading", path: "/trade-talent", isRoute: true },
   { name: "Top BTS", path: "/branded-tokens-shares", isRoute: true },
   { name: "App", scrollTo: "mobileapp" },
@@ -33,6 +34,32 @@ const Navbar = () => {
   const [activeSection, setActiveSection] = useState("home");
   const [ignoreScroll, setIgnoreScroll] = useState(false);
   const location = useLocation();
+  // Site settings (admin-controlled visibility/labels for menu items).
+  // Match settings rows to defaults by `path` so that scroll links
+  // (no path in settings) and route links can both be hidden/relabeled.
+  const { data: siteSettingsResp } = useGetSiteSettingsQuery();
+  const navLinks = useMemo(() => {
+    const items = siteSettingsResp?.data?.menuItems || [];
+    if (!items.length) return defaultNavLinks;
+    const visibleByPath = new Map();
+    items.forEach((m) => {
+      if (m && m.path) {
+        visibleByPath.set(m.path, { visible: m.visible !== false, label: m.label, order: m.order ?? 0 });
+      }
+    });
+    const filtered = defaultNavLinks
+      .filter((l) => {
+        if (!l.path) return true; // scroll links not in admin model — keep visible
+        const cfg = visibleByPath.get(l.path);
+        return cfg ? cfg.visible : true;
+      })
+      .map((l) => {
+        const cfg = l.path ? visibleByPath.get(l.path) : null;
+        return cfg ? { ...l, name: cfg.label || l.name, _order: cfg.order } : l;
+      });
+    filtered.sort((a, b) => (a._order ?? 999) - (b._order ?? 999));
+    return filtered;
+  }, [siteSettingsResp]);
   const navigate = useNavigate();
   const getActiveLink = () => {
     const routeLink = navLinks.find(

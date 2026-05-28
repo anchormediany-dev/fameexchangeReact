@@ -587,29 +587,22 @@ const TalentTokenTicker = ({
           );
 
           if (viewAll) {
-            // Home page: split 8 items into two compact tables side-by-side
-            const left = items.slice(0, 4);
-            const right = items.slice(4, 8);
-            const renderColumn = (rows) => (
-              <div className="bg-gradient-to-br from-[#1a1a1a]/90 to-[#252525]/90 backdrop-blur-xl rounded-3xl border border-gray-600/30 overflow-hidden shadow-2xl">
-                {renderTableHeader(true)}
-                <div className="divide-y divide-gray-700/30">
-                  {rows.map((token, index) =>
-                    renderTableRow(token, index, true)
-                  )}
-                </div>
-              </div>
-            );
+            // Home page: render the SAME single-row wide table as /branded-tokens-shares
+            // but limited to top 8 with a "Discover More" button below.
             return (
               <motion.div
                 variants={fadeInUpVariant}
                 initial="hidden"
                 animate={controls}
                 transition={{ delay: 0.3 }}
-                className="grid grid-cols-1 xl:grid-cols-2 gap-4 md:gap-6"
+                className="overflow-x-auto"
               >
-                {renderColumn(left)}
-                {renderColumn(right)}
+                <div className="min-w-[1000px] bg-gradient-to-br from-[#1a1a1a]/90 to-[#252525]/90 backdrop-blur-xl rounded-3xl border border-gray-600/30 overflow-hidden shadow-2xl">
+                  {renderTableHeader(false)}
+                  <div className="divide-y divide-gray-700/30">
+                    {items.map((token, index) => renderTableRow(token, index))}
+                  </div>
+                </div>
               </motion.div>
             );
           }

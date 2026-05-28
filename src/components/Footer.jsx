@@ -1,14 +1,34 @@
 import { FaFacebookF, FaInstagram, FaYoutube } from "react-icons/fa";
 import { FaXTwitter } from "react-icons/fa6";
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
+import { useState } from "react";
 import siteLogo from "../assets/images/site-logo.png";
 import googlePlay from "../assets/images/google-play.png";
 import appStore from "../assets/images/app-store.png";
 import { Link } from "react-router-dom";
 import Newsletter from "./Newsletter";
 import { useNavigate } from "react-router-dom";
+import { useGetSiteSettingsQuery } from "../app/authApi";
 const Footer = () => {
   const navigate = useNavigate();
+  const [comingSoonOpen, setComingSoonOpen] = useState(false);
+  const [comingSoonPlatform, setComingSoonPlatform] = useState("");
+  const openComingSoon = (platform) => {
+    setComingSoonPlatform(platform);
+    setComingSoonOpen(true);
+  };
+  const closeComingSoon = () => setComingSoonOpen(false);
+  const currentYear = new Date().getFullYear();
+  // Admin-controlled footer link visibility (by section + path).
+  const { data: siteSettingsResp } = useGetSiteSettingsQuery();
+  const footerItems = siteSettingsResp?.data?.footerItems || [];
+  const isFooterVisible = (section, path) => {
+    if (!footerItems.length) return true;
+    const match = footerItems.find(
+      (f) => f.section === section && f.path === path
+    );
+    return match ? match.visible !== false : true;
+  };
   // Animation variants
   const containerVariants = {
     hidden: { opacity: 0 },
@@ -225,6 +245,7 @@ const Footer = () => {
               className="space-y-2 footer_nav_link"
               variants={containerVariants}
             >
+              {isFooterVisible("services", "/how-to-buy-sell") && (
               <motion.li variants={linkVariants}>
                 <motion.div variants={linkVariants} whileHover="hover">
                   <Link to="/how-to-buy-sell" className="hover:text-primary">
@@ -232,6 +253,8 @@ const Footer = () => {
                   </Link>
                 </motion.div>
               </motion.li>
+              )}
+              {isFooterVisible("services", "/anti-money-laundering") && (
               <motion.li variants={linkVariants}>
                 <motion.div variants={linkVariants} whileHover="hover">
                   <Link
@@ -242,6 +265,7 @@ const Footer = () => {
                   </Link>
                 </motion.div>
               </motion.li>
+              )}
             </motion.ul>
           </motion.div>
 
@@ -257,6 +281,7 @@ const Footer = () => {
               className="space-y-2 footer_nav_link"
               variants={containerVariants}
             >
+              {isFooterVisible("about", "/anti-money-laundering") && (
               <motion.li variants={linkVariants}>
                 <motion.div variants={linkVariants} whileHover="hover">
                   <Link
@@ -267,6 +292,8 @@ const Footer = () => {
                   </Link>
                 </motion.div>
               </motion.li>
+              )}
+              {isFooterVisible("about", "/faq") && (
               <motion.li variants={linkVariants}>
                 <motion.div variants={linkVariants} whileHover="hover">
                   <Link to="/faq" className="hover:text-primary">
@@ -274,6 +301,8 @@ const Footer = () => {
                   </Link>
                 </motion.div>
               </motion.li>
+              )}
+              {isFooterVisible("about", "/about-us") && (
               <motion.li variants={linkVariants}>
                 <motion.div variants={linkVariants} whileHover="hover">
                   <Link to="/about-us" className="hover:text-primary">
@@ -281,6 +310,7 @@ const Footer = () => {
                   </Link>
                 </motion.div>
               </motion.li>
+              )}
               {/* <motion.li variants={linkVariants}>
                 <motion.div variants={linkVariants} whileHover="hover">
                   <Link to="/help-support" className="hover:text-primary">
@@ -306,6 +336,7 @@ const Footer = () => {
               <motion.img
                 src={appStore}
                 alt="App Store"
+                onClick={() => openComingSoon("iOS")}
                 className="object-cover max-w-48 cursor-pointer"
                 variants={appImageVariants}
                 whileHover="hover"
@@ -313,6 +344,7 @@ const Footer = () => {
               <motion.img
                 src={googlePlay}
                 alt="Google Play"
+                onClick={() => openComingSoon("Android")}
                 className="object-cover max-w-48 cursor-pointer"
                 variants={appImageVariants}
                 whileHover="hover"
@@ -367,7 +399,7 @@ const Footer = () => {
             variants={containerVariants}
           >
             <motion.p className="footer_copyright" variants={itemVariants}>
-              COPYRIGHT 2025 ALL RIGHTS RESERVED PRIVACY
+              COPYRIGHT {currentYear} ALL RIGHTS RESERVED PRIVACY
             </motion.p>
             <motion.p className="footer_copyright" variants={itemVariants}>
               <Link
@@ -387,6 +419,58 @@ const Footer = () => {
           </motion.div>
         </motion.div>
       </div>
+
+      {/* Coming Soon Modal for App Store / Google Play */}
+      <AnimatePresence>
+        {comingSoonOpen && (
+          <motion.div
+            className="fixed inset-0 z-[100] flex items-center justify-center px-4"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            onClick={closeComingSoon}
+          >
+            <div className="absolute inset-0 bg-black/70 backdrop-blur-sm" />
+            <motion.div
+              initial={{ y: 30, opacity: 0, scale: 0.95 }}
+              animate={{ y: 0, opacity: 1, scale: 1 }}
+              exit={{ y: 30, opacity: 0, scale: 0.95 }}
+              transition={{ duration: 0.25 }}
+              onClick={(e) => e.stopPropagation()}
+              className="relative z-10 w-full max-w-md bg-[#1c1c1c] border border-[#a38b41]/30 rounded-2xl p-6 sm:p-8 shadow-2xl text-center"
+            >
+              <h3 className="text-2xl sm:text-3xl font-bold bg-gradient-to-r from-[#a18a3f] to-[#e6ca7c] bg-clip-text text-transparent mb-2">
+                Coming Soon
+              </h3>
+              <p className="text-gray-300 mb-2">
+                Our {comingSoonPlatform} app is on the way.
+              </p>
+              <p className="text-gray-400 text-sm mb-6">
+                Sign up to join the waiting list and get priority access on launch.
+              </p>
+              <div className="flex flex-col sm:flex-row gap-3 justify-center">
+                <button
+                  type="button"
+                  onClick={() => {
+                    closeComingSoon();
+                    navigate("/signup/fan");
+                  }}
+                  className="bg-gradient-to-r from-[#a18a3f] to-[#e6ca7c] hover:brightness-110 cursor-pointer font-medium text-black py-3 px-6 rounded-md transition-all"
+                >
+                  Sign Up
+                </button>
+                <button
+                  type="button"
+                  onClick={closeComingSoon}
+                  className="border border-white/20 text-white py-3 px-6 rounded-md hover:bg-white/10 transition-all cursor-pointer"
+                >
+                  Close
+                </button>
+              </div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </motion.footer>
   );
 };

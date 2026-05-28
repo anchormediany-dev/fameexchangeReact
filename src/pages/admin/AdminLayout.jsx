@@ -144,6 +144,30 @@ export default function AdminLayout() {
               >
                 FAQ's
               </NavLink>
+              <NavLink
+                to="/admin/inverse-featured"
+                className={({ isActive }) =>
+                  `px-3 py-2 rounded-md ${
+                    isActive
+                      ? "bg-white/10 text-white"
+                      : "text-gray-300 hover:bg-white/5"
+                  }`
+                }
+              >
+                Inverse Featured
+              </NavLink>
+              <NavLink
+                to="/admin/page-visibility"
+                className={({ isActive }) =>
+                  `px-3 py-2 rounded-md ${
+                    isActive
+                      ? "bg-white/10 text-white"
+                      : "text-gray-300 hover:bg-white/5"
+                  }`
+                }
+              >
+                Page Visibility
+              </NavLink>
             </nav>
           </aside>
 

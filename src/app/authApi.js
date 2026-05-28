@@ -435,12 +435,54 @@ export const authApi = api.injectEndpoints({
       }),
       invalidatesTags: ["Team"],
     }),
+    updateTeam: builder.mutation({
+      query: ({ id, formData }) => ({
+        url: `/team/${id}`,
+        method: "PUT",
+        body: formData,
+      }),
+      invalidatesTags: ["Team"],
+    }),
     deleteTeam: builder.mutation({
       query: (id) => ({
         url: `/team/${id}`,
         method: "DELETE",
       }),
       invalidatesTags: ["Team"],
+    }),
+    // Site Settings (admin-controlled navbar/footer visibility, inverse section)
+    getSiteSettings: builder.query({
+      query: () => ({ url: "/site-settings", method: "GET" }),
+      providesTags: ["SiteSettings"],
+    }),
+    updateSiteSettings: builder.mutation({
+      query: (body) => ({
+        url: "/site-settings",
+        method: "PUT",
+        body,
+      }),
+      invalidatesTags: ["SiteSettings"],
+    }),
+    // Talent admin extras (featured-in-inverse + image upload)
+    updateTalentFeatured: builder.mutation({
+      query: ({ id, ...body }) => ({
+        url: `/admin/talents/${id}/featured`,
+        method: "PUT",
+        body,
+      }),
+      invalidatesTags: ["Talent"],
+    }),
+    uploadTalentImage: builder.mutation({
+      query: ({ id, formData }) => ({
+        url: `/admin/talents/${id}/image`,
+        method: "PUT",
+        body: formData,
+      }),
+      invalidatesTags: ["Talent"],
+    }),
+    getInverseFeaturedTalents: builder.query({
+      query: () => ({ url: "/talents/inverse-featured", method: "GET" }),
+      providesTags: ["Talent"],
     }),
     // Customer reviews API
     getReviews: builder.query({
@@ -606,7 +648,15 @@ export const {
   // Our team
   useGetTeamQuery,
   useCreateTeamMutation,
+  useUpdateTeamMutation,
   useDeleteTeamMutation,
+  // Site Settings
+  useGetSiteSettingsQuery,
+  useUpdateSiteSettingsMutation,
+  // Talent admin extras
+  useUpdateTalentFeaturedMutation,
+  useUploadTalentImageMutation,
+  useGetInverseFeaturedTalentsQuery,
   // Delete session
   useDeleteSessionByAdminMutation,
   // Customer reviews
