@@ -3,26 +3,26 @@ import { toast } from "react-toastify";
 import {
   useGetSiteSettingsQuery,
   useUpdateSiteSettingsMutation,
-  useUpdateTalentFeaturedMutation,
-  useUploadTalentImageMutation,
+  useGetTalentQuery,
+  useUpdateUserFeaturedMutation,
+  useUploadUserImageMutation,
 } from "../../app/authApi";
-import { useGetMarketTalentsQuery } from "../../app/tradingApi";
 import { imgSrc } from "../../utils/imgSrc";
 
-// Admin: configure which talents appear in the home Inverse section,
-// in what order, and how many in total.
+// Admin: pick which talent users appear in the home Inverse section,
+// set their display order, change their image, and limit the total shown.
 const AdminInverseFeatured = () => {
   const [search, setSearch] = useState("");
   const { data: talentResp, isLoading, refetch: refetchTalents } =
-    useGetMarketTalentsQuery({ page: 1, limit: 500, search });
+    useGetTalentQuery();
   const { data: settingsResp, refetch: refetchSettings } =
     useGetSiteSettingsQuery();
   const [updateSettings, { isLoading: isSavingSettings }] =
     useUpdateSiteSettingsMutation();
   const [updateFeatured, { isLoading: isSavingFeatured }] =
-    useUpdateTalentFeaturedMutation();
+    useUpdateUserFeaturedMutation();
   const [uploadImage, { isLoading: isUploading }] =
-    useUploadTalentImageMutation();
+    useUploadUserImageMutation();
 
   const [inverseDisplayCount, setInverseDisplayCount] = useState(8);
   const [editingId, setEditingId] = useState(null);
@@ -34,21 +34,31 @@ const AdminInverseFeatured = () => {
     }
   }, [settingsResp]);
 
-  const talents = talentResp?.items || talentResp?.data || [];
+  const users = talentResp?.taleUsers || [];
 
-  const sortedTalents = useMemo(() => {
-    return [...talents].sort((a, b) => {
+  const filtered = useMemo(() => {
+    const q = search.trim().toLowerCase();
+    if (!q) return users;
+    return users.filter((u) =>
+      [u.name, u.full_name, u.email, u.stage_name, u.token_brand_name]
+        .filter(Boolean)
+        .some((v) => String(v).toLowerCase().includes(q))
+    );
+  }, [users, search]);
+
+  const sorted = useMemo(() => {
+    return [...filtered].sort((a, b) => {
       if (a.featured_in_inverse && !b.featured_in_inverse) return -1;
       if (!a.featured_in_inverse && b.featured_in_inverse) return 1;
       return (a.inverse_order ?? 0) - (b.inverse_order ?? 0);
     });
-  }, [talents]);
+  }, [filtered]);
 
-  const handleToggleFeatured = async (talent) => {
+  const handleToggleFeatured = async (user) => {
     try {
       await updateFeatured({
-        id: talent._id,
-        featured_in_inverse: !talent.featured_in_inverse,
+        id: user._id,
+        featured_in_inverse: !user.featured_in_inverse,
       }).unwrap();
       toast.success("Updated");
       refetchTalents();
@@ -57,10 +67,10 @@ const AdminInverseFeatured = () => {
     }
   };
 
-  const handleOrderChange = async (talent, value) => {
+  const handleOrderChange = async (user, value) => {
     try {
       await updateFeatured({
-        id: talent._id,
+        id: user._id,
         inverse_order: Number(value) || 0,
       }).unwrap();
       refetchTalents();
@@ -73,14 +83,14 @@ const AdminInverseFeatured = () => {
     fileInputRefs.current[id]?.click();
   };
 
-  const handleImageChange = async (talent, e) => {
+  const handleImageChange = async (user, e) => {
     const file = e.target.files?.[0];
     if (!file) return;
     try {
-      setEditingId(talent._id);
+      setEditingId(user._id);
       const formData = new FormData();
       formData.append("image", file);
-      await uploadImage({ id: talent._id, formData }).unwrap();
+      await uploadImage({ id: user._id, formData }).unwrap();
       toast.success("Image updated");
       refetchTalents();
     } catch (err) {
@@ -101,6 +111,8 @@ const AdminInverseFeatured = () => {
       toast.error(err?.data?.message || "Update failed");
     }
   };
+
+  const primaryImage = (u) => u?.images?.[0]?.fileUrl || u?.image || "";
 
   return (
     <div className="text-white space-y-6">
@@ -152,7 +164,7 @@ const AdminInverseFeatured = () => {
             <tr>
               <th className="text-left px-4 py-3">Image</th>
               <th className="text-left px-4 py-3">Name</th>
-              <th className="text-left px-4 py-3">Symbol</th>
+              <th className="text-left px-4 py-3">Email</th>
               <th className="text-left px-4 py-3">Featured</th>
               <th className="text-left px-4 py-3 w-24">Order</th>
               <th className="text-left px-4 py-3">Actions</th>
@@ -165,68 +177,78 @@ const AdminInverseFeatured = () => {
                   Loading...
                 </td>
               </tr>
-            ) : sortedTalents.length === 0 ? (
+            ) : sorted.length === 0 ? (
               <tr>
                 <td colSpan={6} className="text-center py-6 text-gray-400">
                   No talents found
                 </td>
               </tr>
             ) : (
-              sortedTalents.map((t) => (
-                <tr key={t._id}>
-                  <td className="px-4 py-3">
-                    {t.image ? (
-                      <img
-                        src={imgSrc(t.image)}
-                        alt={t.name}
-                        className="w-12 h-12 rounded-full object-cover border border-white/10"
+              sorted.map((u) => {
+                const img = primaryImage(u);
+                return (
+                  <tr key={u._id}>
+                    <td className="px-4 py-3">
+                      {img ? (
+                        <img
+                          src={imgSrc(img)}
+                          alt={u.name}
+                          className="w-12 h-12 rounded-full object-cover border border-white/10"
+                        />
+                      ) : (
+                        <div className="w-12 h-12 rounded-full bg-white/10 flex items-center justify-center text-xs text-gray-400">
+                          N/A
+                        </div>
+                      )}
+                    </td>
+                    <td className="px-4 py-3 font-medium">
+                      {u.full_name || u.name}
+                      {u.stage_name && (
+                        <div className="text-xs text-gray-400">
+                          {u.stage_name}
+                        </div>
+                      )}
+                    </td>
+                    <td className="px-4 py-3 text-gray-400">{u.email}</td>
+                    <td className="px-4 py-3">
+                      <input
+                        type="checkbox"
+                        checked={!!u.featured_in_inverse}
+                        disabled={isSavingFeatured}
+                        onChange={() => handleToggleFeatured(u)}
+                        className="w-4 h-4 accent-[#a18a3f]"
                       />
-                    ) : (
-                      <div className="w-12 h-12 rounded-full bg-white/10 flex items-center justify-center text-xs text-gray-400">
-                        N/A
-                      </div>
-                    )}
-                  </td>
-                  <td className="px-4 py-3 font-medium">{t.name}</td>
-                  <td className="px-4 py-3 text-gray-400">{t.symbol}</td>
-                  <td className="px-4 py-3">
-                    <input
-                      type="checkbox"
-                      checked={!!t.featured_in_inverse}
-                      disabled={isSavingFeatured}
-                      onChange={() => handleToggleFeatured(t)}
-                      className="w-4 h-4 accent-[#a18a3f]"
-                    />
-                  </td>
-                  <td className="px-4 py-3">
-                    <input
-                      type="number"
-                      defaultValue={t.inverse_order ?? 0}
-                      onBlur={(e) => handleOrderChange(t, e.target.value)}
-                      className="bg-white/5 border border-white/10 rounded px-2 py-1 text-white w-20"
-                    />
-                  </td>
-                  <td className="px-4 py-3">
-                    <input
-                      ref={(el) => (fileInputRefs.current[t._id] = el)}
-                      type="file"
-                      accept="image/*"
-                      onChange={(e) => handleImageChange(t, e)}
-                      className="hidden"
-                    />
-                    <button
-                      type="button"
-                      onClick={() => handlePickImage(t._id)}
-                      disabled={isUploading && editingId === t._id}
-                      className="text-xs px-3 py-1.5 bg-white/10 hover:bg-white/15 rounded cursor-pointer disabled:opacity-60"
-                    >
-                      {isUploading && editingId === t._id
-                        ? "Uploading..."
-                        : "Change Image"}
-                    </button>
-                  </td>
-                </tr>
-              ))
+                    </td>
+                    <td className="px-4 py-3">
+                      <input
+                        type="number"
+                        defaultValue={u.inverse_order ?? 0}
+                        onBlur={(e) => handleOrderChange(u, e.target.value)}
+                        className="bg-white/5 border border-white/10 rounded px-2 py-1 text-white w-20"
+                      />
+                    </td>
+                    <td className="px-4 py-3">
+                      <input
+                        ref={(el) => (fileInputRefs.current[u._id] = el)}
+                        type="file"
+                        accept="image/*"
+                        onChange={(e) => handleImageChange(u, e)}
+                        className="hidden"
+                      />
+                      <button
+                        type="button"
+                        onClick={() => handlePickImage(u._id)}
+                        disabled={isUploading && editingId === u._id}
+                        className="text-xs px-3 py-1.5 bg-white/10 hover:bg-white/15 rounded cursor-pointer disabled:opacity-60"
+                      >
+                        {isUploading && editingId === u._id
+                          ? "Uploading..."
+                          : "Change Image"}
+                      </button>
+                    </td>
+                  </tr>
+                );
+              })
             )}
           </tbody>
         </table>

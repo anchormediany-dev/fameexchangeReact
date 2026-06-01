@@ -484,6 +484,24 @@ export const authApi = api.injectEndpoints({
       query: () => ({ url: "/talents/inverse-featured", method: "GET" }),
       providesTags: ["Talent"],
     }),
+    // Admin user-based inverse featuring + image upload (operates on User
+    // records flagged role="TALENT" rather than the Talent market collection).
+    updateUserFeatured: builder.mutation({
+      query: ({ id, ...body }) => ({
+        url: `/user/admin/${id}/featured`,
+        method: "PUT",
+        body,
+      }),
+      invalidatesTags: ["Talent"],
+    }),
+    uploadUserImage: builder.mutation({
+      query: ({ id, formData }) => ({
+        url: `/user/admin/${id}/image`,
+        method: "PUT",
+        body: formData,
+      }),
+      invalidatesTags: ["Talent"],
+    }),
     // Customer reviews API
     getReviews: builder.query({
       query: () => ({
@@ -657,6 +675,8 @@ export const {
   useUpdateTalentFeaturedMutation,
   useUploadTalentImageMutation,
   useGetInverseFeaturedTalentsQuery,
+  useUpdateUserFeaturedMutation,
+  useUploadUserImageMutation,
   // Delete session
   useDeleteSessionByAdminMutation,
   // Customer reviews
