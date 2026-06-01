@@ -17,4 +17,8 @@ export default defineConfig({
   optimizeDeps: {
     include: ["react", "react-dom", "react-router-dom"],
   },
+<<<<<<< HEAD
 });
+=======
+});
+>>>>>>> 5f11343 (vite adjust)
