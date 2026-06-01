@@ -1,5 +1,6 @@
-import { FiGlobe, FiPhone, FiExternalLink } from "react-icons/fi";
+import { FiCalendar } from "react-icons/fi";
 import { IoLocationOutline } from "react-icons/io5";
+import { useMemo } from "react";
 import { useNavigate } from "react-router-dom";
 const EventsListings = ({
   events,
@@ -14,6 +15,41 @@ const EventsListings = ({
   const fallbackLogo =
     "https://images.unsplash.com/photo-1531058020387-3be344556be6?w=500&auto=format&fit=crop&q=60";
 
+  // Show events from today forward, sorted by upcoming date first. If a date is
+  // explicitly selected from the calendar, the parent already filters by it so
+  // we just sort within that subset.
+  const orderedEvents = useMemo(() => {
+    const list = Array.isArray(events) ? events.slice() : [];
+    const startOfToday = new Date();
+    startOfToday.setHours(0, 0, 0, 0);
+    const getTime = (e) => {
+      const raw = e?.datetime || e?.date || e?.event_date;
+      const t = raw ? new Date(raw).getTime() : NaN;
+      return Number.isFinite(t) ? t : Number.POSITIVE_INFINITY;
+    };
+    const visible = eventsDate
+      ? list
+      : list.filter((e) => {
+          const t = getTime(e);
+          return !Number.isFinite(t) || t >= startOfToday.getTime();
+        });
+    return visible.sort((a, b) => getTime(a) - getTime(b));
+  }, [events, eventsDate]);
+
+  const formatDateTime = (e) => {
+    const raw = e?.datetime || e?.date || e?.event_date;
+    if (!raw) return "—";
+    const d = new Date(raw);
+    if (Number.isNaN(d.getTime())) return "—";
+    return d.toLocaleString(undefined, {
+      year: "numeric",
+      month: "short",
+      day: "2-digit",
+      hour: "2-digit",
+      minute: "2-digit",
+    });
+  };
+
   const formatSelected = (d) =>
     d
       ? d.toLocaleDateString(undefined, {
@@ -23,7 +59,8 @@ const EventsListings = ({
         })
       : "";
 
-  const empty = !isLoading && !isError && (!events || events.length === 0);
+  const empty =
+    !isLoading && !isError && (!orderedEvents || orderedEvents.length === 0);
   const navigate = useNavigate();
   return (
     <div className=" [overflow-anchor:none] backdrop-blur-xl border border-white/10 rounded-2xl shadow-xl p-3 md:p-4">
@@ -71,15 +108,12 @@ const EventsListings = ({
       {/* Mobile Card View */}
       {!empty && (
         <div className="block sm:hidden space-y-4">
-          {events.map((e, index) => (
+          {orderedEvents.map((e, index) => (
             <div
               key={e.id || index}
               className="bg-white/5 rounded-xl p-4 hover:bg-white/10 transition-colors"
             >
               <div className="flex items-start space-x-3">
-                <span className="w-6 h-6 bg-[#a38b41] rounded-lg flex items-center justify-center text-xs font-bold text-white">
-                  {index + 1}
-                </span>
                 <div className="flex-1 space-y-2">
                   <div className="flex items-center space-x-3">
                     <img
@@ -101,6 +135,10 @@ const EventsListings = ({
                       </span>
                     </div>
                   </div>
+                  <div className="flex items-center space-x-2 text-gray-200 text-sm">
+                    <FiCalendar className="w-4 h-4 text-[#d4c374]" />
+                    <span>{formatDateTime(e)}</span>
+                  </div>
                   <div className="flex items-center space-x-2">
                     <IoLocationOutline className="w-4 h-4 text-green-400" />
                     <span className="text-green-400 font-medium text-sm">
@@ -108,21 +146,6 @@ const EventsListings = ({
                     </span>
                   </div>
                   <p className="text-gray-300 text-sm">{e.address}</p>
-                  <div className="flex flex-wrap gap-2">
-                    <div className="flex items-center space-x-1 text-blue-400 text-sm">
-                      <FiPhone className="w-3 h-3" />
-                      <a href={`tel:${e.phone}`}>{e.phone}</a>
-                    </div>
-                    <a
-                      href={`https://${e.website}`}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="flex items-center space-x-1 text-blue-400 text-sm"
-                    >
-                      <FiGlobe className="w-3 h-3" />
-                      <span className="truncate">{e.website}</span>
-                    </a>
-                  </div>
                 </div>
               </div>
             </div>
@@ -137,10 +160,10 @@ const EventsListings = ({
             <thead>
               <tr className="border-b border-white/10">
                 <th className="text-left p-3 text-gray-300 font-semibold text-sm">
-                  S.No
+                  Event Name
                 </th>
                 <th className="text-left p-3 text-gray-300 font-semibold text-sm">
-                  Event Name
+                  Date &amp; Time
                 </th>
                 <th className="text-left p-3 text-gray-300 font-semibold text-sm">
                   Location
@@ -148,28 +171,14 @@ const EventsListings = ({
                 <th className="text-left p-3 text-gray-300 font-semibold text-sm">
                   Address
                 </th>
-                <th className="text-left p-3 text-gray-300 font-semibold text-sm">
-                  Phone
-                </th>
-                <th className="text-left p-3 text-gray-300 font-semibold text-sm">
-                  Website
-                </th>
               </tr>
             </thead>
             <tbody>
-              {events.map((e, index) => (
+              {orderedEvents.map((e, index) => (
                 <tr
                   key={e.id || index}
                   className="border-b border-white/5 hover:bg-white/5 transition-colors group"
                 >
-                  <td className="p-3">
-                    <span
-                      className="w-6 h-6 bg[#a38b41] rounded-lg flex items-center justify-center text-xs font-bold text-white"
-                      style={{ backgroundColor: "#a38b41" }}
-                    >
-                      {index + 1}
-                    </span>
-                  </td>
                   <td className="p-3">
                     <div className="flex items-center space-x-3">
                       <div className="relative">
@@ -198,6 +207,12 @@ const EventsListings = ({
                     </div>
                   </td>
                   <td className="p-3">
+                    <div className="flex items-center space-x-2 text-gray-200 text-sm whitespace-nowrap">
+                      <FiCalendar className="w-3.5 h-3.5 text-[#d4c374]" />
+                      <span>{formatDateTime(e)}</span>
+                    </div>
+                  </td>
+                  <td className="p-3">
                     <div className="flex items-center space-x-2">
                       <IoLocationOutline className="w-4 h-4 text-green-400" />
                       <span className="text-green-400 font-medium text-sm">
@@ -207,28 +222,6 @@ const EventsListings = ({
                   </td>
                   <td className="p-3">
                     <span className="text-gray-300 text-sm">{e.address}</span>
-                  </td>
-                  <td className="p-3">
-                    <div className="flex items-center space-x-1 text-blue-400 hover:text-blue-300 transition-colors group">
-                      <FiPhone className="w-3 h-3" />
-                      <a href={`tel:${e.phone}`} className="text-sm">
-                        {e.phone}
-                      </a>
-                    </div>
-                  </td>
-                  <td className="p-3">
-                    <a
-                      href={`https://${e.website}`}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="flex items-center space-x-1 text-blue-400 hover:text-blue-300 transition-colors group"
-                    >
-                      <FiGlobe className="w-3 h-3" />
-                      <span className="truncate max-w-28 text-sm">
-                        {e.website}
-                      </span>
-                      <FiExternalLink className="w-3 h-3 opacity-0 group-hover:opacity-100 transition-opacity" />
-                    </a>
                   </td>
                 </tr>
               ))}

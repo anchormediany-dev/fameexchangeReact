@@ -168,14 +168,15 @@ const UltraModernEventsPllatform = () => {
       setLastQuery(clean);
 
       const now = new Date();
+      // Broad search: don't restrict to the current month or to "featured" only,
+      // otherwise the keyword filter ends up matching nothing on most queries.
       await triggerSearch({
         q: clean,
         month: now.getMonth() + 1,
-        withinMonth: true,
+        withinMonth: false,
         year: now.getFullYear(),
-        featured: true,
         status: "active",
-        sort: "-createdAt",
+        sort: "datetime",
       });
     },
     [triggerSearch]

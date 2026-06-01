@@ -1,6 +1,10 @@
 // pages/admin/team/AdminTeams.jsx
 import React, { useMemo, useState } from "react";
-import { useGetTeamQuery, useDeleteTeamMutation } from "../../../app/authApi";
+import {
+  useGetTeamQuery,
+  useDeleteTeamMutation,
+  useUpdateTeamMutation,
+} from "../../../app/authApi";
 import { useNavigate } from "react-router-dom";
 import { FiTrash2 } from "react-icons/fi";
 import { toast } from "react-toastify";
@@ -19,9 +23,15 @@ const AdminTeams = () => {
   const { data, isLoading, isFetching, isError, error, refetch } =
     useGetTeamQuery();
   const [deleteTeam, { isLoading: isDeleting }] = useDeleteTeamMutation();
+  const [updateTeam, { isLoading: isSavingOrder }] = useUpdateTeamMutation();
 
   // API shape: { success, count, data: [...] }
-  const teams = useMemo(() => data?.data || [], [data]);
+  const teams = useMemo(() => {
+    const rows = data?.data || [];
+    return [...rows].sort(
+      (a, b) => (a?.order ?? 0) - (b?.order ?? 0)
+    );
+  }, [data]);
   const isBusy = isLoading || isFetching;
   const empty = !teams || teams.length === 0;
 
@@ -51,6 +61,21 @@ const AdminTeams = () => {
       closeConfirm();
     } catch (err) {
       toast.error(err?.data?.message || err?.error || "Failed to delete");
+    }
+  };
+
+  const handleOrderBlur = async (row, value) => {
+    const next = Number(value);
+    if (!row?._id || !Number.isFinite(next) || next === (row?.order ?? 0)) {
+      return;
+    }
+    try {
+      const formData = new FormData();
+      formData.append("order", String(next));
+      await updateTeam({ id: row._id, formData }).unwrap();
+      toast.success("Order updated");
+    } catch (err) {
+      toast.error(err?.data?.message || err?.error || "Failed to update order");
     }
   };
 
@@ -100,8 +125,8 @@ const AdminTeams = () => {
         <table className="w-full">
           <thead>
             <tr className="border-b border-white/10">
-              <th className="text-left p-3 text-gray-300 font-semibold text-sm">
-                S.No
+              <th className="text-left p-3 text-gray-300 font-semibold text-sm w-24">
+                Order
               </th>
               <th className="text-left p-3 text-gray-300 font-semibold text-sm">
                 Member
@@ -154,12 +179,14 @@ const AdminTeams = () => {
                     className="border-b border-white/5 hover:bg-white/5 transition-colors group"
                   >
                     <td className="p-3">
-                      <span
-                        className="w-6 h-6 rounded-lg flex items-center justify-center text-xs font-bold text-white"
-                        style={{ backgroundColor: "#a38b41" }}
-                      >
-                        {idx + 1}
-                      </span>
+                      <input
+                        type="number"
+                        defaultValue={t?.order ?? 0}
+                        onBlur={(e) => handleOrderBlur(t, e.target.value)}
+                        disabled={isSavingOrder}
+                        title="Lower number shows first"
+                        className="w-16 bg-white/5 border border-white/10 rounded px-2 py-1 text-white text-sm"
+                      />
                     </td>
 
                     <td className="p-3">
