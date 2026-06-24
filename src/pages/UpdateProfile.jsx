@@ -695,6 +695,19 @@ export default function UpdateProfile() {
             <Link className="w-[100%] lg:block hidden" to="/">
               <img src={siteLogo} alt="Logo" />
             </Link>
+            {user?.social_worth > 0 && (
+              <div className="flex flex-col items-center gap-1 w-full">
+                <img
+                  src="/profileverified-fameexchange.png"
+                  alt="Social Verified"
+                  title="Social media accounts verified"
+                  className="w-[100px]"
+                />
+                <span className="text-emerald-400 text-[11px] uppercase tracking-widest font-medium">
+                  Social Verified
+                </span>
+              </div>
+            )}
             <div className="flex flex-col">
               <h1 className="mt-5">
                 <span className="custom-heading-seven ml-5">WELCOME TO</span>
