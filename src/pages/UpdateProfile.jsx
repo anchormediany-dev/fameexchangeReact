@@ -8,6 +8,7 @@ import MotionPageWrapper from "../components/MotionPageWrapper";
 import siteLogo from "../assets/images/site-logo.png";
 import TalentDropdown from "../components/TalentDropdown";
 import RepresentationSection from "../components/RepresentationSection";
+import SocialConnectionsPanel from "../components/SocialConnectionsPanel";
 import { imgSrc } from "../utils/imgSrc";
 import {
   useGetUserByIdQuery,
@@ -497,6 +498,9 @@ export default function UpdateProfile() {
                   </div>
                 </div>
               </section>
+
+              {/* Connected Accounts (OAuth verify + follower fetch → social_worth) */}
+              <SocialConnectionsPanel />
 
               {/* Social Links (read-only) */}
               <section className="bg-[#141414] border border-[#242424] rounded-2xl p-6">
