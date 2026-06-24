@@ -108,6 +108,7 @@ export const api = createApi({
     "TradeHistory",
     "OpenPositions",
     "Position",
+    "SocialConnections",
   ],
   endpoints: () => ({}),
 });

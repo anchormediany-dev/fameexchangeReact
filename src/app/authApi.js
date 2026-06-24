@@ -593,6 +593,31 @@ export const authApi = api.injectEndpoints({
       query: () => "/user/getusers",
       providesTags: ["Users"],
     }),
+    // ── Social Connections (OAuth follower fetch → social_worth) ──────────
+    getSocialConnections: builder.query({
+      query: () => "/social-connections",
+      providesTags: ["SocialConnections"],
+    }),
+    startSocialConnect: builder.mutation({
+      query: (platform) => ({
+        url: `/social-connections/${platform}/start`,
+        method: "POST",
+      }),
+    }),
+    refreshSocialConnection: builder.mutation({
+      query: (platform) => ({
+        url: `/social-connections/${platform}/refresh`,
+        method: "POST",
+      }),
+      invalidatesTags: ["SocialConnections"],
+    }),
+    disconnectSocial: builder.mutation({
+      query: (platform) => ({
+        url: `/social-connections/${platform}`,
+        method: "DELETE",
+      }),
+      invalidatesTags: ["SocialConnections"],
+    }),
   }),
 });
 
@@ -696,4 +721,9 @@ export const {
   useGetProductByIdQuery,
   useCreateProductMutation,
   useUpdateProductMutation,
+  // Social Connections
+  useGetSocialConnectionsQuery,
+  useStartSocialConnectMutation,
+  useRefreshSocialConnectionMutation,
+  useDisconnectSocialMutation,
 } = authApi;

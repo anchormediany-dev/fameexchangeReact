@@ -59,11 +59,21 @@ const TalentCard = ({ user, onClick }) => {
     >
       <div className="flex flex-col w-full items-center gap-2">
         {" "}
-        <div className="w-16 h-16 rounded-full overflow-hidden bg-white/10 flex items-center justify-center shrink-0">
-          {src ? (
-            <img src={src} alt={name} className="w-full h-full object-cover" />
-          ) : (
-            <span className="text-xs text-white/70">{initials || "?"}</span>
+        <div className="relative w-16 h-16 shrink-0">
+          <div className="w-16 h-16 rounded-full overflow-hidden bg-white/10 flex items-center justify-center">
+            {src ? (
+              <img src={src} alt={name} className="w-full h-full object-cover" />
+            ) : (
+              <span className="text-xs text-white/70">{initials || "?"}</span>
+            )}
+          </div>
+          {user.social_worth > 0 && (
+            <img
+              src="/profileverified-fameexchange.png"
+              alt="Social Verified"
+              title="Social media verified"
+              className="absolute -top-1 -left-1 w-6 h-6 drop-shadow-md"
+            />
           )}
         </div>
         <div className="min-w-0 text-left">
