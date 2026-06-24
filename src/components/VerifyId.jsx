@@ -75,8 +75,7 @@ const KYCUpload = () => {
       setFormData({ text: "" });
 
       setTimeout(() => {
-        if (user?.role === "FAN") navigate("/");
-        if (user?.role === "TALENT") navigate("/networth-calculator");
+        navigate("/connect-socials");
       }, 400);
       const imgEl = document.getElementById("image-upload");
       const fileEl = document.getElementById("file-upload");

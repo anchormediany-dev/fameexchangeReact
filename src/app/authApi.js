@@ -599,9 +599,10 @@ export const authApi = api.injectEndpoints({
       providesTags: ["SocialConnections"],
     }),
     startSocialConnect: builder.mutation({
-      query: (platform) => ({
+      query: ({ platform, returnTo }) => ({
         url: `/social-connections/${platform}/start`,
         method: "POST",
+        body: returnTo ? { returnPath: returnTo } : {},
       }),
     }),
     refreshSocialConnection: builder.mutation({

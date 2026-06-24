@@ -49,7 +49,7 @@ const fmt = (n) => {
   return String(n);
 };
 
-export default function SocialConnectionsPanel() {
+export default function SocialConnectionsPanel({ returnTo } = {}) {
   const { data, isLoading, isFetching, refetch } =
     useGetSocialConnectionsQuery();
   const [startConnect, { isLoading: isStarting }] =
@@ -87,7 +87,7 @@ export default function SocialConnectionsPanel() {
 
   const handleConnect = async (platform) => {
     try {
-      const res = await startConnect(platform).unwrap();
+      const res = await startConnect({ platform, returnTo }).unwrap();
       if (res?.url) {
         window.location.href = res.url; // full redirect to the provider
       }
