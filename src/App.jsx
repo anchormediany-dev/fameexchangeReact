@@ -66,6 +66,7 @@ import AddAdminReviews from "./pages/admin/reviews/AddAdminReviews";
 import AdminTeams from "./pages/admin/teams/AdminTeams";
 import AddAdminTeam from "./pages/admin/teams/AddAdminTeam";
 import UpdateProfile from "./pages/UpdateProfile";
+import ConnectSocials from "./pages/ConnectSocials";
 import FanProfile from "./pages/fan/FanProfile";
 import ContactPage from "./pages/contact/ContactPage";
 import BrandedTalentSharesPage from "./pages/branded_talent_shares/BrandedTalentSharesPage";
@@ -601,6 +602,16 @@ export default function App() {
               </MotionPageWrapper>
             }
           />
+          <Route element={<ProtectedRoute />}>
+            <Route
+              path="connect-socials"
+              element={
+                <MotionPageWrapper>
+                  <ConnectSocials />
+                </MotionPageWrapper>
+              }
+            />
+          </Route>
           <Route element={<ProtectedRoute />}>
             <Route
               path="networth-calculator"
