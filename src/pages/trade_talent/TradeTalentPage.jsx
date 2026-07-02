@@ -2,14 +2,7 @@
 import { useParams, useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { toast } from "react-toastify";
-import {
-  AreaChart,
-  Area,
-  XAxis,
-  YAxis,
-  Tooltip,
-  ResponsiveContainer,
-} from "recharts";
+import CandlestickChart from "../../components/CandlestickChart";
 import {
   useGetTalentByIdQuery,
   useGetTalentQuoteQuery,
@@ -26,7 +19,7 @@ import TradeSuccessModal from "../../components/trading/TradeSuccessModal";
 import ClosePositionModal from "../../components/trading/ClosePositionModal";
 import DepositModal from "../../components/trading/DepositModal";
 
-// â”€â”€ helpers â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// â"€â"€ helpers â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€
 const fmt = (n, d = 2) => Number(n || 0).toFixed(d);
 // Bid/Ask formatter: prefer the live API value when present and > 0;
 // otherwise show 0.1000 instead of leaving the box blank or pre-filled
@@ -50,7 +43,7 @@ const TradeTalentPage = () => {
   const { id: talentIdParam } = useParams();
   const navigate = useNavigate();
   const user = useSelector((s) => s.auth.user);
-  // â”€â”€ local state â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+  // â"€â"€ local state â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€
   const [selectedTalentId, setSelectedTalentId] = useState(talentIdParam || "");
   const [tradeType, setTradeType] = useState("buy");
   const [amount, setAmount] = useState("");
@@ -85,7 +78,7 @@ const TradeTalentPage = () => {
     return () => document.removeEventListener("mousedown", handler);
   }, [talentDropdownOpen]);
 
-  // â”€â”€ API queries â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+  // â"€â"€ API queries â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€
   // ── API queries ──────────────────────────────────────────────────────────
   // Use the SAME talent listing endpoint as /inverse so the dropdown is
   // populated by /user/getusers (taleUsers). Filtered to TALENT role and
@@ -142,19 +135,10 @@ const TradeTalentPage = () => {
   const quote = quoteData?.quote;
   const wallet = walletData?.wallet;
   const positions = positionsData?.positions || [];
-  const chartPoints = (chartData?.data || []).map((p) => ({
-    time: new Date(p.recorded_at).toLocaleString([], {
-      month: "short",
-      day: "numeric",
-      hour: "2-digit",
-      minute: "2-digit",
-    }),
-    price: p.price,
-    volume: p.volume,
-  }));
+  const chartPoints = chartData?.data || [];
   const stats = statsData?.stats?.stats;
 
-  // â”€â”€ preview debounce â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+  // â"€â"€ preview debounce â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€
   const fetchPreview = useCallback(
     async (amt) => {
       if (!selectedTalentId || !amt || parseFloat(amt) <= 0) {
@@ -205,7 +189,7 @@ const TradeTalentPage = () => {
     return () => clearInterval(expiryInterval.current);
   }, [quoteExpiry]);
 
-  // â”€â”€ execute trade â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+  // â"€â"€ execute trade â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€
   const handleConfirmTrade = async () => {
     if (!previewData || !previewData.can_execute) return;
     const idempotency_key = `${user?._id || user?.id}-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`;
@@ -227,21 +211,6 @@ const TradeTalentPage = () => {
     }
   };
 
-  // â”€â”€ chart tooltip â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
-  const ChartTooltip = ({ active, payload }) => {
-    if (!active || !payload?.length) return null;
-    const d = payload[0].payload;
-    return (
-      <div className="bg-[#1a1a1a] border border-[#333] rounded-lg px-3 py-2 text-xs">
-        <div className="text-gray-400">{d.time}</div>
-        <div className="text-white font-mono">${fmt(d.price, 4)}</div>
-        {d.volume != null && (
-          <div className="text-gray-500">Vol: {formatVol(d.volume)}</div>
-        )}
-      </div>
-    );
-  };
-
   const ranges = ["1D", "1W", "1M", "3M", "1Y", "5Y", "10Y"];
   const statPeriods = [
     { key: "24h", label: "24H" },
@@ -255,9 +224,9 @@ const TradeTalentPage = () => {
   return (
     <div className="w-full bg-[#0a0a0a] min-h-screen pt-20 md:pt-24 pb-16 px-4 sm:px-6 lg:px-8">
       <div className="container mx-auto mt-6 lg:mt-10">
-        {/* â”€â”€ Main Grid â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */}
+        {/* â"€â"€ Main Grid â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€ */}
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 lg:gap-8">
-          {/* â”€â”€ Left: Order Box â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */}
+          {/* â"€â"€ Left: Order Box â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€ */}
           <div className="lg:col-span-1 space-y-6">
             <div className="bg-[#111111] border border-[#1f1f1f] rounded-2xl p-4 md:p-5">
               {/* BUY / SELL tabs */}
@@ -498,7 +467,7 @@ const TradeTalentPage = () => {
                         onClick={() => fetchPreview(amount)}
                         className="text-[#c9a227] text-xs underline cursor-pointer"
                       >
-                        Quote expired â€” Refresh
+                        Quote expired â€" Refresh
                       </button>
                     </div>
                   )}
@@ -575,7 +544,7 @@ const TradeTalentPage = () => {
             </div>
           </div>
 
-          {/* â”€â”€ Right: Chart + Stats â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */}
+          {/* â"€â"€ Right: Chart + Stats â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€ */}
           <div className="lg:col-span-2 space-y-6">
             {/* Chart Card */}
             <div className="bg-[#111111] border border-[#1f1f1f] rounded-2xl p-4 md:p-5">
@@ -646,60 +615,11 @@ const TradeTalentPage = () => {
                   </div>
 
                   {/* Chart */}
-                  <div className="w-full h-72 md:h-80">
+                  <div className="w-full">
                     {chartPoints.length > 0 ? (
-                      <ResponsiveContainer width="100%" height="100%">
-                        <AreaChart
-                          data={chartPoints}
-                          margin={{ top: 5, right: 10, left: 0, bottom: 5 }}
-                        >
-                          <defs>
-                            <linearGradient
-                              id="priceGrad"
-                              x1="0"
-                              y1="0"
-                              x2="0"
-                              y2="1"
-                            >
-                              <stop
-                                offset="5%"
-                                stopColor="#c9a227"
-                                stopOpacity={0.3}
-                              />
-                              <stop
-                                offset="95%"
-                                stopColor="#c9a227"
-                                stopOpacity={0}
-                              />
-                            </linearGradient>
-                          </defs>
-                          <XAxis
-                            dataKey="time"
-                            axisLine={false}
-                            tickLine={false}
-                            tick={{ fill: "#6b7280", fontSize: 10 }}
-                            minTickGap={30}
-                          />
-                          <YAxis
-                            domain={["auto", "auto"]}
-                            axisLine={false}
-                            tickLine={false}
-                            tick={{ fill: "#6b7280", fontSize: 10 }}
-                            tickFormatter={(v) => `$${v}`}
-                            width={60}
-                          />
-                          <Tooltip content={<ChartTooltip />} />
-                          <Area
-                            type="monotone"
-                            dataKey="price"
-                            stroke="#c9a227"
-                            strokeWidth={2}
-                            fill="url(#priceGrad)"
-                          />
-                        </AreaChart>
-                      </ResponsiveContainer>
+                      <CandlestickChart data={chartPoints} height={320} />
                     ) : (
-                      <div className="flex items-center justify-center h-full text-gray-600">
+                      <div className="flex items-center justify-center h-80 text-gray-600 text-sm">
                         No chart data available
                       </div>
                     )}
@@ -901,7 +821,7 @@ const TradeTalentPage = () => {
         </div>
       </div>
 
-      {/* â”€â”€ Modals â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */}
+      {/* â"€â"€ Modals â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€ */}
       {showSuccessModal && (
         <TradeSuccessModal
           trade={showSuccessModal}

@@ -1,91 +1,102 @@
+import { lazy, Suspense } from "react";
 import { Routes, Route, useLocation, Outlet, Navigate } from "react-router-dom";
-import { AnimatePresence } from "framer-motion";
-import Login from "./pages/login/Login";
-import MotionPageWrapper from "./components/MotionPageWrapper";
+import { Link } from "react-router-dom";
+import { AnimatePresence, motion } from "framer-motion";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import FAQ from "./pages/FAQ";
+
+// ── Always-eager: routing infrastructure, layouts, persistent UI ─────────────
+import MotionPageWrapper from "./components/MotionPageWrapper";
 import ProtectedRoute from "./routes/ProtectedRoute";
-// import Dashboard from "./pages/dashboard/Dashboard";
-import BrandedTokens from "./pages/branded_tokens/BrandedTokens";
-import TalentTokens from "./pages/talent_tokens/TalentTokens";
-import HelpSupport from "./pages/help_support/HelpSupport";
-import AboutUs from "./pages/about/AboutUs";
-import Regions from "./pages/us_international_english/Regions";
-import AntiMoneyLaundering from "./pages/anti_money_laundering/AntiMoneyLaundering";
-import Faq from "./pages/faq/Faq";
-import HowToBuySell from "./pages/how_to_buy_sell/HowToBuySell";
-import TermsConditions from "./pages/terms_conditions/TermsConditions";
-import PrivacyPolicy from "./pages/privacy_policy/PrivacyPolicy";
-import TalentProfile from "./pages/talent_profile/TalentProfile";
-import { Link } from "react-router-dom";
-import { motion } from "framer-motion";
-import siteLogo from "./assets/images/site-logo.png";
-// import MeetGreetPage from "./pages/meet_greet/MeetGreetPage";
-import InversePage from "./pages/inverse/InversePage";
-import InverseCheckoutPage from "./pages/inverse/InverseCheckoutPage";
-import EventsPage from "./pages/events/EventsPage";
-import FutureMusicians from "./pages/future_musicians/FutureMusicians";
-import TradingAccountPage from "./pages/trading_account/TradingAccountPage";
-import TradeTalentPage from "./pages/trade_talent/TradeTalentPage";
-import TradingDashboard from "./pages/trade_talent/TradingDashboard";
+import GuestOnlyRoute from "./routes/GuestOnlyRoute";
 import AuthGate from "./components/AuthGate";
-import Home from "./pages/home/Home";
 import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
-import TalentDashboard from "./pages/talent_dashboard/TalentDashboard";
-import TalentListing from "./pages/talent/TalentListing";
-import SignupOtpVerification from "./components/SignupOtpVerification";
-import VerifyId from "./components/VerifyId";
-import NetworthCalculator from "./components/NetworthCalculator";
-import GuestOnlyRoute from "./routes/GuestOnlyRoute";
-import EventCreateForm from "./pages/create_events/EventCreateForm";
-import AdminLayout from "./pages/admin/AdminLayout";
-import AdminHome from "./pages/admin/AdminHome";
-import AdminNewsletter from "./pages/admin/AdminNewsletter";
-import AdminContact from "./pages/admin/AdminContact";
-import OurTeam from "./pages/team/OurTeam";
-import CustomerReview from "./pages/customer_review/CustomerReview";
-import EventDetails from "./pages/events/EventDetails";
-import SignupTalent from "./pages/signup/SignupTalent";
-import SignupFan from "./pages/signup/SignupFan";
-import SignupModal from "./components/SignupModal";
-import ForgotPassword from "./components/ForgotPassword";
-import Verification from "./components/Verification";
-import ResetPassword from "./components/ResetPassword";
-import TalentProfileForFan from "./pages/talent_profile_fan/TalentProfileForFan";
-import TalentCompactList from "./pages/TalentsListForFan";
-import AdminFaq from "./pages/admin/AdminFaq";
-import AdminInverseFeatured from "./pages/admin/AdminInverseFeatured";
-import AdminPageVisibility from "./pages/admin/AdminPageVisibility";
-import AdminEventsListings from "./pages/admin/AdminEventsListings";
-import AdminInverse from "./pages/admin/AdminInverse";
-import AdminUsers from "./pages/admin/AdminUsers";
-import AdminReviews from "./pages/admin/reviews/AdminReviews";
-import AddAdminReviews from "./pages/admin/reviews/AddAdminReviews";
-import AdminTeams from "./pages/admin/teams/AdminTeams";
-import AddAdminTeam from "./pages/admin/teams/AddAdminTeam";
-import UpdateProfile from "./pages/UpdateProfile";
-import ConnectSocials from "./pages/ConnectSocials";
-import FanProfile from "./pages/fan/FanProfile";
-import ContactPage from "./pages/contact/ContactPage";
-import BrandedTalentSharesPage from "./pages/branded_talent_shares/BrandedTalentSharesPage";
-import Unauthorized from "./pages/Unauthorized";
-import AdminKycListings from "./pages/admin/AdminKycListings";
-import KYCDetailsPage from "./pages/KYCDetailsPage";
-import FanProfileForAdmin from "./pages/admin/FanProfileForAdmin";
-import TalentProfileForAdmin from "./pages/admin/TalentProfileForAdmin";
-import CheckoutPage from "./pages/checkout_pages/Checkout";
-import AttendeesStep from "./pages/checkout_pages/steps/AttendeesStep";
-import BillingStep from "./pages/checkout_pages/steps/BillingStep";
-import PaymentStep from "./pages/checkout_pages/steps/PaymentStep";
-import ConfirmationStep from "./pages/checkout_pages/steps/ConfirmationStep";
-import CheckoutLayout from "./pages/checkout_pages/CheckoutLayout";
-import AdminProductsListings from "./pages/admin/AdminProductsListings";
-import AddProduct from "./pages/admin/AddProduct";
-import AllProducts from "./pages/AllProducts";
-import ProductCheckoutPage from "./pages/product_checkout/ProductCheckoutPage";
 import SessionExpiredModal from "./components/SessionExpiredModal";
+import NotFound from "./pages/NotFound";
+import Unauthorized from "./pages/Unauthorized";
+import siteLogo from "./assets/images/site-logo.png";
+
+// ── Lazy page components — each splits into its own JS chunk ─────────────────
+const Home = lazy(() => import("./pages/home/Home"));
+const Login = lazy(() => import("./pages/login/Login"));
+const SignupTalent = lazy(() => import("./pages/signup/SignupTalent"));
+const SignupFan = lazy(() => import("./pages/signup/SignupFan"));
+const SignupOtpVerification = lazy(() => import("./components/SignupOtpVerification"));
+const ForgotPassword = lazy(() => import("./components/ForgotPassword"));
+const Verification = lazy(() => import("./components/Verification"));
+const ResetPassword = lazy(() => import("./components/ResetPassword"));
+const VerifyId = lazy(() => import("./components/VerifyId"));
+const ConnectSocials = lazy(() => import("./pages/ConnectSocials"));
+const NetworthCalculator = lazy(() => import("./components/NetworthCalculator"));
+const UpdateProfile = lazy(() => import("./pages/UpdateProfile"));
+const TalentProfileForFan = lazy(() => import("./pages/talent_profile_fan/TalentProfileForFan"));
+const TalentProfile = lazy(() => import("./pages/talent_profile/TalentProfile"));
+const TalentCompactList = lazy(() => import("./pages/TalentsListForFan"));
+const TalentListing = lazy(() => import("./pages/talent/TalentListing"));
+const TalentDashboard = lazy(() => import("./pages/talent_dashboard/TalentDashboard"));
+const FanProfile = lazy(() => import("./pages/fan/FanProfile"));
+const FanProfileForAdmin = lazy(() => import("./pages/admin/FanProfileForAdmin"));
+const TalentProfileForAdmin = lazy(() => import("./pages/admin/TalentProfileForAdmin"));
+const KYCDetailsPage = lazy(() => import("./pages/KYCDetailsPage"));
+const TradeTalentPage = lazy(() => import("./pages/trade_talent/TradeTalentPage"));
+const TradingDashboard = lazy(() => import("./pages/trade_talent/TradingDashboard"));
+const TradingAccountPage = lazy(() => import("./pages/trading_account/TradingAccountPage"));
+const InversePage = lazy(() => import("./pages/inverse/InversePage"));
+const InverseCheckoutPage = lazy(() => import("./pages/inverse/InverseCheckoutPage"));
+const EventsPage = lazy(() => import("./pages/events/EventsPage"));
+const EventDetails = lazy(() => import("./pages/events/EventDetails"));
+const EventCreateForm = lazy(() => import("./pages/create_events/EventCreateForm"));
+const CheckoutLayout = lazy(() => import("./pages/checkout_pages/CheckoutLayout"));
+const CheckoutPage = lazy(() => import("./pages/checkout_pages/Checkout"));
+const AttendeesStep = lazy(() => import("./pages/checkout_pages/steps/AttendeesStep"));
+const BillingStep = lazy(() => import("./pages/checkout_pages/steps/BillingStep"));
+const PaymentStep = lazy(() => import("./pages/checkout_pages/steps/PaymentStep"));
+const ConfirmationStep = lazy(() => import("./pages/checkout_pages/steps/ConfirmationStep"));
+const FutureMusicians = lazy(() => import("./pages/future_musicians/FutureMusicians"));
+const ContactPage = lazy(() => import("./pages/contact/ContactPage"));
+const OurTeam = lazy(() => import("./pages/team/OurTeam"));
+const CustomerReview = lazy(() => import("./pages/customer_review/CustomerReview"));
+const BrandedTalentSharesPage = lazy(() => import("./pages/branded_talent_shares/BrandedTalentSharesPage"));
+const AllProducts = lazy(() => import("./pages/AllProducts"));
+const ProductCheckoutPage = lazy(() => import("./pages/product_checkout/ProductCheckoutPage"));
+const BrandedTokens = lazy(() => import("./pages/branded_tokens/BrandedTokens"));
+const TalentTokens = lazy(() => import("./pages/talent_tokens/TalentTokens"));
+const FAQ = lazy(() => import("./pages/FAQ"));
+const Faq = lazy(() => import("./pages/faq/Faq"));
+const HowToBuySell = lazy(() => import("./pages/how_to_buy_sell/HowToBuySell"));
+const AboutUs = lazy(() => import("./pages/about/AboutUs"));
+const PrivacyPolicy = lazy(() => import("./pages/privacy_policy/PrivacyPolicy"));
+const TermsConditions = lazy(() => import("./pages/terms_conditions/TermsConditions"));
+const AntiMoneyLaundering = lazy(() => import("./pages/anti_money_laundering/AntiMoneyLaundering"));
+const Regions = lazy(() => import("./pages/us_international_english/Regions"));
+const HelpSupport = lazy(() => import("./pages/help_support/HelpSupport"));
+// ── Admin pages (heaviest — only loaded by ADMIN role) ───────────────────────
+const AdminLayout = lazy(() => import("./pages/admin/AdminLayout"));
+const AdminHome = lazy(() => import("./pages/admin/AdminHome"));
+const AdminNewsletter = lazy(() => import("./pages/admin/AdminNewsletter"));
+const AdminContact = lazy(() => import("./pages/admin/AdminContact"));
+const AdminFaq = lazy(() => import("./pages/admin/AdminFaq"));
+const AdminUsers = lazy(() => import("./pages/admin/AdminUsers"));
+const AdminKycListings = lazy(() => import("./pages/admin/AdminKycListings"));
+const AdminEventsListings = lazy(() => import("./pages/admin/AdminEventsListings"));
+const AdminInverse = lazy(() => import("./pages/admin/AdminInverse"));
+const AdminInverseFeatured = lazy(() => import("./pages/admin/AdminInverseFeatured"));
+const AdminPageVisibility = lazy(() => import("./pages/admin/AdminPageVisibility"));
+const AdminReviews = lazy(() => import("./pages/admin/reviews/AdminReviews"));
+const AddAdminReviews = lazy(() => import("./pages/admin/reviews/AddAdminReviews"));
+const AdminTeams = lazy(() => import("./pages/admin/teams/AdminTeams"));
+const AddAdminTeam = lazy(() => import("./pages/admin/teams/AddAdminTeam"));
+const AdminProductsListings = lazy(() => import("./pages/admin/AdminProductsListings"));
+const AddProduct = lazy(() => import("./pages/admin/AddProduct"));
+const FuturesPage = lazy(() => import("./pages/futures/FuturesPage"));
+
+// Spinner shown while any lazy page chunk loads
+const PageLoader = () => (
+  <div className="min-h-screen bg-[#171717] flex items-center justify-center">
+    <div className="w-6 h-6 border-2 border-[#F3BA18] border-t-transparent rounded-full animate-spin" />
+  </div>
+);
 
 // Simple Black Header Component
 const SimpleHeader = () => {
@@ -183,6 +194,7 @@ export default function App() {
 
   return (
     <AnimatePresence mode="wait">
+      <Suspense fallback={<PageLoader />}>
       <Routes location={location} key={location.pathname}>
         <Route path="/" element={<MainLayout />}>
           <Route
@@ -498,6 +510,12 @@ export default function App() {
                 <EventDetails />
               </MotionPageWrapper>
             }
+          />
+
+          {/* Futures tier (Fame Futures) */}
+          <Route
+            path="futures"
+            element={<FuturesPage />}
           />
 
           {/* future_musicians Page */}
@@ -842,7 +860,11 @@ export default function App() {
             </MotionPageWrapper>
           }
         />
+
+        {/* 404 Catch-All */}
+        <Route path="*" element={<NotFound />} />
       </Routes>
+      </Suspense>
       <ToastContainer
         position="top-right"
         autoClose={3000}

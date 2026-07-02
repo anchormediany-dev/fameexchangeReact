@@ -1,17 +1,36 @@
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
+import { toast } from "react-toastify";
 import MotionPageWrapper from "../components/MotionPageWrapper";
 import SocialConnectionsPanel from "../components/SocialConnectionsPanel";
 import siteLogo from "../assets/images/site-logo.png";
 import { Link } from "react-router-dom";
+import { useApplyToBeTalentMutation } from "../app/tradingApi";
 
 export default function ConnectSocials() {
   const navigate = useNavigate();
   const user = useSelector((s) => s?.auth?.user);
+  const [applyToBeTalent, { isLoading: applying }] = useApplyToBeTalentMutation();
+  const [applicationResult, setApplicationResult] = useState(null);
 
-  const handleContinue = () => {
+  const goNext = () => {
     if (user?.role === "TALENT") navigate("/networth-calculator");
     else navigate("/");
+  };
+
+  const handleContinue = async () => {
+    if (user?.role !== "TALENT") {
+      goNext();
+      return;
+    }
+    try {
+      const result = await applyToBeTalent().unwrap();
+      setApplicationResult(result);
+    } catch (e) {
+      toast.error(e?.data?.message || "Couldn't calculate your network's net worth right now.");
+      goNext();
+    }
   };
 
   return (
@@ -46,7 +65,7 @@ export default function ConnectSocials() {
             <div className="mt-6 flex flex-col sm:flex-row items-center justify-between gap-3">
               <button
                 type="button"
-                onClick={handleContinue}
+                onClick={goNext}
                 className="text-white/50 text-sm hover:text-white/70 transition"
               >
                 Skip for now
@@ -54,9 +73,10 @@ export default function ConnectSocials() {
               <button
                 type="button"
                 onClick={handleContinue}
-                className="custom-button-two px-10 py-3 rounded-lg font-semibold text-sm"
+                disabled={applying}
+                className="custom-button-two px-10 py-3 rounded-lg font-semibold text-sm disabled:opacity-50"
               >
-                Continue →
+                {applying ? "Calculating…" : "What's Your Network's Net Worth? →"}
               </button>
             </div>
           </div>
@@ -79,6 +99,37 @@ export default function ConnectSocials() {
           </div>
         </div>
       </div>
+
+      {applicationResult && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 px-4">
+          <div className="bg-[#1f1f1f] border border-[#333] rounded-2xl p-8 max-w-md w-full text-center space-y-5">
+            <div className="text-4xl">{applicationResult.tier === "tradeable" ? "🎉" : "🌟"}</div>
+            <h3 className="text-white text-xl font-bold">
+              {applicationResult.tier === "tradeable" ? "You're Tradeable!" : "You're a Future!"}
+            </h3>
+            <p className="text-gray-300 text-sm leading-relaxed">{applicationResult.message}</p>
+            <div className="flex flex-col gap-3">
+              <a
+                href={applicationResult.redirect_url}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="custom-button-two px-6 py-3 rounded-lg font-semibold text-sm"
+              >
+                {applicationResult.tier === "tradeable"
+                  ? "Click here to view your Talent profile →"
+                  : "Click here to visit Fame Futures →"}
+              </a>
+              <button
+                type="button"
+                onClick={goNext}
+                className="text-white/50 text-sm hover:text-white/70 transition"
+              >
+                Continue to dashboard
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </MotionPageWrapper>
   );
 }

@@ -109,6 +109,9 @@ export const api = createApi({
     "OpenPositions",
     "Position",
     "SocialConnections",
+    "Ledger",
+    "FuturesTalents",
+    "FuturesPledges",
   ],
   endpoints: () => ({}),
 });

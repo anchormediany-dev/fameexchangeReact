@@ -44,9 +44,19 @@ const Notifications = ({ userData, error, isError, isLoading }) => {
               <div className="flex items-start justify-between gap-4">
                 <div className="flex items-start space-x-3 flex-1 min-w-0">
                   <FaBell className="text-yellow-400 mt-1 flex-shrink-0" />
-                  <span className="text-sm text-gray-300 leading-relaxed">
-                    {notification.description}
-                  </span>
+                  <div className="text-sm text-gray-300 leading-relaxed">
+                    <span>{notification.description}</span>
+                    {notification.link && (
+                      <a
+                        href={notification.link}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="ml-1 text-[#F3BA18] font-medium hover:underline whitespace-nowrap"
+                      >
+                        Click here →
+                      </a>
+                    )}
+                  </div>
                 </div>
 
                 <div>

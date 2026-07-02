@@ -1,29 +1,22 @@
 import React, { useState } from "react";
-import {
-  LineChart,
-  Line,
-  XAxis,
-  YAxis,
-  Tooltip,
-  ResponsiveContainer,
-} from "recharts";
 import { SlSettings } from "react-icons/sl";
 import { IoCheckmark } from "react-icons/io5";
+import CandlestickChart from "./CandlestickChart";
 import PurchaseConfirmationModal from "./PurchaseConfirmationModal";
-const data = [
-  { time: "1", value: 0.003 },
-  { time: "2", value: 0.002 },
-  { time: "3", value: 0.0018 },
-  { time: "4", value: 0.0025 },
-  { time: "5", value: 0.004 },
-  { time: "6", value: 0.0035 },
-  { time: "7", value: 0.0045 },
-  { time: "8", value: 0.004 },
-  { time: "9", value: 0.005 },
-  { time: "10", value: 0.0048 },
-  { time: "11", value: 0.0052 },
-  { time: "12", value: 0.005 },
-];
+
+// Portfolio value snapshots — synthesize OHLC so the chart renders as candlesticks
+const RAW = [0.003, 0.002, 0.0018, 0.0025, 0.004, 0.0035, 0.0045, 0.004, 0.005, 0.0048, 0.0052, 0.005];
+const BASE_TS = 1704067200; // 2024-01-01 00:00 UTC in seconds
+const data = RAW.map((close, i) => {
+  const open = i === 0 ? close : RAW[i - 1];
+  return {
+    time: BASE_TS + i * 86400,
+    open,
+    high: Math.max(open, close) * 1.004,
+    low:  Math.min(open, close) * 0.996,
+    close,
+  };
+});
 
 export default function PortfolioDashboard({ userData }) {
   const [activeTab, setActiveTab] = useState("buy");
@@ -75,32 +68,8 @@ export default function PortfolioDashboard({ userData }) {
         </div>
 
         {/* Chart Section */}
-        <div className="w-full h-48 md:h-72 mb-8 bg-[#151515] rounded-xl shadow-inner px-2 md:px-6 py-4">
-          <ResponsiveContainer width="100%" height="100%">
-            <LineChart
-              data={data}
-              margin={{ top: 10, right: 0, left: 0, bottom: 0 }}
-            >
-              <XAxis dataKey="time" hide />
-              <YAxis domain={["auto", "auto"]} hide />
-              <Tooltip
-                contentStyle={{ backgroundColor: "#111", border: "none" }}
-                labelStyle={{ color: "#fff" }}
-              />
-              <Line
-                type="monotone"
-                dataKey="value"
-                stroke="#ffffff"
-                strokeWidth={1.5}
-                dot={false}
-                strokeOpacity={0.9}
-                className="shadow-lg"
-                style={{
-                  filter: "drop-shadow(0 0 6px rgba(255, 255, 255, 0.4))",
-                }}
-              />
-            </LineChart>
-          </ResponsiveContainer>
+        <div className="w-full mb-8 bg-[#151515] rounded-xl shadow-inner px-2 md:px-4 py-4">
+          <CandlestickChart data={data} height={240} />
         </div>
 
         <div className=" relative z-10">

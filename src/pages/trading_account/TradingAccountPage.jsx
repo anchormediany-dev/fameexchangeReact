@@ -1,15 +1,6 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import { motion, useInView, useAnimation } from "framer-motion";
-import {
-  LineChart,
-  Line,
-  XAxis,
-  YAxis,
-  CartesianGrid,
-  Tooltip,
-  ResponsiveContainer,
-  ReferenceLine,
-} from "recharts";
+import CandlestickChart from "../../components/CandlestickChart";
 
 const TalentTokenDashboard = () => {
   const [selectedTalent, setSelectedTalent] = useState("Taylor Swift");
@@ -239,6 +230,24 @@ const TalentTokenDashboard = () => {
   const currentData = talentData[selectedTalent] || talentData["Taylor Swift"];
   const chartData = currentData.data[timeframe] || currentData.data["1 Month"];
 
+  const ohlcData = useMemo(() => {
+    return chartData.map((p, i) => {
+      const prev = i === 0 ? p.price : chartData[i - 1].price;
+      const open = prev;
+      const close = p.price;
+      const ts = p.timestamp
+        ? Math.floor(new Date(p.timestamp).getTime() / 1000)
+        : 1704067200 + i * 3600;
+      return {
+        time: ts,
+        open,
+        high: Math.max(open, close) * 1.004,
+        low:  Math.min(open, close) * 0.996,
+        close,
+      };
+    });
+  }, [chartData]);
+
   // Dynamic holdings data that updates based on selections
   const [holdingsData, setHoldingsData] = useState([
     { talentName: "Taylor Swift", tokenName: "SWIFTY", amount: 1 },
@@ -263,29 +272,6 @@ const TalentTokenDashboard = () => {
     // The calculations are already happening in the render cycle
   }, [amount, selectedTalent, holdingsData]);
 
-  // Custom tooltip for the chart
-  const CustomTooltip = ({ active, payload, label }) => {
-    if (active && payload && payload.length) {
-      const data = payload[0];
-      return (
-        <div className="bg-[#1a1a1a] border border-gray-600 rounded-lg p-3 ">
-          <p className="text-gray-300 text-sm">{`Date: ${label}`}</p>
-          <p className="text-white font-bold">
-            {`Price: $${data.value.toFixed(2)}`}
-          </p>
-          <p
-            className={`text-sm ${
-              currentData.change >= 0 ? "text-green-400" : "text-red-400"
-            }`}
-          >
-            {currentData.change >= 0 ? "↗" : "↘"}{" "}
-            {Math.abs(currentData.changePercent).toFixed(2)}%
-          </p>
-        </div>
-      );
-    }
-    return null;
-  };
 
   const handleOrderOptionChange = (option) => {
     setOrderOptions((prev) => ({
@@ -512,52 +498,9 @@ const TalentTokenDashboard = () => {
                 </div>
               </div>
 
-              {/* Dynamic Chart with Recharts */}
-              <div className="w-full h-80 mb-6">
-                <ResponsiveContainer width="100%" height="100%">
-                  <LineChart data={chartData}>
-                    <CartesianGrid
-                      strokeDasharray="3 3"
-                      stroke="#4b5563"
-                      strokeOpacity={0.3}
-                    />
-                    <XAxis
-                      dataKey="date"
-                      stroke="#9ca3af"
-                      tick={{ fontSize: 12 }}
-                    />
-                    <YAxis
-                      stroke="#9ca3af"
-                      tick={{ fontSize: 12 }}
-                      domain={["dataMin - 2", "dataMax + 2"]}
-                    />
-                    <Tooltip content={<CustomTooltip />} />
-                    <Line
-                      type="monotone"
-                      dataKey="price"
-                      stroke={currentData.change >= 0 ? "#34d399" : "#f87171"}
-                      strokeWidth={3}
-                      dot={{
-                        fill: currentData.change >= 0 ? "#34d399" : "#f87171",
-                        strokeWidth: 2,
-                        r: 4,
-                      }}
-                      activeDot={{
-                        r: 6,
-                        stroke: currentData.change >= 0 ? "#34d399" : "#f87171",
-                        strokeWidth: 2,
-                        fill: "#fff",
-                      }}
-                      animationDuration={1500}
-                    />
-                    <ReferenceLine
-                      y={stats.avgPrice}
-                      stroke="#a38b41"
-                      strokeDasharray="5 5"
-                      strokeOpacity={0.6}
-                    />
-                  </LineChart>
-                </ResponsiveContainer>
+              {/* Dynamic Chart */}
+              <div className="w-full mb-6">
+                <CandlestickChart data={ohlcData} height={320} />
               </div>
 
               {/* Available balance and current invested amount */}

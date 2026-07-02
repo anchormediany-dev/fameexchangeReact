@@ -109,7 +109,7 @@ export const tradingApi = api.injectEndpoints({
     getTalentChart: builder.query({
       query: ({ id, range = "1D" }) => ({
         url: `/talents/${id}/chart`,
-        params: { range },
+        params: { range, format: "ohlc" },
       }),
     }),
 
@@ -237,6 +237,107 @@ export const tradingApi = api.injectEndpoints({
         "WalletTransactions",
       ],
     }),
+
+    // ── Admin: FameScore valuation engine ───────────────────
+    previewFameScore: builder.query({
+      query: ({ userId, min_price, max_price }) => ({
+        url: "/admin/talents/preview-famescore",
+        params: { userId, min_price, max_price },
+      }),
+    }),
+
+    createTalentAdmin: builder.mutation({
+      query: (body) => ({
+        url: "/admin/talents",
+        method: "POST",
+        body,
+      }),
+      invalidatesTags: ["MarketTalents", "TopTalents"],
+    }),
+
+    recalculateTalentValuation: builder.mutation({
+      query: (talentId) => ({
+        url: `/admin/talents/${talentId}/recalculate-valuation`,
+        method: "POST",
+      }),
+      invalidatesTags: ["MarketTalents", "TopTalents"],
+    }),
+
+    recalculateAllValuations: builder.mutation({
+      query: () => ({
+        url: "/admin/talents/recalculate-all-valuations",
+        method: "POST",
+      }),
+      invalidatesTags: ["MarketTalents", "TopTalents"],
+    }),
+
+    // ── Admin: hash-chained ledger ───────────────────────────
+    getLedgerEntries: builder.query({
+      query: ({ page = 1, limit = 50 } = {}) => ({
+        url: "/admin/ledger",
+        params: { page, limit },
+      }),
+      providesTags: ["Ledger"],
+    }),
+
+    verifyLedger: builder.query({
+      query: ({ from, to } = {}) => ({
+        url: "/admin/ledger/verify",
+        params: { ...(from ? { from } : {}), ...(to ? { to } : {}) },
+      }),
+    }),
+
+    // ── Futures tier ─────────────────────────────────────────
+    getFuturesTalents: builder.query({
+      query: () => "/futures",
+      providesTags: ["FuturesTalents"],
+    }),
+
+    simulatePledge: builder.mutation({
+      query: ({ talentId, userId, amount }) => ({
+        url: `/admin/futures/${talentId}/simulate-pledge`,
+        method: "POST",
+        body: { userId, amount },
+      }),
+      invalidatesTags: ["FuturesTalents", "FuturesPledges"],
+    }),
+
+    getPledgesForTalent: builder.query({
+      query: (talentId) => `/admin/futures/${talentId}/pledges`,
+      providesTags: ["FuturesPledges"],
+    }),
+
+    // ── Fan-facing futures pledge flow ───────────────────────
+    startFanPledge: builder.mutation({
+      query: ({ talentId, amount, currency = "usd" }) => ({
+        url: `/futures/${talentId}/pledge-intent`,
+        method: "POST",
+        body: { amount, currency },
+      }),
+    }),
+
+    confirmFanPledge: builder.mutation({
+      query: ({ paymentIntentId }) => ({
+        url: "/futures/pledge-confirm",
+        method: "POST",
+        body: { paymentIntentId },
+      }),
+      invalidatesTags: ["FuturesTalents", "FuturesPledges"],
+    }),
+
+    getMyPledges: builder.query({
+      query: () => "/futures/my-pledges",
+      providesTags: ["FuturesPledges"],
+    }),
+
+    // ── Self-serve talent application ───────────────────────
+    applyToBeTalent: builder.mutation({
+      query: () => ({
+        url: "/talents/apply",
+        method: "POST",
+      }),
+      invalidatesTags: ["MarketTalents", "FuturesTalents"],
+    }),
   }),
 });
 
@@ -268,4 +369,22 @@ export const {
   useGetPositionQuery,
   useClosePositionPreviewMutation,
   useClosePositionMutation,
+  // Admin: FameScore
+  useLazyPreviewFameScoreQuery,
+  useCreateTalentAdminMutation,
+  useRecalculateTalentValuationMutation,
+  useRecalculateAllValuationsMutation,
+  // Admin: Ledger
+  useGetLedgerEntriesQuery,
+  useLazyVerifyLedgerQuery,
+  // Futures
+  useGetFuturesTalentsQuery,
+  useSimulatePledgeMutation,
+  useGetPledgesForTalentQuery,
+  // Fan pledge flow
+  useStartFanPledgeMutation,
+  useConfirmFanPledgeMutation,
+  useGetMyPledgesQuery,
+  // Self-serve application
+  useApplyToBeTalentMutation,
 } = tradingApi;

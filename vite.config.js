@@ -17,8 +17,19 @@ export default defineConfig({
   optimizeDeps: {
     include: ["react", "react-dom", "react-router-dom"],
   },
-<<<<<<< HEAD
+
+  build: {
+    target: "es2020",
+    outDir: "dist",
+    rollupOptions: {
+      output: {
+        manualChunks: {
+          "vendor-react": ["react", "react-dom", "react-router-dom"],
+          "vendor-redux": ["redux", "@reduxjs/toolkit", "react-redux", "redux-persist"],
+          "vendor-ui": ["framer-motion", "react-toastify"],
+          "vendor-stripe": ["@stripe/react-stripe-js", "@stripe/stripe-js"],
+        },
+      },
+    },
+  },
 });
-=======
-});
->>>>>>> 5f11343 (vite adjust)
