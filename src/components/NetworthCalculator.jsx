@@ -1,11 +1,18 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useNetworthCalculateMutation } from "../app/authApi";
-import FameExchangeLoader from "./FameExchangeLoader";
+import FameScoreCalculatingModal from "./FameScoreCalculatingModal";
+
+// The scrapers behind this endpoint can occasionally resolve very fast
+// (cached/short-circuited platforms), so we still floor the animation at a
+// short minimum — but the real wait here is usually several seconds of
+// actual Puppeteer scraping, unlike the OAuth apply flow.
+const MIN_CALCULATING_MS = 1800;
 
 const NetworthCalculator = () => {
   const navigate = useNavigate();
-  const [saveNetworth, { isLoading, error }] = useNetworthCalculateMutation();
+  const [saveNetworth] = useNetworthCalculateMutation();
+  const [calculating, setCalculating] = useState(false);
 
   const [formData, setFormData] = useState({
     fullName: "",
@@ -73,10 +80,15 @@ const NetworthCalculator = () => {
     if (!validateForm()) return;
 
     setIsSubmitting(true);
+    setCalculating(true);
+    const startedAt = Date.now();
+    const waitForMinimum = async () => {
+      const remaining = MIN_CALCULATING_MS - (Date.now() - startedAt);
+      if (remaining > 0) await new Promise((r) => setTimeout(r, remaining));
+    };
 
     try {
       const response = await saveNetworth(formData).unwrap();
-      console.log("Networth saved successfully:", response);
       const netWorth =
         response?.data?.netWorth ??
         response?.data?.data?.netWorth ??
@@ -85,10 +97,9 @@ const NetworthCalculator = () => {
 
       if (netWorth !== null && netWorth !== undefined) {
         localStorage.setItem("netWorth", String(netWorth));
-        console.log("netWorth:", netWorth);
-      } else {
-        console.log("netWorth not found in response");
       }
+
+      await waitForMinimum();
 
       navigate("/", {
         state: {
@@ -98,13 +109,14 @@ const NetworthCalculator = () => {
       });
     } catch (error) {
       console.error("Failed to save networth:", error);
-      // Handle API errors here
+      await waitForMinimum();
       setErrors((prev) => ({
         ...prev,
         apiError: "Failed to calculate networth. Please try again.",
       }));
     } finally {
       setIsSubmitting(false);
+      setCalculating(false);
     }
   };
 
@@ -327,12 +339,9 @@ const NetworthCalculator = () => {
             {isSubmitting ? "Calculating..." : "Calculate"}
           </button>
         </form>
-        {isLoading && (
-          <div className="mt-6 flex justify-center">
-            <FameExchangeLoader />
-          </div>
-        )}
       </div>
+
+      <FameScoreCalculatingModal open={calculating} />
     </div>
   );
 };

@@ -4,14 +4,21 @@ import { useSelector } from "react-redux";
 import { toast } from "react-toastify";
 import MotionPageWrapper from "../components/MotionPageWrapper";
 import SocialConnectionsPanel from "../components/SocialConnectionsPanel";
+import FameScoreCalculatingModal from "../components/FameScoreCalculatingModal";
 import siteLogo from "../assets/images/site-logo.png";
 import { Link } from "react-router-dom";
 import { useApplyToBeTalentMutation } from "../app/tradingApi";
 
+// The apply endpoint itself is fast (no live scraping happens at apply-time),
+// so we hold the calculating animation open for at least this long —
+// otherwise it just flashes and undersells what's happening.
+const MIN_CALCULATING_MS = 2800;
+
 export default function ConnectSocials() {
   const navigate = useNavigate();
   const user = useSelector((s) => s?.auth?.user);
-  const [applyToBeTalent, { isLoading: applying }] = useApplyToBeTalentMutation();
+  const [applyToBeTalent] = useApplyToBeTalentMutation();
+  const [calculating, setCalculating] = useState(false);
   const [applicationResult, setApplicationResult] = useState(null);
 
   const goNext = () => {
@@ -24,12 +31,24 @@ export default function ConnectSocials() {
       goNext();
       return;
     }
+
+    setCalculating(true);
+    const startedAt = Date.now();
+    const waitForMinimum = async () => {
+      const remaining = MIN_CALCULATING_MS - (Date.now() - startedAt);
+      if (remaining > 0) await new Promise((r) => setTimeout(r, remaining));
+    };
+
     try {
       const result = await applyToBeTalent().unwrap();
+      await waitForMinimum();
       setApplicationResult(result);
     } catch (e) {
+      await waitForMinimum();
       toast.error(e?.data?.message || "Couldn't calculate your network's net worth right now.");
       goNext();
+    } finally {
+      setCalculating(false);
     }
   };
 
@@ -73,10 +92,10 @@ export default function ConnectSocials() {
               <button
                 type="button"
                 onClick={handleContinue}
-                disabled={applying}
+                disabled={calculating}
                 className="custom-button-two px-10 py-3 rounded-lg font-semibold text-sm disabled:opacity-50"
               >
-                {applying ? "Calculating…" : "What's Your Network's Net Worth? →"}
+                {calculating ? "Calculating…" : "What's Your Network's Net Worth? →"}
               </button>
             </div>
           </div>
@@ -99,6 +118,8 @@ export default function ConnectSocials() {
           </div>
         </div>
       </div>
+
+      <FameScoreCalculatingModal open={calculating} />
 
       {applicationResult && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 px-4">
