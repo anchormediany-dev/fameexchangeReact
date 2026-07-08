@@ -24,11 +24,10 @@ const MAX = 50000;
 const BONUS = 15;
 
 // ── Inner payment form (needs stripe + elements context) ─────────────────────
-function CardForm({ clientSecret, paymentIntentId, talent, amount, onSuccess, onCancel }) {
+function CardForm({ clientSecret, paymentIntentId, talent, amount, onSuccess, onCancel, busy, setBusy }) {
   const stripe = useStripe();
   const elements = useElements();
   const [confirmFanPledge] = useConfirmFanPledgeMutation();
-  const [busy, setBusy] = useState(false);
   const [cardError, setCardError] = useState("");
 
   const handleSubmit = async (e) => {
@@ -120,8 +119,14 @@ export default function PledgeModal({ talent, onClose }) {
   const [amountError, setAmountError] = useState("");
   const [intentData, setIntentData] = useState(null); // { clientSecret, paymentIntentId }
   const [successData, setSuccessData] = useState(null);
+  const [busy, setBusy] = useState(false); // true while Stripe/backend confirmation is in flight
 
   const [startFanPledge, { isLoading: starting }] = useStartFanPledgeMutation();
+
+  const handleClose = () => {
+    if (busy) return; // don't let a charge-in-progress get dismissed with no confirmation
+    onClose();
+  };
 
   const handleAmountSubmit = async (e) => {
     e.preventDefault();
@@ -141,6 +146,7 @@ export default function PledgeModal({ talent, onClose }) {
   const handleSuccess = (result) => {
     setSuccessData(result);
     setStep("success");
+    toast.success("Pledge confirmed!");
   };
 
   const titles = {
@@ -155,7 +161,12 @@ export default function PledgeModal({ talent, onClose }) {
         {/* Header */}
         <div className="flex items-center justify-between">
           <h2 className="text-white font-bold text-lg">{titles[step]}</h2>
-          <button onClick={onClose} className="text-gray-500 hover:text-white transition p-1">
+          <button
+            onClick={handleClose}
+            disabled={busy}
+            title={busy ? "Please wait for your payment to finish processing" : undefined}
+            className="text-gray-500 hover:text-white transition p-1 disabled:opacity-30 disabled:hover:text-gray-500"
+          >
             <FiX size={20} />
           </button>
         </div>
@@ -247,6 +258,8 @@ export default function PledgeModal({ talent, onClose }) {
               amount={amount}
               onSuccess={handleSuccess}
               onCancel={() => setStep("amount")}
+              busy={busy}
+              setBusy={setBusy}
             />
           </Elements>
         )}

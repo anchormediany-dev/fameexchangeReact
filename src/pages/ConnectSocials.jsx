@@ -121,13 +121,11 @@ export default function ConnectSocials() {
 
       <FameScoreCalculatingModal open={calculating} />
 
-      {applicationResult && (
+      {applicationResult && applicationResult.tier === "tradeable" && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 px-4">
           <div className="bg-[#1f1f1f] border border-[#333] rounded-2xl p-8 max-w-md w-full text-center space-y-5">
-            <div className="text-4xl">{applicationResult.tier === "tradeable" ? "🎉" : "🌟"}</div>
-            <h3 className="text-white text-xl font-bold">
-              {applicationResult.tier === "tradeable" ? "You're Tradeable!" : "You're a Future!"}
-            </h3>
+            <div className="text-4xl">🎉</div>
+            <h3 className="text-white text-xl font-bold">You're Tradeable!</h3>
             <p className="text-gray-300 text-sm leading-relaxed">{applicationResult.message}</p>
             <div className="flex flex-col gap-3">
               <a
@@ -136,9 +134,42 @@ export default function ConnectSocials() {
                 rel="noopener noreferrer"
                 className="custom-button-two px-6 py-3 rounded-lg font-semibold text-sm"
               >
-                {applicationResult.tier === "tradeable"
-                  ? "Click here to view your Talent profile →"
-                  : "Click here to visit Fame Futures →"}
+                Click here to view your Talent profile →
+              </a>
+              <button
+                type="button"
+                onClick={goNext}
+                className="text-white/50 text-sm hover:text-white/70 transition"
+              >
+                Continue to dashboard
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {applicationResult && applicationResult.tier !== "tradeable" && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 px-4">
+          <div className="bg-[#1f1f1f] border border-[#333] rounded-2xl p-8 max-w-md w-full text-center space-y-5">
+            <div className="text-4xl">🌟</div>
+            <h3 className="text-white text-xl font-bold">You're Not Quite Tradeable Yet</h3>
+            <p className="text-gray-300 text-sm leading-relaxed">{applicationResult.message}</p>
+            <p className="text-gray-500 text-xs">Here's how you can keep building toward the live market:</p>
+            <div className="flex flex-col gap-3">
+              <button
+                type="button"
+                onClick={() => navigate("/futures")}
+                className="custom-button-two px-6 py-3 rounded-lg font-semibold text-sm"
+              >
+                Build My Futures Profile →
+              </button>
+              <a
+                href={applicationResult.redirect_url}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="px-6 py-3 rounded-lg font-semibold text-sm border border-[#444] text-white hover:border-[#F3BA18] hover:text-[#F3BA18] transition"
+              >
+                Visit famefutures.com ↗
               </a>
               <button
                 type="button"
