@@ -168,6 +168,18 @@ export default function AdminLayout() {
               >
                 Page Visibility
               </NavLink>
+              <NavLink
+                to="/admin/famescore-dashboard"
+                className={({ isActive }) =>
+                  `px-3 py-2 rounded-md ${
+                    isActive
+                      ? "bg-white/10 text-white"
+                      : "text-gray-300 hover:bg-white/5"
+                  }`
+                }
+              >
+                FameScore Dashboard
+              </NavLink>
             </nav>
           </aside>
 

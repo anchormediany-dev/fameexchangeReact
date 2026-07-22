@@ -185,7 +185,7 @@ const TradingDashboard = () => {
                         <th className="py-3 text-center">Side</th>
                         <th className="py-3 text-right">Entry Price</th>
                         <th className="py-3 text-right">Current Price</th>
-                        <th className="py-3 text-right">Units</th>
+                        <th className="py-3 text-right">Shares</th>
                         <th className="py-3 text-right">Invested</th>
                         <th className="py-3 text-right">P&L</th>
                         <th className="py-3 text-right">Opened</th>
@@ -235,7 +235,7 @@ const TradingDashboard = () => {
                             ${fmt(pos.current_price)}
                           </td>
                           <td className="py-3 text-right font-mono text-gray-300">
-                            {fmt(pos.units, 6)}
+                            {fmt(pos.units, 0)}
                           </td>
                           <td className="py-3 text-right font-mono text-gray-300">
                             ${fmt(pos.invested_amount)}
@@ -357,7 +357,7 @@ const TradingDashboard = () => {
                         <th className="py-3 text-center">Type</th>
                         <th className="py-3 text-right">Price</th>
                         <th className="py-3 text-right">Amount</th>
-                        <th className="py-3 text-right">Units</th>
+                        <th className="py-3 text-right">Shares</th>
                         <th className="py-3 text-right">Fee</th>
                         <th className="py-3 text-right">P&L</th>
                         <th className="py-3 text-right">Ref</th>
@@ -414,7 +414,7 @@ const TradingDashboard = () => {
                             ${fmt(t.amount)}
                           </td>
                           <td className="py-3 text-right font-mono text-gray-400">
-                            {fmt(t.units, 6)}
+                            {fmt(t.units, 0)}
                           </td>
                           <td className="py-3 text-right font-mono text-gray-500">
                             ${fmt(t.fee)}

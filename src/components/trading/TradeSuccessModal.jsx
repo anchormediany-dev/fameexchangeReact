@@ -22,8 +22,8 @@ const TradeSuccessModal = ({ trade, onClose }) => {
             <span className="text-white font-mono">${Number(trade?.price || 0).toFixed(2)}</span>
           </div>
           <div className="flex justify-between text-sm">
-            <span className="text-gray-400">Units</span>
-            <span className="text-white font-mono">{Number(trade?.units || 0).toFixed(6)}</span>
+            <span className="text-gray-400">Shares</span>
+            <span className="text-white font-mono">{Number(trade?.units || 0).toFixed(0)}</span>
           </div>
           <div className="flex justify-between text-sm">
             <span className="text-gray-400">Amount</span>

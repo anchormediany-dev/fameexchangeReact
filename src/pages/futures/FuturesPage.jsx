@@ -5,17 +5,18 @@ import PledgeModal from "./PledgeModal";
 import { FiStar, FiClock, FiTrendingUp, FiUsers, FiExternalLink } from "react-icons/fi";
 import MotionPageWrapper from "../../components/MotionPageWrapper";
 
-const MIN_TRADEABLE = 400;
-
+// FameScore is 0-100. Note there's no single "score >= X means qualified"
+// number anymore — qualification is a multi-factor gate (total followers,
+// engagement rate, platform count, growth trend), so a high score here
+// doesn't by itself guarantee this talent would qualify. This bar is just
+// an honest 0-100 strength indicator, not a qualification progress bar.
 function ScoreBar({ score }) {
-  const pct = Math.min(100, ((score || 0) / MIN_TRADEABLE) * 100);
+  const pct = Math.min(100, Math.max(0, score || 0));
   return (
     <div className="space-y-1">
       <div className="flex justify-between text-xs text-gray-400">
         <span>FameScore</span>
-        <span className={score >= MIN_TRADEABLE ? "text-emerald-400" : "text-[#F3BA18]"}>
-          {(score || 0).toFixed(0)} / {MIN_TRADEABLE}
-        </span>
+        <span className="text-[#F3BA18]">{(score || 0).toFixed(0)} / 100</span>
       </div>
       <div className="h-1.5 bg-[#333] rounded-full overflow-hidden">
         <div

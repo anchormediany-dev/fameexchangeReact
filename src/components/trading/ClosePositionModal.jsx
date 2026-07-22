@@ -94,8 +94,8 @@ const ClosePositionModal = ({ position, onClose, onSuccess }) => {
                     <span className="text-white font-mono">${Number(preview.exit_price).toFixed(2)}</span>
                   </div>
                   <div className="flex justify-between text-sm">
-                    <span className="text-gray-400">Units</span>
-                    <span className="text-white font-mono">{Number(preview.units).toFixed(6)}</span>
+                    <span className="text-gray-400">Shares</span>
+                    <span className="text-white font-mono">{Number(preview.units).toFixed(0)}</span>
                   </div>
                   <div className="border-t border-[#1f1f1f] my-2" />
                   <div className="flex justify-between text-sm">

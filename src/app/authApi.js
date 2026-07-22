@@ -17,6 +17,14 @@ export const authApi = api.injectEndpoints({
       }),
     }),
 
+    quickQualify: builder.mutation({
+      query: (data) => ({
+        url: "/auth/quick-qualify",
+        method: "POST",
+        body: data,
+      }),
+    }),
+
     verifyOtp: builder.mutation({
       query: (data) => ({
         url: "/auth/verify-otp",
@@ -625,6 +633,7 @@ export const authApi = api.injectEndpoints({
 export const {
   useSignupMutation,
   useSigninMutation,
+  useQuickQualifyMutation,
   useVerifyOtpMutation,
   useVerifyIdMutation,
   useResendOtpMutation,

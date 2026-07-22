@@ -7,12 +7,14 @@ import gifOne from "../assets/gifs/gif1.gif";
 import gifTwo from "../assets/gifs/gif2.gif";
 import gifThree from "../assets/gifs/gif3.gif";
 import gifFour from "../assets/gifs/gif4.gif";
+import QualifyPopup from "./QualifyPopup";
 const VideoBanner = () => {
   const navigate = useNavigate();
   const popupVideoRef = useRef(null);
   const [showVideoPopup, setShowVideoPopup] = useState(false);
   const [isPopupVideoPlaying, setIsPopupVideoPlaying] = useState(false);
   const [currentGifIndex, setCurrentGifIndex] = useState(0);
+  const [showQualifyPopup, setShowQualifyPopup] = useState(false);
 
   const gifs = [gifOne, gifTwo, gifThree, gifFour];
 
@@ -172,6 +174,17 @@ const VideoBanner = () => {
                 <span className="flex items-center justify-center gap-2">
                   Watch Demo
                   <FaPlay className="text-xs sm:text-sm" />
+                </span>
+              </button>
+
+              <button
+                type="button"
+                onClick={() => setShowQualifyPopup(true)}
+                className="cursor-pointer rounded-full w-full sm:w-auto min-w-[200px] px-6 py-3 sm:px-8 sm:py-4 text-sm sm:text-base border-2 border-[#F3BA18]/60 text-[#F3BA18] font-medium hover:bg-[#F3BA18]/10 hover:border-[#F3BA18] transition-all duration-500 hover:scale-105 focus:outline-none focus:ring-4 focus:ring-[#F3BA18]/20 backdrop-blur-sm"
+              >
+                <span className="flex items-center justify-center gap-2">
+                  See If You Qualify
+                  <FaArrowRight className="text-xs sm:text-sm" />
                 </span>
               </button>
             </div>
@@ -351,6 +364,8 @@ const VideoBanner = () => {
           </div>
         </div>
       )}
+
+      <QualifyPopup open={showQualifyPopup} onClose={() => setShowQualifyPopup(false)} />
     </div>
   );
 };

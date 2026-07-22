@@ -83,6 +83,7 @@ const AdminEventsListings = lazy(() => import("./pages/admin/AdminEventsListings
 const AdminInverse = lazy(() => import("./pages/admin/AdminInverse"));
 const AdminInverseFeatured = lazy(() => import("./pages/admin/AdminInverseFeatured"));
 const AdminPageVisibility = lazy(() => import("./pages/admin/AdminPageVisibility"));
+const AdminFameScoreDashboard = lazy(() => import("./pages/admin/AdminFameScoreDashboard"));
 const AdminReviews = lazy(() => import("./pages/admin/reviews/AdminReviews"));
 const AddAdminReviews = lazy(() => import("./pages/admin/reviews/AddAdminReviews"));
 const AdminTeams = lazy(() => import("./pages/admin/teams/AdminTeams"));
@@ -486,6 +487,14 @@ export default function App() {
                 element={
                   <MotionPageWrapper>
                     <AdminPageVisibility />
+                  </MotionPageWrapper>
+                }
+              />
+              <Route
+                path="famescore-dashboard"
+                element={
+                  <MotionPageWrapper>
+                    <AdminFameScoreDashboard />
                   </MotionPageWrapper>
                 }
               />

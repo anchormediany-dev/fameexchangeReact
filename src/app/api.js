@@ -112,6 +112,7 @@ export const api = createApi({
     "Ledger",
     "FuturesTalents",
     "FuturesPledges",
+    "FameScoreDashboard",
   ],
   endpoints: () => ({}),
 });

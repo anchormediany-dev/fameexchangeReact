@@ -5,6 +5,7 @@ import { toast } from "react-toastify";
 import MotionPageWrapper from "../components/MotionPageWrapper";
 import SocialConnectionsPanel from "../components/SocialConnectionsPanel";
 import FameScoreCalculatingModal from "../components/FameScoreCalculatingModal";
+import FameScoreBreakdownView from "../components/FameScoreBreakdownView";
 import siteLogo from "../assets/images/site-logo.png";
 import { Link } from "react-router-dom";
 import { useApplyToBeTalentMutation } from "../app/tradingApi";
@@ -20,6 +21,7 @@ export default function ConnectSocials() {
   const [applyToBeTalent] = useApplyToBeTalentMutation();
   const [calculating, setCalculating] = useState(false);
   const [applicationResult, setApplicationResult] = useState(null);
+  const [showBreakdown, setShowBreakdown] = useState(false);
 
   const goNext = () => {
     if (user?.role === "TALENT") navigate("/networth-calculator");
@@ -148,29 +150,29 @@ export default function ConnectSocials() {
         </div>
       )}
 
-      {applicationResult && applicationResult.tier !== "tradeable" && (
+      {applicationResult && applicationResult.tier !== "tradeable" && !showBreakdown && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 px-4">
           <div className="bg-[#1f1f1f] border border-[#333] rounded-2xl p-8 max-w-md w-full text-center space-y-5">
-            <div className="text-4xl">🌟</div>
-            <h3 className="text-white text-xl font-bold">You're Not Quite Tradeable Yet</h3>
-            <p className="text-gray-300 text-sm leading-relaxed">{applicationResult.message}</p>
-            <p className="text-gray-500 text-xs">Here's how you can keep building toward the live market:</p>
+            <h3 className="text-white text-xl font-bold">You're Not Tradeable Yet — But You're Close</h3>
+            <p className="text-gray-300 text-sm leading-relaxed">
+              Your FameScore is {Number(applicationResult.fame_score ?? 0).toFixed(1)}. {applicationResult.talent?.qualification_reason}{" "}
+              On FameFutures, early supporters can back you right now while you grow — and when you hit the threshold, you automatically move to TFE.
+            </p>
             <div className="flex flex-col gap-3">
               <button
                 type="button"
                 onClick={() => navigate("/futures")}
                 className="custom-button-two px-6 py-3 rounded-lg font-semibold text-sm"
               >
-                Build My Futures Profile →
+                Start Building on FameFutures →
               </button>
-              <a
-                href={applicationResult.redirect_url}
-                target="_blank"
-                rel="noopener noreferrer"
+              <button
+                type="button"
+                onClick={() => setShowBreakdown(true)}
                 className="px-6 py-3 rounded-lg font-semibold text-sm border border-[#444] text-white hover:border-[#F3BA18] hover:text-[#F3BA18] transition"
               >
-                Visit famefutures.com ↗
-              </a>
+                See What It Takes to Qualify
+              </button>
               <button
                 type="button"
                 onClick={goNext}
@@ -179,6 +181,15 @@ export default function ConnectSocials() {
                 Continue to dashboard
               </button>
             </div>
+          </div>
+        </div>
+      )}
+
+      {applicationResult && applicationResult.tier !== "tradeable" && showBreakdown && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 px-4">
+          <div className="bg-[#1f1f1f] border border-[#333] rounded-2xl p-8 max-w-md w-full space-y-5">
+            <h3 className="text-white text-xl font-bold text-center">Qualification Details</h3>
+            <FameScoreBreakdownView talent={applicationResult.talent} onBack={() => setShowBreakdown(false)} />
           </div>
         </div>
       )}

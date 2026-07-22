@@ -427,9 +427,9 @@ const TradeTalentPage = () => {
                     </span>
                   </div>
                   <div className="flex justify-between">
-                    <span className="text-gray-400">Est. Units</span>
+                    <span className="text-gray-400">Est. Shares</span>
                     <span className="text-white font-mono">
-                      {fmt(previewData.estimated_units, 6)}
+                      {fmt(previewData.estimated_units, 0)}
                     </span>
                   </div>
                   <div className="flex justify-between">
