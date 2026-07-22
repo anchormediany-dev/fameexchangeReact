@@ -2,88 +2,171 @@ import React, { useState } from "react";
 import {
   useUploadKYCDocumentsMutation,
   useGetKYCDocumentsQuery,
+  useGetSocialConnectionsQuery,
 } from "../app/authApi";
 import { useAuth } from "../utils/auth/useAuth";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 import KYCDetailsPageForTalent from "../pages/KYCDetailsPageForTalent";
 
+const theme = {
+  primary: "#a38b41",
+  bg: "bg-[#171717]",
+  card: "bg-gradient-to-br from-[#1a1a1a] to-[#0d0d0d]",
+  border: "border border-white/10",
+  text: "text-white",
+  sub: "text-gray-400",
+};
+
+const TOTAL_STEPS = 6;
+const STEP_LABELS = [
+  "Personal Info",
+  "Government ID",
+  "Selfie",
+  "Social Confirmation",
+  "Listing Fee",
+  "Submit",
+];
+
+const isAdult = (dobString) => {
+  if (!dobString) return false;
+  const dob = new Date(dobString);
+  if (Number.isNaN(dob.getTime())) return false;
+  const eighteenYearsAgo = new Date();
+  eighteenYearsAgo.setFullYear(eighteenYearsAgo.getFullYear() - 18);
+  return dob <= eighteenYearsAgo;
+};
+
+const Dropzone = ({ id, label, hint, file, onChange, onRemove, accept = "image/*" }) => (
+  <div>
+    <label className={`block text-sm font-medium ${theme.text} mb-2`}>{label}</label>
+    {file ? (
+      <div className="relative inline-block">
+        <img
+          src={file.preview}
+          alt={label}
+          className="w-40 h-28 object-cover rounded-lg shadow-sm"
+        />
+        <button
+          type="button"
+          onClick={onRemove}
+          className="absolute -top-2 -right-2 bg-red-500 text-white rounded-full w-6 h-6 flex items-center justify-center"
+        >
+          ×
+        </button>
+      </div>
+    ) : (
+      <div className={`rounded-2xl p-6 text-center border-dashed ${theme.border}`}>
+        <input id={id} type="file" accept={accept} onChange={onChange} className="hidden" />
+        <label
+          htmlFor={id}
+          className={`cursor-pointer inline-flex items-center px-6 py-3 rounded-lg ${theme.border} ${theme.text} hover:bg-white/10`}
+        >
+          Select File
+        </label>
+        {hint && <p className={`text-sm ${theme.sub} mt-2`}>{hint}</p>}
+      </div>
+    )}
+  </div>
+);
+
 const KYCUpload = () => {
   const navigate = useNavigate();
   const { user } = useAuth();
   const { data, isLoading, error } = useGetKYCDocumentsQuery(user?.id);
-  const kycStatus =
-    data?.userDocument?.isKYCVerified || data?.user?.KYC_Verified;
-  console.log(kycStatus);
-  const [formData, setFormData] = useState({ text: "" });
-  const [images, setImages] = useState([]);
-  const [files, setFiles] = useState([]);
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  const [uploadProgress] = useState(0);
-
-  const theme = {
-    primary: "#a38b41",
-    bg: "bg-[#171717]",
-    card: "bg-gradient-to-br from-[#1a1a1a] to-[#0d0d0d]",
-    border: "border border-white/10",
-    text: "text-white",
-    sub: "text-gray-400",
-  };
-
-  const handleImageUpload = (e) => {
-    const selected = Array.from(e.target.files || []);
-    const next = selected.map((f) =>
-      Object.assign(f, {
-        preview: URL.createObjectURL(f),
-        id: Math.random().toString(36).slice(2),
-      })
-    );
-    setImages((p) => [...p, ...next]);
-  };
-  const handleFileUpload = (e) => {
-    const selected = Array.from(e.target.files || []);
-    const next = selected.map((f) =>
-      Object.assign(f, { id: Math.random().toString(36).slice(2) })
-    );
-    setFiles((p) => [...p, ...next]);
-  };
-  const removeImage = (id) => setImages((p) => p.filter((x) => x.id !== id));
-  const removeFile = (id) => setFiles((p) => p.filter((x) => x.id !== id));
-  const formatSize = (bytes = 0) => {
-    if (!bytes) return "0 B";
-    const k = 1024;
-    const sizes = ["B", "KB", "MB", "GB"];
-    const i = Math.floor(Math.log(bytes) / Math.log(k));
-    return `${parseFloat((bytes / Math.pow(k, i)).toFixed(2))} ${sizes[i]}`;
-  };
-
+  const { data: socialData } = useGetSocialConnectionsQuery();
   const [uploadKYCDocuments] = useUploadKYCDocumentsMutation();
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
+  const kycStatus =
+    data?.userDocument?.isKYCVerified || data?.user?.KYC_Verified;
+
+  const [step, setStep] = useState(1);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [errorMsg, setErrorMsg] = useState("");
+  const [submitted, setSubmitted] = useState(false);
+
+  const [personal, setPersonal] = useState({
+    fullLegalName: user?.name || "",
+    dateOfBirth: "",
+    street: "",
+    city: "",
+    state: "",
+    zipCode: "",
+    country: "US",
+    taxId: "",
+  });
+  const [govIdType, setGovIdType] = useState("drivers_license");
+  const [govIdFront, setGovIdFront] = useState(null);
+  const [govIdBack, setGovIdBack] = useState(null);
+  const [selfie, setSelfie] = useState(null);
+  const [socialConfirmed, setSocialConfirmed] = useState(false);
+  const [feeAcknowledged, setFeeAcknowledged] = useState(false);
+
+  const connectedPlatforms = (socialData?.providers || []).filter((p) => p.connected);
+
+  const withPreview = (file) =>
+    file
+      ? Object.assign(file, { preview: URL.createObjectURL(file) })
+      : null;
+
+  const goNext = () => {
+    setErrorMsg("");
+    if (step === 1) {
+      if (!personal.fullLegalName.trim()) return setErrorMsg("Full legal name is required.");
+      if (!isAdult(personal.dateOfBirth)) return setErrorMsg("You must be 18 or older to verify.");
+      if (!personal.street.trim() || !personal.city.trim() || !personal.state.trim() || !personal.zipCode.trim()) {
+        return setErrorMsg("Full residential address is required.");
+      }
+      if (!personal.taxId.trim()) return setErrorMsg("Tax ID / SSN is required.");
+    }
+    if (step === 2) {
+      if (!govIdFront) return setErrorMsg("Please upload the front of your government ID.");
+      if (govIdType !== "passport" && !govIdBack) {
+        return setErrorMsg("Please upload the back of your ID (required for driver's license / state ID).");
+      }
+    }
+    if (step === 3 && !selfie) return setErrorMsg("Please upload a selfie holding your ID.");
+    if (step === 4 && connectedPlatforms.length > 0 && !socialConfirmed) {
+      return setErrorMsg("Please confirm your connected account belongs to you.");
+    }
+    if (step === 5 && !feeAcknowledged) return setErrorMsg("Please acknowledge the listing fee to continue.");
+    setStep((s) => Math.min(TOTAL_STEPS, s + 1));
+  };
+  const goBack = () => {
+    setErrorMsg("");
+    setStep((s) => Math.max(1, s - 1));
+  };
+
+  const handleSubmit = async () => {
     setIsSubmitting(true);
     try {
       const submitData = new FormData();
-      images.forEach((img) => submitData.append("images", img));
-      files.forEach((f) => submitData.append("files", f));
-      submitData.append("text", formData.text);
+      submitData.append("docType", "government_id");
+      submitData.append("govIdType", govIdType);
+      submitData.append("dateOfBirth", personal.dateOfBirth);
+      submitData.append("taxId", personal.taxId);
+      submitData.append(
+        "address",
+        JSON.stringify({
+          street: personal.street,
+          city: personal.city,
+          state: personal.state,
+          zipCode: personal.zipCode,
+          country: personal.country,
+        })
+      );
+      submitData.append("text", `Full legal name: ${personal.fullLegalName}`);
+      submitData.append("govIdFront", govIdFront);
+      if (govIdBack) submitData.append("govIdBack", govIdBack);
+      submitData.append("selfie", selfie);
 
       await uploadKYCDocuments(submitData).unwrap();
-      toast.success("Your KYC documents have been submitted successfully!");
-      setImages([]);
-      setFiles([]);
-      setFormData({ text: "" });
-
-      setTimeout(() => {
-        navigate("/connect-socials");
-      }, 400);
-      const imgEl = document.getElementById("image-upload");
-      const fileEl = document.getElementById("file-upload");
-      if (imgEl) imgEl.value = "";
-      if (fileEl) fileEl.value = "";
+      toast.success("Your KYC application has been submitted!");
+      setSubmitted(true);
     } catch (err) {
       console.error(err);
-      toast.error(err?.data?.message || "Upload failed. Please try again.");
+      toast.error(err?.data?.message || "Submission failed. Please try again.");
+      setErrorMsg(err?.data?.message || "Submission failed. Please try again.");
     } finally {
       setIsSubmitting(false);
     }
@@ -92,277 +175,278 @@ const KYCUpload = () => {
   return (
     <section className={`w-full py-10 container px-4 lg:px-8 ${theme.bg}`}>
       <h1 className={`text-3xl font-bold ${theme.text} mb-6`}>
-        KYC Details{data?.user?.name ? ` – ${data?.user?.name}` : ""}
+        Identity Verification{data?.user?.name ? ` – ${data?.user?.name}` : ""}
       </h1>
-      {/* Details & status like the screenshot */}
-      <KYCDetailsPageForTalent
-        data={data}
-        isLoading={isLoading}
-        error={error}
-      />
-      {/* Submission box - mirrors “KYC Submission” like in the image */}
-      {/* {kycStatus === false && ( */}
-      <div className="mt-12">
-        <div className={`${theme.card} ${theme.border} rounded-2xl p-6`}>
-          <div className="text-center mb-6">
-            <h2 className={`text-2xl font-semibold ${theme.text}`}>
-              KYC Submission
-            </h2>
-            <p className={theme.sub}>
-              Complete your verification by uploading required documents
-            </p>
-          </div>
 
-          <form onSubmit={handleSubmit}>
-            {/* Message */}
-            <div className="mb-6">
-              <label className={`block text-sm font-medium ${theme.text} mb-2`}>
-                Message (Optional)
-              </label>
-              <textarea
-                value={formData.text}
-                onChange={(e) => setFormData({ text: e.target.value })}
-                rows={4}
-                className={`w-full px-4 py-3 rounded-lg bg-white/5 ${theme.text} ${theme.border} outline-none`}
-                style={{ boxShadow: `0 0 0 0px ${theme.primary}` }}
-                onFocus={(e) =>
-                  (e.currentTarget.style.boxShadow = `0 0 0 2px ${theme.primary}`)
-                }
-                onBlur={(e) =>
-                  (e.currentTarget.style.boxShadow = `0 0 0 0px ${theme.primary}`)
-                }
-                placeholder="Add any message..."
-              />
-            </div>
+      <KYCDetailsPageForTalent data={data} isLoading={isLoading} error={error} />
 
-            {/* Images */}
-            <div className="mb-6">
-              <label className={`block text-sm font-medium ${theme.text} mb-3`}>
-                Upload Images
-              </label>
-              <div
-                className={`rounded-2xl p-6 text-center border-dashed ${theme.border}`}
-              >
-                <input
-                  id="image-upload"
-                  type="file"
-                  multiple
-                  accept=".jpeg,.jpg,.png,.gif,.webp"
-                  onChange={handleImageUpload}
-                  className="hidden"
-                />
-                <label
-                  htmlFor="image-upload"
-                  className={`cursor-pointer inline-flex items-center px-6 py-3 rounded-lg ${theme.border} ${theme.text} hover:bg-white/10`}
-                >
-                  <svg
-                    className="w-5 h-5 mr-2"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth="2"
-                      d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 002 2z"
-                    />
-                  </svg>
-                  Select Images
-                </label>
-                <p className={`text-sm ${theme.sub} mt-2`}>
-                  Click to select multiple images
-                </p>
-              </div>
-
-              {images.length > 0 && (
-                <div className="mt-5">
-                  <h4 className={`text-sm font-medium ${theme.text} mb-3`}>
-                    Selected Images ({images.length})
-                  </h4>
-                  <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
-                    {images.map((image) => (
-                      <div key={image.id} className="relative group">
-                        <img
-                          src={image.preview}
-                          alt={image.name}
-                          className="w-full h-24 object-cover rounded-lg shadow-sm"
-                        />
-                        <button
-                          type="button"
-                          onClick={() => removeImage(image.id)}
-                          className="absolute -top-2 -right-2 bg-red-500 text-white rounded-full w-6 h-6 flex items-center justify-center opacity-0 group-hover:opacity-100 transition"
-                        >
-                          ×
-                        </button>
-                        <div className={`text-xs ${theme.sub} truncate mt-1`}>
-                          {image.name}
-                        </div>
-                      </div>
-                    ))}
-                  </div>
+      {!kycStatus && (
+        <div className="mt-12">
+          <div className={`${theme.card} ${theme.border} rounded-2xl p-6`}>
+            {!submitted ? (
+              <>
+                <div className="text-center mb-6">
+                  <p className={`text-xs uppercase tracking-widest mb-2`} style={{ color: theme.primary }}>
+                    Step {step} of {TOTAL_STEPS} — {STEP_LABELS[step - 1]}
+                  </p>
+                  <h2 className={`text-2xl font-semibold ${theme.text}`}>
+                    Before your shares go live, we need to verify your identity
+                  </h2>
+                  <p className={theme.sub}>
+                    This protects you, your fans, and the platform.
+                  </p>
                 </div>
-              )}
-            </div>
 
-            {/* Files */}
-            <div className="mb-6">
-              <label className={`block text-sm font-medium ${theme.text} mb-3`}>
-                Upload Documents
-              </label>
-              <div
-                className={`rounded-2xl p-6 text-center border-dashed ${theme.border}`}
-              >
-                <input
-                  id="file-upload"
-                  type="file"
-                  multiple
-                  accept=".pdf,.doc,.docx,.txt"
-                  onChange={handleFileUpload}
-                  className="hidden"
-                />
-                <label
-                  htmlFor="file-upload"
-                  className={`cursor-pointer inline-flex items-center px-6 py-3 rounded-lg ${theme.border} ${theme.text} hover:bg-white/10`}
-                >
-                  <svg
-                    className="w-5 h-5 mr-2"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth="2"
-                      d="M9 13h6m-3-3v6m-9 1V7a2 2 0 012-2h6l2 2h6a2 2 0 012 2v8a2 2 0 01-2 2H5a2 2 0 01-2-2z"
-                    />
-                  </svg>
-                  Select Documents
-                </label>
-                <p className={`text-sm ${theme.sub} mt-2`}>
-                  Click to select multiple files
-                </p>
-              </div>
-
-              {files.length > 0 && (
-                <div className="mt-5 space-y-2">
-                  {files.map((file) => (
-                    <div
-                      key={file.id}
-                      className={`flex items-center justify-between p-3 rounded-lg ${theme.border}`}
-                    >
-                      <div className="flex items-center">
-                        <svg
-                          className="w-8 h-8 mr-3 text-gray-400"
-                          fill="none"
-                          stroke="currentColor"
-                          viewBox="0 0 24 24"
-                        >
-                          <path
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            strokeWidth="2"
-                            d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586l6.121 6.121V19a2 2 0 01-2 2z"
-                          />
-                        </svg>
-                        <div>
-                          <div className={theme.text}>{file.name}</div>
-                          <div className={`text-xs ${theme.sub}`}>
-                            {formatSize(file.size)}
-                          </div>
-                        </div>
-                      </div>
-                      <button
-                        type="button"
-                        onClick={() => removeFile(file.id)}
-                        className="text-red-400 hover:text-red-300"
-                      >
-                        <svg
-                          className="w-5 h-5"
-                          fill="none"
-                          stroke="currentColor"
-                          viewBox="0 0 24 24"
-                        >
-                          <path
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            strokeWidth="2"
-                            d="M6 18L18 6M6 6l12 12"
-                          />
-                        </svg>
-                      </button>
+                {step === 1 && (
+                  <div className="space-y-4 max-w-xl mx-auto">
+                    <div>
+                      <label className={`block text-sm font-medium ${theme.text} mb-2`}>Full Legal Name</label>
+                      <input
+                        type="text"
+                        value={personal.fullLegalName}
+                        onChange={(e) => setPersonal((p) => ({ ...p, fullLegalName: e.target.value }))}
+                        className={`w-full px-4 py-3 rounded-lg bg-white/5 ${theme.text} ${theme.border} outline-none`}
+                      />
                     </div>
-                  ))}
-                </div>
-              )}
-            </div>
+                    <div>
+                      <label className={`block text-sm font-medium ${theme.text} mb-2`}>Date of Birth</label>
+                      <input
+                        type="date"
+                        value={personal.dateOfBirth}
+                        onChange={(e) => setPersonal((p) => ({ ...p, dateOfBirth: e.target.value }))}
+                        className={`w-full px-4 py-3 rounded-lg bg-white/5 ${theme.text} ${theme.border} outline-none`}
+                      />
+                    </div>
+                    <div className="grid grid-cols-2 gap-3">
+                      <input
+                        type="text"
+                        placeholder="Street address"
+                        value={personal.street}
+                        onChange={(e) => setPersonal((p) => ({ ...p, street: e.target.value }))}
+                        className={`col-span-2 px-4 py-3 rounded-lg bg-white/5 ${theme.text} ${theme.border} outline-none`}
+                      />
+                      <input
+                        type="text"
+                        placeholder="City"
+                        value={personal.city}
+                        onChange={(e) => setPersonal((p) => ({ ...p, city: e.target.value }))}
+                        className={`px-4 py-3 rounded-lg bg-white/5 ${theme.text} ${theme.border} outline-none`}
+                      />
+                      <input
+                        type="text"
+                        placeholder="State"
+                        value={personal.state}
+                        onChange={(e) => setPersonal((p) => ({ ...p, state: e.target.value }))}
+                        className={`px-4 py-3 rounded-lg bg-white/5 ${theme.text} ${theme.border} outline-none`}
+                      />
+                      <input
+                        type="text"
+                        placeholder="ZIP code"
+                        value={personal.zipCode}
+                        onChange={(e) => setPersonal((p) => ({ ...p, zipCode: e.target.value }))}
+                        className={`px-4 py-3 rounded-lg bg-white/5 ${theme.text} ${theme.border} outline-none`}
+                      />
+                      <input
+                        type="text"
+                        placeholder="Country"
+                        value={personal.country}
+                        onChange={(e) => setPersonal((p) => ({ ...p, country: e.target.value }))}
+                        className={`px-4 py-3 rounded-lg bg-white/5 ${theme.text} ${theme.border} outline-none`}
+                      />
+                    </div>
+                    <div>
+                      <label className={`block text-sm font-medium ${theme.text} mb-2`}>Tax ID / SSN</label>
+                      <input
+                        type="password"
+                        placeholder="•••-••-••••"
+                        value={personal.taxId}
+                        onChange={(e) => setPersonal((p) => ({ ...p, taxId: e.target.value }))}
+                        className={`w-full px-4 py-3 rounded-lg bg-white/5 ${theme.text} ${theme.border} outline-none`}
+                      />
+                    </div>
+                  </div>
+                )}
 
-            {/* Progress (optional) */}
-            {isSubmitting && (
-              <div className="mb-6">
-                <div className="flex justify-between mb-2">
-                  <span className={`text-sm font-medium ${theme.text}`}>
-                    Upload Progress
-                  </span>
-                  <span className={`text-sm ${theme.sub}`}>
-                    {uploadProgress}%
-                  </span>
+                {step === 2 && (
+                  <div className="space-y-5 max-w-xl mx-auto">
+                    <div>
+                      <label className={`block text-sm font-medium ${theme.text} mb-2`}>Government ID Type</label>
+                      <select
+                        value={govIdType}
+                        onChange={(e) => setGovIdType(e.target.value)}
+                        className={`w-full px-4 py-3 rounded-lg bg-white/5 ${theme.text} ${theme.border} outline-none`}
+                      >
+                        <option value="drivers_license">Driver's License</option>
+                        <option value="passport">Passport</option>
+                        <option value="state_id">State ID</option>
+                      </select>
+                    </div>
+                    <Dropzone
+                      id="gov-id-front"
+                      label="ID Front"
+                      hint="Clear photo of the front of your ID"
+                      file={govIdFront}
+                      onChange={(e) => setGovIdFront(withPreview(e.target.files?.[0]))}
+                      onRemove={() => setGovIdFront(null)}
+                    />
+                    {govIdType !== "passport" && (
+                      <Dropzone
+                        id="gov-id-back"
+                        label="ID Back"
+                        hint="Clear photo of the back of your ID"
+                        file={govIdBack}
+                        onChange={(e) => setGovIdBack(withPreview(e.target.files?.[0]))}
+                        onRemove={() => setGovIdBack(null)}
+                      />
+                    )}
+                  </div>
+                )}
+
+                {step === 3 && (
+                  <div className="max-w-xl mx-auto">
+                    <Dropzone
+                      id="selfie-upload"
+                      label="Selfie Holding Your ID"
+                      hint="Take a clear photo of yourself holding the ID you just uploaded"
+                      file={selfie}
+                      onChange={(e) => setSelfie(withPreview(e.target.files?.[0]))}
+                      onRemove={() => setSelfie(null)}
+                    />
+                  </div>
+                )}
+
+                {step === 4 && (
+                  <div className="max-w-xl mx-auto space-y-4">
+                    {connectedPlatforms.length > 0 ? (
+                      <>
+                        <p className={`text-sm ${theme.sub}`}>Confirm these are your verified accounts:</p>
+                        <div className="space-y-2">
+                          {connectedPlatforms.map((p) => (
+                            <div
+                              key={p.platform}
+                              className={`flex items-center justify-between p-3 rounded-lg ${theme.border}`}
+                            >
+                              <span className={`${theme.text} capitalize`}>{p.platform}</span>
+                              <span className={theme.sub}>
+                                {p.username ? `@${p.username}` : ""} {p.followers ? `· ${p.followers.toLocaleString()} followers` : ""}
+                              </span>
+                            </div>
+                          ))}
+                        </div>
+                        <label className={`flex items-center gap-2 text-sm ${theme.text}`}>
+                          <input
+                            type="checkbox"
+                            checked={socialConfirmed}
+                            onChange={(e) => setSocialConfirmed(e.target.checked)}
+                          />
+                          I confirm these are my verified accounts.
+                        </label>
+                      </>
+                    ) : (
+                      <p className={`text-sm ${theme.sub}`}>
+                        No connected social accounts found yet. You can still continue —
+                        connect your platforms anytime from your profile.
+                      </p>
+                    )}
+                  </div>
+                )}
+
+                {step === 5 && (
+                  <div className="max-w-xl mx-auto space-y-4">
+                    <div className={`p-4 rounded-lg ${theme.border} bg-white/5`}>
+                      <p className={`${theme.text} font-medium mb-1`}>Listing Fee</p>
+                      <p className={`text-sm ${theme.sub}`}>
+                        A one-time listing fee of 3% of your estimated valuation (minimum $500)
+                        is charged automatically once your identity is verified and your shares
+                        go live — not before, and not as part of this submission. No payment is
+                        collected here.
+                      </p>
+                    </div>
+                    <label className={`flex items-center gap-2 text-sm ${theme.text}`}>
+                      <input
+                        type="checkbox"
+                        checked={feeAcknowledged}
+                        onChange={(e) => setFeeAcknowledged(e.target.checked)}
+                      />
+                      I understand and acknowledge the listing fee.
+                    </label>
+                  </div>
+                )}
+
+                {step === 6 && (
+                  <div className="max-w-xl mx-auto text-center space-y-3">
+                    <p className={theme.text}>
+                      Review complete. Submitting will send your documents for admin review.
+                    </p>
+                    <p className={`text-sm ${theme.sub}`}>
+                      Estimated review time: 48-72 hours. You'll be notified by email once
+                      your verification is complete.
+                    </p>
+                  </div>
+                )}
+
+                {errorMsg && (
+                  <p className="text-red-400 text-sm text-center mt-4">{errorMsg}</p>
+                )}
+
+                <div className="flex justify-between gap-3 mt-8">
+                  <button
+                    type="button"
+                    onClick={() => (step === 1 ? navigate("/") : goBack())}
+                    disabled={isSubmitting}
+                    className={`px-6 py-2 rounded-lg ${theme.border} ${theme.text} hover:bg-white/10 cursor-pointer disabled:opacity-50`}
+                  >
+                    {step === 1 ? "Save for Later" : "Back"}
+                  </button>
+                  {step < TOTAL_STEPS ? (
+                    <button
+                      type="button"
+                      onClick={goNext}
+                      className="px-6 py-2 rounded-lg text-white font-medium"
+                      style={{ background: theme.primary, border: `1px solid ${theme.primary}` }}
+                    >
+                      Continue
+                    </button>
+                  ) : (
+                    <button
+                      type="button"
+                      onClick={handleSubmit}
+                      disabled={isSubmitting}
+                      className="px-6 py-2 rounded-lg text-white font-medium disabled:opacity-50"
+                      style={{ background: theme.primary, border: `1px solid ${theme.primary}` }}
+                    >
+                      {isSubmitting ? "Submitting..." : "Submit Application"}
+                    </button>
+                  )}
                 </div>
-                <div className="w-full bg-gray-700 rounded-full h-2">
-                  <div
-                    className="h-2 rounded-full transition-all"
-                    style={{
-                      width: `${uploadProgress}%`,
-                      background: theme.primary,
-                    }}
-                  />
-                </div>
+              </>
+            ) : (
+              <div className="text-center space-y-4 py-6">
+                <h2 className={`text-2xl font-semibold ${theme.text}`}>
+                  Your KYC application has been submitted!
+                </h2>
+                <p className={theme.sub}>
+                  Submitted {new Date().toLocaleDateString()} — estimated review time: 48-72 hours.
+                </p>
+                <p className={`${theme.sub} text-sm`}>Current status: Pending Review</p>
+                <p className={`text-sm ${theme.sub} max-w-md mx-auto`}>
+                  Our team will review your documents. You'll receive an email when your
+                  verification is complete. Once verified, your shares will automatically go
+                  live on the trading board.
+                </p>
+                <button
+                  type="button"
+                  onClick={() => navigate("/")}
+                  className="px-6 py-2 rounded-lg text-white font-medium"
+                  style={{ background: theme.primary, border: `1px solid ${theme.primary}` }}
+                >
+                  Go to Dashboard
+                </button>
               </div>
             )}
-
-            {/* Actions */}
-            <div className="flex justify-end gap-3">
-              {/* <button
-                type="button"
-                disabled={isSubmitting}
-                onClick={() => {
-                  setImages([]);
-                  setFiles([]);
-                  setFormData({ text: "" });
-                  const imgEl = document.getElementById("image-upload");
-                  const fileEl = document.getElementById("file-upload");
-                  if (imgEl) imgEl.value = "";
-                  if (fileEl) fileEl.value = "";
-                }}
-                className={`px-6 py-2 rounded-lg ${theme.border} ${theme.text} hover:bg-white/10 curoer disabled:opacity-50`}
-              >
-                Cancel
-              </button> */}
-              <button
-                type="button"
-                onClick={() => {
-                  navigate("/"); // Navigate to home page
-                }}
-                className={`px-6 py-2 rounded-lg ${theme.border} ${theme.text} hover:bg-white/10 cursor-pointer`}
-              >
-                Skip KYC
-              </button>
-              <button
-                type="submit"
-                disabled={isSubmitting || (!images.length && !files.length)}
-                className="px-6 py-2 rounded-lg text-white font-medium disabled:opacity-50 disabled:cursor-not-allowed"
-                style={{
-                  background: theme.primary,
-                  border: `1px solid ${theme.primary}`,
-                }}
-              >
-                {isSubmitting ? "Uploading..." : "Submit Documents"}
-              </button>
-            </div>
-          </form>
+          </div>
         </div>
-      </div>
+      )}
     </section>
   );
 };

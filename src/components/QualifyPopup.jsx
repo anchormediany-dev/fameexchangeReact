@@ -108,6 +108,12 @@ export default function QualifyPopup({ open, onClose }) {
     navigate("/");
   };
 
+  const goToKycVerification = () => {
+    reset();
+    onClose();
+    navigate("/verify-id");
+  };
+
   if (!open) return null;
 
   return (
@@ -232,6 +238,17 @@ export default function QualifyPopup({ open, onClose }) {
                 </a>
                 <button
                   type="button"
+                  onClick={() => {
+                    reset();
+                    onClose();
+                    navigate("/talent/qr-code");
+                  }}
+                  className="px-6 py-3 rounded-lg font-semibold text-sm border border-[#444] text-white hover:border-[#F3BA18] hover:text-[#F3BA18] transition"
+                >
+                  Share Your Profile
+                </button>
+                <button
+                  type="button"
                   onClick={goToDashboard}
                   className="text-white/50 text-sm hover:text-white/70 transition"
                 >
@@ -241,7 +258,36 @@ export default function QualifyPopup({ open, onClose }) {
             </div>
           )}
 
-          {step === "result" && result && result.tier !== "tradeable" && (
+          {step === "result" && result && result.tier !== "tradeable" && result.talent?.qualified_pending_kyc && (
+            <div className="text-center space-y-5">
+              <h3 className="text-white text-xl font-bold">You Qualified! Just One More Step</h3>
+              <p className="text-gray-300 text-sm leading-relaxed">
+                Your FameScore is {Number(result.fame_score ?? 0).toFixed(1)} — that qualifies you to go tradeable.
+                Complete identity verification (KYC) to unlock your shares. Once approved, your shares go live automatically.
+              </p>
+              <p className="text-gray-500 text-xs">
+                We've created your account with {email} — check your inbox for a code to set your password.
+              </p>
+              <div className="flex flex-col gap-3">
+                <button
+                  type="button"
+                  onClick={goToKycVerification}
+                  className="custom-button-two px-6 py-3 rounded-lg font-semibold text-sm"
+                >
+                  Complete Identity Verification →
+                </button>
+                <button
+                  type="button"
+                  onClick={goToDashboard}
+                  className="text-white/50 text-sm hover:text-white/70 transition"
+                >
+                  Continue to dashboard
+                </button>
+              </div>
+            </div>
+          )}
+
+          {step === "result" && result && result.tier !== "tradeable" && !result.talent?.qualified_pending_kyc && (
             <div className="text-center space-y-5">
               <h3 className="text-white text-xl font-bold">You're Not Tradeable Yet — But You're Close</h3>
               <p className="text-gray-300 text-sm leading-relaxed">

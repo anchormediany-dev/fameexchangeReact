@@ -32,6 +32,7 @@ const NetworthCalculator = lazy(() => import("./components/NetworthCalculator"))
 const UpdateProfile = lazy(() => import("./pages/UpdateProfile"));
 const TalentProfileForFan = lazy(() => import("./pages/talent_profile_fan/TalentProfileForFan"));
 const TalentProfile = lazy(() => import("./pages/talent_profile/TalentProfile"));
+const TalentQRCodePage = lazy(() => import("./pages/TalentQRCodePage"));
 const TalentCompactList = lazy(() => import("./pages/TalentsListForFan"));
 const TalentListing = lazy(() => import("./pages/talent/TalentListing"));
 const TalentDashboard = lazy(() => import("./pages/talent_dashboard/TalentDashboard"));
@@ -294,6 +295,14 @@ export default function App() {
               element={
                 <MotionPageWrapper>
                   <TalentProfile />
+                </MotionPageWrapper>
+              }
+            />
+            <Route
+              path="talent/qr-code"
+              element={
+                <MotionPageWrapper>
+                  <TalentQRCodePage />
                 </MotionPageWrapper>
               }
             />

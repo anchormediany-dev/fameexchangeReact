@@ -113,6 +113,7 @@ export const api = createApi({
     "FuturesTalents",
     "FuturesPledges",
     "FameScoreDashboard",
+    "KYC",
   ],
   endpoints: () => ({}),
 });

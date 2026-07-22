@@ -49,22 +49,18 @@ export const authApi = api.injectEndpoints({
           rejectionReason: data.rejectionReason,
         },
       }),
-      invalidatesTags: ["OverviewForFan"],
+      invalidatesTags: ["KYC"],
     }),
     getKYCDocuments: builder.query({
       query: (userId) => `/user/get/${userId}`,
       providesTags: ["KYC"],
     }),
     getKYCListings: builder.query({
-      query: () => `/user_documents/all-user-documents`,
-      providesTags: ["KYC"],
-    }),
-    verifyId: builder.mutation({
-      query: (data) => ({
-        url: "/user_documents/upload-docs",
-        method: "POST",
-        body: data,
+      query: ({ status, page = 1, limit = 20 } = {}) => ({
+        url: "/user_documents/all-user-documents",
+        params: { ...(status ? { status } : {}), page, limit },
       }),
+      providesTags: ["KYC"],
     }),
     networthCalculate: builder.mutation({
       query: (data) => ({
@@ -635,7 +631,6 @@ export const {
   useSigninMutation,
   useQuickQualifyMutation,
   useVerifyOtpMutation,
-  useVerifyIdMutation,
   useResendOtpMutation,
   useNetworthCalculateMutation,
   useGetNetworthQuery,

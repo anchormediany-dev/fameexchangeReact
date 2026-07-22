@@ -1,26 +1,39 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import {
-  useGetKYCListingsQuery,
-  useAdminKycConfirmationMutation,
-} from "../../app/authApi";
-import { motion, AnimatePresence } from "framer-motion";
-import { FiRefreshCcw, FiX } from "react-icons/fi";
-import { FaCheck, FaSpinner, FaTimes } from "react-icons/fa";
-import { Navigate } from "react-router-dom";
+import { useGetKYCListingsQuery } from "../../app/authApi";
+import { motion } from "framer-motion";
+import { FiRefreshCcw } from "react-icons/fi";
+
+const STATUS_FILTERS = [
+  { value: "", label: "All" },
+  { value: "PENDING", label: "Pending" },
+  { value: "VERIFIED", label: "Verified" },
+  { value: "REJECTED", label: "Rejected" },
+];
 
 export default function AdminKycListings() {
   const navigate = useNavigate();
+  const [statusFilter, setStatusFilter] = useState("");
   const { data, isLoading, isError, error, refetch, isFetching } =
-    useGetKYCListingsQuery();
-  const [confirmTalentRequest, { isLoading: isConfirming }] =
-    useAdminKycConfirmationMutation();
+    useGetKYCListingsQuery({ status: statusFilter, limit: 100 });
+
   // Copy then sort (newest first). No useMemo, no fixed timezone.
   const rows = Array.isArray(data?.data)
     ? [...data.data].sort(
         (a, b) => new Date(b.createdAt) - new Date(a.createdAt)
       )
     : [];
+
+  const counts = rows.reduce(
+    (acc, r) => {
+      acc.total += 1;
+      if (r?.status === "PENDING") acc.pending += 1;
+      if (r?.status === "VERIFIED") acc.verified += 1;
+      if (r?.status === "REJECTED") acc.rejected += 1;
+      return acc;
+    },
+    { total: 0, pending: 0, verified: 0, rejected: 0 }
+  );
 
   return (
     <div className="space-y-4">
@@ -69,6 +82,41 @@ export default function AdminKycListings() {
         </motion.button>
       </div>
 
+      <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+        <div className="bg-white/5 border border-white/10 rounded-xl p-3">
+          <div className="text-gray-400 text-xs uppercase tracking-wider">Total</div>
+          <div className="text-white text-xl font-bold">{counts.total}</div>
+        </div>
+        <div className="bg-white/5 border border-white/10 rounded-xl p-3">
+          <div className="text-yellow-300 text-xs uppercase tracking-wider">Pending</div>
+          <div className="text-white text-xl font-bold">{counts.pending}</div>
+        </div>
+        <div className="bg-white/5 border border-white/10 rounded-xl p-3">
+          <div className="text-green-300 text-xs uppercase tracking-wider">Verified</div>
+          <div className="text-white text-xl font-bold">{counts.verified}</div>
+        </div>
+        <div className="bg-white/5 border border-white/10 rounded-xl p-3">
+          <div className="text-red-300 text-xs uppercase tracking-wider">Rejected</div>
+          <div className="text-white text-xl font-bold">{counts.rejected}</div>
+        </div>
+      </div>
+
+      <div className="flex gap-2">
+        {STATUS_FILTERS.map((f) => (
+          <button
+            key={f.value}
+            onClick={() => setStatusFilter(f.value)}
+            className={`px-3 py-1.5 rounded-lg text-sm border transition ${
+              statusFilter === f.value
+                ? "bg-[#a38b41] border-[#a38b41] text-white"
+                : "border-white/10 text-gray-300 hover:bg-white/5"
+            }`}
+          >
+            {f.label}
+          </button>
+        ))}
+      </div>
+
       <div className="bg-white/5 border border-white/10 rounded-xl p-4">
         <div className="overflow-x-auto">
           <table className="w-full">
@@ -110,7 +158,7 @@ export default function AdminKycListings() {
                     {error?.data?.error ||
                       error?.data?.message ||
                       error?.error ||
-                      "Failed to load contacts."}
+                      "Failed to load KYC requests."}
                   </td>
                 </tr>
               </tbody>
@@ -118,7 +166,7 @@ export default function AdminKycListings() {
               <tbody>
                 <tr>
                   <td colSpan={6} className="p-6 text-center text-gray-300">
-                    No inverse requests yet.
+                    No KYC requests yet.
                   </td>
                 </tr>
               </tbody>

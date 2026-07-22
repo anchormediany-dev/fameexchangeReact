@@ -140,6 +140,13 @@ export default function ConnectSocials() {
               </a>
               <button
                 type="button"
+                onClick={() => navigate("/talent/qr-code")}
+                className="px-6 py-3 rounded-lg font-semibold text-sm border border-[#444] text-white hover:border-[#F3BA18] hover:text-[#F3BA18] transition"
+              >
+                Share Your Profile
+              </button>
+              <button
+                type="button"
                 onClick={goNext}
                 className="text-white/50 text-sm hover:text-white/70 transition"
               >
@@ -150,7 +157,35 @@ export default function ConnectSocials() {
         </div>
       )}
 
-      {applicationResult && applicationResult.tier !== "tradeable" && !showBreakdown && (
+      {applicationResult && applicationResult.tier !== "tradeable" && applicationResult.talent?.qualified_pending_kyc && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 px-4">
+          <div className="bg-[#1f1f1f] border border-[#333] rounded-2xl p-8 max-w-md w-full text-center space-y-5">
+            <h3 className="text-white text-xl font-bold">You Qualified! Just One More Step</h3>
+            <p className="text-gray-300 text-sm leading-relaxed">
+              Your FameScore is {Number(applicationResult.fame_score ?? 0).toFixed(1)} — that qualifies you to go tradeable.
+              Complete identity verification (KYC) to unlock your shares. Once approved, your shares go live automatically.
+            </p>
+            <div className="flex flex-col gap-3">
+              <button
+                type="button"
+                onClick={() => navigate("/verify-id")}
+                className="custom-button-two px-6 py-3 rounded-lg font-semibold text-sm"
+              >
+                Complete Identity Verification →
+              </button>
+              <button
+                type="button"
+                onClick={goNext}
+                className="text-white/50 text-sm hover:text-white/70 transition"
+              >
+                Continue to dashboard
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {applicationResult && applicationResult.tier !== "tradeable" && !applicationResult.talent?.qualified_pending_kyc && !showBreakdown && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 px-4">
           <div className="bg-[#1f1f1f] border border-[#333] rounded-2xl p-8 max-w-md w-full text-center space-y-5">
             <h3 className="text-white text-xl font-bold">You're Not Tradeable Yet — But You're Close</h3>

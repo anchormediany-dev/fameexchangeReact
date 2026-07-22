@@ -554,8 +554,7 @@ const KYCDetailsPage = () => {
                   </div>
                 )}
 
-                {/* (Optional) Whole-KYC approve/reject */}
-                {/* <div className="pt-4 border-t border-white/10">
+                <div className="pt-4 border-t border-white/10">
                   <h3 className="text-sm font-medium text-white mb-3">
                     Verify KYC Application
                   </h3>
@@ -564,7 +563,7 @@ const KYCDetailsPage = () => {
                     <button
                       onClick={() => handleKYCVerification("VERIFIED")}
                       disabled={
-                        isVerifying || kycData.status.current === "approved"
+                        isVerifying || kycData.status.current === "verified"
                       }
                       className="flex items-center justify-center space-x-2 px-4 py-3 bg-green-600 hover:bg-green-700 disabled:bg-green-800 text-white rounded-lg transition-colors disabled:cursor-not-allowed"
                     >
@@ -591,7 +590,7 @@ const KYCDetailsPage = () => {
                       <span>Reject KYC</span>
                     </button>
                   </div>
-                </div> */}
+                </div>
               </div>
             </motion.div>
           </div>
