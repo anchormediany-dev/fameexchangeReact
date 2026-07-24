@@ -55,6 +55,7 @@ const TradeTalentPage = () => {
   const [previewData, setPreviewData] = useState(null);
   const [quoteExpiry, setQuoteExpiry] = useState(null);
   const [talentDropdownOpen, setTalentDropdownOpen] = useState(false);
+  const [showValuationBreakdown, setShowValuationBreakdown] = useState(false);
   const previewTimer = useRef(null);
   const expiryInterval = useRef(null);
   const talentSelectRef = useRef(null);
@@ -660,6 +661,62 @@ const TradeTalentPage = () => {
                           ${fmt(talent.spread, 4)}
                         </div>
                       </div>
+                      {talent.total_shares != null && (
+                        <div>
+                          <span className="text-gray-500 text-xs uppercase">
+                            Market Cap
+                          </span>
+                          <div className="text-white font-mono">
+                            ${fmt((talent.current_price || 0) * talent.total_shares)}
+                          </div>
+                        </div>
+                      )}
+                    </div>
+                  )}
+
+                  {/* Valuation breakdown (collapsible) */}
+                  {talent.valuation_breakdown && (
+                    <div className="mt-4 pt-4 border-t border-[#1f1f1f]">
+                      <button
+                        type="button"
+                        onClick={() => setShowValuationBreakdown((v) => !v)}
+                        className="text-sm text-gray-400 hover:text-white transition flex items-center gap-1"
+                      >
+                        {showValuationBreakdown ? "▼" : "▶"} Valuation Breakdown
+                        {talent.valuation != null && (
+                          <span className="text-white font-mono ml-1">
+                            (${fmt(talent.valuation)})
+                          </span>
+                        )}
+                      </button>
+                      {showValuationBreakdown && (
+                        <div className="mt-3 grid grid-cols-2 md:grid-cols-4 gap-3 text-sm">
+                          <div>
+                            <span className="text-gray-500 text-xs uppercase">Monthly Potential</span>
+                            <div className="text-white font-mono">${fmt(talent.valuation_breakdown.mmp)}</div>
+                          </div>
+                          <div>
+                            <span className="text-gray-500 text-xs uppercase">Annual Value</span>
+                            <div className="text-white font-mono">${fmt(talent.valuation_breakdown.amv)}</div>
+                          </div>
+                          <div>
+                            <span className="text-gray-500 text-xs uppercase">Growth Multiplier</span>
+                            <div className="text-white font-mono">{talent.valuation_breakdown.growthMultiplier}x</div>
+                          </div>
+                          <div>
+                            <span className="text-gray-500 text-xs uppercase">Cross-Platform Premium</span>
+                            <div className="text-white font-mono">{talent.valuation_breakdown.crossPlatformPremium}x</div>
+                          </div>
+                          <div>
+                            <span className="text-gray-500 text-xs uppercase">Verified Bonus</span>
+                            <div className="text-white font-mono">{talent.valuation_breakdown.verifiedBonus}x</div>
+                          </div>
+                          <div>
+                            <span className="text-gray-500 text-xs uppercase">Valuation Multiple</span>
+                            <div className="text-white font-mono">{talent.valuation_breakdown.valuationMultiple}x</div>
+                          </div>
+                        </div>
+                      )}
                     </div>
                   )}
                 </>

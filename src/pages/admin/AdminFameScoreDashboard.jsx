@@ -19,6 +19,11 @@ const COLUMNS = [
   { key: "qualified", label: "Qualified" },
   { key: "platform_count", label: "Platforms" },
   { key: "tier", label: "Tier" },
+  { key: "valuation", label: "Valuation" },
+  { key: "initial_share_price", label: "Share Price" },
+  { key: "market_cap", label: "Market Cap" },
+  { key: "listing_fee", label: "Listing Fee" },
+  { key: "shares_available_in_pool", label: "Pool Depth" },
   { key: "total_revenue", label: "Revenue" },
 ];
 
@@ -161,6 +166,23 @@ export default function AdminFameScoreDashboard() {
                     <span className="text-xs px-2 py-1 rounded-full bg-white/10 text-gray-300 capitalize">
                       {t.tier}
                     </span>
+                  </td>
+                  <td className="p-3 text-white font-mono text-sm">
+                    {t.valuation != null ? money(t.valuation) : "—"}
+                  </td>
+                  <td className="p-3 text-white font-mono text-sm">
+                    {t.initial_share_price != null ? money(t.initial_share_price) : "—"}
+                  </td>
+                  <td className="p-3 text-white font-mono text-sm">
+                    {t.market_cap != null ? money(t.market_cap) : "—"}
+                  </td>
+                  <td className="p-3 text-white font-mono text-sm">
+                    {t.listing_fee != null ? money(t.listing_fee) : "—"}
+                  </td>
+                  <td className="p-3 text-gray-300 text-sm">
+                    {t.shares_available_in_pool != null && t.shares_in_liquidity_pool != null
+                      ? `${t.shares_available_in_pool.toLocaleString()} / ${t.shares_in_liquidity_pool.toLocaleString()}`
+                      : "—"}
                   </td>
                   <td className="p-3 text-white font-mono text-sm">{money(t.total_revenue)}</td>
                 </tr>

@@ -252,7 +252,7 @@ export const tradingApi = api.injectEndpoints({
         method: "POST",
         body,
       }),
-      invalidatesTags: ["MarketTalents", "TopTalents"],
+      invalidatesTags: ["MarketTalents", "TopTalents", "FuturesTalents"],
     }),
 
     recalculateTalentValuation: builder.mutation({

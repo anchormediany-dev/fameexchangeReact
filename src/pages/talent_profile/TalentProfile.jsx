@@ -406,6 +406,15 @@ const TalentProfile = () => {
           />
           <TalentLinks userData={data} />
         </div>{" "}
+        <div className="mt-6 flex justify-end">
+          <button
+            type="button"
+            onClick={() => navigate("/talent/qr-code")}
+            className="px-6 py-3 rounded-lg font-semibold text-sm border border-[#444] text-white hover:border-[#a38b41] hover:text-[#a38b41] transition"
+          >
+            Share Your Profile
+          </button>
+        </div>
         <div className="mt-6">
           <SocialConnectionsPanel />
         </div>
