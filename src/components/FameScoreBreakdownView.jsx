@@ -26,6 +26,7 @@ export default function FameScoreBreakdownView({ talent, onBack }) {
   const { data, isLoading } = useGetFameScoreThresholdsQuery();
   const thresholds = data?.thresholds;
   const singlePlatform = data?.singlePlatformThresholds;
+  const growthTiering = data?.growthTiering;
 
   const breakdown = Array.isArray(talent?.fame_score_breakdown) ? talent.fame_score_breakdown : [];
   const platformCount = breakdown.length;
@@ -33,7 +34,10 @@ export default function FameScoreBreakdownView({ talent, onBack }) {
   const avgEngagementRate = totalFollowers > 0
     ? breakdown.reduce((sum, p) => sum + (Number(p.engagementRate) || 0) * (Number(p.followers) || 0), 0) / totalFollowers
     : 0;
-  const hasGrowth = breakdown.some((p) => (Number(p.growthRate) || 0) > 0);
+  // growthQualifies is computed server-side (platformGrowthQualifies in
+  // famescoreService.js) — it accounts for account scale/maturity, not just
+  // a flat "growthRate > 0" check, so it must not be re-derived here.
+  const hasGrowth = breakdown.some((p) => p.growthQualifies);
 
   return (
     <div className="space-y-5 text-left">
@@ -56,8 +60,8 @@ export default function FameScoreBreakdownView({ talent, onBack }) {
                   </div>
                 </div>
                 <div className="text-right text-xs">
-                  <div className={(p.growthRate ?? 0) > 0 ? "text-emerald-400" : "text-gray-500"}>
-                    {p.growthRate == null ? "No growth history yet" : (p.growthRate > 0 ? "Growing ↑" : "Not growing")}
+                  <div className={p.growthQualifies ? "text-emerald-400" : "text-gray-500"}>
+                    {p.growthRate == null ? "No growth history yet" : (p.growthQualifies ? "Growing ↑" : "Declining")}
                   </div>
                   {p.verified && <div className="text-[#F3BA18]">Verified</div>}
                 </div>
@@ -77,8 +81,13 @@ export default function FameScoreBreakdownView({ talent, onBack }) {
             <ThresholdRow label="Total followers" have={num(totalFollowers)} need={`${num(thresholds.minTotalFollowers)}+`} met={totalFollowers >= thresholds.minTotalFollowers} />
             <ThresholdRow label="Avg. engagement rate" have={pct(avgEngagementRate)} need={`${pct(thresholds.minEngagementRate)}+`} met={avgEngagementRate >= thresholds.minEngagementRate} />
             <ThresholdRow label="Platforms connected" have={platformCount} need={`${thresholds.minPlatforms}+`} met={platformCount >= thresholds.minPlatforms} />
-            <ThresholdRow label="Growth trend" have={hasGrowth ? "Growing" : "Not yet"} need={thresholds.requireGrowthTrend ? "Required" : "Not required"} met={!thresholds.requireGrowthTrend || hasGrowth} />
+            <ThresholdRow label="Growth trend" have={hasGrowth ? "Qualifies" : "Not yet"} need={thresholds.requireGrowthTrend ? "Required" : "Not required"} met={!thresholds.requireGrowthTrend || hasGrowth} />
           </div>
+        )}
+        {growthTiering && (
+          <p className="text-gray-500 text-xs px-1">
+            Growth requirement scales with account size/age: accounts under {growthTiering.matureAccountAgeMonths} months old need {pct(growthTiering.newAccountGrowthFloor)}+ growth; established accounts just need to avoid declining more than {pct(Math.abs(growthTiering.matureAccountGrowthFloor))}/month; accounts over {num(growthTiering.megaAccountThreshold)} followers can also qualify by adding {num(growthTiering.megaAccountAbsoluteGrowthFloor)}+ followers/month even if that's a small percentage.
+          </p>
         )}
       </div>
 
