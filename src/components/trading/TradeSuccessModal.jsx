@@ -1,8 +1,10 @@
+import fameCoin from "../../assets/home/thecoin.png";
+
 const TradeSuccessModal = ({ trade, onClose }) => {
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 backdrop-blur-sm px-4">
       <div className="bg-[#111111] border border-[#2a2a2a] rounded-2xl w-full max-w-md p-6 text-center">
-        <div className="text-5xl mb-4">🎉</div>
+        <img src={fameCoin} alt="" className="w-16 h-16 mx-auto mb-4" />
         <h3 className="text-xl font-bold text-white mb-2">Trade Executed!</h3>
         <p className="text-gray-400 text-sm mb-6">Your order has been successfully placed.</p>
 

@@ -4,6 +4,7 @@ import { useSelector } from "react-redux";
 import { toast } from "react-toastify";
 import CandlestickChart from "../../components/CandlestickChart";
 import {
+  useGetMarketTalentsQuery,
   useGetTalentByIdQuery,
   useGetTalentQuoteQuery,
   useGetTalentChartQuery,
@@ -13,7 +14,6 @@ import {
   useTradePreviewMutation,
   useTradeOpenMutation,
 } from "../../app/tradingApi";
-import { useGetTalentQuery } from "../../app/authApi";
 import { imgSrc } from "../../utils/imgSrc";
 import TradeSuccessModal from "../../components/trading/TradeSuccessModal";
 import ClosePositionModal from "../../components/trading/ClosePositionModal";
@@ -81,13 +81,12 @@ const TradeTalentPage = () => {
 
   // â"€â"€ API queries â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€â"€
   // ── API queries ──────────────────────────────────────────────────────────
-  // Use the SAME talent listing endpoint as /inverse so the dropdown is
-  // populated by /user/getusers (taleUsers). Filtered to TALENT role and
-  // searched client-side.
-  const { data: usersData } = useGetTalentQuery();
-  const allTalents = (usersData?.taleUsers || []).filter(
-    (u) => (u.role || "").toUpperCase() === "TALENT"
-  );
+  // The picker must only ever offer talents that are actually tradeable
+  // (status:"active", tier:"tradeable") — /talents is the canonical endpoint
+  // for that; the legacy /user/get-talent endpoint returns every TALENT-role
+  // user regardless of trading status and doesn't belong here.
+  const { data: marketData } = useGetMarketTalentsQuery({ limit: 1000 });
+  const allTalents = marketData?.talents || [];
   const talentList = allTalents.filter((u) =>
     talentSearch
       ? (u.name || "").toLowerCase().includes(talentSearch.toLowerCase())
@@ -576,6 +575,14 @@ const TradeTalentPage = () => {
                         <h2 className="text-xl font-bold text-white">
                           {talent.name}
                         </h2>
+                        {talent.is_certified_tradeable && (
+                          <img
+                            src="/certified-tradeable-fameexchange.png"
+                            alt="Certified Tradeable"
+                            title="Certified Tradeable — qualified and KYC verified"
+                            className="w-5 h-5"
+                          />
+                        )}
                         <span className="text-sm text-gray-500 font-mono bg-[#1a1a1a] px-2 py-0.5 rounded">
                           {talent.symbol}
                         </span>
@@ -794,6 +801,7 @@ const TradeTalentPage = () => {
                       <tr className="text-gray-500 text-xs uppercase border-b border-[#1f1f1f]">
                         <th className="py-2 text-left">Talent</th>
                         <th className="py-2 text-center">Side</th>
+                        <th className="py-2 text-right">Shares</th>
                         <th className="py-2 text-right">Entry</th>
                         <th className="py-2 text-right">Current</th>
                         <th className="py-2 text-right">Invested</th>
@@ -836,6 +844,9 @@ const TradeTalentPage = () => {
                             >
                               {pos.side}
                             </span>
+                          </td>
+                          <td className="py-3 text-right font-mono text-white">
+                            {fmt(pos.units, 0)}
                           </td>
                           <td className="py-3 text-right font-mono text-gray-300">
                             ${fmt(pos.entry_price)}

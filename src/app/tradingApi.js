@@ -20,15 +20,6 @@ export const tradingApi = api.injectEndpoints({
       providesTags: ["WalletTransactions"],
     }),
 
-    depositFunds: builder.mutation({
-      query: (amount) => ({
-        url: "/wallet/deposit",
-        method: "POST",
-        body: { amount },
-      }),
-      invalidatesTags: ["Wallet", "WalletTransactions"],
-    }),
-
     // ── Stripe-funded wallet deposits ───────────────────────
     createDepositIntent: builder.mutation({
       query: ({ amount, currency = "usd" }) => ({
@@ -104,6 +95,7 @@ export const tradingApi = api.injectEndpoints({
 
     getTalentQuote: builder.query({
       query: (id) => `/talents/${id}/quote`,
+      providesTags: (_result, _error, id) => [{ type: "Quote", id }],
     }),
 
     getTalentChart: builder.query({
@@ -111,6 +103,7 @@ export const tradingApi = api.injectEndpoints({
         url: `/talents/${id}/chart`,
         params: { range, format: "ohlc" },
       }),
+      providesTags: (_result, _error, { id }) => [{ type: "Chart", id }],
     }),
 
     getTalentStats: builder.query({
@@ -155,11 +148,18 @@ export const tradingApi = api.injectEndpoints({
           /* error path handled by caller */
         }
       },
-      invalidatesTags: [
+      // Chart/quote/talent-detail/stats are all scoped to the talent that was
+      // just traded — id-scoped tags need the talent_id from the mutation's
+      // own args (available immediately, no need to wait on the response).
+      invalidatesTags: (_result, _error, arg) => [
         "Wallet",
         "OpenPositions",
         "TradeHistory",
         "WalletTransactions",
+        { type: "Chart", id: arg.talent_id },
+        { type: "Quote", id: arg.talent_id },
+        { type: "TalentDetail", id: arg.talent_id },
+        { type: "TalentStats", id: arg.talent_id },
       ],
     }),
 
@@ -230,11 +230,22 @@ export const tradingApi = api.injectEndpoints({
           /* error path handled by caller */
         }
       },
-      invalidatesTags: [
+      // closePosition's own arg is just the position id, not the talent id
+      // needed for the id-scoped Chart/Quote/TalentDetail/TalentStats tags —
+      // pull talent_id from the response instead (present on result.trade).
+      invalidatesTags: (result) => [
         "Wallet",
         "OpenPositions",
         "TradeHistory",
         "WalletTransactions",
+        ...(result?.trade?.talent_id
+          ? [
+              { type: "Chart", id: result.trade.talent_id },
+              { type: "Quote", id: result.trade.talent_id },
+              { type: "TalentDetail", id: result.trade.talent_id },
+              { type: "TalentStats", id: result.trade.talent_id },
+            ]
+          : []),
       ],
     }),
 
@@ -350,7 +361,6 @@ export const {
   // Wallet
   useGetWalletQuery,
   useGetWalletTransactionsQuery,
-  useDepositFundsMutation,
   useCreateDepositIntentMutation,
   useConfirmDepositMutation,
   // Inverse Session Stripe Checkout

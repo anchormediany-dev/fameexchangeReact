@@ -105,6 +105,8 @@ export const api = createApi({
     "TopTalents",
     "TalentDetail",
     "TalentStats",
+    "Chart",
+    "Quote",
     "TradeHistory",
     "OpenPositions",
     "Position",
