@@ -267,8 +267,16 @@ const ImageSwitchFan = ({ userData }) => {
         <div className="flex-1 flex flex-col">
           <div className="space-y-4 flex-1">
             <div className="group relative flex-1 flex flex-col h-full">
-              <label className="text-xl uppercase text-[#a38b41] mb-5 font-bold">
+              <label className="text-xl uppercase text-[#a38b41] mb-5 font-bold flex items-center gap-2">
                 {talentName}
+                {userData?.data?.profile?.is_certified_tradeable && (
+                  <img
+                    src="/certified-tradeable-fameexchange.png"
+                    alt="Certified Tradeable"
+                    title="Certified Tradeable — qualified and KYC verified"
+                    className="w-5 h-5 shrink-0"
+                  />
+                )}
               </label>
               <div className="flex justify-between items-center mb-2">
                 <label className="text-xs uppercase text-gray-400 font-semibold">
