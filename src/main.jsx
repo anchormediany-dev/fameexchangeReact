@@ -1,5 +1,6 @@
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
+import * as Sentry from "@sentry/react";
 import "./index.css";
 import App from "./App.jsx";
 import { BrowserRouter } from "react-router-dom";
@@ -14,6 +15,17 @@ for (const key of REQUIRED_ENV) {
   if (!import.meta.env[key]) {
     console.error(`[config] Missing required env var: ${key}`);
   }
+}
+
+// No-ops entirely if VITE_SENTRY_DSN isn't set (e.g. local dev) — safe to
+// always leave in. ErrorBoundary below reports render errors explicitly;
+// this also catches anything outside the component tree.
+if (import.meta.env.VITE_SENTRY_DSN) {
+  Sentry.init({
+    dsn: import.meta.env.VITE_SENTRY_DSN,
+    environment: import.meta.env.MODE,
+    tracesSampleRate: import.meta.env.PROD ? 0.1 : 0,
+  });
 }
 
 createRoot(document.getElementById("root")).render(
