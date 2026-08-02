@@ -8,6 +8,7 @@ import { useAuth } from "../utils/auth/useAuth";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 import KYCDetailsPageForTalent from "../pages/KYCDetailsPageForTalent";
+import fameCoin from "../assets/home/thecoin.png";
 
 const theme = {
   primary: "#a38b41",
@@ -422,6 +423,7 @@ const KYCUpload = () => {
               </>
             ) : (
               <div className="text-center space-y-4 py-6">
+                <img src={fameCoin} alt="" className="w-14 h-14 mx-auto" />
                 <h2 className={`text-2xl font-semibold ${theme.text}`}>
                   Your KYC application has been submitted!
                 </h2>
