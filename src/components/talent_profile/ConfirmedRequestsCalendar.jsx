@@ -3,8 +3,6 @@ import {
   FaChevronLeft,
   FaChevronRight,
   FaCheckCircle,
-  FaClock,
-  FaMapMarkerAlt,
 } from "react-icons/fa";
 import {
   addMonths,
@@ -14,7 +12,6 @@ import {
   eachDayOfInterval,
   getDay,
   isSameDay,
-  format,
   parseISO,
   isValid,
 } from "date-fns";

@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from "react";
+import { useState, useMemo } from "react";
 import { motion } from "framer-motion";
 import { FaChevronDown } from "react-icons/fa";
 import { FiSearch, FiX } from "react-icons/fi";

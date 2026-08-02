@@ -1,5 +1,5 @@
 // components/ui/ConfirmDialog.jsx
-import React, { useEffect, useRef } from "react";
+import { useEffect, useRef } from "react";
 import { FiTrash2, FiAlertTriangle } from "react-icons/fi";
 
 const VARIANTS = {

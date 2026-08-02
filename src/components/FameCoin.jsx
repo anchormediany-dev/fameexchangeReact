@@ -1,4 +1,3 @@
-import React from "react";
 import FameCoinLogo from "../assets/icons/famecoin-logo.svg?react";
 import { useState } from "react";
 import LoginSignupModal from "./LoginSignupModal";

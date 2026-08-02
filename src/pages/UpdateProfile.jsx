@@ -15,7 +15,6 @@ import {
   useUpdateMyProfileMutation,
   useDeleteProfileImageMutation,
 } from "../app/authApi";
-import { setCredentials } from "../features/auth/authSlice";
 import { HiBadgeCheck } from "react-icons/hi";
 import {
   FaShieldAlt,

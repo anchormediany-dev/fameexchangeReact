@@ -319,7 +319,6 @@
 // };
 
 // export default MeetingRequests;
-import React from "react";
 
 const PendingRequests = () => {
   return <div>PendingRequests</div>;

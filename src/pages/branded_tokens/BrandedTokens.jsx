@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { LineChart, Line, ResponsiveContainer, Tooltip } from "recharts";
 import btcChart from "../../assets/images/BTC_Logo.png";
 import dcrChart from "../../assets/images/DCR_Logo.png";

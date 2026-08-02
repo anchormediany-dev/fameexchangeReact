@@ -1,4 +1,4 @@
-import React, { useRef, useEffect, useState } from "react";
+import { useRef, useEffect, useState } from "react";
 import { FaChevronDown } from "react-icons/fa";
 
 const talentOptions = [

@@ -2,7 +2,6 @@ import { motion, useInView } from "framer-motion";
 import { useRef } from "react";
 import talentTradingImage from "../assets/home/talent-trading-1.png";
 import theCoin from "../assets/home/thecoin.png";
-import imageText from "../assets/images/fame-exchange-image-text.png";
 
 const TalentTradingSection = () => {
   const sectionRef = useRef(null);

@@ -1,9 +1,8 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { motion } from "framer-motion";
 import { toast } from "react-toastify";
 import {
   FaTimes,
-  FaDownload,
   FaUser,
   FaIdCard,
   FaCalendarAlt,
@@ -14,7 +13,6 @@ import {
   FaSpinner,
   FaCheckCircle,
   FaTimesCircle,
-  FaPaperPlane,
 } from "react-icons/fa";
 import { imgSrc } from "../utils/imgSrc";
 import { useUploadKYCDocumentsMutation } from "../app/authApi";

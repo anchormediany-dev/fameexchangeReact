@@ -2,11 +2,8 @@ import {
   FaYoutube,
   FaFacebook,
   FaInstagram,
-  FaLinkedin,
   FaTiktok,
   FaSnapchatGhost,
-  FaDiscord,
-  FaReddit,
   FaExternalLinkAlt,
 } from "react-icons/fa";
 import { FaXTwitter } from "react-icons/fa6";

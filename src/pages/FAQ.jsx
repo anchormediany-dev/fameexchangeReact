@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import { useState } from "react";
+import { motion } from "framer-motion";
 import { FaChevronDown } from "react-icons/fa";
 import Footer from "../components/Footer";
 import Navbar from "../components/Navbar";

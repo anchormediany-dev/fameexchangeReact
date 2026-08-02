@@ -33,7 +33,7 @@ const baseQuery = fetchBaseQuery({
     if (secretKey) {
       headers.set("secret-key", secretKey);
     } else if (import.meta.env.DEV) {
-      // eslint-disable-next-line no-console
+       
       console.warn(
         "[api] VITE_SECRET_KEY is not set — protected endpoints will 401."
       );

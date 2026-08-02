@@ -1,6 +1,5 @@
-import React, { useRef, useState, useEffect } from "react";
+import { useRef, useState, useEffect } from "react";
 import { useDispatch } from "react-redux";
-import { GoMute } from "react-icons/go";
 import { FaArrowRight } from "react-icons/fa6";
 import { FaPlay, FaPause, FaTimes } from "react-icons/fa";
 import gifOne from "../assets/gifs/gif1.gif";

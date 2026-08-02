@@ -1,9 +1,7 @@
 import { useState } from "react";
 import {
-  FiUpload,
   FiVideo,
   FiUsers,
-  FiX,
   FiExternalLink,
 } from "react-icons/fi";
 import { IoTicketOutline } from "react-icons/io5";

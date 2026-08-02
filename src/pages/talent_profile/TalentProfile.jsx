@@ -1,23 +1,16 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import {
-  FaSearch,
   FaCalculator,
   FaChartLine,
   FaWallet,
-  FaTimes,
-  FaCoins,
-  FaSpinner,
 } from "react-icons/fa";
 import ImageSwitch from "./ImageSwitch";
 import { useNavigate } from "react-router-dom";
 import PortfolioDashboard from "../../components/PortfolioDashboard";
 import CreateSession from "../../components/talent/create_session/CreateSession";
-import PendingRequests from "../../components/talent/create_session/PendingRequests";
 import {
-  useGetUserByIdQuery,
   useUpdateMyProfileMutation,
   useNetworthCalculateMutation,
-  useGetNetworthQuery,
   // Talent Overview API
   useGetTalentOverviewQuery,
 } from "../../app/authApi";
@@ -30,7 +23,6 @@ import SocialConnectionsPanel from "../../components/SocialConnectionsPanel";
 import ConfirmedRequestsCalendar from "../../components/talent_profile/ConfirmedRequestsCalendar";
 import PendingRequestsList from "../../components/talent_profile/PendingRequestsList";
 import { toast } from "react-toastify";
-import CalculatingNetworthPopup from "../../components/CalculatingNetworthPopup";
 import CalculatingNetworthPopupUser from "./CalculatingNetworthPopupUser";
 const TalentProfile = () => {
   const userLocalData = JSON.parse(localStorage.getItem("user"));

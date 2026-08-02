@@ -1,10 +1,7 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import {
-  FaSearch,
-  FaCalculator,
   FaChartLine,
   FaWallet,
-  FaTimes,
 } from "react-icons/fa";
 import ImageSwitch from "./ImageSwitchFan";
 import { useGetTalentOverviewQuery } from "../../app/authApi";

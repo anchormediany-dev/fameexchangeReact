@@ -1,6 +1,5 @@
 import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
-import mapImage from "../../assets/images/map-ui.png";
 import "./ContactUs.css";
 import { useContactUsMutation } from "../../app/authApi";
 import { toast } from "react-toastify";

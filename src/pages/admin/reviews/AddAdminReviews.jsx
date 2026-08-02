@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { useCreateReviewMutation } from "../../../app/authApi";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";

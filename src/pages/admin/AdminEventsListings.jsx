@@ -1,5 +1,5 @@
 // components/admin/AdminEventsListings.jsx
-import React, { useState } from "react";
+import { useState } from "react";
 import { FiGlobe, FiPhone, FiExternalLink, FiTrash2 } from "react-icons/fi";
 import { IoLocationOutline } from "react-icons/io5";
 import { useNavigate } from "react-router-dom";

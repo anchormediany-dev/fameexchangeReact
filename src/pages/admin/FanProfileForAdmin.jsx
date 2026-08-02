@@ -1,17 +1,9 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import {
-  FaSearch,
-  FaCalculator,
-  FaChartLine,
-  FaWallet,
-  FaTimes,
   FaArrowLeft,
 } from "react-icons/fa";
 import { useGetTalentOverviewQuery } from "../../app/authApi";
 import { useParams, Link } from "react-router-dom";
-import EventsFanSection from "../../components/talent_profile_fan/EventsFanSection";
-import TalentLinksFan from "../../components/talent_profile_fan/TalentLinksFan";
-import PortfolioDashboardForFan from "../../pages/talent_profile_fan/Portfolio";
 import ImageSwitchForFanInAdmin from "./ImageSwitchForFanInAdmin";
 
 const FanProfileForAdmin = () => {

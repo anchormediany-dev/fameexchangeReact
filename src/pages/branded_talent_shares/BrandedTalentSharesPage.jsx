@@ -1,6 +1,6 @@
 import TalentTokenTicker from "../../components/BrandedTalentShares";
 import { useGetTalentQuery } from "../../app/authApi";
-import React, { useMemo } from "react";
+import React from "react";
 const BrandedTalentSharesPage = () => {
   const { data, isLoading, isError, error, refetch, isFetching } =
     useGetTalentQuery();

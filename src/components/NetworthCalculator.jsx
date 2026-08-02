@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useNetworthCalculateMutation } from "../app/authApi";
 import FameScoreCalculatingModal from "./FameScoreCalculatingModal";

@@ -1,4 +1,4 @@
-import React, { useState, useRef } from "react";
+import { useState, useRef } from "react";
 import { motion, useInView } from "framer-motion";
 import {
   FaSearch,
@@ -7,13 +7,11 @@ import {
   FaChevronDown,
   FaChevronUp,
   FaCalendarAlt,
-  FaClock,
   FaCheck,
   FaTimes,
   FaChevronLeft,
   FaChevronRight,
 } from "react-icons/fa";
-import { Link } from "react-router-dom";
 import {
   format,
   addMonths,
@@ -21,7 +19,6 @@ import {
   startOfMonth,
   endOfMonth,
   eachDayOfInterval,
-  isSameMonth,
   isSameDay,
   parse,
   getDay,

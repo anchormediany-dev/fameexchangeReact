@@ -1,11 +1,10 @@
 // components/ProfileMenu.jsx
-import React, { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   FiEdit,
   FiExternalLink,
-  FiEye,
   FiLink,
   FiLogOut,
   FiCreditCard,

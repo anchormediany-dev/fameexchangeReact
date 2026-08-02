@@ -1,4 +1,3 @@
-import React from "react";
 import { LineChart, Line, ResponsiveContainer } from "recharts";
 import FeatureSection from "./FeatureSection";
 import Futures from "./Futures";

@@ -3,8 +3,6 @@ import {
   FaTrash,
   FaHeart,
   FaEllipsisH,
-  FaSearch,
-  FaTimes,
   FaArrowLeft,
 } from "react-icons/fa";
 import { toast } from "react-toastify";

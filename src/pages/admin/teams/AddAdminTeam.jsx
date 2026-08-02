@@ -1,4 +1,4 @@
-import React, { useMemo, useState, useEffect } from "react";
+import { useMemo, useState, useEffect } from "react";
 import { useCreateTeamMutation } from "../../../app/authApi";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";

@@ -1,7 +1,7 @@
 import { useForm } from "react-hook-form";
 import { useState } from "react";
 import moment from "moment-timezone";
-import { Calendar, momentLocalizer } from "react-big-calendar";
+import { momentLocalizer } from "react-big-calendar";
 import "react-big-calendar/lib/css/react-big-calendar.css";
 import { useCreateSessionMutation } from "../../../app/authApi";
 import { toast } from "react-toastify";

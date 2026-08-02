@@ -1,4 +1,3 @@
-import React from "react";
 import processImg from "../assets/images/process-img.png";
 import { useState } from "react";
 import LoginSignupModal from "./LoginSignupModal";

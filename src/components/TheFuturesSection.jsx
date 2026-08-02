@@ -1,4 +1,4 @@
-import React, { useRef } from "react";
+import { useRef } from "react";
 import { motion, useInView } from "framer-motion";
 // import futuresImage from "../assets/images/future-bg.png";
 // import futuresImage from "../assets/images/futures-bg.png";
@@ -6,7 +6,6 @@ import { motion, useInView } from "framer-motion";
 import futuresImage from "../assets/home/thefutures.png";
 import { useNavigate } from "react-router-dom";
 import { GoArrowUpRight } from "react-icons/go";
-import { FiMusic } from "react-icons/fi";
 const TheFuturesSection = () => {
   const navigate = useNavigate();
   const sectionRef = useRef(null);

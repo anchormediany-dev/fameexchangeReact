@@ -1,7 +1,5 @@
-import React from "react";
 import fansGetTo from "../assets/images/fans-get-to.png";
 import easyToTrade from "../assets/images/easy-to-trade.png";
-import personalities from "../assets/images/personalities.png";
 import checkoutOurInVerse from "../assets/images/checkout-our-in-verse.png";
 
 const FeatureSection = () => {

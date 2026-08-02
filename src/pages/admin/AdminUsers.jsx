@@ -1,5 +1,5 @@
 // components/admin/AdminUsers.jsx
-import React, { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { FiTrash2 } from "react-icons/fi";
 import { useGetUsersQuery, useDeleteUserMutation } from "../../app/authApi";
 

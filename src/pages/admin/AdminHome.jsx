@@ -1,5 +1,5 @@
 // pages/AdminDashboard.jsx
-import React, { useMemo, useState } from "react";
+import { useMemo, useState } from "react";
 import {
   useGetAdminDashboardQuery,
   useDeleteSessionByAdminMutation,

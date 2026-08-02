@@ -1,4 +1,3 @@
-import React from "react";
 import dividerImage from "../assets/home/btsbanner.png";
 const SectionDivider = () => {
   return (

@@ -1,6 +1,5 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { SlSettings } from "react-icons/sl";
-import { IoCheckmark } from "react-icons/io5";
 import CandlestickChart from "./CandlestickChart";
 import PurchaseConfirmationModal from "./PurchaseConfirmationModal";
 

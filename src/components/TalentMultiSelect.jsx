@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from "react";
+import { useMemo, useState } from "react";
 import { useGetTalentQuery } from "../app/authApi";
 const TalentMultiSelect = ({ value = [], onChange, placeholder, disabled }) => {
   const { data: talents, isLoading, isError } = useGetTalentQuery();

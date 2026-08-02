@@ -3,7 +3,6 @@ import { FaPlus, FaMinus } from "react-icons/fa";
 import { FiArrowRightCircle } from "react-icons/fi";
 import { useNavigate } from "react-router-dom";
 import faqImage from "../../assets/images/faq.png";
-import faqItems from "../../data/faqData";
 import { useGetAllFaqsQuery } from "../../app/authApi";
 const Faq = () => {
   const { data, isLoading, isError, error } = useGetAllFaqsQuery();

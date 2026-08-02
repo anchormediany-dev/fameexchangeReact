@@ -1,17 +1,7 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation, Autoplay } from "swiper/modules";
 import { FiChevronLeft, FiChevronRight, FiShoppingCart } from "react-icons/fi";
-import image5 from "../assets/our-products/5.jpg";
-import image6 from "../assets/our-products/6.jpg";
-import image7 from "../assets/our-products/7.jpg";
-import image8 from "../assets/our-products/8.jpg";
-import image9 from "../assets/our-products/9.jpg";
-import image10 from "../assets/our-products/10.jpg";
-import image11 from "../assets/our-products/11.jpg";
-import image12 from "../assets/our-products/12.jpg";
-import image13 from "../assets/our-products/13.jpg";
-import image14 from "../assets/our-products/14.jpg";
 // Import Swiper styles
 import "swiper/css";
 import "swiper/css/navigation";

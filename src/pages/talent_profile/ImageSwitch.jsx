@@ -3,10 +3,7 @@ import {
   FaEdit,
   FaSave,
   FaTimes,
-  FaHeart,
-  FaFileAlt,
   FaUpload,
-  FaTrash,
   FaPlus,
   FaCalendarAlt,
 } from "react-icons/fa";

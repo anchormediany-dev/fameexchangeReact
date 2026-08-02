@@ -1,7 +1,4 @@
 import {
-  FiFileText,
-  FiCalendar,
-  FiEdit2,
   FiAlertTriangle,
   FiUsers,
   FiBook,
@@ -12,7 +9,6 @@ import {
   FiGlobe,
   FiDatabase,
   FiAward,
-  FiBell,
   FiRefreshCw,
   FiMail,
 } from "react-icons/fi";
@@ -20,8 +16,6 @@ import {
   FaEnvelope,
   FaPhoneAlt,
   FaMapMarkerAlt,
-  FaChevronDown,
-  FaChevronUp,
 } from "react-icons/fa";
 import { FcManager } from "react-icons/fc";
 const amlData = [

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import {
   LineChart,
   Line,
@@ -8,7 +8,6 @@ import {
   ResponsiveContainer,
 } from "recharts";
 import { SlSettings } from "react-icons/sl";
-import { IoCheckmark } from "react-icons/io5";
 import PurchaseConfirmationModal from "../../components/PurchaseConfirmationModal";
 const data = [
   { time: "1", value: 0.003 },

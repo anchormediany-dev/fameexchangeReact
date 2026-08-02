@@ -13,7 +13,6 @@ import { FcGoogle } from "react-icons/fc";
 import { IoEyeOffSharp, IoEyeSharp } from "react-icons/io5";
 import MotionPageWrapper from "../../components/MotionPageWrapper";
 import { Link } from "react-router-dom";
-import SignupOtpVerification from "../../components/SignupOtpVerification";
 import siteLogo from "../../assets/images/site-logo.png";
 import TalentDropdown from "../../components/TalentDropdown";
 import RepresentationSection from "../../components/RepresentationSection";

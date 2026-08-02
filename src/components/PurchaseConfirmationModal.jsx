@@ -1,4 +1,4 @@
-import React, { useRef, useEffect } from "react";
+import { useRef, useEffect } from "react";
 import congratulationsPurchaseLogo from "../assets/images/congratulations-purchase-logo.png";
 
 const PurchaseConfirmationModal = ({ isOpen, onClose }) => {

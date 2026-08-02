@@ -1,5 +1,5 @@
 // pages/admin/team/AdminTeams.jsx
-import React, { useMemo, useState } from "react";
+import { useMemo, useState } from "react";
 import {
   useGetTeamQuery,
   useDeleteTeamMutation,

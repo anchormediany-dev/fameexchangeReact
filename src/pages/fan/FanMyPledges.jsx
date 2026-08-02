@@ -1,6 +1,6 @@
 import { useGetMyPledgesQuery } from "../../app/tradingApi";
 import { Link } from "react-router-dom";
-import { FiTrendingUp, FiClock, FiCheck, FiX, FiRefreshCw } from "react-icons/fi";
+import { FiTrendingUp, FiClock, FiCheck, FiRefreshCw } from "react-icons/fi";
 
 const REFUND_DAYS = 90;
 

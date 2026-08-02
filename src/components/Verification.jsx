@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import MotionPageWrapper from "./MotionPageWrapper";
 import { useLocation, useNavigate } from "react-router-dom";
 import {

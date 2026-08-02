@@ -213,7 +213,7 @@
 // };
 
 // export default CountrySelector;
-import React, { useState } from "react";
+import { useState } from "react";
 import { BiChevronDown } from "react-icons/bi";
 import Navbar from "../../components/Navbar";
 import Footer from "../../components/Footer";
