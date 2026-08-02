@@ -42,7 +42,6 @@ const TalentProfileForAdmin = lazy(() => import("./pages/admin/TalentProfileForA
 const KYCDetailsPage = lazy(() => import("./pages/KYCDetailsPage"));
 const TradeTalentPage = lazy(() => import("./pages/trade_talent/TradeTalentPage"));
 const TradingDashboard = lazy(() => import("./pages/trade_talent/TradingDashboard"));
-const TradingAccountPage = lazy(() => import("./pages/trading_account/TradingAccountPage"));
 const InversePage = lazy(() => import("./pages/inverse/InversePage"));
 const InverseCheckoutPage = lazy(() => import("./pages/inverse/InverseCheckoutPage"));
 const EventsPage = lazy(() => import("./pages/events/EventsPage"));
@@ -195,9 +194,10 @@ export default function App() {
   const location = useLocation();
 
   return (
+    <>
     <AnimatePresence mode="wait">
-      <Suspense fallback={<PageLoader />}>
-      <Routes location={location} key={location.pathname}>
+      <Suspense fallback={<PageLoader />} key={location.pathname}>
+      <Routes location={location}>
         <Route path="/" element={<MainLayout />}>
           <Route
             index
@@ -545,15 +545,6 @@ export default function App() {
               </MotionPageWrapper>
             }
           />
-          {/* trading_account Page */}
-          <Route
-            path="trading-account"
-            element={
-              <MotionPageWrapper>
-                <TradingAccountPage />
-              </MotionPageWrapper>
-            }
-          />
           {/* trade-talent Pages */}
           <Route
             path="trade-talent"
@@ -883,6 +874,7 @@ export default function App() {
         <Route path="*" element={<NotFound />} />
       </Routes>
       </Suspense>
+    </AnimatePresence>
       <ToastContainer
         position="top-right"
         autoClose={3000}
@@ -895,6 +887,6 @@ export default function App() {
         theme="dark"
       />
       <SessionExpiredModal />
-    </AnimatePresence>
+    </>
   );
 }
