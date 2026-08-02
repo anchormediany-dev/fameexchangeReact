@@ -2,6 +2,20 @@ import { motion, useScroll, useTransform } from "framer-motion";
 import { useRef } from "react";
 import { useNavigate } from "react-router-dom";
 
+// Hooks can't be called inside a .map() callback in the parent's render body
+// (Rules of Hooks — that's a loop, not a component) — each star needs its
+// own component instance so its single useTransform call is stable and
+// consistent across renders.
+const ParallaxStar = ({ scrollYProgress, style, driftRange }) => {
+  const y = useTransform(scrollYProgress, [0, 1], [0, driftRange]);
+  return (
+    <motion.div
+      className="absolute rounded-full bg-white"
+      style={{ ...style, y }}
+    />
+  );
+};
+
 const HeroSection = () => {
   const navigate = useNavigate();
   // Ref for the section to track scroll position
@@ -47,20 +61,16 @@ const HeroSection = () => {
     >
       {/* Parallax Stars/Particles Background */}
       {[...Array(30)].map((_, i) => (
-        <motion.div
+        <ParallaxStar
           key={i}
-          className="absolute rounded-full bg-white"
+          scrollYProgress={scrollYProgress}
+          driftRange={Math.random() * 200 * (Math.random() > 0.5 ? 1 : -1)}
           style={{
             width: Math.random() * 3 + 1,
             height: Math.random() * 3 + 1,
             top: `${Math.random() * 100}%`,
             left: `${Math.random() * 100}%`,
             opacity: Math.random() * 0.3 + 0.1,
-            y: useTransform(
-              scrollYProgress,
-              [0, 1],
-              [0, Math.random() * 200 * (Math.random() > 0.5 ? 1 : -1)]
-            ),
           }}
         />
       ))}

@@ -1,4 +1,4 @@
-import React, { useState, useMemo, useEffect } from "react";
+import { useState, useMemo, useEffect } from "react";
 import { FiUpload } from "react-icons/fi";
 import {
   FaCalendarAlt,
@@ -277,7 +277,10 @@ export default function EventCreateForm() {
   const resetInput = (input) => {
     try {
       input.value = "";
-    } catch {}
+    } catch {
+      // Some input types (e.g. file inputs in older browsers) can throw
+      // when programmatically cleared — safe to ignore.
+    }
   };
   const handleLogoChange = (e) => {
     const file = e.target.files?.[0] || null;

@@ -111,6 +111,13 @@ const ImageSwitchAdmin = ({ userData }) => {
     }
   };
 
+  // Note: this component has no current route/caller in the app (dead
+  // code) — fixed for consistency with the other ImageSwitch* variants
+  // rather than left crashing if it's ever wired up.
+  const saveImagesToBackend = async () => {
+    toast.error("Bulk image upload isn't available in the admin view yet.");
+  };
+
   // Helper to convert DataURL to Blob
   const dataURLtoBlob = (dataUrl) => {
     const arr = dataUrl.split(",");

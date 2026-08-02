@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import moment from "moment-timezone";
 import { Calendar, momentLocalizer } from "react-big-calendar";
 import "react-big-calendar/lib/css/react-big-calendar.css";
@@ -26,11 +26,17 @@ const TalentDashboard = () => {
 
   const [events, setEvents] = useState([]);
 
+  // Configurable session length was disabled above (settings state
+  // commented out) — this previously referenced an undefined `settings`
+  // and crashed on every slot selection. Default matches what that
+  // settings object was originally initialized to.
+  const DEFAULT_SESSION_LENGTH_MINUTES = 30;
+
   const handleSelectSlot = ({ start }) => {
     const newEvent = {
       title: "Available Session",
       start,
-      end: moment(start).add(settings.sessionLength, "minutes").toDate(),
+      end: moment(start).add(DEFAULT_SESSION_LENGTH_MINUTES, "minutes").toDate(),
       allDay: false,
     };
     setEvents([...events, newEvent]);

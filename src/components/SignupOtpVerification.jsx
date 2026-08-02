@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from "react";
-import { useParams, useLocation, useNavigate } from "react-router-dom";
+import { useState, useEffect } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
 import MotionPageWrapper from "./MotionPageWrapper";
 // import VerifyId from "../components/VerifyId";
 import { useVerifyOtpMutation, useResendOtpMutation } from "../app/authApi";
@@ -11,17 +11,19 @@ const SignupOtpVerification = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const email = location.state?.email || sessionStorage.getItem("signupEmail");
+  const [code, setCode] = useState(["", "", "", ""]);
+  const [isVerifyOpen, setIsVerifyOpen] = useState(false);
+  const [verifyOtp, { isLoading, isError, error }] = useVerifyOtpMutation();
+  const [resendOtp, { isLoading: isResending }] = useResendOtpMutation();
   useEffect(() => {
     if (!email) {
       dispatch(openSignupModalAction());
     }
   }, [email, navigate]);
 
+  // Hooks above must all run every render (Rules of Hooks) — the early
+  // return has to come after every hook call, not before.
   if (!email) return null;
-  const [code, setCode] = useState(["", "", "", ""]);
-  const [isVerifyOpen, setIsVerifyOpen] = useState(false);
-  const [verifyOtp, { isLoading, isError, error }] = useVerifyOtpMutation();
-  const [resendOtp, { isLoading: isResending }] = useResendOtpMutation();
   const handleResendOtp = async () => {
     try {
       const res = await resendOtp({ email }).unwrap();

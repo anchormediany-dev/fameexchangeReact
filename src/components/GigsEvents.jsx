@@ -110,7 +110,9 @@ const GigsEvents = () => {
             year: "numeric",
           });
         }
-      } catch {}
+      } catch {
+        // Unparseable date — leave dateText at its "—" default.
+      }
       return {
         id: e?._id || e?.id,
         title: e?.title || e?.name || "Untitled Event",

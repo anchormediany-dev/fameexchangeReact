@@ -27,7 +27,7 @@ const MeetAndGreet = () => {
       <p className="text-red-400 font-medium">
         Couldn’t load talents. Please try again.
       </p>
-      {process.env.NODE_ENV !== "production" && (
+      {import.meta.env.DEV && (
         <p className="text-xs text-red-300/70 max-w-[560px] break-words">
           {(() => {
             if (!error) return null;

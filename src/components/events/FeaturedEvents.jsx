@@ -11,7 +11,7 @@ import {
 import { BiSolidDiscount } from "react-icons/bi";
 import { IoLocationOutline } from "react-icons/io5";
 import { BsPeople } from "react-icons/bs";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { useGetFeaturedEventsQuery } from "../../app/authApi";
 import { truncate } from "../../utils/truncate";
 
@@ -109,7 +109,9 @@ const FeaturedEvents = () => {
             year: "numeric",
           });
         }
-      } catch {}
+      } catch {
+        // Unparseable date — leave dateText at its "—" default.
+      }
       return {
         id: e?._id || e?.id,
         title: e?.title || e?.name || "Untitled Event",

@@ -1,7 +1,6 @@
 import { motion, useInView, useAnimation } from "framer-motion";
 import { useEffect, useRef } from "react";
 import * as d3 from "d3";
-import imageText from "../assets/images/fame-exchange-image-text.png";
 import { Link } from "react-router-dom";
 import { imgSrc } from "../utils/imgSrc";
 import { handleImageError } from "../utils/imagePlaceholder";
@@ -45,12 +44,10 @@ const TalentTokenTicker = ({
   isLoading,
   isError,
   error,
-  onRefresh,
   viewAll,
 }) => {
-  if (isLoading) return <div>Loading…</div>;
-  if (isError)
-    return <div className="text-red-600">{String(error?.data || error)}</div>;
+  // Hooks must run every render regardless of isLoading/isError (Rules of
+  // Hooks) — the early returns below have to come after every hook call.
   const sectionRef = useRef(null);
   const isInView = useInView(sectionRef, { once: true, amount: 0.1 });
   const controls = useAnimation();
@@ -60,6 +57,10 @@ const TalentTokenTicker = ({
       controls.start("visible");
     }
   }, [isInView, controls]);
+
+  if (isLoading) return <div>Loading…</div>;
+  if (isError)
+    return <div className="text-red-600">{String(error?.data || error)}</div>;
 
   // Custom D3 Chart Component
   const D3Chart = ({ data, color, width = 112, height = 56, index }) => {

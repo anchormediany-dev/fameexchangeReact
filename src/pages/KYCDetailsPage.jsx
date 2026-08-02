@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { motion } from "framer-motion";
 import { toast } from "react-toastify";
 import { FaCheckCircle, FaTimesCircle } from "react-icons/fa";
@@ -10,8 +10,6 @@ import {
 import {
   FaCheck,
   FaTimes,
-  FaDownload,
-  FaExpand,
   FaUser,
   FaIdCard,
   FaCalendarAlt,
@@ -21,11 +19,13 @@ import {
   FaClock,
   FaSpinner,
 } from "react-icons/fa";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import { imgSrc } from "../utils/imgSrc";
 
 const KYCDetailsPage = () => {
   const { id: userId } = useParams();
+  const navigate = useNavigate();
+  const user = JSON.parse(localStorage.getItem("user") || "null");
   const {
     data: apiData,
     isLoading,

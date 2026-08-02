@@ -1,5 +1,5 @@
 import { useState, useRef, useEffect } from "react";
-import { FaHeart, FaFileAlt, FaUpload } from "react-icons/fa";
+import { FaUpload } from "react-icons/fa";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 const IMAGE_BASE_URL = import.meta.env.VITE_API_IMAGE_BASE_URL;
@@ -191,6 +191,15 @@ const ImageSwitchForFanInAdmin = ({ userData }) => {
     if (e.dataTransfer.files.length > 0) {
       handleFileSelect(e.dataTransfer.files);
     }
+  };
+
+  // No admin endpoint exists for bulk-appending images to a fan's gallery
+  // yet (the admin image mutation replaces the single primary image, it
+  // doesn't append an array) — this previously referenced an undefined
+  // saveImagesToBackend and crashed silently into the catch block below.
+  // Failing clearly here instead of pretending to save.
+  const saveImagesToBackend = async () => {
+    toast.error("Bulk image upload isn't available in the admin view yet.");
   };
 
   // Helper to convert DataURL to Blob

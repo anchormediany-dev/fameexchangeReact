@@ -270,7 +270,7 @@
 //   );
 // }
 // src/pages/admin/AddProduct.jsx
-import React, { useState, useMemo, useEffect } from "react";
+import { useState, useMemo, useEffect } from "react";
 import { FiUpload } from "react-icons/fi";
 import { useNavigate, useParams } from "react-router-dom";
 import MotionPageWrapper from "../../components/MotionPageWrapper";
@@ -345,7 +345,10 @@ export default function AddProduct() {
   const resetInput = (input) => {
     try {
       input.value = "";
-    } catch {}
+    } catch {
+      // Some input types (e.g. file inputs in older browsers) can throw
+      // when programmatically cleared — safe to ignore.
+    }
   };
 
   const handleGalleryChange = (e) => {

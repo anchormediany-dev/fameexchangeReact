@@ -127,6 +127,17 @@ const ImageSwitchFan = ({ userData }) => {
     }
     return new Blob([u8arr], { type: mime });
   };
+
+  // This page (talent-profile/:id via TalentProfileForFan) is a FAN
+  // viewing a talent's profile, not a self-edit page — there is no mutation
+  // wired to persist uploads here (unlike talent_profile/ImageSwitch.jsx's
+  // updateMyProfile, which edits the logged-in user's own profile). Calling
+  // dataURLtoBlob was previously dead code because this function referenced
+  // an undefined saveImagesToBackend and crashed silently into the catch
+  // block below. Failing clearly here instead of pretending to save.
+  const saveImagesToBackend = async () => {
+    toast.error("Image uploads aren't available on this view yet.");
+  };
   // Sponsor functionality
   const [isPopupOpen, setIsPopupOpen] = useState(false);
 
