@@ -6,9 +6,8 @@ import CongratulationsPopup from "../../components/CongratulationsPopup";
 import BrandedTalentShares from "../../components/BrandedTalentShares";
 import TalentTradingSection from "../../components/TalentTradingSection";
 import VideoBanner3 from "../../components/VideoBanner3";
-import { useGetTalentQuery } from "../../app/authApi";
 import { useGetTopTalentsQuery } from "../../app/tradingApi";
-import React, { useMemo } from "react";
+import { useMemo } from "react";
 
 // Below-the-fold (lazy): split into separate chunks, fetched as the user scrolls
 const DownloadApp = lazy(() => import("../../components/DownloadApp"));
@@ -27,17 +26,6 @@ const SectionFallback = () => (
   <div className="min-h-[200px] w-full" aria-hidden="true" />
 );
 const Home = () => {
-  const { data, isLoading, isError, error, refetch, isFetching } =
-    useGetTalentQuery();
-  const sortedTalent = React.useMemo(() => {
-    const users = data?.taleUsers ?? [];
-    const toNum = (v) =>
-      v === 0 || v ? Number(String(v).replace(/,/g, "")) : 0;
-    return [...users]
-      .map((u) => ({ ...u, _net: toNum(u.networth) }))
-      .sort((a, b) => b._net - a._net);
-  }, [data]);
-
   // Top BTS leaderboard - backend confirmed: GET /api/talents/top?sort=bts
   const {
     data: topBtsData,
@@ -82,14 +70,11 @@ const Home = () => {
       <VideoBanner3 />
       <TalentTradingSection />
       <BrandedTalentShares
-        talent={btsTalent.length ? btsTalent : sortedTalent}
-        isLoading={btsLoading || btsFetching || isLoading || isFetching}
-        isError={btsError || isError}
-        error={btsErrObj || error}
-        onRefresh={() => {
-          refetch();
-          refetchBts();
-        }}
+        talent={btsTalent}
+        isLoading={btsLoading || btsFetching}
+        isError={btsError}
+        error={btsErrObj}
+        onRefresh={refetchBts}
         viewAll={true}
       />
       <Suspense fallback={<SectionFallback />}>

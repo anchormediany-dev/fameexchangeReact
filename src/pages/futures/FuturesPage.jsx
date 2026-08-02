@@ -109,6 +109,50 @@ function TalentCard({ talent, onPledge, isLoggedIn }) {
   );
 }
 
+// "What is the Futures Section?" explainer box — lives once in the hero
+// (always visible regardless of how many futures talents exist), linking
+// out to famefutures.com rather than the in-app qualify flow.
+function FameFuturesCTA({ className = "" }) {
+  return (
+    <div className={`bg-gradient-to-br from-[#1f1f1f] to-[#191919] border border-[#F3BA18]/20 rounded-2xl p-6 ${className}`}>
+      <h3 className="text-white font-bold text-base mb-1.5">What is the Futures Section?</h3>
+      <p className="text-gray-400 text-sm leading-relaxed mb-4">
+        The Futures Section gives creators the AI tools, strategy, and ecosystem needed to
+        grow their brand, audience, revenue, and market value — preparing them for the Fame
+        Exchange.
+      </p>
+      <a
+        href="https://famefutures.com"
+        target="_blank"
+        rel="noopener noreferrer"
+        className="block w-full sm:w-auto sm:inline-block text-center bg-[#F3BA18] text-black px-6 py-2.5 rounded-lg font-semibold text-sm hover:bg-[#dbb934] transition-colors"
+      >
+        Start Building Your Asset!
+      </a>
+    </div>
+  );
+}
+
+// Companion box, same style, sitting directly underneath the explainer —
+// links out to the membership-sponsorship page on famefutures.com.
+function SponsorMembershipCTA({ className = "" }) {
+  return (
+    <div className={`bg-gradient-to-br from-[#1f1f1f] to-[#191919] border border-[#F3BA18]/20 rounded-2xl p-6 ${className}`}>
+      <h3 className="text-white font-bold text-base mb-1.5">
+        Would you like to sponsor a future's membership?
+      </h3>
+      <a
+        href="https://famefutures.com/membership"
+        target="_blank"
+        rel="noopener noreferrer"
+        className="mt-3 block w-full sm:w-auto sm:inline-block text-center bg-[#F3BA18] text-black px-6 py-2.5 rounded-lg font-semibold text-sm hover:bg-[#dbb934] transition-colors"
+      >
+        Click Here!
+      </a>
+    </div>
+  );
+}
+
 export default function FuturesPage() {
   const { data, isLoading, isError, refetch } = useGetFuturesTalentsQuery();
   const user = useSelector((s) => s?.auth?.user);
@@ -121,8 +165,9 @@ export default function FuturesPage() {
       <div className="bg-[#171717] min-h-screen text-white">
         {/* ── Hero ────────────────────────────────────────────── */}
         <div className="bg-gradient-to-b from-[#1a1500] to-[#171717] border-b border-[#F3BA18]/10">
-          <div className="container mx-auto px-4 sm:px-6 lg:px-8 pt-28 pb-12">
-            <div className="max-w-2xl">
+          <div className="container mx-auto px-4 sm:px-6 lg:px-8 pt-36 pb-12">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 items-center">
+            <div>
               <div className="flex items-center gap-2 mb-4">
                 <span className="text-[#F3BA18] text-xs uppercase tracking-widest font-semibold">
                   Fame Exchange
@@ -165,6 +210,12 @@ export default function FuturesPage() {
                 </div>
               </div>
             </div>
+
+            <div className="space-y-4">
+              <FameFuturesCTA />
+              <SponsorMembershipCTA />
+            </div>
+            </div>
           </div>
         </div>
 
@@ -197,32 +248,14 @@ export default function FuturesPage() {
               <p className="text-gray-400 text-sm max-w-sm mx-auto">
                 Talented creators are being evaluated. Check back soon — the next big name is just around the corner.
               </p>
-              <a
-                href="https://famefutures.com"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-block custom-button-two px-6 py-2.5 rounded-lg text-sm font-semibold"
-              >
-                Visit Fame Futures →
-              </a>
             </div>
           ) : (
             <>
-              <div className="flex items-center justify-between mb-8">
-                <div>
-                  <h2 className="text-white text-xl font-bold">
-                    {talents.length} Rising {talents.length === 1 ? "Talent" : "Talents"}
-                  </h2>
-                  <p className="text-gray-500 text-sm mt-0.5">Sorted by FameScore — highest potential first</p>
-                </div>
-                <a
-                  href="https://famefutures.com"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="hidden sm:flex items-center gap-1.5 text-[#F3BA18] text-sm font-semibold hover:underline"
-                >
-                  famefutures.com <FiExternalLink className="w-3.5 h-3.5" />
-                </a>
+              <div className="mb-8">
+                <h2 className="text-white text-xl font-bold">
+                  {talents.length} Rising {talents.length === 1 ? "Talent" : "Talents"}
+                </h2>
+                <p className="text-gray-500 text-sm mt-0.5">Sorted by FameScore — highest potential first</p>
               </div>
 
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5">

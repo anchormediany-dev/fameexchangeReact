@@ -214,8 +214,10 @@ const MeetAndGreet = () => {
         </motion.div>
       </div>
 
-      {/* Swiper styling */}
-      <style jsx global>{`
+      {/* Swiper styling — intentionally global (targets Swiper's own
+          library-generated class names, which live outside this
+          component's own DOM subtree at times) */}
+      <style>{`
         .swiper-slide-active {
           z-index: 2;
           transition: all 0.5s ease;

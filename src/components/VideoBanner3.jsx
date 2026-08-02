@@ -1,5 +1,5 @@
 import React, { useRef, useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useDispatch } from "react-redux";
 import { GoMute } from "react-icons/go";
 import { FaArrowRight } from "react-icons/fa6";
 import { FaPlay, FaPause, FaTimes } from "react-icons/fa";
@@ -8,8 +8,9 @@ import gifTwo from "../assets/gifs/gif2.gif";
 import gifThree from "../assets/gifs/gif3.gif";
 import gifFour from "../assets/gifs/gif4.gif";
 import QualifyPopup from "./QualifyPopup";
+import { openSignupModal } from "../features/auth/signupModalSlice";
 const VideoBanner = () => {
-  const navigate = useNavigate();
+  const dispatch = useDispatch();
   const popupVideoRef = useRef(null);
   const [showVideoPopup, setShowVideoPopup] = useState(false);
   const [isPopupVideoPlaying, setIsPopupVideoPlaying] = useState(false);
@@ -109,7 +110,7 @@ const VideoBanner = () => {
   return (
     <div>
       {/* Banner adjusted for 120px header */}
-      <section className="relative w-full h-[85vh] min-h-[600px] max-h-[900px] overflow-hidden pt-[120px]">
+      <section className="video-banner-hero relative w-full h-[85vh] min-h-[600px] max-h-[900px] overflow-hidden pt-[120px]">
         {/* Rotating GIF Background */}
         <div className="absolute inset-0 w-full h-full">
           {gifs.map((gif, index) => (
@@ -156,11 +157,11 @@ const VideoBanner = () => {
             <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 md:gap-6 justify-center items-center animate-slide-up-stagger px-2">
               <button
                 type="button"
-                onClick={() => navigate("/trade-talent")}
+                onClick={() => dispatch(openSignupModal())}
                 className="custom-button-two cursor-pointer rounded-full w-full sm:w-auto min-w-[200px] px-6 py-3 sm:px-8 sm:py-4 text-sm sm:text-base"
               >
                 <span className="relative z-10 flex items-center justify-center gap-2">
-                  Start Trading Now
+                  Get Started
                   <FaArrowRight className="text-xs sm:text-sm" />
                 </span>
                 <div className="absolute inset-0 rounded-full opacity-0 group-hover:opacity-20 transition-opacity duration-500 blur-xl" />
@@ -191,7 +192,7 @@ const VideoBanner = () => {
           </div>
         </div>
 
-        <style jsx>{`
+        <style>{`
           @keyframes fade-in-up {
             from {
               opacity: 0;
@@ -267,24 +268,32 @@ const VideoBanner = () => {
             animation: pulse-glow 2s ease-in-out infinite;
           }
 
+          /* Scoped to .video-banner-hero — this block previously had no
+             real scoping (a plain <style jsx> tag isn't actually processed
+             by any styled-jsx transform in this Vite app, so it silently
+             rendered as global CSS), meaning these rules were overriding
+             .custom-button-two/.text-2xl/.text-lg/.text-base for every
+             instance of those classes across the ENTIRE app on small
+             screens whenever this banner was mounted, not just this
+             banner's own button/text. */
           @media (max-width: 640px) {
-            .custom-button-two {
+            .video-banner-hero .custom-button-two {
               padding: 12px 24px;
               font-size: 14px;
             }
           }
 
           @media (max-width: 480px) {
-            .text-2xl {
+            .video-banner-hero .text-2xl {
               font-size: 1.5rem;
               line-height: 1.2;
             }
 
-            .text-lg {
+            .video-banner-hero .text-lg {
               font-size: 1rem;
             }
 
-            .text-base {
+            .video-banner-hero .text-base {
               font-size: 0.875rem;
             }
           }

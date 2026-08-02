@@ -17,7 +17,7 @@ const defaultNavLinks = [
   { name: "App", scrollTo: "mobileapp" },
   { name: "Inverse", path: "/inverse", isRoute: true },
   { name: "Podcast", scrollTo: "podcast" },
-  { name: "Futures", path: "/future", isRoute: true },
+  { name: "Futures", path: "/futures", isRoute: true },
   { name: "Merchandise", path: "/products", isRoute: true },
   { name: "Gigs & Events", path: "/events", isRoute: true },
 ];

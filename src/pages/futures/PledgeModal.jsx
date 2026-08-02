@@ -3,7 +3,8 @@ import { Elements, CardElement, useStripe, useElements } from "@stripe/react-str
 import { loadStripe } from "@stripe/stripe-js";
 import { useStartFanPledgeMutation, useConfirmFanPledgeMutation } from "../../app/tradingApi";
 import { toast } from "react-toastify";
-import { FiX, FiLock, FiStar, FiCheck } from "react-icons/fi";
+import { FiX, FiLock, FiStar } from "react-icons/fi";
+import fameCoin from "../../assets/home/thecoin.png";
 
 const stripePromise = loadStripe(import.meta.env.VITE_STRIPE_PUBLISHABLE_KEY);
 
@@ -267,9 +268,7 @@ export default function PledgeModal({ talent, onClose }) {
         {/* Step: success */}
         {step === "success" && (
           <div className="text-center space-y-4 py-4">
-            <div className="w-14 h-14 rounded-full bg-emerald-500/20 border border-emerald-500/40 flex items-center justify-center mx-auto">
-              <FiCheck className="text-emerald-400 w-7 h-7" />
-            </div>
+            <img src={fameCoin} alt="" className="w-14 h-14 mx-auto" />
             <div>
               <p className="text-white font-bold text-lg">You're in! 🌟</p>
               <p className="text-gray-400 text-sm mt-1">

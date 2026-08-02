@@ -8,6 +8,7 @@ import { useQuickQualifyMutation } from "../app/authApi";
 import { setCredentials } from "../features/auth/authSlice";
 import FameScoreCalculatingModal from "./FameScoreCalculatingModal";
 import FameScoreBreakdownView from "./FameScoreBreakdownView";
+import fameCoin from "../assets/home/thecoin.png";
 
 // Scraping happens server-side during this call, but we still floor the
 // animation so it never just flashes on a fast/cached response.
@@ -216,7 +217,7 @@ export default function QualifyPopup({ open, onClose }) {
 
           {step === "result" && result && result.tier === "tradeable" && (
             <div className="text-center space-y-5">
-              <div className="text-4xl">🎉</div>
+              <img src={fameCoin} alt="" className="w-14 h-14 mx-auto" />
               <h3 className="text-white text-xl font-bold">You're Tradeable!</h3>
               <p className="text-gray-300 text-sm leading-relaxed">{result.message}</p>
               <p className="text-gray-500 text-xs">
