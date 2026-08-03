@@ -1,0 +1,31 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: ".nvmrc"
+          cache: "npm"
+
+      - run: npm ci
+      - run: npm run lint
+
+      # Placeholder values — this job only verifies the build succeeds
+      # structurally, it never ships this output anywhere. The real
+      # production build (with real secrets) happens in deploy.yml.
+      - run: npm run build
+        env:
+          VITE_API_BASE_URL: https://api.example.com
+          VITE_STRIPE_PUBLISHABLE_KEY: pk_test_placeholder
+          VITE_SECRET_KEY: placeholder
+          VITE_GOOGLE_MAPS_KEY: placeholder

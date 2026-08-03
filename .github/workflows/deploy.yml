@@ -1,0 +1,70 @@
+# Requires Phase 5 (infra/, Terraform) to exist before this can succeed —
+# until then this will fail cleanly at the "configure AWS credentials" step,
+# which is expected and harmless (no partial/bad deploys happen).
+#
+# Repo secrets/variables this workflow needs, once Phase 5 is live:
+#   AWS_DEPLOY_ROLE_ARN       - IAM role ARN for GitHub OIDC to assume (infra/ output)
+#   AWS_REGION                - e.g. us-east-1
+#   S3_BUCKET                 - frontend static-hosting bucket name (infra/ output)
+#   CLOUDFRONT_DISTRIBUTION_ID - the frontend's CloudFront distribution (infra/ output)
+#   VITE_API_BASE_URL          - real production API URL
+#   VITE_STRIPE_PUBLISHABLE_KEY - real Stripe publishable key
+#   VITE_SECRET_KEY             - real internal API key
+#   VITE_GOOGLE_MAPS_KEY        - real Google Maps key
+#   VITE_SENTRY_DSN             - optional, omit to leave Sentry disabled
+name: Deploy
+
+on:
+  push:
+    branches: [main]
+
+permissions:
+  id-token: write # required for GitHub OIDC -> AWS role assumption
+  contents: read
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: ".nvmrc"
+          cache: "npm"
+      - run: npm ci
+      - run: npm run lint
+      - run: npm run build
+        env:
+          VITE_API_BASE_URL: ${{ secrets.VITE_API_BASE_URL }}
+          VITE_STRIPE_PUBLISHABLE_KEY: ${{ secrets.VITE_STRIPE_PUBLISHABLE_KEY }}
+          VITE_SECRET_KEY: ${{ secrets.VITE_SECRET_KEY }}
+          VITE_GOOGLE_MAPS_KEY: ${{ secrets.VITE_GOOGLE_MAPS_KEY }}
+          VITE_SENTRY_DSN: ${{ secrets.VITE_SENTRY_DSN }}
+      - uses: actions/upload-artifact@v4
+        with:
+          name: dist
+          path: dist/
+          retention-days: 1
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          name: dist
+          path: dist/
+
+      - uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: ${{ secrets.AWS_DEPLOY_ROLE_ARN }}
+          aws-region: ${{ secrets.AWS_REGION }}
+
+      - name: Sync to S3
+        run: aws s3 sync dist/ "s3://${{ secrets.S3_BUCKET }}" --delete
+
+      - name: Invalidate CloudFront cache
+        run: |
+          aws cloudfront create-invalidation \
+            --distribution-id "${{ secrets.CLOUDFRONT_DISTRIBUTION_ID }}" \
+            --paths "/*"
