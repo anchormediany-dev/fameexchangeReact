@@ -11,8 +11,6 @@ import { toast } from "react-toastify";
 import ConfirmDialog from "../../../utils/ConfirmDialog";
 import { imgSrc } from "../../../utils/imgSrc";
 
-const toAbsolute = (p) => imgSrc(p);
-
 const chipVisible = (v) =>
   v
     ? "text-green-300 border-green-400/30 bg-green-400/10"
@@ -36,7 +34,7 @@ const AdminTeams = () => {
   const empty = !teams || teams.length === 0;
 
   // image error tracking (show name badge if broken)
-  const [brokenIds, setBrokenIds] = useState(() => new Set());
+  const [, setBrokenIds] = useState(() => new Set());
   const markBroken = (id) =>
     setBrokenIds((prev) => new Set([...Array.from(prev), id]));
 
@@ -171,8 +169,6 @@ const AdminTeams = () => {
               !isError &&
               !empty &&
               teams.map((t, idx) => {
-                const img = toAbsolute(t?.imageUrl);
-                const showBadge = !img || brokenIds.has(t?._id);
                 return (
                   <tr
                     key={t?._id || idx}

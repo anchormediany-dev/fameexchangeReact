@@ -150,9 +150,9 @@ export default function FutureTalents() {
   // ---- API params state (with sensible defaults) ----
   const today = new Date().toISOString().slice(0, 10);
   const [page, setPage] = useState(1);
-  const [from, setFrom] = useState("2025-01-01");
-  const [to, setTo] = useState(today);
-  const [sort, setSort] = useState("oldest");
+  const [from] = useState("2025-01-01");
+  const [to] = useState(today);
+  const [sort] = useState("oldest");
   const limit = 10;
 
   // ---- fetch from API ----
@@ -191,7 +191,7 @@ export default function FutureTalents() {
   const pagination = data?.pagination;
 
   // Derive available categories and counts
-  const { categories, categoryCounts, totalWithAnyCategory } = useMemo(() => {
+  const { categories, totalWithAnyCategory } = useMemo(() => {
     const counts = new Map(); // category -> count
     let withAny = 0;
     for (const u of talents) {

@@ -19,7 +19,7 @@ const LoginSignupModal = ({ isOpen, onClose, setIsOpenLoginSignup }) => {
 
   const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
   const [isSignupModalOpen, setIsSignupModalOpen] = useState(false);
-  const [isLoginSignupOpen, setIsLoginSignupOpen] = useState(false);
+  const [, setIsLoginSignupOpen] = useState(false);
 
   // for login modals
   const openLoginModal = () => {
@@ -39,9 +39,6 @@ const LoginSignupModal = ({ isOpen, onClose, setIsOpenLoginSignup }) => {
 
   const closeSignupModal = () => {
     setIsSignupModalOpen(false);
-  };
-  const closeLoginSignupModal = () => {
-    setIsLoginSignupOpen(false);
   };
   useEffect(() => {
     if (isOpen) {

@@ -13,13 +13,6 @@ const fmt = (n, d = 2) => Number(n || 0).toFixed(d);
 const fmtPnl = (v) => (v >= 0 ? `+$${fmt(v)}` : `-$${fmt(Math.abs(v))}`);
 const pnlClass = (v) =>
   v > 0 ? "text-green-400" : v < 0 ? "text-red-400" : "text-gray-400";
-const formatVol = (v) => {
-  if (v >= 1e9) return `${(v / 1e9).toFixed(1)}B`;
-  if (v >= 1e6) return `${(v / 1e6).toFixed(1)}M`;
-  if (v >= 1e3) return `${(v / 1e3).toFixed(1)}K`;
-  return String(v);
-};
-
 const TradingDashboard = () => {
   const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState("positions");

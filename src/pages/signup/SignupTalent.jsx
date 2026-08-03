@@ -43,8 +43,7 @@ const SignupTalent = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [isOver18, setIsOver18] = useState(false);
   const [agreedTerms, setAgreedTerms] = useState(false);
-  const [isOtpOpen, setIsOtpOpen] = useState(false);
-  const [signupResponse, setSignupResponse] = useState(null);
+  const [, setSignupResponse] = useState(null);
 
   // Talent and representation data
   const [talentData, setTalentData] = useState([]);
@@ -69,7 +68,7 @@ const SignupTalent = () => {
   // Lenient social profile validators. Empty is always valid (optional).
   // Accept either a full URL or an @handle / plain handle.
   const handleRe = /^@?[A-Za-z0-9._-]{1,40}$/;
-  const urlRe = /^(https?:\/\/)?[\w-]+(\.[\w-]+)+([\/?#][^\s]*)?$/i;
+  const urlRe = /^(https?:\/\/)?[\w-]+(\.[\w-]+)+([/?#][^\s]*)?$/i;
   const validateSocial = (name, raw) => {
     const value = String(raw || "").trim();
     if (!value) return "";

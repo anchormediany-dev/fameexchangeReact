@@ -2,7 +2,7 @@ import FameCoinLogo from "../assets/icons/famecoin-logo.svg?react";
 import { useState } from "react";
 import LoginSignupModal from "./LoginSignupModal";
 const FameCoin = () => {
-  const [isOpen, setIsOpen] = useState(false);
+  const [, setIsOpen] = useState(false);
   const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
   // for login modals
   const openLoginModal = () => {

@@ -7,9 +7,6 @@ import ConfirmDialog from "../../utils/ConfirmDialog";
 import { Link } from "react-router-dom";
 import { imgSrc } from "../../utils/imgSrc";
 
-const fallbackAvatar =
-  "https://images.unsplash.com/photo-1502685104226-ee32379fefbe?w=200&auto=format&fit=crop&q=60";
-
 const formatDate = (iso) => {
   if (!iso) return "—";
   try {

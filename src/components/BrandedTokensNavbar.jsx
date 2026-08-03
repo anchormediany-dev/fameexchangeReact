@@ -103,7 +103,6 @@ const BrandedTokensNavbar = () => {
   const [dropdownTimeout, setDropdownTimeout] = useState(null);
   const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
   const [isSignupModalOpen, setIsSignupModalOpen] = useState(false);
-  const [activeSection, setActiveSection] = useState(null);
   const [showTalentTokens, setShowTalentTokens] = useState(false);
 
   const location = useLocation();

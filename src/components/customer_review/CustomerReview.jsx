@@ -8,8 +8,7 @@ import "swiper/css";
 import { useGetReviewsQuery } from "../../app/authApi";
 import { Link } from "react-router-dom";
 const CustomerReviews = () => {
-  const { data, isLoading, isError, error, refetch, isFetching } =
-    useGetReviewsQuery();
+  const { data } = useGetReviewsQuery();
   // Animation variants
   const containerVariants = {
     hidden: { opacity: 0 },
@@ -139,9 +138,6 @@ const CustomerReviews = () => {
         .filter((r) => r?.status === "approved")
         .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
     : [];
-  // Always show 3 specific reviews (can be first 3 or any 3 you choose)
-  const displayedReviews = reviews.slice(0, 3);
-
   const truncate = (text = "", max = 50) => {
     if (!text) return "";
     if (text.length <= max) return text;

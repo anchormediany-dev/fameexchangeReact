@@ -18,11 +18,7 @@ const data = RAW.map((close, i) => {
 });
 
 export default function PortfolioDashboard({ userData }) {
-  const [activeTab, setActiveTab] = useState("buy");
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const handlePreviewOrderClick = () => {
-    setIsModalOpen(true);
-  };
 
   const handleCloseModal = () => {
     setIsModalOpen(false);

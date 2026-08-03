@@ -41,7 +41,6 @@ const getEmail = (u) => (u?.email || "").trim();
 
 const TalentCard = ({ user, onClick }) => {
   const name = getName(user) || "Unnamed";
-  const email = getEmail(user) || "—";
   const src = firstImageUrl(user);
   const initials = name
     .split(" ")

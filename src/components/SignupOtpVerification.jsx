@@ -12,8 +12,7 @@ const SignupOtpVerification = () => {
   const navigate = useNavigate();
   const email = location.state?.email || sessionStorage.getItem("signupEmail");
   const [code, setCode] = useState(["", "", "", ""]);
-  const [isVerifyOpen, setIsVerifyOpen] = useState(false);
-  const [verifyOtp, { isLoading, isError, error }] = useVerifyOtpMutation();
+  const [verifyOtp, { isLoading }] = useVerifyOtpMutation();
   const [resendOtp, { isLoading: isResending }] = useResendOtpMutation();
   useEffect(() => {
     if (!email) {
@@ -54,7 +53,7 @@ const SignupOtpVerification = () => {
 
     try {
       const otp = code.join("");
-      const res = await verifyOtp({ email, otp }).unwrap();
+      await verifyOtp({ email, otp }).unwrap();
       toast.success("OTP Verified Successfully!");
       setTimeout(() => {
         navigate("/verify-id");

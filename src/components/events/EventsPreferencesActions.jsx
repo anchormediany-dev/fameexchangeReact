@@ -11,26 +11,12 @@ import { Link } from "react-router-dom";
 const EventsPreferencesActions = ({ eventId, eventDetails }) => {
   const [attendanceOption, setAttendanceOption] = useState("interested");
   const [eventType, setEventType] = useState("liveInPerson");
-  const [uploadedLogo, setUploadedLogo] = useState(null);
-  const [uploadedFile, setUploadedFile] = useState(null);
+  const [, setUploadedLogo] = useState(null);
+  const [, setUploadedFile] = useState(null);
   const [submitMsg, setSubmitMsg] = useState("");
   const [submitErr, setSubmitErr] = useState("");
   const [setPreference, { isLoading: isSubmitting }] =
     useSetEventPreferenceMutation();
-
-  const handleLogoUpload = (event) => {
-    const file = event.target.files[0];
-    if (file) {
-      setUploadedFile(file);
-      const reader = new FileReader();
-      reader.onload = (e) => {
-        setUploadedLogo({ url: e.target.result, name: file.name });
-      };
-      reader.readAsDataURL(file);
-      setSubmitMsg("");
-      setSubmitErr("");
-    }
-  };
 
   const handleReset = () => {
     setAttendanceOption("interested");

@@ -17,7 +17,7 @@ const EventsCalendar = ({
   height = 500,
 }) => {
   const [currentDate, setCurrentDate] = useState(new Date());
-  const [selectedEvent, setSelectedEvent] = useState(null);
+  const [, setSelectedEvent] = useState(null);
 
   const monthNames = [
     "JANUARY",

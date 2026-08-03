@@ -5,7 +5,7 @@ import { useNavigate } from "react-router-dom";
 import faqImage from "../../assets/images/faq.png";
 import { useGetAllFaqsQuery } from "../../app/authApi";
 const Faq = () => {
-  const { data, isLoading, isError, error } = useGetAllFaqsQuery();
+  const { data, isLoading, isError } = useGetAllFaqsQuery();
   const faqData = data?.result;
   console.log(faqData);
   const [openFaq, setOpenFaq] = useState(null);
@@ -15,7 +15,6 @@ const Faq = () => {
     setOpenFaq(openFaq === index ? null : index);
   };
 
-  const goldColor = "#a38b41";
   const borderStyle = "2px solid #d9c698";
 
   return (

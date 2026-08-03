@@ -2,7 +2,7 @@ import processImg from "../assets/images/process-img.png";
 import { useState } from "react";
 import LoginSignupModal from "./LoginSignupModal";
 const Process = () => {
-  const [isOpen, setIsOpen] = useState(false);
+  const [, setIsOpen] = useState(false);
   const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
   // for login modals
   const openLoginModal = () => {

@@ -157,10 +157,6 @@ const Navbar = () => {
     navigate("/login");
   };
   const closeLoginModal = () => setIsLoginModalOpen(false);
-  const openSignupModal = () => {
-    setIsSignupModalOpen(true);
-    setIsOpen(false);
-  };
   const closeSignupModal = () => setIsSignupModalOpen(false);
 
   useEffect(() => {

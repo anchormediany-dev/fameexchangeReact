@@ -131,7 +131,6 @@ function CardForm({ clientSecret, totalAmount }) {
 export default function PaymentStep() {
   const paymentIntent = useSelector(selectPaymentIntent);
   const attendees = useSelector(selectAttendees);
-  const billing = useSelector(selectBilling);
 
   const totalAmount = (attendees?.length || 0) * 1; // amount is for display; Stripe uses PI amount
   if (!paymentIntent?.clientSecret)

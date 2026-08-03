@@ -5,7 +5,6 @@ import "react-big-calendar/lib/css/react-big-calendar.css";
 import "./TalentDashboard.css";
 import CreateSession from "../../components/talent/create_session/CreateSession";
 const localizer = momentLocalizer(moment);
-const timeZones = moment.tz.names();
 
 const TalentDashboard = () => {
   // const [settings, setSettings] = useState({

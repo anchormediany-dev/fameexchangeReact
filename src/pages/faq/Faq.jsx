@@ -54,7 +54,7 @@ const FAQItem = ({ faq, index, isOpen, toggleOpen }) => {
 const FAQ = () => {
   const [openKey, setOpenKey] = useState(null);
   const [searchQuery, setSearchQuery] = useState("");
-  const { data, isLoading, error, isError } = useGetAllFaqsQuery();
+  const { data, isLoading, isError } = useGetAllFaqsQuery();
 
   const toggleOpen = (key) => {
     setOpenKey(openKey === key ? null : key);

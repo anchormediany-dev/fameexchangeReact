@@ -50,7 +50,6 @@ const currency = (n) =>
 function CheckoutForm({ quote, sessionId, talentId, sessionMeta }) {
   const stripe = useStripe();
   const elements = useElements();
-  const navigate = useNavigate();
   const { user } = useAuth();
 
   const [processing, setProcessing] = useState(false);

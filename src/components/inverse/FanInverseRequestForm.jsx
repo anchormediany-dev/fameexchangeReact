@@ -38,8 +38,7 @@ const FanInverseRequestForm = ({
 
   const location = useLocation();
 
-  const [sendFanRequest, { isLoading, isError, error }] =
-    useFanInverseRequestMutation();
+  const [sendFanRequest, { error }] = useFanInverseRequestMutation();
   // Handle access type selection
   const handleAccessTypeChange = (e) => {
     const selectedType = e.target.value;
@@ -113,7 +112,7 @@ const FanInverseRequestForm = ({
         await sendFanRequest(requestBody).unwrap();
         toast.success("Inverse request sent successfully!");
         handleClear();
-      } catch (err) {
+      } catch {
         toast.error(error?.data?.message);
       }
   };

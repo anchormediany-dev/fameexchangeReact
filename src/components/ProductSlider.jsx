@@ -12,7 +12,7 @@ import { useNavigate } from "react-router-dom";
 import ImageLightbox from "./ImageLightbox";
 const ProductSlider = () => {
   const navigate = useNavigate();
-  const { data, error, isError, isLoading } = useGetProductsQuery();
+  const { data, isError, isLoading } = useGetProductsQuery();
   const [slidesPerView, setSlidesPerView] = useState(4);
   const [previewSrc, setPreviewSrc] = useState(null);
   const [previewAlt, setPreviewAlt] = useState("");

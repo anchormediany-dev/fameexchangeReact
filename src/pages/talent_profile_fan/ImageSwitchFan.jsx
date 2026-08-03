@@ -15,8 +15,7 @@ const ImageSwitchFan = ({ userData }) => {
   const [selectedImage, setSelectedImage] = useState(0);
   const [dragOver, setDragOver] = useState(false);
   const fileInputRef = useRef(null);
-  const [isUploading, setIsUploading] = useState(false);
-  const [bioText, setBioText] = useState("");
+  const [, setIsUploading] = useState(false);
   const IMAGE_BASE_URL = import.meta.env.VITE_API_BASE_URL;
   const [addSponsorship, { isLoading: isSponsoring }] =
     useAddSponsorshipMutation();
@@ -115,19 +114,6 @@ const ImageSwitchFan = ({ userData }) => {
     }
   };
 
-  // Helper to convert DataURL to Blob
-  const dataURLtoBlob = (dataUrl) => {
-    const arr = dataUrl.split(",");
-    const mime = arr[0].match(/:(.*?);/)[1];
-    const bstr = atob(arr[1]);
-    let n = bstr.length;
-    const u8arr = new Uint8Array(n);
-    while (n--) {
-      u8arr[n] = bstr.charCodeAt(n);
-    }
-    return new Blob([u8arr], { type: mime });
-  };
-
   // This page (talent-profile/:id via TalentProfileForFan) is a FAN
   // viewing a talent's profile, not a self-edit page — there is no mutation
   // wired to persist uploads here (unlike talent_profile/ImageSwitch.jsx's
@@ -185,12 +171,6 @@ const ImageSwitchFan = ({ userData }) => {
         error?.error ||
         "Failed to process sponsorship. Please try again.";
       toast.error(msg);
-    }
-  };
-  // Close popup when clicking outside
-  const handleBackdropClick = (e) => {
-    if (e.target === e.currentTarget) {
-      handleCancel();
     }
   };
 

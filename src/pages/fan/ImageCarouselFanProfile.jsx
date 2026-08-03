@@ -98,8 +98,6 @@ const ImageCarouselFanProfile = ({ userData, updateMyProfile }) => {
       city: "New York",
     },
   ];
-  const user = JSON.parse(localStorage.getItem("user"));
-  const userId = user?.id;
   const [images, setImages] = useState([]);
   const [selectedImage, setSelectedImage] = useState(0);
   const [deleteProfileImage] = useDeleteProfileImageMutation();

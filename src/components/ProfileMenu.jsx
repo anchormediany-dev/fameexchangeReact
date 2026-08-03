@@ -1,6 +1,6 @@
 // components/ProfileMenu.jsx
 import { useEffect, useRef, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   FiEdit,
@@ -14,8 +14,7 @@ export default function ProfileMenu({
   user = { name: "User", avatarUrl: "" },
   onLogout,
 }) {
-  const navigate = useNavigate();
-  const { user: userDetails, isAuthenticated } = useAuth();
+  const { user: userDetails } = useAuth();
   const [open, setOpen] = useState(false);
   const btnRef = useRef(null);
   const panelRef = useRef(null);

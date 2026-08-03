@@ -30,7 +30,7 @@ const currency = (n) =>
     : "";
 
 export default function EventDetails() {
-  const { isAuthenticated, user } = useAuth();
+  const { isAuthenticated } = useAuth();
   const { id } = useParams();
   const navigate = useNavigate();
   const { data, isLoading, isError, error } = useGetEventByIdQuery(id, {
@@ -54,14 +54,6 @@ export default function EventDetails() {
     ? (event?.regular_price || 0) * (1 - (event.discount_percent || 0) / 100)
     : event?.regular_price;
 
-  // ✅ Cover fallback chain
-  const cover =
-    resolveImage(event?.event_cover) ||
-    resolveImage(
-      Array.isArray(event?.event_images) ? event?.event_images?.[0] : ""
-    ) ||
-    resolveImage(event?.userId?.images?.[0]?.fileUrl) ||
-    FALLBACK_COVER;
   const logo =
     resolveImage(event?.logo) ||
     resolveImage(event?.userId?.images?.[0]?.fileUrl) ||
@@ -70,8 +62,6 @@ export default function EventDetails() {
     )}` ||
     FALLBACK_LOGO_PLACEHOLDER;
   const pref = event?.prefrence ?? event?.preference ?? "—";
-  const lat = event?.event_coordinates?.lat ?? "—";
-  const lng = event?.event_coordinates?.long ?? "—";
   const carouselImages = [];
   if (event?.event_cover) {
     carouselImages.push(resolveImage(event.event_cover));

@@ -70,7 +70,7 @@ const ConfirmedRequestsCalendar = ({ userData, error, isError, isLoading }) => {
     try {
       const parsed = parseISO(dateString);
       return isValid(parsed) ? parsed : null;
-    } catch (error) {
+    } catch {
       console.warn("Invalid date string:", dateString);
       return null;
     }
@@ -78,14 +78,6 @@ const ConfirmedRequestsCalendar = ({ userData, error, isError, isLoading }) => {
   const isConfirmedDate = (date) => {
     if (!confirmations) return false;
     return confirmations?.some((req) => {
-      const requestDate = safeParseISO(req.confirmedDate);
-      return requestDate && isSameDay(requestDate, date);
-    });
-  };
-
-  const getConfirmedRequestsForDate = (date) => {
-    if (!confirmations) return [];
-    return confirmations?.filter((req) => {
       const requestDate = safeParseISO(req.confirmedDate);
       return requestDate && isSameDay(requestDate, date);
     });

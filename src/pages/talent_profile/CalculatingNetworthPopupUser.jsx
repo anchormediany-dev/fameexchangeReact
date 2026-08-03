@@ -33,7 +33,6 @@ export default function CalculatingNetworthPopupUser({
   onClose,
 }) {
   const social = data?.socialMedia || {};
-  const createdAt = data?.createdAt ? new Date(data.createdAt) : null;
 
   return (
     <AnimatePresence>

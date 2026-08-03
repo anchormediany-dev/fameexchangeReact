@@ -12,9 +12,8 @@ const ContactForm = () => {
   });
 
   const [isLoaded, setIsLoaded] = useState(false);
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  const [contactUs, { isLoading, isError, error, isSuccess }] =
-    useContactUsMutation();
+  const [isSubmitting] = useState(false);
+  const [contactUs] = useContactUsMutation();
   useEffect(() => {
     setIsLoaded(true);
 
@@ -79,21 +78,6 @@ const ContactForm = () => {
     },
   };
 
-  const fadeInRightVariants = {
-    hidden: {
-      opacity: 0,
-      x: 20,
-    },
-    visible: {
-      opacity: 1,
-      x: 0,
-      transition: {
-        duration: 0.7,
-        ease: "easeOut",
-      },
-    },
-  };
-
   const buttonVariants = {
     idle: {
       scale: 1,
@@ -112,18 +96,6 @@ const ContactForm = () => {
       scale: 0.98,
       transition: {
         duration: 0.1,
-      },
-    },
-  };
-
-  const inputFocusVariants = {
-    rest: {
-      borderColor: "transparent",
-    },
-    focus: {
-      borderColor: "#a38b41",
-      transition: {
-        duration: 0.2,
       },
     },
   };
@@ -153,9 +125,6 @@ const ContactForm = () => {
         autoClose: 3000,
       });
     }
-  };
-  const handleOpenApp = () => {
-    window.open("https://your-app-link-or-store-url.com", "_blank");
   };
   return (
     <motion.div

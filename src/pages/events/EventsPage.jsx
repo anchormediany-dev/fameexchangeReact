@@ -150,11 +150,6 @@ const UltraModernEventsPllatform = () => {
     });
   }, [events, eventsDate]);
 
-  const featuredEvents = useMemo(
-    () => events.filter((e) => e.isFeatured),
-    [events]
-  );
-
   /* Search mapping (no pagination) */
   const searchRaw = Array.isArray(searchResp?.data) ? searchResp.data : [];
   const searchEvents = searchRaw.map(mapEvent);

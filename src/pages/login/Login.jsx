@@ -16,7 +16,7 @@ import { openSignupModal as openSignupModalAction } from "../../features/auth/si
 const LoginPage = () => {
   const [formData, setFormData] = useState({ email: "", password: "" });
   const [touched, setTouched] = useState({ email: false, password: false });
-  const [showForgotPassword, setShowForgotPassword] = useState(false);
+  const [showForgotPassword] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const navigate = useNavigate();
 
@@ -35,7 +35,7 @@ const LoginPage = () => {
   //   navigate("/dashboard");
   // };
   const dispatch = useDispatch();
-  const [signin, { isLoading }] = useSigninMutation();
+  const [signin] = useSigninMutation();
 
   const handleSubmit = async (e) => {
     e.preventDefault();

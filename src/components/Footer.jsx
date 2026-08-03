@@ -53,41 +53,6 @@ const Footer = () => {
     },
   };
 
-  const logoVariants = {
-    hidden: { opacity: 0, scale: 0.8, rotateY: -180 },
-    visible: {
-      opacity: 1,
-      scale: 1,
-      rotateY: 0,
-      transition: {
-        duration: 0.8,
-        ease: "easeOut",
-      },
-    },
-  };
-
-  const buttonVariants = {
-    hidden: { opacity: 0, scale: 0.8 },
-    visible: {
-      opacity: 1,
-      scale: 1,
-      transition: {
-        duration: 0.5,
-        ease: "easeOut",
-      },
-    },
-    hover: {
-      scale: 1.05,
-      transition: {
-        duration: 0.2,
-        ease: "easeInOut",
-      },
-    },
-    tap: {
-      scale: 0.95,
-    },
-  };
-
   const socialIconVariants = {
     hidden: { opacity: 0, scale: 0 },
     visible: {
@@ -141,25 +106,6 @@ const Footer = () => {
     hover: {
       scale: 1.05,
       y: -2,
-      transition: {
-        duration: 0.2,
-        ease: "easeInOut",
-      },
-    },
-  };
-
-  const inputVariants = {
-    hidden: { opacity: 0, y: 20 },
-    visible: {
-      opacity: 1,
-      y: 0,
-      transition: {
-        duration: 0.5,
-        ease: "easeOut",
-      },
-    },
-    focus: {
-      scale: 1.02,
       transition: {
         duration: 0.2,
         ease: "easeInOut",

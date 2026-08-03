@@ -13,9 +13,8 @@ const ContactPage = () => {
   });
 
   const [isLoaded, setIsLoaded] = useState(false);
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  const [contactUs, { isLoading, isError, error, isSuccess }] =
-    useContactUsMutation();
+  const [isSubmitting] = useState(false);
+  const [contactUs] = useContactUsMutation();
   useEffect(() => {
     setIsLoaded(true);
 
@@ -37,64 +36,6 @@ const ContactPage = () => {
     return () => clearInterval(interval);
   }, []);
 
-  // Refined animation variants
-  const containerVariants = {
-    hidden: { opacity: 0 },
-    visible: {
-      opacity: 1,
-      transition: {
-        duration: 0.8,
-        staggerChildren: 0.15,
-        ease: "easeOut",
-      },
-    },
-  };
-
-  const fadeInUpVariants = {
-    hidden: {
-      opacity: 0,
-      y: 20,
-    },
-    visible: {
-      opacity: 1,
-      y: 0,
-      transition: {
-        duration: 0.6,
-        ease: "easeOut",
-      },
-    },
-  };
-
-  const fadeInLeftVariants = {
-    hidden: {
-      opacity: 0,
-      x: -20,
-    },
-    visible: {
-      opacity: 1,
-      x: 0,
-      transition: {
-        duration: 0.7,
-        ease: "easeOut",
-      },
-    },
-  };
-
-  const fadeInRightVariants = {
-    hidden: {
-      opacity: 0,
-      x: 20,
-    },
-    visible: {
-      opacity: 1,
-      x: 0,
-      transition: {
-        duration: 0.7,
-        ease: "easeOut",
-      },
-    },
-  };
-
   const buttonVariants = {
     idle: {
       scale: 1,
@@ -113,18 +54,6 @@ const ContactPage = () => {
       scale: 0.98,
       transition: {
         duration: 0.1,
-      },
-    },
-  };
-
-  const inputFocusVariants = {
-    rest: {
-      borderColor: "transparent",
-    },
-    focus: {
-      borderColor: "#a38b41",
-      transition: {
-        duration: 0.2,
       },
     },
   };
@@ -154,9 +83,6 @@ const ContactPage = () => {
         autoClose: 3000,
       });
     }
-  };
-  const handleOpenApp = () => {
-    window.open("https://your-app-link-or-store-url.com", "_blank");
   };
   return (
     <section className="w-full z-50 bg-gradient-to-br py-12 2xl:py-16 flex flex-col 2xl:gap-16 gap-12 px-4 sm:px-6 lg:px-8">

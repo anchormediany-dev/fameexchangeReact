@@ -1,6 +1,5 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
-import { toast } from "react-toastify";
 import {
   FaTimes,
   FaUser,
@@ -15,57 +14,14 @@ import {
   FaTimesCircle,
 } from "react-icons/fa";
 import { imgSrc } from "../utils/imgSrc";
-import { useUploadKYCDocumentsMutation } from "../app/authApi";
 
 const GOLD = "#a38b41";
 
 const KYCDetailsPageForTalent = ({ data: apiData, error, isLoading }) => {
-  const kycStatus = apiData?.userDocument?.isKYCVerified;
   const [selectedImage, setSelectedImage] = useState(null);
-  const [formData, setFormData] = useState({ text: "" });
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  const [uploadKYCDocuments] = useUploadKYCDocumentsMutation();
 
   const talentMessages = apiData?.userDocument?.messages;
   const isKYCVerified = apiData?.userDocument?.isKYCVerified;
-  const talentDocumentId = apiData?.userDocument?._id;
-
-  const theme = {
-    primary: "#a38b41",
-    bg: "bg-[#171717]",
-    card: "bg-gradient-to-br from-[#1a1a1a] to-[#0d0d0d]",
-    border: "border border-white/10",
-    text: "text-white",
-    sub: "text-gray-400",
-  };
-
-  const handleSendComment = async (e) => {
-    e.preventDefault();
-    if (!formData.text.trim()) {
-      toast.error("Please enter a message");
-      return;
-    }
-
-    setIsSubmitting(true);
-    try {
-      const submitData = new FormData();
-      submitData.append("text", formData.text);
-      submitData.append("docId", talentDocumentId);
-      await uploadKYCDocuments(submitData).unwrap();
-      toast.success("Message sent successfully!");
-      setFormData({ text: "" });
-
-      // Refresh the data to show the new message
-      // You might want to add a refetch function here if needed
-    } catch (err) {
-      console.error(err);
-      toast.error(
-        err?.data?.message || "Failed to send message. Please try again."
-      );
-    } finally {
-      setIsSubmitting(false);
-    }
-  };
 
   console.log(talentMessages, "api data here");
   const fmtDate = (d) =>

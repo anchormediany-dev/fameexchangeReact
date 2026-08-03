@@ -1,7 +1,6 @@
 import { useForm } from "react-hook-form";
 import { useState } from "react";
 import moment from "moment-timezone";
-import { momentLocalizer } from "react-big-calendar";
 import "react-big-calendar/lib/css/react-big-calendar.css";
 import { useCreateSessionMutation } from "../../../app/authApi";
 import { toast } from "react-toastify";
@@ -12,8 +11,6 @@ const DEFAULT_TZ = moment.tz.zone("US/Alaska")
 
 const allZones = moment.tz.names();
 const timeZones = [DEFAULT_TZ, ...allZones.filter((z) => z !== DEFAULT_TZ)];
-
-const localizer = momentLocalizer(moment);
 
 const CreateSession = () => {
   const [createSession, { isLoading, error }] = useCreateSessionMutation();

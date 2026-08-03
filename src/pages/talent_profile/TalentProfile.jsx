@@ -41,8 +41,8 @@ const TalentProfile = () => {
   // } = useGetNetworthQuery();
   const [saveNetworth, { isLoading: isSavingNetworth }] =
     useNetworthCalculateMutation();
-  const [statusMsg, setStatusMsg] = useState("");
-  const [builtPayload, setBuiltPayload] = useState(null);
+  const [, setStatusMsg] = useState("");
+  const [, setBuiltPayload] = useState(null);
   const [showNetworthPopup, setShowNetworthPopup] = useState(false);
   const [networthResult, setNetworthResult] = useState(null);
   const [networthError, setNetworthError] = useState(null);
@@ -131,46 +131,9 @@ const TalentProfile = () => {
       setShowNetworthPopup(true);
     }
   };
-  const [searchValue, setSearchValue] = useState("");
-  const [isFocused, setIsFocused] = useState(false);
-  const [updateMyProfile, { isLoading: isUpdating, error: isUpdatingError }] =
-    useUpdateMyProfileMutation();
+  const [updateMyProfile] = useUpdateMyProfileMutation();
   // const { data: userData, isLoading, isError } = useGetUserByIdQuery(userId);
   // console.log(userData?.user?.name, "user data");
-  const handleSearch = (e) => {
-    e.preventDefault();
-    if (searchValue.trim()) {
-      console.log("Searching for:", searchValue);
-      // Add your search logic here
-    }
-  };
-
-  const clearSearch = (e) => {
-    e.preventDefault();
-    e.stopPropagation();
-    setSearchValue("");
-    // Keep focus on input after clearing
-    const input = e.target.closest("form").querySelector("input");
-    if (input) {
-      input.focus();
-    }
-  };
-
-  const handleInputBlur = (e) => {
-    // Only blur if the click is outside the form
-    const form = e.currentTarget.closest("form");
-    setTimeout(() => {
-      if (!form.contains(document.activeElement)) {
-        setIsFocused(false);
-      }
-    }, 100);
-  };
-
-  const handleRecalculate = () => {
-    console.log("Recalculating values...");
-    // Add recalculation logic here
-  };
-
   const handleTradingChart = () => {
     console.log("Opening trading chart...");
     // Add chart logic here

@@ -7,14 +7,11 @@ const ImageSwitchAdmin = ({ userData }) => {
   const navigate = useNavigate();
   const biography = userData?.data?.profile?.biography;
   const talentName = userData?.data?.profile?.name;
-  const user = JSON.parse(localStorage.getItem("user"));
-  const userId = user?.id;
   const [images, setImages] = useState([]);
   const [selectedImage, setSelectedImage] = useState(0);
   const [dragOver, setDragOver] = useState(false);
   const fileInputRef = useRef(null);
-  const [isUploading, setIsUploading] = useState(false);
-  const [bioText, setBioText] = useState("");
+  const [, setIsUploading] = useState(false);
   const IMAGE_BASE_URL = import.meta.env.VITE_API_BASE_URL;
   // const handleInverseClick = () => {
   //   navigate("/inverse#inverse-request-form");
@@ -118,18 +115,6 @@ const ImageSwitchAdmin = ({ userData }) => {
     toast.error("Bulk image upload isn't available in the admin view yet.");
   };
 
-  // Helper to convert DataURL to Blob
-  const dataURLtoBlob = (dataUrl) => {
-    const arr = dataUrl.split(",");
-    const mime = arr[0].match(/:(.*?);/)[1];
-    const bstr = atob(arr[1]);
-    let n = bstr.length;
-    const u8arr = new Uint8Array(n);
-    while (n--) {
-      u8arr[n] = bstr.charCodeAt(n);
-    }
-    return new Blob([u8arr], { type: mime });
-  };
   // Sponsor functionality
   const [isPopupOpen, setIsPopupOpen] = useState(false);
   useEffect(() => {
@@ -160,13 +145,6 @@ const ImageSwitchAdmin = ({ userData }) => {
 
   const handleCancel = () => {
     setIsPopupOpen(false);
-  };
-
-  // Close popup when clicking outside
-  const handleBackdropClick = (e) => {
-    if (e.target === e.currentTarget) {
-      handleCancel();
-    }
   };
 
   return (

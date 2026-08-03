@@ -18,7 +18,7 @@ const AllProducts = () => {
 
   const limit = 8;
 
-  const { data, error, isError, isLoading, isFetching } = useGetProductsQuery({
+  const { data, isError, isLoading, isFetching } = useGetProductsQuery({
     page,
     limit,
     search: appliedSearch,

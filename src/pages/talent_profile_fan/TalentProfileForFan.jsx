@@ -1,4 +1,3 @@
-import { useState } from "react";
 import {
   FaChartLine,
   FaWallet,
@@ -13,45 +12,9 @@ import PortfolioDashboardForFan from "./Portfolio";
 
 const TalentProfileForFan = () => {
   const { id } = useParams();
-  const { data, isLoading, isError } = useGetTalentOverviewQuery(id, {
+  const { data } = useGetTalentOverviewQuery(id, {
     skip: !id,
   });
-  const [searchValue, setSearchValue] = useState("");
-  const [isFocused, setIsFocused] = useState(false);
-  const handleSearch = (e) => {
-    e.preventDefault();
-    if (searchValue.trim()) {
-      console.log("Searching for:", searchValue);
-      // Add your search logic here
-    }
-  };
-
-  const clearSearch = (e) => {
-    e.preventDefault();
-    e.stopPropagation();
-    setSearchValue("");
-    // Keep focus on input after clearing
-    const input = e.target.closest("form").querySelector("input");
-    if (input) {
-      input.focus();
-    }
-  };
-
-  const handleInputBlur = (e) => {
-    // Only blur if the click is outside the form
-    const form = e.currentTarget.closest("form");
-    setTimeout(() => {
-      if (!form.contains(document.activeElement)) {
-        setIsFocused(false);
-      }
-    }, 100);
-  };
-
-  const handleRecalculate = () => {
-    console.log("Recalculating values...");
-    // Add recalculation logic here
-  };
-
   const handleTradingChart = () => {
     console.log("Opening trading chart...");
     // Add chart logic here

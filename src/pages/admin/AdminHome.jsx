@@ -112,10 +112,10 @@ const AdminDashboard = () => {
   const [confirmOpen, setConfirmOpen] = useState(false);
   const [target, setTarget] = useState(null);
   const [pendingId, setPendingId] = useState(null);
-  const [deleteError, setDeleteError] = useState(null);
+  const [, setDeleteError] = useState(null);
   const { data, isLoading, isFetching, isError, error, refetch } =
     useGetAdminDashboardQuery();
-  const [deleteSession, { isLoading: isDeleting, error: deleteSessionError }] =
+  const [deleteSession, { isLoading: isDeleting }] =
     useDeleteSessionByAdminMutation();
   const navigate = useNavigate();
   // response envelope: { success, data: {...} }
@@ -125,24 +125,19 @@ const AdminDashboard = () => {
   const sessions = payload?.sessions || [];
   const totalEvents = payload?.totalEvents ?? 0;
 
-  const { totalUsers, talents, fans, activeCount, inactiveCount } =
-    useMemo(() => {
-      const total = users.length;
-      const a = users.filter((u) => u.role === "ADMIN");
-      const t = users.filter((u) => u.role === "TALENT");
-      const f = users.filter((u) => u.role === "FAN");
-      const o = users.filter(
-        (u) => !["ADMIN", "TALENT", "FAN"].includes(u.role || "")
-      );
-      const act = users.filter((u) => u.is_active).length;
-      return {
-        totalUsers: total,
-        talents: t.length,
-        fans: f.length,
-        activeCount: act,
-        inactiveCount: total - act,
-      };
-    }, [users]);
+  const { totalUsers } = useMemo(() => {
+    const total = users.length;
+    const t = users.filter((u) => u.role === "TALENT");
+    const f = users.filter((u) => u.role === "FAN");
+    const act = users.filter((u) => u.is_active).length;
+    return {
+      totalUsers: total,
+      talents: t.length,
+      fans: f.length,
+      activeCount: act,
+      inactiveCount: total - act,
+    };
+  }, [users]);
 
   // sessions[*].createdBy is an object
   const normalizedSessions = useMemo(

@@ -2,7 +2,7 @@
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { Link /*, useNavigate*/ } from "react-router-dom";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import { toast } from "react-toastify";
 import MotionPageWrapper from "../components/MotionPageWrapper";
 import siteLogo from "../assets/images/site-logo.png";
@@ -67,7 +67,6 @@ const talentOptions = [
 ];
 
 export default function UpdateProfile() {
-  const dispatch = useDispatch();
   const userId = useSelector((s) => s?.auth?.user?.id);
 
   // get user + expose refetch so UI updates after uploads/deletes
@@ -269,7 +268,7 @@ export default function UpdateProfile() {
   const onSubmit = async (values) => {
     try {
       const formData = buildFormData(values);
-      const res = await updateMyProfile(formData).unwrap();
+      await updateMyProfile(formData).unwrap();
 
       // if (res?.user || res?.token) {
       //   const cur = {

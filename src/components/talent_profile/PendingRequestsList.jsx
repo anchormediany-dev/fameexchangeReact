@@ -8,7 +8,6 @@ import {
   FaSpinner,
 } from "react-icons/fa";
 import { isSameMonth, parseISO, format } from "date-fns";
-import { useNavigate } from "react-router-dom";
 import {
   useGetAllFanRequestsQuery,
   useTalentConfirmationRequestMutation,
@@ -30,8 +29,6 @@ const PendingRequestsList = () => {
     fansName: "",
     accessType: "online",
   });
-  const navigate = useNavigate();
-
   const {
     data: fanRequestsData,
     isLoading,
@@ -52,9 +49,6 @@ const PendingRequestsList = () => {
   ] = useRescheduleTalentConfirmationMutation();
 
   const userLocalData = JSON.parse(localStorage.getItem("user"));
-  const isRoleTalent = userLocalData?.role === "TALENT";
-  const isRoleFan = userLocalData?.role === "FAN";
-  const isRoleAdmin = userLocalData?.role === "ADMIN";
   const roleId = userLocalData?.id;
   const {
     data: sessionsData,

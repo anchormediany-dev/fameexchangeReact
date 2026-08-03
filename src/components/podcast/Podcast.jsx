@@ -21,21 +21,6 @@ const Podcast = () => {
     },
   };
 
-  const fadeInRight = {
-    hidden: {
-      opacity: 0,
-      x: 30,
-    },
-    visible: {
-      opacity: 1,
-      x: 0,
-      transition: {
-        duration: 0.8,
-        ease: "easeOut",
-      },
-    },
-  };
-
   const staggerContainer = {
     hidden: { opacity: 0 },
     visible: {
@@ -46,46 +31,6 @@ const Podcast = () => {
       },
     },
   };
-
-  // Letter animation for heading
-  const letterAnimation = {
-    hidden: {
-      opacity: 0,
-      y: 50,
-    },
-    visible: {
-      opacity: 1,
-      y: 0,
-      transition: {
-        duration: 0.5,
-        ease: "easeOut",
-      },
-    },
-  };
-
-  // Word animation for paragraph
-  const wordAnimation = {
-    hidden: {
-      opacity: 0,
-      y: 20,
-    },
-    visible: {
-      opacity: 1,
-      y: 0,
-      transition: {
-        duration: 0.6,
-        ease: "easeOut",
-      },
-    },
-  };
-
-  const famexLetters = "FAMEX".split("");
-  const podcastLetters = "PODCAST".split("");
-
-  const paragraphWords =
-    "The experience that will be sure to give you exposure to spotlight your career".split(
-      " "
-    );
 
   return (
     <motion.section

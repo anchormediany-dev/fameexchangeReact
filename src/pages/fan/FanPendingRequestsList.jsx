@@ -10,7 +10,6 @@ import {
   FaSpinner,
 } from "react-icons/fa";
 import { isSameMonth, parseISO, format } from "date-fns";
-import { useNavigate } from "react-router-dom";
 import {
   useGetAllFanRequestsQuery,
   useFanRequestConfirmationMutation,
@@ -25,7 +24,6 @@ const FanPendingRequestsList = ({ userData }) => {
   const [currentDate] = useState(new Date());
   const [activeRequestId, setActiveRequestId] = useState(null);
   const [loadingAction, setLoadingAction] = useState(null);
-  const navigate = useNavigate();
 
   const {
     data: fanRequestsData,
@@ -36,8 +34,6 @@ const FanPendingRequestsList = ({ userData }) => {
 
   const [confirmTalentRequest, { isLoading: isConfirming }] =
     useFanRequestConfirmationMutation();
-  const userLocalData = JSON.parse(localStorage.getItem("user"));
-  const roleId = userLocalData?.id;
   const [open, setOpen] = useState(false);
   const [selected, setSelected] = useState(null);
 

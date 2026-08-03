@@ -1,117 +1,17 @@
 import { useState, useRef, useEffect } from "react";
 import { FaUpload } from "react-icons/fa";
 import { toast } from "react-toastify";
-import { useNavigate } from "react-router-dom";
 import FriendsFanSection from "../../components/talent_profile_fan/FriendsFanSection";
 const IMAGE_BASE_URL = import.meta.env.VITE_API_IMAGE_BASE_URL;
 const ImageSwitchForTalentAdmin = ({ userData }) => {
-  const tickets = [
-    {
-      id: "1",
-      eventId: "101",
-      eventName: "Music Fiesta 2025",
-      date: "2025-03-15",
-      time: "19:00",
-      venue: "Madison Square Garden",
-      city: "New York",
-    },
-    {
-      id: "2",
-      eventId: "102",
-      eventName: "Tech Conference 2025",
-      date: "2025-04-22",
-      time: "09:00",
-      venue: "Convention Center",
-      city: "San Francisco",
-    },
-    {
-      id: "3",
-      eventId: "103",
-      eventName: "Startup Pitch Night",
-      date: "2025-05-10",
-      time: "18:30",
-      venue: "Innovation Hub",
-      city: "Austin",
-    },
-    {
-      id: "4",
-      eventId: "104",
-      eventName: "Jazz Festival",
-      date: "2025-06-05",
-      time: "20:00",
-      venue: "Riverfront Park",
-      city: "New Orleans",
-    },
-    {
-      id: "5",
-      eventId: "105",
-      eventName: "Comedy Night Special",
-      date: "2025-07-18",
-      time: "21:00",
-      venue: "Laugh Factory",
-      city: "Los Angeles",
-    },
-    {
-      id: "6",
-      eventId: "106",
-      eventName: "Food & Wine Expo",
-      date: "2025-08-12",
-      time: "11:00",
-      venue: "Metro Convention",
-      city: "Chicago",
-    },
-    {
-      id: "7",
-      eventId: "107",
-      eventName: "Film Premiere Gala",
-      date: "2025-09-25",
-      time: "19:30",
-      venue: "Hollywood Theater",
-      city: "Los Angeles",
-    },
-    {
-      id: "8",
-      eventId: "108",
-      eventName: "Sports Championship",
-      date: "2025-10-08",
-      time: "15:00",
-      venue: "National Stadium",
-      city: "Miami",
-    },
-    {
-      id: "9",
-      eventId: "109",
-      eventName: "Art Exhibition Opening",
-      date: "2025-11-14",
-      time: "18:00",
-      venue: "Modern Art Museum",
-      city: "Boston",
-    },
-    {
-      id: "10",
-      eventId: "110",
-      eventName: "New Year's Eve Concert",
-      date: "2025-12-31",
-      time: "22:00",
-      venue: "Times Square",
-      city: "New York",
-    },
-  ];
-  const navigate = useNavigate();
   const biography = userData?.data?.profile?.biography;
   const talentName = userData?.data?.profile?.name;
-  const user = JSON.parse(localStorage.getItem("user"));
-  const userId = user?.id;
   const [images, setImages] = useState([]);
   const [selectedImage, setSelectedImage] = useState(0);
   const [dragOver, setDragOver] = useState(false);
   const fileInputRef = useRef(null);
-  const [isUploading, setIsUploading] = useState(false);
-  const [bioText, setBioText] = useState("");
+  const [, setIsUploading] = useState(false);
   const IMAGE_BASE_URL = import.meta.env.VITE_API_BASE_URL;
-  const handleInverseClick = () => {
-    navigate("/inverse#inverse-request-form");
-  };
   const normalizePath = (p) => {
     if (!p) return "";
     const clean = p.replace(/\\/g, "/"); // windows -> url
@@ -201,19 +101,6 @@ const ImageSwitchForTalentAdmin = ({ userData }) => {
   // block below. Failing clearly here instead of pretending to save.
   const saveImagesToBackend = async () => {
     toast.error("Bulk image upload isn't available in the admin view yet.");
-  };
-
-  // Helper to convert DataURL to Blob
-  const dataURLtoBlob = (dataUrl) => {
-    const arr = dataUrl.split(",");
-    const mime = arr[0].match(/:(.*?);/)[1];
-    const bstr = atob(arr[1]);
-    let n = bstr.length;
-    const u8arr = new Uint8Array(n);
-    while (n--) {
-      u8arr[n] = bstr.charCodeAt(n);
-    }
-    return new Blob([u8arr], { type: mime });
   };
 
   return (

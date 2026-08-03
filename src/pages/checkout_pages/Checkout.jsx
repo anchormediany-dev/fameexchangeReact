@@ -18,7 +18,6 @@ import {
   useAddIntentMutation,
   useConfirmPaymentMutation,
 } from "../../app/authApi";
-import { useAuth } from "../../utils/auth/useAuth";
 
 // Stripe imports
 import { loadStripe } from "@stripe/stripe-js";
@@ -585,7 +584,6 @@ function ConfirmationStep({
 function CheckoutPage() {
   const { id } = useParams();
   const navigate = useNavigate();
-  const { user } = useAuth();
   const { data, isLoading } = useGetEventByIdQuery(id, { skip: !id });
   const [addIntent, { isLoading: isCreatingIntent, error: intentError }] =
     useAddIntentMutation();

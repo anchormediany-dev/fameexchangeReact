@@ -119,7 +119,7 @@ export default function PledgeModal({ talent, onClose }) {
   const [amount, setAmount] = useState(25);
   const [amountError, setAmountError] = useState("");
   const [intentData, setIntentData] = useState(null); // { clientSecret, paymentIntentId }
-  const [successData, setSuccessData] = useState(null);
+  const [, setSuccessData] = useState(null);
   const [busy, setBusy] = useState(false); // true while Stripe/backend confirmation is in flight
 
   const [startFanPledge, { isLoading: starting }] = useStartFanPledgeMutation();

@@ -21,8 +21,6 @@ const scrollToCreateSession = () => {
 const IMAGE_BASE_URL = import.meta.env.VITE_API_IMAGE_BASE_URL;
 
 const ImageUploadSwitcher = ({ userData, updateMyProfile }) => {
-  const user = JSON.parse(localStorage.getItem("user"));
-  const userId = user?.id;
   const [images, setImages] = useState([]);
   const [selectedImage, setSelectedImage] = useState(0);
   const [deleteProfileImage] = useDeleteProfileImageMutation();
@@ -53,10 +51,6 @@ const ImageUploadSwitcher = ({ userData, updateMyProfile }) => {
     } catch (err) {
       console.error("Error updating biography:", err);
     }
-  };
-
-  const handleActionClick = (label) => {
-    console.log(`${label} clicked`);
   };
 
   const cancelEdit = () => {

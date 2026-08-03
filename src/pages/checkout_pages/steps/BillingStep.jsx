@@ -17,7 +17,6 @@ export default function BillingStep() {
   const billing = useSelector(selectBilling);
   const attendees = useSel(selectAttendees); // for back guard
 
-  const errors = {};
   const validate = () => {
     const e = {};
     if (!billing.name.trim()) e.name = "Full name is required";

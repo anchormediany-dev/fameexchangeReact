@@ -4,21 +4,8 @@ import raphaelRenter from "../assets/images/raphael-renter.png";
 import { useState } from "react";
 import LoginSignupModal from "./LoginSignupModal";
 const Futures = () => {
-  const [isOpen, setIsOpen] = useState(false);
+  const [, setIsOpen] = useState(false);
   const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
-  const handleScroll = (id) => {
-    const element = document.getElementById(id);
-    if (element) {
-      const yOffset = -80;
-      const y =
-        element.getBoundingClientRect().top + window.pageYOffset + yOffset;
-
-      window.scrollTo({
-        top: y,
-        behavior: "smooth",
-      });
-    }
-  };
   // for login modals
   const openLoginModal = () => {
     setIsLoginModalOpen(true);

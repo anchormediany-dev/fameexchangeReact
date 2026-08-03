@@ -86,9 +86,6 @@ const AddAdminTeam = () => {
     }
   };
 
-  const sectionTitleCls =
-    "text-lg font-semibold mb-4 col-span-full gredient-text";
-
   return (
     <div className="bg-[#222222] p-6 rounded-2xl border border-[#333333]">
       <h2

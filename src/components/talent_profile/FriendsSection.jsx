@@ -34,7 +34,7 @@ const FriendsSection = ({
     refetch: refetchUsers,
   } = useGetTalentQuery();
 
-  const [deleteFriends, { isLoading: isDeleting }] = useDeleteFriendsMutation();
+  const [deleteFriends] = useDeleteFriendsMutation();
   const [addFriend, { isLoading: isAdding }] = useAddFriendMutation();
 
   const friends = userData?.data?.friends || [];
@@ -63,8 +63,6 @@ const FriendsSection = ({
       toast.error(error?.data?.message || "Failed to remove friend");
     }
   };
-
-  const showResults = Boolean(searchTerm.trim() && !selectedUser?._id);
 
   const removeMultipleFriends = async () => {
     try {
@@ -130,9 +128,6 @@ const FriendsSection = ({
     return `${first} ${last.charAt(0).toUpperCase()}.`;
   }
 
-  function fallbackInitial(name = "") {
-    return (name.trim()[0] || "?").toUpperCase();
-  }
   return (
     <div className="bg-[#1f1f1f] rounded-xl shadow-lg">
       <div className="p-4 border-b border-gray-700 flex justify-between items-center">

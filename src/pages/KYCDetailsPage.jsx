@@ -38,7 +38,6 @@ const KYCDetailsPage = () => {
   const [adminKycConfirmation, { isLoading: isVerifying }] =
     useAdminKycConfirmationMutation();
   const [uploadKYCDocuments] = useUploadKYCDocumentsMutation();
-  const [kycStatus, setKycStatus] = useState("pending"); // kept for compatibility
   const [comment, setComment] = useState("");
   const [selectedImage, setSelectedImage] = useState(null);
   const [formData, setFormData] = useState({ text: "" });
@@ -46,7 +45,7 @@ const KYCDetailsPage = () => {
   const [showRejectionPopup, setShowRejectionPopup] = useState(false);
   const [rejectionReason, setRejectionReason] = useState("");
   const [verifyingDocumentId, setVerifyingDocumentId] = useState(null);
-  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [, setIsSubmitting] = useState(false);
   const theme = {
     primary: "#a38b41",
     bg: "bg-[#171717]",
@@ -199,9 +198,6 @@ const KYCDetailsPage = () => {
     },
     userDocumentId: null,
   };
-
-  // ---- UI state helpers
-  const handleStatusUpdate = (status) => setKycStatus(status);
 
   // ---- Popup flow
   const openRejectPopup = (docId) => {
@@ -692,28 +688,6 @@ const DocumentCard = ({
   verificationStatus,
   kycStatusTalent,
 }) => {
-  const getStatusColor = (status) => {
-    switch (status) {
-      case "approved":
-        return "text-green-400";
-      case "rejected":
-        return "text-red-400";
-      default:
-        return "text-yellow-400";
-    }
-  };
-
-  const getStatusText = (status) => {
-    switch (status) {
-      case "approved":
-        return "Approved";
-      case "rejected":
-        return "Rejected";
-      default:
-        return "Pending";
-    }
-  };
-
   return (
     <div className="group relative bg-[#2a2a2a] rounded-lg overflow-hidden border border-gray-600 hover:border-[#a38b41] transition-all">
       <div className="p-4 flex justify-between items-center">

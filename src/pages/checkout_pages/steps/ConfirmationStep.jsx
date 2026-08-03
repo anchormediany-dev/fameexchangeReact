@@ -18,8 +18,6 @@ export default function ConfirmationStep() {
     return <div className="text-red-300">No payment found.</div>;
   }
 
-  const totalAmount = attendees.length * 1; // adjust if you want to re-calc price here
-
   return (
     <div className="bg-[#222222] border border-[#333333] rounded-2xl p-6">
       <div className="text-center mb-6">

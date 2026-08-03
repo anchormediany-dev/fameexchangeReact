@@ -25,11 +25,7 @@ const data = [
 ];
 
 export default function PortfolioDashboardForFan({ userData }) {
-  const [activeTab, setActiveTab] = useState("buy");
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const handlePreviewOrderClick = () => {
-    setIsModalOpen(true);
-  };
 
   const handleCloseModal = () => {
     setIsModalOpen(false);

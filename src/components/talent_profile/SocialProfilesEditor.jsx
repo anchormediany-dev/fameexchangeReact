@@ -62,7 +62,7 @@ const fields = [
 ];
 
 const handleRe = /^@?[A-Za-z0-9._-]{1,40}$/;
-const urlRe = /^(https?:\/\/)?[\w-]+(\.[\w-]+)+([\/?#][^\s]*)?$/i;
+const urlRe = /^(https?:\/\/)?[\w-]+(\.[\w-]+)+([/?#][^\s]*)?$/i;
 const validate = (accepts, raw) => {
   const value = String(raw || "").trim();
   if (!value) return "";

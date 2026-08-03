@@ -45,7 +45,7 @@ const SearchTalents = ({
         setSelectedSearchUser?.(profile._id);
         setShowResults(false);
       }
-    } catch (e) {
+    } catch {
       // ignore JSON errors silently
     }
     // Run once on mount

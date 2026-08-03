@@ -6,8 +6,7 @@ import { useNewsletterSubscribeMutation } from "../app/authApi";
 const Newsletter = () => {
   const [email, setEmail] = useState("");
 
-  const [subscribe, { isLoading, isError, error, reset }] =
-    useNewsletterSubscribeMutation();
+  const [subscribe, { isLoading, reset }] = useNewsletterSubscribeMutation();
 
   const itemVariants = {
     hidden: { opacity: 0, y: 30 },
