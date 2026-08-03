@@ -223,7 +223,7 @@ const Navbar = () => {
   }, [userLocalData]);
   return (
     <>
-      <nav className="fixed top-0 w-full z-50 bg-black shadow-lg font-medium text-sm">
+      <nav className="fixed top-0 w-full z-50 bg-black shadow-lg font-medium text-sm pt-[env(safe-area-inset-top)]">
         <div className="container mx-auto flex items-center justify-between px-4 py-5">
           <Link
             to="/"

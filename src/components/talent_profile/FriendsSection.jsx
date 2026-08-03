@@ -352,7 +352,8 @@ const FriendsSection = ({
                     ) : (
                       <button
                         onClick={() => removeFriend(friend?._id)}
-                        className="absolute top-1 cursor-pointer right-1 text-red-400 opacity-0 group-hover:opacity-100 transition"
+                        aria-label="Remove friend"
+                        className="absolute top-1 right-1 cursor-pointer text-red-400 bg-black/40 p-1.5 rounded-full opacity-70 sm:opacity-0 sm:group-hover:opacity-100 transition touch-manipulation"
                       >
                         <FaTrash size={12} />
                       </button>

@@ -563,7 +563,8 @@ export default function UpdateProfile() {
                           <button
                             type="button"
                             onClick={() => handleRemoveExistingImage(img)}
-                            className="absolute top-1 right-1 bg-red-600/90 hover:bg-red-700 text-white p-1.5 rounded-full opacity-0 group-hover:opacity-100 transition"
+                            aria-label="Remove image"
+                            className="absolute top-1 right-1 bg-red-600/90 hover:bg-red-700 text-white p-1.5 rounded-full opacity-70 sm:opacity-0 sm:group-hover:opacity-100 transition touch-manipulation"
                             title="Remove"
                           >
                             <FaTrash size={12} />

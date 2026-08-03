@@ -245,7 +245,8 @@ const ImageUploadSwitcher = ({ userData, updateMyProfile }) => {
 
               <button
                 onClick={() => removeImage(idx)}
-                className="absolute top-0.5 right-0.5 bg-red-600 hover:bg-red-700 text-white p-1 rounded-full opacity-0 group-hover:opacity-100 transition-opacity"
+                aria-label="Remove image"
+                className="absolute top-0.5 right-0.5 bg-red-600 hover:bg-red-700 text-white p-1.5 rounded-full opacity-70 sm:opacity-0 sm:group-hover:opacity-100 transition-opacity touch-manipulation"
               >
                 <FaTimes size={10} />
               </button>
@@ -294,12 +295,21 @@ const ImageUploadSwitcher = ({ userData, updateMyProfile }) => {
               <label className="text-xl uppercase text-[#a38b41] mb-5 font-bold flex items-center gap-2">
                 {userData?.data?.profile?.name}
                 {userData?.data?.profile?.is_certified_tradeable && (
-                  <img
-                    src="/certified-tradeable-fameexchange.png"
-                    alt="Certified Tradeable"
+                  <button
+                    type="button"
+                    onClick={() =>
+                      toast.info("Certified Tradeable — qualified and KYC verified")
+                    }
                     title="Certified Tradeable — qualified and KYC verified"
-                    className="w-5 h-5 shrink-0"
-                  />
+                    aria-label="Certified Tradeable — qualified and KYC verified"
+                    className="shrink-0 touch-manipulation"
+                  >
+                    <img
+                      src="/certified-tradeable-fameexchange.png"
+                      alt=""
+                      className="w-5 h-5"
+                    />
+                  </button>
                 )}
               </label>
               <div className="flex justify-between items-center mb-2">

@@ -118,7 +118,7 @@ const TokenLeaderboard = () => {
               className="flex flex-col md:flex-row items-center gap-3 md:gap-2 md:justify-between bg-[#111111] rounded-xl px-4 md:px-6 py-4 shadow-lg hover:scale-[1.01] transition-transform"
             >
               {/* Token Name + Ticker */}
-              <div className="w-full md:w-[180px] lg:w-[220px] xl:w-[260px] font-heading-section text-center md:text-left">
+              <div className="w-full md:flex-1 md:basis-[180px] lg:basis-[220px] xl:basis-[260px] md:min-w-0 font-heading-section text-center md:text-left">
                 {token.name}{" "}
                 <span className="text-sm text-gray-400 font-light">
                   {token.ticker}
@@ -126,22 +126,22 @@ const TokenLeaderboard = () => {
               </div>
 
               {/* Token Price */}
-              <div className="w-full md:w-[120px] text-center md:text-left font-paragraph-lg text-white">
+              <div className="w-full md:flex-1 md:basis-[120px] md:min-w-0 text-center md:text-left font-paragraph-lg text-white">
                 {token.price}
               </div>
 
               {/* Token Change */}
-              <div className="w-full md:w-[100px] text-center md:text-left font-paragraph-lg text-darkOrange">
+              <div className="w-full md:flex-1 md:basis-[100px] md:min-w-0 text-center md:text-left font-paragraph-lg text-darkOrange">
                 {token.change}
               </div>
 
               {/* Token Volume */}
-              <div className="w-full md:w-[200px] xl:w-[250px] text-center md:text-left text-gray-300 font-paragraph-lg truncate">
+              <div className="w-full md:flex-1 md:basis-[200px] xl:basis-[250px] md:min-w-0 text-center md:text-left text-gray-300 font-paragraph-lg truncate">
                 {token.volume}
               </div>
 
               {/* Line Chart */}
-              <div className="w-full md:w-[140px] xl:w-[180px] h-10">
+              <div className="w-full md:flex-1 md:basis-[140px] xl:basis-[180px] md:min-w-0 h-10">
                 <ResponsiveContainer width="100%" height="100%">
                   <LineChart data={token.graphData}>
                     <Line
@@ -157,7 +157,7 @@ const TokenLeaderboard = () => {
               </div>
 
               {/* Trade Button */}
-              <div className="w-full md:w-[120px] flex justify-center md:justify-end">
+              <div className="w-full md:flex-1 md:basis-[120px] md:min-w-0 flex justify-center md:justify-end">
                 <button className="bg-gray font-button-lg-alt text-yellow-400 px-6 py-2 rounded-xl transition-colors duration-300 shadow-[4px_4px_4px_#000000EB,_-4px_-4px_12px_#FFFFFF08]">
                   Trade
                 </button>

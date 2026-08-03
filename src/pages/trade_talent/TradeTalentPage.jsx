@@ -576,12 +576,21 @@ const TradeTalentPage = () => {
                           {talent.name}
                         </h2>
                         {talent.is_certified_tradeable && (
-                          <img
-                            src="/certified-tradeable-fameexchange.png"
-                            alt="Certified Tradeable"
+                          <button
+                            type="button"
+                            onClick={() =>
+                              toast.info("Certified Tradeable — qualified and KYC verified")
+                            }
                             title="Certified Tradeable — qualified and KYC verified"
-                            className="w-5 h-5"
-                          />
+                            aria-label="Certified Tradeable — qualified and KYC verified"
+                            className="shrink-0 touch-manipulation"
+                          >
+                            <img
+                              src="/certified-tradeable-fameexchange.png"
+                              alt=""
+                              className="w-5 h-5"
+                            />
+                          </button>
                         )}
                         <span className="text-sm text-gray-500 font-mono bg-[#1a1a1a] px-2 py-0.5 rounded">
                           {talent.symbol}

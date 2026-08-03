@@ -170,98 +170,185 @@ const TradingDashboard = () => {
                   </div>
                 </div>
               ) : (
-                <div className="overflow-x-auto">
-                  <table className="w-full text-sm">
-                    <thead>
-                      <tr className="text-gray-500 text-xs uppercase border-b border-[#1f1f1f]">
-                        <th className="py-3 text-left">Talent</th>
-                        <th className="py-3 text-center">Side</th>
-                        <th className="py-3 text-right">Entry Price</th>
-                        <th className="py-3 text-right">Current Price</th>
-                        <th className="py-3 text-right">Shares</th>
-                        <th className="py-3 text-right">Invested</th>
-                        <th className="py-3 text-right">P&L</th>
-                        <th className="py-3 text-right">Opened</th>
-                        <th className="py-3 text-right"></th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {positions.map((pos) => (
-                        <tr
-                          key={pos._id}
-                          className="border-b border-[#1f1f1f]/50 hover:bg-[#1a1a1a]/50"
-                        >
-                          <td className="py-3">
-                            <div className="flex items-center gap-2">
-                              {pos.talent_image && (
-                                <img
-                                  src={pos.talent_image}
-                                  alt=""
-                                  className="w-7 h-7 rounded-full object-cover"
-                                />
-                              )}
-                              <div>
-                                <div className="text-white font-medium">
-                                  {pos.talent_name}
-                                </div>
-                                <div className="text-gray-500 text-xs font-mono">
-                                  {pos.talent_symbol}
+                <>
+                  {/* Desktop/tablet: full table */}
+                  <div className="overflow-x-auto hidden md:block">
+                    <table className="w-full text-sm">
+                      <thead>
+                        <tr className="text-gray-500 text-xs uppercase border-b border-[#1f1f1f]">
+                          <th className="py-3 text-left">Talent</th>
+                          <th className="py-3 text-center">Side</th>
+                          <th className="py-3 text-right">Entry Price</th>
+                          <th className="py-3 text-right">Current Price</th>
+                          <th className="py-3 text-right">Shares</th>
+                          <th className="py-3 text-right">Invested</th>
+                          <th className="py-3 text-right">P&L</th>
+                          <th className="py-3 text-right">Opened</th>
+                          <th className="py-3 text-right"></th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {positions.map((pos) => (
+                          <tr
+                            key={pos._id}
+                            className="border-b border-[#1f1f1f]/50 hover:bg-[#1a1a1a]/50"
+                          >
+                            <td className="py-3">
+                              <div className="flex items-center gap-2">
+                                {pos.talent_image && (
+                                  <img
+                                    src={pos.talent_image}
+                                    alt=""
+                                    className="w-7 h-7 rounded-full object-cover"
+                                  />
+                                )}
+                                <div>
+                                  <div className="text-white font-medium">
+                                    {pos.talent_name}
+                                  </div>
+                                  <div className="text-gray-500 text-xs font-mono">
+                                    {pos.talent_symbol}
+                                  </div>
                                 </div>
                               </div>
+                            </td>
+                            <td className="py-3 text-center">
+                              <span
+                                className={`text-xs font-semibold px-2.5 py-1 rounded uppercase ${
+                                  pos.side === "buy"
+                                    ? "bg-green-600/20 text-green-400"
+                                    : "bg-red-600/20 text-red-400"
+                                }`}
+                              >
+                                {pos.side}
+                              </span>
+                            </td>
+                            <td className="py-3 text-right font-mono text-gray-300">
+                              ${fmt(pos.entry_price)}
+                            </td>
+                            <td className="py-3 text-right font-mono text-white">
+                              ${fmt(pos.current_price)}
+                            </td>
+                            <td className="py-3 text-right font-mono text-gray-300">
+                              {fmt(pos.units, 0)}
+                            </td>
+                            <td className="py-3 text-right font-mono text-gray-300">
+                              ${fmt(pos.invested_amount)}
+                            </td>
+                            <td className="py-3 text-right">
+                              <div
+                                className={`font-mono font-semibold ${pnlClass(pos.unrealized_pnl)}`}
+                              >
+                                {fmtPnl(pos.unrealized_pnl)}
+                              </div>
+                              <div
+                                className={`text-[10px] font-mono ${pnlClass(pos.unrealized_pnl_percent)}`}
+                              >
+                                {pos.unrealized_pnl_percent >= 0 ? "+" : ""}
+                                {fmt(pos.unrealized_pnl_percent)}%
+                              </div>
+                            </td>
+                            <td className="py-3 text-right text-gray-500 text-xs">
+                              {new Date(pos.opened_at).toLocaleDateString()}
+                            </td>
+                            <td className="py-3 text-right">
+                              <button
+                                onClick={() => setClosingPosition(pos)}
+                                className="text-xs bg-red-600/20 text-red-400 px-3 py-1.5 rounded-lg hover:bg-red-600/30 transition-colors cursor-pointer"
+                              >
+                                Close
+                              </button>
+                            </td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
+
+                  {/* Mobile: stacked cards — a 9-column table forced users
+                      to horizontally scroll a dense financial table on
+                      small screens, which is hard to read and easy to
+                      mis-tap. */}
+                  <div className="space-y-3 md:hidden">
+                    {positions.map((pos) => (
+                      <div
+                        key={pos._id}
+                        className="rounded-xl border border-[#1f1f1f] bg-[#161616] p-4"
+                      >
+                        <div className="flex items-center justify-between gap-2 mb-3">
+                          <div className="flex items-center gap-2 min-w-0">
+                            {pos.talent_image && (
+                              <img
+                                src={pos.talent_image}
+                                alt=""
+                                className="w-8 h-8 rounded-full object-cover shrink-0"
+                              />
+                            )}
+                            <div className="min-w-0">
+                              <div className="text-white font-medium truncate">
+                                {pos.talent_name}
+                              </div>
+                              <div className="text-gray-500 text-xs font-mono">
+                                {pos.talent_symbol}
+                              </div>
                             </div>
-                          </td>
-                          <td className="py-3 text-center">
-                            <span
-                              className={`text-xs font-semibold px-2.5 py-1 rounded uppercase ${
-                                pos.side === "buy"
-                                  ? "bg-green-600/20 text-green-400"
-                                  : "bg-red-600/20 text-red-400"
-                              }`}
-                            >
-                              {pos.side}
-                            </span>
-                          </td>
-                          <td className="py-3 text-right font-mono text-gray-300">
-                            ${fmt(pos.entry_price)}
-                          </td>
-                          <td className="py-3 text-right font-mono text-white">
-                            ${fmt(pos.current_price)}
-                          </td>
-                          <td className="py-3 text-right font-mono text-gray-300">
-                            {fmt(pos.units, 0)}
-                          </td>
-                          <td className="py-3 text-right font-mono text-gray-300">
-                            ${fmt(pos.invested_amount)}
-                          </td>
-                          <td className="py-3 text-right">
-                            <div
-                              className={`font-mono font-semibold ${pnlClass(pos.unrealized_pnl)}`}
-                            >
-                              {fmtPnl(pos.unrealized_pnl)}
+                          </div>
+                          <span
+                            className={`text-xs font-semibold px-2.5 py-1 rounded uppercase shrink-0 ${
+                              pos.side === "buy"
+                                ? "bg-green-600/20 text-green-400"
+                                : "bg-red-600/20 text-red-400"
+                            }`}
+                          >
+                            {pos.side}
+                          </span>
+                        </div>
+
+                        <div className="grid grid-cols-2 gap-y-2 gap-x-4 text-sm mb-3">
+                          <div>
+                            <div className="text-gray-500 text-xs">Entry</div>
+                            <div className="font-mono text-gray-300">${fmt(pos.entry_price)}</div>
+                          </div>
+                          <div>
+                            <div className="text-gray-500 text-xs">Current</div>
+                            <div className="font-mono text-white">${fmt(pos.current_price)}</div>
+                          </div>
+                          <div>
+                            <div className="text-gray-500 text-xs">Shares</div>
+                            <div className="font-mono text-gray-300">{fmt(pos.units, 0)}</div>
+                          </div>
+                          <div>
+                            <div className="text-gray-500 text-xs">Invested</div>
+                            <div className="font-mono text-gray-300">${fmt(pos.invested_amount)}</div>
+                          </div>
+                          <div>
+                            <div className="text-gray-500 text-xs">P&L</div>
+                            <div className={`font-mono font-semibold ${pnlClass(pos.unrealized_pnl)}`}>
+                              {fmtPnl(pos.unrealized_pnl)}{" "}
+                              <span className={`text-[10px] ${pnlClass(pos.unrealized_pnl_percent)}`}>
+                                ({pos.unrealized_pnl_percent >= 0 ? "+" : ""}
+                                {fmt(pos.unrealized_pnl_percent)}%)
+                              </span>
                             </div>
-                            <div
-                              className={`text-[10px] font-mono ${pnlClass(pos.unrealized_pnl_percent)}`}
-                            >
-                              {pos.unrealized_pnl_percent >= 0 ? "+" : ""}
-                              {fmt(pos.unrealized_pnl_percent)}%
+                          </div>
+                          <div>
+                            <div className="text-gray-500 text-xs">Opened</div>
+                            <div className="text-gray-500 text-xs">
+                              {new Date(pos.opened_at).toLocaleDateString()}
                             </div>
-                          </td>
-                          <td className="py-3 text-right text-gray-500 text-xs">
-                            {new Date(pos.opened_at).toLocaleDateString()}
-                          </td>
-                          <td className="py-3 text-right">
-                            <button
-                              onClick={() => setClosingPosition(pos)}
-                              className="text-xs bg-red-600/20 text-red-400 px-3 py-1.5 rounded-lg hover:bg-red-600/30 transition-colors cursor-pointer"
-                            >
-                              Close
-                            </button>
-                          </td>
-                        </tr>
-                      ))}
-                    </tbody>
-                  </table>
-                </div>
+                          </div>
+                        </div>
+
+                        <button
+                          onClick={() => setClosingPosition(pos)}
+                          className="w-full text-xs bg-red-600/20 text-red-400 px-3 py-2 rounded-lg hover:bg-red-600/30 transition-colors cursor-pointer touch-manipulation"
+                        >
+                          Close
+                        </button>
+                      </div>
+                    ))}
+                  </div>
+                </>
               )}
             </>
           )}
@@ -340,51 +427,121 @@ const TradingDashboard = () => {
                   No trade history yet
                 </div>
               ) : (
-                <div className="overflow-x-auto">
-                  <table className="w-full text-sm">
-                    <thead>
-                      <tr className="text-gray-500 text-xs uppercase border-b border-[#1f1f1f]">
-                        <th className="py-3 text-left">Date</th>
-                        <th className="py-3 text-left">Talent</th>
-                        <th className="py-3 text-center">Side</th>
-                        <th className="py-3 text-center">Type</th>
-                        <th className="py-3 text-right">Price</th>
-                        <th className="py-3 text-right">Amount</th>
-                        <th className="py-3 text-right">Shares</th>
-                        <th className="py-3 text-right">Fee</th>
-                        <th className="py-3 text-right">P&L</th>
-                        <th className="py-3 text-right">Ref</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {trades.map((t) => (
-                        <tr
-                          key={t.trade_id}
-                          className="border-b border-[#1f1f1f]/50 hover:bg-[#1a1a1a]/50"
-                        >
-                          <td className="py-3 text-gray-400 text-xs">
-                            {new Date(t.created_at).toLocaleString([], {
-                              month: "short",
-                              day: "numeric",
-                              hour: "2-digit",
-                              minute: "2-digit",
-                            })}
-                          </td>
-                          <td className="py-3">
-                            <div className="flex items-center gap-2">
-                              {t.talent_image && (
-                                <img
-                                  src={t.talent_image}
-                                  alt=""
-                                  className="w-5 h-5 rounded-full object-cover"
-                                />
-                              )}
-                              <span className="text-white text-xs">
-                                {t.talent_name}
+                <div>
+                  {/* Desktop/tablet: full table */}
+                  <div className="overflow-x-auto hidden md:block">
+                    <table className="w-full text-sm">
+                      <thead>
+                        <tr className="text-gray-500 text-xs uppercase border-b border-[#1f1f1f]">
+                          <th className="py-3 text-left">Date</th>
+                          <th className="py-3 text-left">Talent</th>
+                          <th className="py-3 text-center">Side</th>
+                          <th className="py-3 text-center">Type</th>
+                          <th className="py-3 text-right">Price</th>
+                          <th className="py-3 text-right">Amount</th>
+                          <th className="py-3 text-right">Shares</th>
+                          <th className="py-3 text-right">Fee</th>
+                          <th className="py-3 text-right">P&L</th>
+                          <th className="py-3 text-right">Ref</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {trades.map((t) => (
+                          <tr
+                            key={t.trade_id}
+                            className="border-b border-[#1f1f1f]/50 hover:bg-[#1a1a1a]/50"
+                          >
+                            <td className="py-3 text-gray-400 text-xs">
+                              {new Date(t.created_at).toLocaleString([], {
+                                month: "short",
+                                day: "numeric",
+                                hour: "2-digit",
+                                minute: "2-digit",
+                              })}
+                            </td>
+                            <td className="py-3">
+                              <div className="flex items-center gap-2">
+                                {t.talent_image && (
+                                  <img
+                                    src={t.talent_image}
+                                    alt=""
+                                    className="w-5 h-5 rounded-full object-cover"
+                                  />
+                                )}
+                                <span className="text-white text-xs">
+                                  {t.talent_name}
+                                </span>
+                              </div>
+                            </td>
+                            <td className="py-3 text-center">
+                              <span
+                                className={`text-[10px] font-semibold px-2 py-0.5 rounded uppercase ${
+                                  t.side === "buy"
+                                    ? "bg-green-600/20 text-green-400"
+                                    : "bg-red-600/20 text-red-400"
+                                }`}
+                              >
+                                {t.side}
                               </span>
-                            </div>
-                          </td>
-                          <td className="py-3 text-center">
+                            </td>
+                            <td className="py-3 text-center">
+                              <span className="text-[10px] font-semibold px-2 py-0.5 rounded uppercase bg-gray-600/20 text-gray-400">
+                                {t.trade_type}
+                              </span>
+                            </td>
+                            <td className="py-3 text-right font-mono text-gray-300">
+                              ${fmt(t.price)}
+                            </td>
+                            <td className="py-3 text-right font-mono text-white">
+                              ${fmt(t.amount)}
+                            </td>
+                            <td className="py-3 text-right font-mono text-gray-400">
+                              {fmt(t.units, 0)}
+                            </td>
+                            <td className="py-3 text-right font-mono text-gray-500">
+                              ${fmt(t.fee)}
+                            </td>
+                            <td className="py-3 text-right">
+                              {t.pnl != null ? (
+                                <span
+                                  className={`font-mono font-semibold ${pnlClass(t.pnl)}`}
+                                >
+                                  {fmtPnl(t.pnl)}
+                                </span>
+                              ) : (
+                                <span className="text-gray-600">—</span>
+                              )}
+                            </td>
+                            <td className="py-3 text-right text-[10px] text-gray-600 font-mono">
+                              {t.reference_no?.slice(-8)}
+                            </td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
+
+                  {/* Mobile: stacked cards */}
+                  <div className="space-y-3 md:hidden">
+                    {trades.map((t) => (
+                      <div
+                        key={t.trade_id}
+                        className="rounded-xl border border-[#1f1f1f] bg-[#161616] p-4"
+                      >
+                        <div className="flex items-center justify-between gap-2 mb-2">
+                          <div className="flex items-center gap-2 min-w-0">
+                            {t.talent_image && (
+                              <img
+                                src={t.talent_image}
+                                alt=""
+                                className="w-6 h-6 rounded-full object-cover shrink-0"
+                              />
+                            )}
+                            <span className="text-white text-sm truncate">
+                              {t.talent_name}
+                            </span>
+                          </div>
+                          <div className="flex gap-1 shrink-0">
                             <span
                               className={`text-[10px] font-semibold px-2 py-0.5 rounded uppercase ${
                                 t.side === "buy"
@@ -394,42 +551,56 @@ const TradingDashboard = () => {
                             >
                               {t.side}
                             </span>
-                          </td>
-                          <td className="py-3 text-center">
                             <span className="text-[10px] font-semibold px-2 py-0.5 rounded uppercase bg-gray-600/20 text-gray-400">
                               {t.trade_type}
                             </span>
-                          </td>
-                          <td className="py-3 text-right font-mono text-gray-300">
-                            ${fmt(t.price)}
-                          </td>
-                          <td className="py-3 text-right font-mono text-white">
-                            ${fmt(t.amount)}
-                          </td>
-                          <td className="py-3 text-right font-mono text-gray-400">
-                            {fmt(t.units, 0)}
-                          </td>
-                          <td className="py-3 text-right font-mono text-gray-500">
-                            ${fmt(t.fee)}
-                          </td>
-                          <td className="py-3 text-right">
+                          </div>
+                        </div>
+                        <div className="text-gray-500 text-xs mb-3">
+                          {new Date(t.created_at).toLocaleString([], {
+                            month: "short",
+                            day: "numeric",
+                            hour: "2-digit",
+                            minute: "2-digit",
+                          })}
+                        </div>
+                        <div className="grid grid-cols-2 gap-y-2 gap-x-4 text-sm">
+                          <div>
+                            <div className="text-gray-500 text-xs">Price</div>
+                            <div className="font-mono text-gray-300">${fmt(t.price)}</div>
+                          </div>
+                          <div>
+                            <div className="text-gray-500 text-xs">Amount</div>
+                            <div className="font-mono text-white">${fmt(t.amount)}</div>
+                          </div>
+                          <div>
+                            <div className="text-gray-500 text-xs">Shares</div>
+                            <div className="font-mono text-gray-400">{fmt(t.units, 0)}</div>
+                          </div>
+                          <div>
+                            <div className="text-gray-500 text-xs">Fee</div>
+                            <div className="font-mono text-gray-500">${fmt(t.fee)}</div>
+                          </div>
+                          <div>
+                            <div className="text-gray-500 text-xs">P&L</div>
                             {t.pnl != null ? (
-                              <span
-                                className={`font-mono font-semibold ${pnlClass(t.pnl)}`}
-                              >
+                              <span className={`font-mono font-semibold ${pnlClass(t.pnl)}`}>
                                 {fmtPnl(t.pnl)}
                               </span>
                             ) : (
                               <span className="text-gray-600">—</span>
                             )}
-                          </td>
-                          <td className="py-3 text-right text-[10px] text-gray-600 font-mono">
-                            {t.reference_no?.slice(-8)}
-                          </td>
-                        </tr>
-                      ))}
-                    </tbody>
-                  </table>
+                          </div>
+                          <div>
+                            <div className="text-gray-500 text-xs">Ref</div>
+                            <div className="text-[10px] text-gray-600 font-mono">
+                              {t.reference_no?.slice(-8)}
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
 
                   {/* Pagination */}
                   {historyData?.totalPages > 1 && (

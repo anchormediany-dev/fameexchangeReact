@@ -3,7 +3,13 @@
   <head>
     <meta charset="UTF-8" />
     <link rel="icon" type="image/png" href="/site-logo.png" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <!-- viewport-fit=cover lets content render edge-to-edge on notched
+         devices (needed once this ships as a Capacitor app) and makes
+         env(safe-area-inset-*) actually resolve to non-zero values —
+         without it, Safari/WebView keeps content inset automatically and
+         the safe-area padding below would just be dead weight. -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <meta name="theme-color" content="#000000" />
     <title>The Fame Exchange — Trade Branded Talent Shares</title>
 
     <!-- SEO -->
