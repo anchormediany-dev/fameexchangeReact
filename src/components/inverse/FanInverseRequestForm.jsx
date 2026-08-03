@@ -38,7 +38,7 @@ const FanInverseRequestForm = ({
 
   const location = useLocation();
 
-  const [sendFanRequest, { error }] = useFanInverseRequestMutation();
+  const [sendFanRequest] = useFanInverseRequestMutation();
   // Handle access type selection
   const handleAccessTypeChange = (e) => {
     const selectedType = e.target.value;
@@ -112,8 +112,11 @@ const FanInverseRequestForm = ({
         await sendFanRequest(requestBody).unwrap();
         toast.success("Inverse request sent successfully!");
         handleClear();
-      } catch {
-        toast.error(error?.data?.message);
+      } catch (err) {
+        // The mutation hook's own `error` state reflects the PREVIOUS
+        // render (stale on the very first failure) — use the exception
+        // this catch just received instead.
+        toast.error(err?.data?.message || "Failed to send inverse request.");
       }
   };
 

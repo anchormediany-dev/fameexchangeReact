@@ -13,8 +13,7 @@ const ContactPage = () => {
   });
 
   const [isLoaded, setIsLoaded] = useState(false);
-  const [isSubmitting] = useState(false);
-  const [contactUs] = useContactUsMutation();
+  const [contactUs, { isLoading: isSubmitting }] = useContactUsMutation();
   useEffect(() => {
     setIsLoaded(true);
 

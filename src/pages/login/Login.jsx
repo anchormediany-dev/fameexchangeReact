@@ -5,7 +5,6 @@ import { FaFacebookF } from "react-icons/fa";
 import { IoEyeOffSharp, IoEyeSharp } from "react-icons/io5";
 import { Link, useNavigate } from "react-router-dom";
 import MotionPageWrapper from "../../components/MotionPageWrapper";
-import ForgotPassword from "../../components/ForgotPassword";
 import siteLogo from "../../assets/images/site-logo.png";
 import { jwtDecode } from "jwt-decode";
 import { useSigninMutation } from "../../app/authApi";
@@ -16,7 +15,6 @@ import { openSignupModal as openSignupModalAction } from "../../features/auth/si
 const LoginPage = () => {
   const [formData, setFormData] = useState({ email: "", password: "" });
   const [touched, setTouched] = useState({ email: false, password: false });
-  const [showForgotPassword] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const navigate = useNavigate();
 
@@ -78,7 +76,7 @@ const LoginPage = () => {
     }
   };
 
-  return !showForgotPassword ? (
+  return (
     <MotionPageWrapper>
       <div className="flex mt-10 lg:mt-16 2xl:mt-20 py-12 2xl:py-16 bg-[#171717] overflow-hidden">
         <div className="w-full container flex flex-col lg:flex-row gap-8 z-10">
@@ -228,8 +226,6 @@ const LoginPage = () => {
         </div>
       </div>
     </MotionPageWrapper>
-  ) : (
-    <ForgotPassword />
   );
 };
 
