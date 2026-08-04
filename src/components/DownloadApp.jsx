@@ -1,43 +1,13 @@
 import { motion, useInView } from "framer-motion";
-import { useRef, useState } from "react";
-import { toast } from "react-toastify";
+import { useRef } from "react";
+import { useNavigate } from "react-router-dom";
 import { FaApple, FaGooglePlay } from "react-icons/fa";
 import phoneMockupImage from "../assets/images/app-phones.png";
-import { useNewsletterSubscribeMutation } from "../app/authApi";
 
 const AppShowcase = () => {
   const sectionRef = useRef(null);
   const isInView = useInView(sectionRef, { once: true, amount: 0.2 });
-
-  const [email, setEmail] = useState("");
-  const [name, setName] = useState("");
-  const [subscribe, { isLoading }] = useNewsletterSubscribeMutation();
-
-  const isInvalidEmail = !email.trim() || !/^\S+@\S+\.\S+$/.test(email);
-
-  const handleWaitlistSubmit = async (e) => {
-    e.preventDefault();
-    if (isInvalidEmail) {
-      toast.error("Please enter a valid email address.");
-      return;
-    }
-    try {
-      const response = await subscribe({
-        email: email.trim(),
-        name: name.trim() || undefined,
-        source: "app-waitlist",
-      }).unwrap();
-      toast.success(
-        response?.message || "You're on the list! We'll let you know on launch."
-      );
-      setEmail("");
-      setName("");
-    } catch (err) {
-      toast.error(
-        err?.data?.message || "Failed to join the waitlist. Please try again."
-      );
-    }
-  };
+  const navigate = useNavigate();
 
   const fadeInUpVariant = {
     hidden: { opacity: 0, y: 30 },
@@ -87,9 +57,6 @@ const AppShowcase = () => {
                   className="w-full rounded-[30px] sm:rounded-[40px] shadow-lg sm:shadow-2xl bg-[#e2cb68]"
                 />
                 <div className="absolute inset-[8px] sm:inset-[10px] rounded-[22px] sm:rounded-[30px] bg-[#e2cb68]/30" />
-                <div className="absolute top-4 right-4 bg-gradient-to-r from-[#a18a3f] to-[#e6ca7c] text-black text-xs font-bold px-3 py-1 rounded-full shadow-lg">
-                  COMING SOON
-                </div>
               </div>
             </motion.div>
           </div>
@@ -113,7 +80,7 @@ const AppShowcase = () => {
             transition={{ duration: 0.6, delay: 0.1 }}
             className="custom-heading-one mb-2 sm:mb-3"
           >
-            Coming Soon
+            Download Now
           </motion.h1>
 
           <motion.p
@@ -123,8 +90,9 @@ const AppShowcase = () => {
             transition={{ duration: 0.6, delay: 0.3 }}
             className="text-gray-300 mb-6 max-w-xl lg:max-w-none mx-auto"
           >
-            The Fame Exchange app is launching soon on iOS and Android. Sign up
-            for the waitlist to get priority access on launch day.
+            The Fame Exchange app is available now on iOS and Android. Trade
+            talent, track your portfolio, and never miss a drop — all from
+            your phone.
           </motion.p>
 
           <motion.div
@@ -145,50 +113,25 @@ const AppShowcase = () => {
             </span>
           </motion.div>
 
-          <motion.form
-            onSubmit={handleWaitlistSubmit}
+          <motion.div
             initial="hidden"
             animate={isInView ? "visible" : "hidden"}
             variants={fadeInUpVariant}
             transition={{ duration: 0.6, delay: 0.4 }}
-            className="flex flex-col sm:flex-row gap-3 max-w-xl mx-auto lg:mx-0"
           >
-            <input
-              type="text"
-              placeholder="Your name (optional)"
-              value={name}
-              onChange={(e) => setName(e.target.value)}
-              className="flex-1 px-4 py-3 bg-white/10 border border-white/20 rounded-md text-white placeholder-gray-400 outline-none focus:border-[#a38b41] transition"
-              disabled={isLoading}
-            />
-            <input
-              type="email"
-              placeholder="Email address"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              className="flex-1 px-4 py-3 bg-white/10 border border-white/20 rounded-md text-white placeholder-gray-400 outline-none focus:border-[#a38b41] transition"
-              disabled={isLoading}
-              required
-            />
             <motion.button
-              type="submit"
-              disabled={isInvalidEmail || isLoading}
-              whileHover={
-                !isInvalidEmail && !isLoading
-                  ? { scale: 1.03, boxShadow: "0 0 20px rgba(230, 202, 124, 0.4)" }
-                  : undefined
-              }
-              whileTap={!isInvalidEmail && !isLoading ? { scale: 0.98 } : undefined}
-              className={`font-medium text-black py-3 px-6 rounded-md bg-gradient-to-r from-[#a18a3f] to-[#e6ca7c] transition-all ${
-                isInvalidEmail || isLoading ? "opacity-60 cursor-not-allowed" : "hover:brightness-110 cursor-pointer"
-              }`}
+              type="button"
+              onClick={() => navigate("/download-app")}
+              whileHover={{
+                scale: 1.03,
+                boxShadow: "0 0 20px rgba(230, 202, 124, 0.4)",
+              }}
+              whileTap={{ scale: 0.98 }}
+              className="font-medium text-black py-3 px-8 rounded-md bg-gradient-to-r from-[#a18a3f] to-[#e6ca7c] hover:brightness-110 transition-all cursor-pointer"
             >
-              {isLoading ? "Joining..." : "Join Waitlist"}
+              Download Now
             </motion.button>
-          </motion.form>
-          <p className="text-xs text-gray-500 mt-3">
-            By joining, you'll be among the first to access the app on launch.
-          </p>
+          </motion.div>
         </div>
       </div>
     </div>
