@@ -61,6 +61,7 @@ const OurTeam = lazy(() => import("./pages/team/OurTeam"));
 const CustomerReview = lazy(() => import("./pages/customer_review/CustomerReview"));
 const BrandedTalentSharesPage = lazy(() => import("./pages/branded_talent_shares/BrandedTalentSharesPage"));
 const AllProducts = lazy(() => import("./pages/AllProducts"));
+const DownloadAppPage = lazy(() => import("./pages/download_app/DownloadAppPage"));
 const ProductCheckoutPage = lazy(() => import("./pages/product_checkout/ProductCheckoutPage"));
 const BrandedTokens = lazy(() => import("./pages/branded_tokens/BrandedTokens"));
 const TalentTokens = lazy(() => import("./pages/talent_tokens/TalentTokens"));
@@ -827,6 +828,14 @@ export default function App() {
           element={
             <MotionPageWrapper>
               <AboutUs />
+            </MotionPageWrapper>
+          }
+        />
+        <Route
+          path="download-app"
+          element={
+            <MotionPageWrapper>
+              <DownloadAppPage />
             </MotionPageWrapper>
           }
         />
