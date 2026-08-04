@@ -9,6 +9,7 @@ import { setCredentials } from "../features/auth/authSlice";
 import FameScoreCalculatingModal from "./FameScoreCalculatingModal";
 import FameScoreBreakdownView from "./FameScoreBreakdownView";
 import fameCoin from "../assets/home/thecoin.png";
+import { openExternal } from "../utils/nativeLinks";
 
 // Scraping happens server-side during this call, but we still floor the
 // animation so it never just flashes on a fast/cached response.
@@ -233,6 +234,10 @@ export default function QualifyPopup({ open, onClose }) {
                   href={result.redirect_url}
                   target="_blank"
                   rel="noopener noreferrer"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    openExternal(result.redirect_url);
+                  }}
                   className="custom-button-two px-6 py-3 rounded-lg font-semibold text-sm"
                 >
                   View your Talent profile →

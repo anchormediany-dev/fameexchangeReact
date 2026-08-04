@@ -13,6 +13,7 @@ import {
   useJsApiLoader,
 } from "@react-google-maps/api";
 import { Link } from "react-router-dom";
+import { openExternal } from "../../utils/nativeLinks";
 
 const isValidCoord = (lat, lng) =>
   Number.isFinite(lat) &&
@@ -230,6 +231,10 @@ export default function GoogleMapsEvents({
                           target="_blank"
                           className="underline text-blue-400"
                           rel="noreferrer"
+                          onClick={(e) => {
+                            e.preventDefault();
+                            openExternal(ev.website);
+                          }}
                         >
                           Website
                         </a>

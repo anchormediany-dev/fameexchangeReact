@@ -1,6 +1,7 @@
 import { FaBell } from "react-icons/fa";
 import { getTimeAgo } from "../../utils/getTimeAgo";
 import { useGetNotificationsQuery } from "../../app/authApi";
+import { openExternal } from "../../utils/nativeLinks";
 
 const FanNotifications = () => {
   const userLocalData = JSON.parse(localStorage.getItem("user"));
@@ -51,6 +52,10 @@ const FanNotifications = () => {
                         href={notification.link}
                         target="_blank"
                         rel="noopener noreferrer"
+                        onClick={(e) => {
+                          e.preventDefault();
+                          openExternal(notification.link);
+                        }}
                         className="ml-1 text-[#a38b41] font-medium hover:underline whitespace-nowrap"
                       >
                         Click here →

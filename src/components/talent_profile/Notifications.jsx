@@ -1,5 +1,6 @@
 import { FaBell } from "react-icons/fa";
 import { getTimeAgo } from "../../utils/getTimeAgo";
+import { openExternal } from "../../utils/nativeLinks";
 // import { useGetNotificationsQuery } from "../../app/authApi";
 
 const Notifications = ({ userData, error, isError, isLoading }) => {
@@ -51,6 +52,10 @@ const Notifications = ({ userData, error, isError, isLoading }) => {
                         href={notification.link}
                         target="_blank"
                         rel="noopener noreferrer"
+                        onClick={(e) => {
+                          e.preventDefault();
+                          openExternal(notification.link);
+                        }}
                         className="ml-1 text-[#F3BA18] font-medium hover:underline whitespace-nowrap"
                       >
                         Click here →

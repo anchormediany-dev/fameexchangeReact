@@ -7,6 +7,7 @@ import {
   FaExternalLinkAlt,
 } from "react-icons/fa";
 import { FaXTwitter } from "react-icons/fa6";
+import { openExternal } from "../../utils/nativeLinks";
 
 const TalentLinksFan = ({ userData }) => {
   return (
@@ -38,6 +39,10 @@ const TalentLinksFan = ({ userData }) => {
                     href={userData?.data?.profile?.social_youtube}
                     target="_blank"
                     rel="noopener noreferrer"
+                    onClick={(e) => {
+                      e.preventDefault();
+                      openExternal(userData?.data?.profile?.social_youtube);
+                    }}
                     className="text-blue-400 hover:text-blue-300 transition duration-200 whitespace-nowrap"
                   >
                     {userData?.data?.profile?.social_youtube}
@@ -47,6 +52,10 @@ const TalentLinksFan = ({ userData }) => {
                   href={userData?.data?.profile?.social_youtube}
                   target="_blank"
                   rel="noopener noreferrer"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    openExternal(userData?.data?.profile?.social_youtube);
+                  }}
                   className="text-blue-400 hover:text-blue-300 transition duration-200 whitespace-nowrap"
                 >
                   Visit
@@ -63,6 +72,10 @@ const TalentLinksFan = ({ userData }) => {
                     href={userData?.data?.profile?.social_facebook}
                     target="_blank"
                     rel="noopener noreferrer"
+                    onClick={(e) => {
+                      e.preventDefault();
+                      openExternal(userData?.data?.profile?.social_facebook);
+                    }}
                     className="text-blue-400 hover:text-blue-300 transition duration-200 whitespace-nowrap"
                   >
                     {userData?.data?.profile?.social_facebook}
@@ -72,6 +85,10 @@ const TalentLinksFan = ({ userData }) => {
                   href={userData?.data?.profile?.social_facebook}
                   target="_blank"
                   rel="noopener noreferrer"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    openExternal(userData?.data?.profile?.social_facebook);
+                  }}
                   className="text-blue-400 hover:text-blue-300 transition duration-200 whitespace-nowrap"
                 >
                   Visit
@@ -88,6 +105,10 @@ const TalentLinksFan = ({ userData }) => {
                     href={userData?.data?.profile?.social_insta}
                     target="_blank"
                     rel="noopener noreferrer"
+                    onClick={(e) => {
+                      e.preventDefault();
+                      openExternal(userData?.data?.profile?.social_insta);
+                    }}
                     className="text-blue-400 hover:text-blue-300 transition duration-200 whitespace-nowrap"
                   >
                     {userData?.data?.profile?.social_insta}
@@ -97,6 +118,10 @@ const TalentLinksFan = ({ userData }) => {
                   href={userData?.data?.profile?.social_insta}
                   target="_blank"
                   rel="noopener noreferrer"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    openExternal(userData?.data?.profile?.social_insta);
+                  }}
                   className="text-blue-400 hover:text-blue-300 transition duration-200 whitespace-nowrap"
                 >
                   Visit
@@ -113,6 +138,10 @@ const TalentLinksFan = ({ userData }) => {
                     href={userData?.data?.profile?.social_tiktok}
                     target="_blank"
                     rel="noopener noreferrer"
+                    onClick={(e) => {
+                      e.preventDefault();
+                      openExternal(userData?.data?.profile?.social_tiktok);
+                    }}
                     className="text-blue-400 hover:text-blue-300 transition duration-200 whitespace-nowrap"
                   >
                     {userData?.data?.profile?.social_tiktok}
@@ -122,6 +151,10 @@ const TalentLinksFan = ({ userData }) => {
                   href={userData?.data?.profile?.social_tiktok}
                   target="_blank"
                   rel="noopener noreferrer"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    openExternal(userData?.data?.profile?.social_tiktok);
+                  }}
                   className="text-blue-400 hover:text-blue-300 transition duration-200 whitespace-nowrap"
                 >
                   Visit
@@ -138,6 +171,10 @@ const TalentLinksFan = ({ userData }) => {
                     href={userData?.data?.profile?.social_snap}
                     target="_blank"
                     rel="noopener noreferrer"
+                    onClick={(e) => {
+                      e.preventDefault();
+                      openExternal(userData?.data?.profile?.social_snap);
+                    }}
                     className="text-blue-400 hover:text-blue-300 transition duration-200 whitespace-nowrap"
                   >
                     {userData?.data?.profile?.social_snap}
@@ -147,6 +184,10 @@ const TalentLinksFan = ({ userData }) => {
                   href={userData?.data?.profile?.social_snap}
                   target="_blank"
                   rel="noopener noreferrer"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    openExternal(userData?.data?.profile?.social_snap);
+                  }}
                   className="text-blue-400 hover:text-blue-300 transition duration-200 whitespace-nowrap"
                 >
                   Visit
@@ -163,6 +204,10 @@ const TalentLinksFan = ({ userData }) => {
                     href={userData?.data?.profile?.social_twitter}
                     target="_blank"
                     rel="noopener noreferrer"
+                    onClick={(e) => {
+                      e.preventDefault();
+                      openExternal(userData?.data?.profile?.social_twitter);
+                    }}
                     className="text-blue-400 hover:text-blue-300 transition duration-200 whitespace-nowrap"
                   >
                     {userData?.data?.profile?.social_twitter}
@@ -172,6 +217,10 @@ const TalentLinksFan = ({ userData }) => {
                   href={userData?.data?.profile?.social_twitter}
                   target="_blank"
                   rel="noopener noreferrer"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    openExternal(userData?.data?.profile?.social_twitter);
+                  }}
                   className="text-blue-400 hover:text-blue-300 transition duration-200 whitespace-nowrap"
                 >
                   Visit

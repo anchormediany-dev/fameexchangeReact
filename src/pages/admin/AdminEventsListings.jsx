@@ -8,6 +8,7 @@ import {
   useDeleteEventMutation,
 } from "../../app/authApi";
 import { toast } from "react-toastify";
+import { openExternal } from "../../utils/nativeLinks";
 
 import ConfirmDialog from "../../utils/ConfirmDialog";
 import { imgSrc } from "../../utils/imgSrc";
@@ -255,7 +256,11 @@ const AdminEventsListings = () => {
                         target="_blank"
                         rel="noopener noreferrer"
                         className="flex items-center space-x-1 text-blue-400 text-sm"
-                        onClick={(ev) => ev.stopPropagation()}
+                        onClick={(ev) => {
+                          ev.stopPropagation();
+                          ev.preventDefault();
+                          openExternal(normalizeUrl(e.website));
+                        }}
                       >
                         <FiGlobe className="w-3 h-3" />
                         <span className="truncate max-w-40">{e.website}</span>
@@ -375,7 +380,11 @@ const AdminEventsListings = () => {
                         target="_blank"
                         rel="noopener noreferrer"
                         className="flex items-center space-x-1 text-blue-400 hover:text-blue-300 transition-colors group"
-                        onClick={(ev) => ev.stopPropagation()}
+                        onClick={(ev) => {
+                          ev.stopPropagation();
+                          ev.preventDefault();
+                          openExternal(normalizeUrl(e.website));
+                        }}
                       >
                         <FiGlobe className="w-3 h-3" />
                         <span className="truncate max-w-28 text-sm">

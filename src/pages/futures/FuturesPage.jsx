@@ -4,6 +4,7 @@ import { useSelector } from "react-redux";
 import PledgeModal from "./PledgeModal";
 import { FiStar, FiClock, FiTrendingUp, FiUsers, FiExternalLink } from "react-icons/fi";
 import MotionPageWrapper from "../../components/MotionPageWrapper";
+import { openExternal } from "../../utils/nativeLinks";
 
 // FameScore is 0-100. Note there's no single "score >= X means qualified"
 // number anymore — qualification is a multi-factor gate (total followers,
@@ -125,6 +126,10 @@ function FameFuturesCTA({ className = "" }) {
         href="https://famefutures.com"
         target="_blank"
         rel="noopener noreferrer"
+        onClick={(e) => {
+          e.preventDefault();
+          openExternal("https://famefutures.com");
+        }}
         className="block w-full sm:w-auto sm:inline-block text-center bg-[#F3BA18] text-black px-6 py-2.5 rounded-lg font-semibold text-sm hover:bg-[#dbb934] transition-colors"
       >
         Start Building Your Asset!
@@ -145,6 +150,10 @@ function SponsorMembershipCTA({ className = "" }) {
         href="https://famefutures.com/membership"
         target="_blank"
         rel="noopener noreferrer"
+        onClick={(e) => {
+          e.preventDefault();
+          openExternal("https://famefutures.com/membership");
+        }}
         className="mt-3 block w-full sm:w-auto sm:inline-block text-center bg-[#F3BA18] text-black px-6 py-2.5 rounded-lg font-semibold text-sm hover:bg-[#dbb934] transition-colors"
       >
         Click Here!
@@ -177,6 +186,10 @@ export default function FuturesPage() {
                   href="https://famefutures.com"
                   target="_blank"
                   rel="noopener noreferrer"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    openExternal("https://famefutures.com");
+                  }}
                   className="text-[#F3BA18] text-xs uppercase tracking-widest font-semibold flex items-center gap-1 hover:underline"
                 >
                   famefutures.com <FiExternalLink className="w-3 h-3" />

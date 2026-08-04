@@ -1,5 +1,6 @@
 import { AnimatePresence, motion } from "framer-motion";
 import { FaSpinner, FaTimes } from "react-icons/fa";
+import { openExternal } from "../../utils/nativeLinks";
 
 const backdropVariants = {
   hidden: { opacity: 0 },
@@ -151,6 +152,10 @@ export default function CalculatingNetworthPopupUser({
                                   href={stats.url}
                                   target="_blank"
                                   rel="noreferrer"
+                                  onClick={(e) => {
+                                    e.preventDefault();
+                                    openExternal(stats.url);
+                                  }}
                                   className="text-xs text-[#a38b41] break-all hover:underline"
                                 >
                                   {stats.url}

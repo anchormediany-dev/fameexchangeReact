@@ -5,6 +5,8 @@ import { FaYoutube, FaInstagram } from "react-icons/fa";
 import { FaXTwitter } from "react-icons/fa6";
 import { FiLink, FiRefreshCw } from "react-icons/fi";
 import { HiBadgeCheck } from "react-icons/hi";
+import { Capacitor } from "@capacitor/core";
+import { Browser } from "@capacitor/browser";
 import {
   useGetSocialConnectionsQuery,
   useStartSocialConnectMutation,
@@ -82,6 +84,25 @@ export default function SocialConnectionsPanel({ returnTo } = {}) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  // Inside the Capacitor app, handleConnect() opens the OAuth flow in an
+  // in-app browser sheet (Browser.open) rather than navigating this
+  // WebView away — the sheet overlays the app and the provider's final
+  // redirect (to https://app.thefameexchange.com/...) plays out inside it,
+  // never touching our own WebView's location. The user dismisses the
+  // sheet (or it's closed programmatically below) and lands back on this
+  // exact, untouched screen. Refetch on close so a completed connection
+  // shows up without the user having to pull-to-refresh manually.
+  useEffect(() => {
+    if (!Capacitor.isNativePlatform()) return;
+    const listenerPromise = Browser.addListener("browserFinished", () => {
+      refetch();
+    });
+    return () => {
+      listenerPromise.then((listener) => listener.remove());
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   const providers = data?.providers || [];
   const socialWorth = data?.social_worth || 0;
 
@@ -89,7 +110,15 @@ export default function SocialConnectionsPanel({ returnTo } = {}) {
     try {
       const res = await startConnect({ platform, returnTo }).unwrap();
       if (res?.url) {
-        window.location.href = res.url; // full redirect to the provider
+        if (Capacitor.isNativePlatform()) {
+          // Open in an in-app browser sheet instead of navigating this
+          // WebView away — see the "browserFinished" listener above for
+          // why this is safe even though the provider's final redirect
+          // lands on the real https://app.thefameexchange.com site.
+          await Browser.open({ url: res.url });
+        } else {
+          window.location.href = res.url; // full redirect to the provider
+        }
       }
     } catch (e) {
       toast.error(

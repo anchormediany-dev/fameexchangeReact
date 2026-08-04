@@ -1,4 +1,5 @@
 import { useState, useMemo, useEffect } from "react";
+import { openExternal } from "../../utils/nativeLinks";
 import { FiUpload } from "react-icons/fi";
 import {
   FaCalendarAlt,
@@ -267,7 +268,7 @@ export default function EventCreateForm() {
     try {
       const url = raw.startsWith("http") ? raw : `https://${raw}`;
       const u = new URL(url);
-      window.open(u.toString(), "_blank", "noopener,noreferrer");
+      openExternal(u.toString());
     } catch {
       toast.error("Enter a valid Purchase URL");
     }

@@ -1,5 +1,7 @@
-import { lazy, Suspense } from "react";
-import { Routes, Route, useLocation, Outlet, Navigate } from "react-router-dom";
+import { lazy, Suspense, useEffect } from "react";
+import { Routes, Route, useLocation, useNavigate, Outlet, Navigate } from "react-router-dom";
+import { Capacitor } from "@capacitor/core";
+import { App as CapacitorApp } from "@capacitor/app";
 import { Link } from "react-router-dom";
 import { AnimatePresence, motion } from "framer-motion";
 import { ToastContainer } from "react-toastify";
@@ -192,6 +194,26 @@ const Page = ({ title }) => (
 
 export default function App() {
   const location = useLocation();
+  const navigate = useNavigate();
+
+  // Android's hardware back button isn't handled by react-router on its
+  // own inside a Capacitor WebView — without this, pressing it does
+  // nothing (or exits the app unexpectedly) instead of navigating back.
+  useEffect(() => {
+    if (!Capacitor.isNativePlatform()) return;
+
+    const listenerPromise = CapacitorApp.addListener("backButton", () => {
+      if (window.history.state && window.history.state.idx > 0) {
+        navigate(-1);
+      } else {
+        CapacitorApp.exitApp();
+      }
+    });
+
+    return () => {
+      listenerPromise.then((listener) => listener.remove());
+    };
+  }, [navigate]);
 
   return (
     <>

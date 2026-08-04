@@ -5,6 +5,7 @@ import { useStartFanPledgeMutation, useConfirmFanPledgeMutation } from "../../ap
 import { toast } from "react-toastify";
 import { FiX, FiLock, FiStar } from "react-icons/fi";
 import fameCoin from "../../assets/home/thecoin.png";
+import { openExternal } from "../../utils/nativeLinks";
 
 const stripePromise = loadStripe(import.meta.env.VITE_STRIPE_PUBLISHABLE_KEY);
 
@@ -289,6 +290,10 @@ export default function PledgeModal({ talent, onClose }) {
                 href="https://famefutures.com"
                 target="_blank"
                 rel="noopener noreferrer"
+                onClick={(e) => {
+                  e.preventDefault();
+                  openExternal("https://famefutures.com");
+                }}
                 className="block custom-button-two py-3 rounded-lg font-semibold text-sm"
               >
                 Track on Fame Futures →

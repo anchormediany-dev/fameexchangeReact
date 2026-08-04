@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">FameExchange</string>
+    <string name="title_activity_main">FameExchange</string>
+    <string name="package_name">com.fameexchange.app</string>
+    <string name="custom_url_scheme">com.fameexchange.app</string>
+</resources>

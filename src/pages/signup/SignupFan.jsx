@@ -313,7 +313,6 @@ const SignupFan = () => {
                   <Link
                     to="/terms-conditions"
                     className="gredient-text hover:underline"
-                    target="_blank"
                   >
                     Terms & Conditions
                   </Link>{" "}
@@ -321,7 +320,6 @@ const SignupFan = () => {
                   <Link
                     to="/privacy-policy"
                     className="gredient-text hover:underline"
-                    target="_blank"
                   >
                     Privacy Policy
                   </Link>

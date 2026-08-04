@@ -3,6 +3,7 @@ import { FiCalendar, FiGlobe, FiPhone } from "react-icons/fi";
 import { useGetEventByIdQuery } from "../../app/authApi";
 import EventsPreferencesActions from "../../components/events/EventsPreferencesActions";
 import { useAuth } from "../../utils/auth/useAuth";
+import { openExternal } from "../../utils/nativeLinks";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Autoplay, EffectFade } from "swiper/modules";
 import "swiper/css";
@@ -308,6 +309,10 @@ export default function EventDetails() {
                               href={event.website}
                               target="_blank"
                               rel="noreferrer"
+                              onClick={(e) => {
+                                e.preventDefault();
+                                openExternal(event.website);
+                              }}
                             >
                               {new URL(event.website).hostname}
                             </a>

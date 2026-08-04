@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { openExternal } from "../utils/nativeLinks";
 import { motion } from "framer-motion";
 import {
   FaTimes,
@@ -468,6 +469,10 @@ const ImageDoc = ({ doc, onOpen }) => (
           href={imgSrc(doc?.url)}
           download
           target="_blank"
+          onClick={(e) => {
+            e.preventDefault();
+            openExternal(imgSrc(doc?.url));
+          }}
           className="p-2  hover:text-[#a38b41] transition-colors text-blue-400 underline text-sm font-medium truncate max-w-xs"
         >
           {doc?.name}
@@ -484,6 +489,10 @@ const FileRow = ({ file }) => (
         href={imgSrc(file?.url)}
         download
         target="_blank"
+        onClick={(e) => {
+          e.preventDefault();
+          openExternal(imgSrc(file?.url));
+        }}
         className="p-2  hover:text-[#a38b41] transition-colors text-blue-400 underline text-sm font-medium truncate max-w-xs"
       >
         {file?.name}

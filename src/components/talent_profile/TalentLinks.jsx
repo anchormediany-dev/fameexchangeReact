@@ -7,6 +7,7 @@ import {
   FaExternalLinkAlt,
 } from "react-icons/fa";
 import { FaXTwitter } from "react-icons/fa6";
+import { openExternal } from "../../utils/nativeLinks";
 
 const TalentLinks = ({ userData: user }) => {
   const root = user?.data ?? user ?? {};
@@ -80,6 +81,10 @@ const TalentLinks = ({ userData: user }) => {
                   href={link?.url}
                   target="_blank"
                   rel="noopener noreferrer"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    openExternal(link?.url);
+                  }}
                   className="text-blue-400 hover:text-blue-300 transition duration-200 whitespace-nowrap"
                 >
                   {link?.url}
@@ -89,6 +94,10 @@ const TalentLinks = ({ userData: user }) => {
                 href={link?.url}
                 target="_blank"
                 rel="noopener noreferrer"
+                onClick={(e) => {
+                  e.preventDefault();
+                  openExternal(link?.url);
+                }}
                 className="text-blue-400 hover:text-blue-300 transition duration-200 whitespace-nowrap"
               >
                 Visit

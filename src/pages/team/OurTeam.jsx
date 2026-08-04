@@ -4,6 +4,7 @@ import imageText from "../../assets/images/fame-exchange-image-text.png";
 import { imgSrc } from "../../utils/imgSrc";
 import { FaLinkedinIn } from "react-icons/fa";
 import { FiGlobe } from "react-icons/fi";
+import { openExternal } from "../../utils/nativeLinks";
 
 const FALLBACK_IMG =
   "https://images.unsplash.com/photo-1527980965255-d3b416303d12?auto=format&fit=crop&w=1200&q=60";
@@ -22,7 +23,7 @@ const OurTeam = ({ teamMembers: propTeamMembers }) => {
 
   const openLink = (url) => {
     if (!url) return;
-    window.open(url, "_blank", "noopener,noreferrer");
+    openExternal(url);
   };
 
   return (

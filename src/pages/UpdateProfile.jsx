@@ -8,6 +8,7 @@ import MotionPageWrapper from "../components/MotionPageWrapper";
 import siteLogo from "../assets/images/site-logo.png";
 import TalentDropdown from "../components/TalentDropdown";
 import RepresentationSection from "../components/RepresentationSection";
+import { openExternal } from "../utils/nativeLinks";
 import SocialConnectionsPanel from "../components/SocialConnectionsPanel";
 import { imgSrc } from "../utils/imgSrc";
 import {
@@ -525,6 +526,10 @@ export default function UpdateProfile() {
                           href={s.value}
                           target="_blank"
                           rel="noreferrer"
+                          onClick={(e) => {
+                            e.preventDefault();
+                            openExternal(s.value);
+                          }}
                           className="text-[#F3BA18] hover:underline truncate max-w-[60%] text-right"
                         >
                           {s.value}

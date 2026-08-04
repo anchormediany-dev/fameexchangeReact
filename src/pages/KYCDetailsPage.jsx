@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { openExternal } from "../utils/nativeLinks";
 import { motion } from "framer-motion";
 import { toast } from "react-toastify";
 import { FaCheckCircle, FaTimesCircle } from "react-icons/fa";
@@ -699,6 +700,10 @@ const DocumentCard = ({
                 download
                 target="_blank"
                 rel="noreferrer"
+                onClick={(e) => {
+                  e.preventDefault();
+                  openExternal(imgSrc(document?.url));
+                }}
                 className=""
               >
                 <p className="p-2  hover:text-[#a38b41] transition-colors text-blue-400 underline text-sm font-medium truncate max-w-xs">

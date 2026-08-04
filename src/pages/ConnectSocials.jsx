@@ -9,6 +9,7 @@ import FameScoreBreakdownView from "../components/FameScoreBreakdownView";
 import siteLogo from "../assets/images/site-logo.png";
 import { Link } from "react-router-dom";
 import { useApplyToBeTalentMutation } from "../app/tradingApi";
+import { openExternal } from "../utils/nativeLinks";
 
 // The apply endpoint itself is fast (no live scraping happens at apply-time),
 // so we hold the calculating animation open for at least this long —
@@ -134,6 +135,10 @@ export default function ConnectSocials() {
                 href={applicationResult.redirect_url}
                 target="_blank"
                 rel="noopener noreferrer"
+                onClick={(e) => {
+                  e.preventDefault();
+                  openExternal(applicationResult.redirect_url);
+                }}
                 className="custom-button-two px-6 py-3 rounded-lg font-semibold text-sm"
               >
                 Click here to view your Talent profile →
