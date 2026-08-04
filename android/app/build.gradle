@@ -1,5 +1,17 @@
 apply plugin: 'com.android.application'
 
+// Release signing — keystore.properties is gitignored (never committed) and
+// points at a keystore file kept outside the repo entirely, under
+// ~/dev-tools/android-keystores/ (backed up to the external drive per
+// backup_standing_habit). Absent locally (e.g. CI without the file), release
+// builds fall back to unsigned rather than failing the whole Gradle config.
+def keystorePropertiesFile = rootProject.file('keystore.properties')
+def keystoreProperties = new Properties()
+def hasKeystoreProperties = keystorePropertiesFile.exists()
+if (hasKeystoreProperties) {
+    keystoreProperties.load(new FileInputStream(keystorePropertiesFile))
+}
+
 android {
     namespace "com.fameexchange.app"
     compileSdkVersion rootProject.ext.compileSdkVersion
@@ -16,10 +28,21 @@ android {
             ignoreAssetsPattern '!.svn:!.git:!.ds_store:!*.scc:.*:!CVS:!thumbs.db:!picasa.ini:!*~'
         }
     }
+    signingConfigs {
+        release {
+            if (hasKeystoreProperties) {
+                storeFile file(keystoreProperties['storeFile'])
+                storePassword keystoreProperties['storePassword']
+                keyAlias keystoreProperties['keyAlias']
+                keyPassword keystoreProperties['keyPassword']
+            }
+        }
+    }
     buildTypes {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            signingConfig hasKeystoreProperties ? signingConfigs.release : null
         }
     }
 }
