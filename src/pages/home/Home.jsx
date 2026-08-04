@@ -14,6 +14,7 @@ const DownloadApp = lazy(() => import("../../components/DownloadApp"));
 const GigsEvents = lazy(() => import("../../components/GigsEvents"));
 const MeetAndGreet = lazy(() => import("../../components/MeetGreetSection"));
 const TheFuturesSection = lazy(() => import("../../components/TheFuturesSection"));
+const FeaturedTalentSection = lazy(() => import("../../components/FeaturedTalentSection"));
 const OurTeam = lazy(() => import("../../components/our_team/OurTeam"));
 const ContactUs = lazy(() => import("../../components/contact/ContactUs"));
 const Podcast = lazy(() => import("../../components/podcast/Podcast"));
@@ -84,6 +85,7 @@ const Home = () => {
         {/* CustomerReview hidden per request - keep import for future use */}
         {/* <CustomerReview /> */}
         <TheFuturesSection />
+        <FeaturedTalentSection />
         <GigsEvents />
         <CelebMerchandiseHero />
         <ProductSlider />

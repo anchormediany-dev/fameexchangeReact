@@ -13,6 +13,7 @@ import ProfileMenu from "./ProfileMenu";
 import { useGetSiteSettingsQuery } from "../app/authApi";
 const defaultNavLinks = [
   { name: "Branded Talent Shares", path: "/branded-tokens-shares", isRoute: true },
+  { name: "Featured", path: "/featured-talent", isRoute: true },
   { name: "App", path: "/download-app", isRoute: true },
   { name: "Inverse", path: "/inverse", isRoute: true },
   { name: "Podcast", scrollTo: "podcast" },

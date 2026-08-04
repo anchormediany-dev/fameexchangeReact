@@ -157,6 +157,18 @@ export default function AdminLayout() {
                 Inverse Featured
               </NavLink>
               <NavLink
+                to="/admin/featured-talent"
+                className={({ isActive }) =>
+                  `px-3 py-2 rounded-md ${
+                    isActive
+                      ? "bg-white/10 text-white"
+                      : "text-gray-300 hover:bg-white/5"
+                  }`
+                }
+              >
+                Featured Talent
+              </NavLink>
+              <NavLink
                 to="/admin/page-visibility"
                 className={({ isActive }) =>
                   `px-3 py-2 rounded-md ${

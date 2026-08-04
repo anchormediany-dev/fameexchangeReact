@@ -506,6 +506,46 @@ export const authApi = api.injectEndpoints({
       }),
       invalidatesTags: ["Talent"],
     }),
+    // Featured Talent spotlight (single talent, distinct from
+    // featured_in_inverse above) — public read + admin management.
+    getFeaturedTalent: builder.query({
+      query: () => ({ url: "/talents/featured", method: "GET" }),
+      providesTags: ["Talent"],
+    }),
+    getSpotlightCandidates: builder.query({
+      query: (search) => ({
+        url: "/admin/talents/spotlight-candidates",
+        method: "GET",
+        params: search ? { search } : undefined,
+      }),
+      providesTags: ["Talent"],
+    }),
+    getFuturesQualificationProgress: builder.query({
+      query: () => ({ url: "/admin/talents/futures-progress", method: "GET" }),
+      providesTags: ["Talent"],
+    }),
+    setTalentSpotlight: builder.mutation({
+      query: (id) => ({
+        url: `/admin/talents/${id}/spotlight`,
+        method: "PUT",
+      }),
+      invalidatesTags: ["Talent"],
+    }),
+    clearTalentSpotlight: builder.mutation({
+      query: (id) => ({
+        url: `/admin/talents/${id}/unspotlight`,
+        method: "PUT",
+      }),
+      invalidatesTags: ["Talent"],
+    }),
+    uploadHighlightReel: builder.mutation({
+      query: ({ id, formData }) => ({
+        url: `/admin/talents/${id}/highlight-reel`,
+        method: "POST",
+        body: formData,
+      }),
+      invalidatesTags: ["Talent"],
+    }),
     // Customer reviews API
     getReviews: builder.query({
       query: () => ({
@@ -720,6 +760,12 @@ export const {
   useGetInverseFeaturedTalentsQuery,
   useUpdateUserFeaturedMutation,
   useUploadUserImageMutation,
+  useGetFeaturedTalentQuery,
+  useGetSpotlightCandidatesQuery,
+  useGetFuturesQualificationProgressQuery,
+  useSetTalentSpotlightMutation,
+  useClearTalentSpotlightMutation,
+  useUploadHighlightReelMutation,
   // Delete session
   useDeleteSessionByAdminMutation,
   // Customer reviews

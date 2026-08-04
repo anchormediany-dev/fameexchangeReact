@@ -62,6 +62,7 @@ const CustomerReview = lazy(() => import("./pages/customer_review/CustomerReview
 const BrandedTalentSharesPage = lazy(() => import("./pages/branded_talent_shares/BrandedTalentSharesPage"));
 const AllProducts = lazy(() => import("./pages/AllProducts"));
 const DownloadAppPage = lazy(() => import("./pages/download_app/DownloadAppPage"));
+const FeaturedTalentPage = lazy(() => import("./pages/featured_talent/FeaturedTalentPage"));
 const ProductCheckoutPage = lazy(() => import("./pages/product_checkout/ProductCheckoutPage"));
 const BrandedTokens = lazy(() => import("./pages/branded_tokens/BrandedTokens"));
 const TalentTokens = lazy(() => import("./pages/talent_tokens/TalentTokens"));
@@ -85,6 +86,7 @@ const AdminKycListings = lazy(() => import("./pages/admin/AdminKycListings"));
 const AdminEventsListings = lazy(() => import("./pages/admin/AdminEventsListings"));
 const AdminInverse = lazy(() => import("./pages/admin/AdminInverse"));
 const AdminInverseFeatured = lazy(() => import("./pages/admin/AdminInverseFeatured"));
+const AdminFeaturedTalent = lazy(() => import("./pages/admin/AdminFeaturedTalent"));
 const AdminPageVisibility = lazy(() => import("./pages/admin/AdminPageVisibility"));
 const AdminFameScoreDashboard = lazy(() => import("./pages/admin/AdminFameScoreDashboard"));
 const AdminReviews = lazy(() => import("./pages/admin/reviews/AdminReviews"));
@@ -515,6 +517,14 @@ export default function App() {
                 }
               />
               <Route
+                path="featured-talent"
+                element={
+                  <MotionPageWrapper>
+                    <AdminFeaturedTalent />
+                  </MotionPageWrapper>
+                }
+              />
+              <Route
                 path="page-visibility"
                 element={
                   <MotionPageWrapper>
@@ -836,6 +846,14 @@ export default function App() {
           element={
             <MotionPageWrapper>
               <DownloadAppPage />
+            </MotionPageWrapper>
+          }
+        />
+        <Route
+          path="featured-talent"
+          element={
+            <MotionPageWrapper>
+              <FeaturedTalentPage />
             </MotionPageWrapper>
           }
         />
