@@ -233,7 +233,7 @@ const TheFuturesSection = () => {
             whileHover={{ scale: 1.02 }}
             className="mt-4 px-4 py-2  cursor-pointer bg-gradient-to-r from-[#a18a3f] w-fit to-[#e6ca7c] text-white rounded-lg flex items-center gap-2 hover:brightness-110 transition-all"
           >
-            The Fame Collective
+            The Futures
             <motion.div whileHover={{ x: 3, y: -3 }}>
               <GoArrowUpRight size={20} />
             </motion.div>

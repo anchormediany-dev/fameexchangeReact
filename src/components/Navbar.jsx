@@ -12,8 +12,7 @@ import { openSignupModal as openSignupModalAction } from "../features/auth/signu
 import ProfileMenu from "./ProfileMenu";
 import { useGetSiteSettingsQuery } from "../app/authApi";
 const defaultNavLinks = [
-  { name: "Talent Trading", path: "/trade-talent", isRoute: true },
-  { name: "Top BTS", path: "/branded-tokens-shares", isRoute: true },
+  { name: "Branded Talent Shares", path: "/branded-tokens-shares", isRoute: true },
   { name: "App", scrollTo: "mobileapp" },
   { name: "Inverse", path: "/inverse", isRoute: true },
   { name: "Podcast", scrollTo: "podcast" },

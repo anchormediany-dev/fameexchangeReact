@@ -39,7 +39,7 @@ const Podcast = () => {
       role="button"
       tabIndex={0}
       onKeyDown={(e) => { if (e.key === "Enter" || e.key === " ") handlePodcastClick(); }}
-      className="relative cursor-pointer h-[30vh] sm:h-[40vh] md:h-[50vh] lg:h-[50vh] xl:h-[80vh] bg-cover bg-center bg-no-repeat w-full flex items-center text-white px-4 sm:px-6 lg:px-8 overflow-hidden"
+      className="relative cursor-pointer h-[30vh] sm:h-[40vh] md:h-[50vh] lg:h-[50vh] xl:h-[80vh] bg-cover bg-[75%_center] bg-no-repeat w-full flex items-center text-white px-4 sm:px-6 lg:px-8 overflow-hidden"
       style={{
         backgroundImage: `url(${micImage})`,
       }}
@@ -49,7 +49,7 @@ const Podcast = () => {
     >
       {/* Background */}
       <motion.div
-        className="absolute inset-0 bg-cover bg-center bg-no-repeat"
+        className="absolute inset-0 bg-cover bg-[75%_center] bg-no-repeat"
         style={{
           backgroundImage: `url(${micImage})`,
         }}
@@ -60,7 +60,7 @@ const Podcast = () => {
 
       {/* Overlay */}
       <motion.div
-        className="absolute inset-0 bg-gradient-to-r from-black/75 via-black/50 to-black/60"
+        className="absolute inset-0 bg-gradient-to-r from-black/55 via-black/20 to-black/10"
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ duration: 1 }}
