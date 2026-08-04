@@ -12,10 +12,7 @@ import {
 import { FiLock, FiCreditCard, FiArrowLeft } from "react-icons/fi";
 import Navbar from "../../components/Navbar";
 import Footer from "../../components/Footer";
-import {
-  useAddIntentMutation,
-  useConfirmPaymentMutation,
-} from "../../app/authApi";
+import { useCreateProductPaymentIntentMutation } from "../../app/authApi";
 import { imgSrc } from "../../utils/imgSrc";
 import { handleImageError } from "../../utils/imagePlaceholder";
 
@@ -45,8 +42,7 @@ function CheckoutForm({ product }) {
   const navigate = useNavigate();
   const user = useSelector((s) => s.auth.user);
 
-  const [addIntent] = useAddIntentMutation();
-  const [confirmPayment] = useConfirmPaymentMutation();
+  const [createProductPaymentIntent] = useCreateProductPaymentIntentMutation();
   const [processing, setProcessing] = useState(false);
   const [errMsg, setErrMsg] = useState("");
 
@@ -83,13 +79,10 @@ function CheckoutForm({ product }) {
 
     setProcessing(true);
     try {
-      const intent = await addIntent({
-        amount,
-        currency: "usd",
+      const intent = await createProductPaymentIntent({
         productId: product?._id,
-        productTitle: product?.title,
         quantity: 1,
-        type: "product",
+        currency: "usd",
         customer: {
           name: form.fullName,
           email: form.email,
@@ -104,7 +97,7 @@ function CheckoutForm({ product }) {
         },
       }).unwrap();
 
-      const clientSecret = intent?.clientSecret || intent?.client_secret;
+      const clientSecret = intent?.paymentIntent?.client_secret;
       if (!clientSecret) {
         throw new Error("Payment intent did not return a client secret");
       }
@@ -140,27 +133,10 @@ function CheckoutForm({ product }) {
         return;
       }
 
-      try {
-        await confirmPayment({
-          paymentIntentId: paymentIntent.id,
-          productId: product?._id,
-          customer: {
-            name: form.fullName,
-            email: form.email,
-            phone: form.phone || undefined,
-            address: {
-              line1: form.addressLine || undefined,
-              city: form.city || undefined,
-              state: form.state || undefined,
-              postal_code: form.postalCode || undefined,
-              country: form.country || undefined,
-            },
-          },
-        }).unwrap();
-      } catch {
-        // best-effort order recording; payment already succeeded
-      }
-
+      // No client-side confirm call needed here — the product webhook
+      // (server-side, verified directly against Stripe) is the source of
+      // truth for order status, stock decrement, and the confirmation
+      // email once it lands, typically within a second or two.
       toast.success(`Payment successful! Thanks, ${form.fullName}.`);
       navigate("/products", { replace: true });
     } catch (err) {

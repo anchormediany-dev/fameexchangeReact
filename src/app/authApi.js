@@ -584,6 +584,18 @@ export const authApi = api.injectEndpoints({
         body,
       }),
     }),
+    // Merch store — distinct from the event-ticket addIntent/confirmPayment
+    // pair above, hits productController.js's createProductPaymentIntent.
+    // No client-side confirm mutation needed: the product webhook
+    // (routes/productRoutes.js -> stripeProductWebhookNoSig) is the source
+    // of truth for order status, stock decrement, and confirmation email.
+    createProductPaymentIntent: builder.mutation({
+      query: (body) => ({
+        url: "/products/payment-intent",
+        method: "POST",
+        body,
+      }),
+    }),
     // Talent social profiles editor (PATCH only - sparse update)
     updateSocialProfiles: builder.mutation({
       query: (body) => ({
@@ -672,6 +684,7 @@ export const {
   // Stripe API
   useAddIntentMutation,
   useConfirmPaymentMutation,
+  useCreateProductPaymentIntentMutation,
   // Talent social profiles editor
   useUpdateSocialProfilesMutation,
   // Notifications

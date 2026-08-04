@@ -304,6 +304,7 @@ export default function AddProduct() {
     title: "",
     description: "",
     price: "",
+    stock: "",
   });
 
   // Local file state (we’ll only send the FIRST file as `image` in FormData)
@@ -330,6 +331,10 @@ export default function AddProduct() {
         price:
           productData?.price !== undefined && productData?.price !== null
             ? String(productData.price)
+            : "",
+        stock:
+          productData?.stock !== undefined && productData?.stock !== null
+            ? String(productData.stock)
             : "",
       });
       // If you want, you could store existing image URL in state here for preview
@@ -363,6 +368,9 @@ export default function AddProduct() {
     fd.append("title", form.title || "");
     fd.append("description", form.description || "");
     fd.append("price", form.price || "");
+    // Blank = untracked/unlimited stock (no oversell protection) — the
+    // server treats "" the same as omitted.
+    fd.append("stock", form.stock ?? "");
 
     // BACKEND EXPECTS: image (single)
     if (eventImages[0]) {
@@ -478,6 +486,24 @@ export default function AddProduct() {
                       placeholder="Enter price"
                       className="bg-transparent outline-none w-full text-white placeholder-gray-400"
                       required
+                    />
+                  </div>
+                </div>
+
+                {/* Stock */}
+                <div>
+                  <label className="block text-white text-sm font-medium mb-2">
+                    Stock <span className="text-gray-500">(optional)</span>
+                  </label>
+                  <div className="flex items-center border rounded-lg px-4 py-3 bg-[#2d2d2d]">
+                    <input
+                      type="number"
+                      min="0"
+                      name="stock"
+                      value={form.stock}
+                      onChange={handleChange}
+                      placeholder="Leave blank for unlimited"
+                      className="bg-transparent outline-none w-full text-white placeholder-gray-400"
                     />
                   </div>
                 </div>
