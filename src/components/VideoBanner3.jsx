@@ -128,12 +128,6 @@ const VideoBanner = () => {
         {/* Main Content */}
         <div className="relative z-10 flex items-center justify-center w-full h-full px-4 sm:px-6 lg:px-8 py-8 sm:py-12">
           <div className="text-center text-white max-w-5xl mx-auto w-full">
-            <div className="inline-flex items-center px-3 py-1.5 sm:px-4 sm:py-2 mb-4 sm:mb-6 bg-gray-800/40 backdrop-blur-md rounded-full border border-gray-600/30 animate-fade-in-up shadow-xl">
-              <span className="text-xs sm:text-sm font-medium text-gray-200 tracking-wide">
-                FAME EXCHANGE
-              </span>
-            </div>
-
             <div className="mb-4 sm:mb-6 md:mb-8">
               <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-bold leading-tight">
                 <span className="block animate-text-reveal bg-gradient-to-r from-white via-cyan-100 to-white bg-clip-text text-transparent drop-shadow-2xl mb-1 sm:mb-2">
