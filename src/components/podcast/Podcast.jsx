@@ -197,46 +197,6 @@ const Podcast = () => {
               </p>
             </motion.div>
 
-            {/* CTA Section */}
-            <motion.div
-              className="lg:flex hidden flex-col  sm:flex-row gap-6 justify-center lg:justify-start items-center"
-              variants={fadeInUp}
-            >
-              {/* Interview Button */}
-              <motion.button
-                className="custom-button-two "
-                whileHover={{
-                  scale: 1.05,
-                  boxShadow: "0 25px 50px rgba(163, 139, 65, 0.4)",
-                }}
-                whileTap={{ scale: 0.95 }}
-                transition={{ duration: 0.2 }}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                style={{ transitionDelay: "2s" }}
-              >
-                <motion.div className="absolute  inset-0 bg-white/20 translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-700" />
-                <span className="relative z-10 ">BE INTERVIEWED</span>
-              </motion.button>
-
-              {/* Email Contact */}
-              <motion.a
-                href="mailto:info@FAMEXPODCAST.com"
-                className="text-gray-400 font-medium text-base group relative"
-                whileHover={{
-                  color: "#a38b41",
-                }}
-                transition={{ duration: 0.3 }}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                style={{ transitionDelay: "2.2s" }}
-              >
-                <span>info@FAMEXPODCAST.com</span>
-                <motion.div className="absolute bottom-0 left-0 h-[2px] bg-[#a38b41] w-0 group-hover:w-full transition-all duration-300" />
-              </motion.a>
-            </motion.div>
           </motion.div>
 
           {/* Right Visual Element */}
