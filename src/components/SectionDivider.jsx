@@ -4,7 +4,7 @@ const SectionDivider = () => {
     <section className="bg-[#171717] text-white relative overflow-hidden">
       <img
         src={dividerImage}
-        className="w-full h-[300px] sm:h-[360px] md:h-[420px] lg:h-[460px] object-cover object-center"
+        className="w-full h-[300px] sm:h-[360px] md:h-[420px] lg:h-[460px] object-contain object-center"
         alt="The Fame Exchange"
       />
     </section>
