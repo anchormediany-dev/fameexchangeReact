@@ -1,0 +1,115 @@
+# Builds the iOS app (Capacitor-wrapped) and uploads it to TestFlight.
+#
+# Manual trigger only (workflow_dispatch) — this pipeline hasn't been proven
+# against a real macOS runner yet, so it's deliberately not wired to auto-run
+# on every push until a first real run has been verified end-to-end.
+#
+# Signing is fully manual (not Xcode's automatic signing) — a brand-new
+# Apple Developer account can't reliably bootstrap distribution signing via
+# `xcodebuild -allowProvisioningUpdates` alone (confirmed locally: it kept
+# trying to create a Development profile even for an archive/App Store
+# build). Instead: the App Store distribution certificate + provisioning
+# profile were created once via the App Store Connect API and are
+# provisioned into this job explicitly below.
+#
+# Repo secrets this workflow needs:
+#   APPSTORE_KEY_ID              - App Store Connect API key ID
+#   APPSTORE_ISSUER_ID           - App Store Connect API issuer ID
+#   APPSTORE_API_KEY_P8          - base64-encoded contents of the .p8 private key
+#   APPLE_TEAM_ID                - Apple Developer Team ID
+#   IOS_DISTRIBUTION_CERT_P12    - base64-encoded .p12 (cert + private key)
+#   IOS_DISTRIBUTION_CERT_PASSWORD - that .p12's export password
+#   VITE_API_BASE_URL / VITE_STRIPE_PUBLISHABLE_KEY / VITE_SECRET_KEY /
+#   VITE_GOOGLE_MAPS_KEY / VITE_SENTRY_DSN - same as deploy.yml, since the
+#     Capacitor build embeds the same web bundle.
+name: iOS TestFlight
+
+on:
+  workflow_dispatch:
+
+jobs:
+  build-and-upload:
+    runs-on: macos-15
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: ".nvmrc"
+          cache: "npm"
+
+      - run: npm ci
+
+      - run: npm run build
+        env:
+          VITE_API_BASE_URL: ${{ secrets.VITE_API_BASE_URL }}
+          VITE_STRIPE_PUBLISHABLE_KEY: ${{ secrets.VITE_STRIPE_PUBLISHABLE_KEY }}
+          VITE_SECRET_KEY: ${{ secrets.VITE_SECRET_KEY }}
+          VITE_GOOGLE_MAPS_KEY: ${{ secrets.VITE_GOOGLE_MAPS_KEY }}
+          VITE_SENTRY_DSN: ${{ secrets.VITE_SENTRY_DSN }}
+
+      # Copies dist/ into ios/App and runs `pod install` for us.
+      - run: npx cap sync ios
+
+      - name: Install App Store Connect API key
+        run: |
+          mkdir -p ~/private_keys
+          echo "${{ secrets.APPSTORE_API_KEY_P8 }}" | base64 --decode > ~/private_keys/AuthKey_${{ secrets.APPSTORE_KEY_ID }}.p8
+
+      - name: Import distribution certificate into a CI keychain
+        env:
+          CERT_PASSWORD: ${{ secrets.IOS_DISTRIBUTION_CERT_PASSWORD }}
+          KEYCHAIN_PASSWORD: ${{ github.run_id }}-${{ github.run_attempt }}
+        run: |
+          echo "${{ secrets.IOS_DISTRIBUTION_CERT_P12 }}" | base64 --decode > $RUNNER_TEMP/distribution.p12
+          curl -s -o $RUNNER_TEMP/wwdrg3.cer "http://certs.apple.com/wwdrg3.der"
+
+          security create-keychain -p "$KEYCHAIN_PASSWORD" build.keychain
+          security set-keychain-settings -lut 21600 build.keychain
+          security unlock-keychain -p "$KEYCHAIN_PASSWORD" build.keychain
+          security list-keychain -d user -s build.keychain login.keychain
+
+          security import $RUNNER_TEMP/wwdrg3.cer -k build.keychain -T /usr/bin/codesign
+          security import $RUNNER_TEMP/distribution.p12 -k build.keychain -P "$CERT_PASSWORD" -T /usr/bin/codesign -T /usr/bin/security
+          security set-key-partition-list -S apple-tool:,apple:,codesign: -s -k "$KEYCHAIN_PASSWORD" build.keychain
+
+      - name: Fetch provisioning profile
+        env:
+          APPSTORE_KEY_ID: ${{ secrets.APPSTORE_KEY_ID }}
+          APPSTORE_ISSUER_ID: ${{ secrets.APPSTORE_ISSUER_ID }}
+          APPSTORE_API_KEY_PATH: /Users/runner/private_keys/AuthKey_${{ secrets.APPSTORE_KEY_ID }}.p8
+          # "FameExchange App Store Distribution" profile, created once via
+          # the App Store Connect API (see ios/ExportOptions.plist).
+          APPSTORE_PROFILE_ID: 8YT2VT7VUY
+        run: node ios/scripts/fetch-provisioning-profile.mjs
+
+      - name: Archive
+        working-directory: ios/App
+        run: |
+          xcodebuild \
+            -workspace App.xcworkspace \
+            -scheme App \
+            -configuration Release \
+            -destination "generic/platform=iOS" \
+            -archivePath "$RUNNER_TEMP/App.xcarchive" \
+            archive
+
+      - name: Export IPA
+        working-directory: ios
+        run: |
+          xcodebuild -exportArchive \
+            -archivePath "$RUNNER_TEMP/App.xcarchive" \
+            -exportOptionsPlist ExportOptions.plist \
+            -exportPath "$RUNNER_TEMP/export"
+
+      - name: Upload to TestFlight
+        run: |
+          xcrun altool --upload-app \
+            --type ios \
+            -f "$RUNNER_TEMP/export/App.ipa" \
+            --apiKey ${{ secrets.APPSTORE_KEY_ID }} \
+            --apiIssuer ${{ secrets.APPSTORE_ISSUER_ID }}
+
+      - name: Clean up CI keychain
+        if: always()
+        run: security delete-keychain build.keychain || true
