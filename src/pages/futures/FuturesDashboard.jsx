@@ -114,7 +114,6 @@ function DashboardContent() {
   // identity layer works; the real dashboard (AI chat, missions, etc.)
   // lands in later phases.
   if (talentProfile || fanProfile) {
-    const profile = talentProfile || fanProfile;
     const name = talentProfile ? talentProfile.stage_name : fanProfile.display_name;
     return (
       <div className="max-w-2xl mx-auto text-center py-24">
