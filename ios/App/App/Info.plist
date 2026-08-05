@@ -16,6 +16,11 @@
 	<string>$(PRODUCT_NAME)</string>
 	<key>CFBundlePackageType</key>
 	<string>APPL</string>
+	<!-- Only standard HTTPS/TLS, no custom cryptography — answers Apple's
+	     export-compliance question automatically so every future TestFlight
+	     upload doesn't need it resolved by hand via the API/App Store Connect UI. -->
+	<key>ITSAppUsesNonExemptEncryption</key>
+	<false/>
 	<key>CFBundleShortVersionString</key>
 	<string>$(MARKETING_VERSION)</string>
 	<key>CFBundleVersion</key>
