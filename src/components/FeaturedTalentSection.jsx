@@ -35,7 +35,7 @@ const FeaturedTalentSection = () => {
             src={imgSrc(talent.image)}
             alt={displayName}
             onError={handleImageError}
-            className="w-full h-full object-cover"
+            className="w-full h-full object-cover object-top"
           />
         </motion.div>
 

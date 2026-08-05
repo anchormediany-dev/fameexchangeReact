@@ -180,7 +180,7 @@ export default function FeaturedTalentPage() {
                         src={fallbackImage}
                         alt={displayName}
                         onError={handleImageError}
-                        className="w-full h-full object-cover"
+                        className="w-full h-full object-cover object-top"
                       />
                     </div>
                   )}
