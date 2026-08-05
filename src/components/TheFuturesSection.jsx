@@ -1,5 +1,6 @@
 import { useRef } from "react";
 import { motion, useInView } from "framer-motion";
+import { Capacitor } from "@capacitor/core";
 // import futuresImage from "../assets/images/future-bg.png";
 // import futuresImage from "../assets/images/futures-bg.png";
 // import futuresImage from "../assets/images/future-bg-2.png";
@@ -138,7 +139,9 @@ const TheFuturesSection = () => {
   return (
     <motion.section
       ref={sectionRef}
-      className="w-full h-screen md:h-[85vh] lg:h-[80vh] bg-cover bg-center bg-no-repeat relative overflow-hidden"
+      className={`w-full ${
+        Capacitor.isNativePlatform() ? "h-[50vh]" : "h-screen"
+      } md:h-[85vh] lg:h-[80vh] bg-cover bg-center bg-no-repeat relative overflow-hidden`}
       style={sectionStyle}
       id="futures"
       initial="hidden"
