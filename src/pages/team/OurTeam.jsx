@@ -5,21 +5,28 @@ import { imgSrc } from "../../utils/imgSrc";
 import { FaLinkedinIn } from "react-icons/fa";
 import { FiGlobe } from "react-icons/fi";
 import { openExternal } from "../../utils/nativeLinks";
+import { useGetTeamQuery } from "../../app/authApi";
 
 const FALLBACK_IMG =
   "https://images.unsplash.com/photo-1527980965255-d3b416303d12?auto=format&fit=crop&w=1200&q=60";
 
 const OurTeam = ({ teamMembers: propTeamMembers }) => {
-  // If navigated via <Link to="/our-team" state={{ teamMembers }}>
+  // Navigation state (from the homepage carousel's "View All" link) renders
+  // instantly with no loading flicker when available, but a direct visit —
+  // bookmark, shared link, refresh — has neither a prop nor state, so this
+  // always also fetches live as the real source of truth.
   const location = useLocation();
   const stateMembers = location.state?.teamMembers;
+  const { data, isLoading } = useGetTeamQuery();
+  const fetchedMembers = Array.isArray(data?.data)
+    ? data.data.filter((m) => m?.isVisible)
+    : [];
 
-  // Prefer explicit prop, else router state; both should be arrays
   const teamMembers = Array.isArray(propTeamMembers)
     ? propTeamMembers
     : Array.isArray(stateMembers)
     ? stateMembers
-    : [];
+    : fetchedMembers;
 
   const openLink = (url) => {
     if (!url) return;
@@ -45,7 +52,9 @@ const OurTeam = ({ teamMembers: propTeamMembers }) => {
           </div>
         </div>
 
-        {teamMembers.length === 0 ? (
+        {teamMembers.length === 0 && isLoading ? (
+          <div className="text-center text-gray-300 py-10">Loading…</div>
+        ) : teamMembers.length === 0 ? (
           <div className="text-center text-gray-300 py-10">
             No team members to display.
           </div>
