@@ -1,13 +1,10 @@
-import { motion, useInView } from "framer-motion";
-import { useRef } from "react";
+import { motion } from "framer-motion";
 import { useNavigate } from "react-router-dom";
 import { useGetFeaturedTalentQuery } from "../app/authApi";
 import { imgSrc } from "../utils/imgSrc";
 import { handleImageError } from "../utils/imagePlaceholder";
 
 const FeaturedTalentSection = () => {
-  const sectionRef = useRef(null);
-  const isInView = useInView(sectionRef, { once: true, amount: 0.2 });
   const navigate = useNavigate();
   const { data, isLoading } = useGetFeaturedTalentQuery();
 
@@ -20,14 +17,12 @@ const FeaturedTalentSection = () => {
   const displayName = talent.profile?.name || talent.profile?.full_name || talent.name;
 
   return (
-    <section
-      ref={sectionRef}
-      className="bg-[#171717] text-white py-16 lg:py-20 2xl:py-24 px-4 sm:px-6 md:px-16 relative overflow-hidden"
-    >
+    <section className="bg-[#171717] text-white py-16 lg:py-20 2xl:py-24 px-4 sm:px-6 md:px-16 relative overflow-hidden">
       <div className="relative z-10 container mx-auto grid lg:grid-cols-2 items-center gap-10 lg:gap-12 xl:gap-16 px-4">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
-          animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, amount: 0.2 }}
           transition={{ duration: 0.6 }}
           className="rounded-2xl overflow-hidden order-1 lg:order-1 aspect-square max-h-[420px] mx-auto lg:mx-0 w-full"
         >
@@ -41,7 +36,8 @@ const FeaturedTalentSection = () => {
 
         <motion.div
           initial={{ opacity: 0, x: 20 }}
-          animate={isInView ? { opacity: 1, x: 0 } : { opacity: 0, x: 20 }}
+          whileInView={{ opacity: 1, x: 0 }}
+          viewport={{ once: true, amount: 0.2 }}
           transition={{ duration: 0.6, delay: 0.15 }}
           className="order-2 lg:order-2 space-y-5"
         >
