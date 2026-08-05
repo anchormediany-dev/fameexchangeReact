@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { Link } from "react-router-dom";
 import { useGetFuturesTalentsQuery } from "../../app/tradingApi";
 import { useSelector } from "react-redux";
 import PledgeModal from "./PledgeModal";
@@ -111,8 +112,10 @@ function TalentCard({ talent, onPledge, isLoggedIn }) {
 }
 
 // "What is the Futures Section?" explainer box — lives once in the hero
-// (always visible regardless of how many futures talents exist), linking
-// out to famefutures.com rather than the in-app qualify flow.
+// (always visible regardless of how many futures talents exist). Was an
+// external famefutures.com link; now goes to the in-app dashboard now that
+// Phase 2 (identity + qualification gate) is live — see the plan file for
+// the phase-by-phase cutover this is part of.
 function FameFuturesCTA({ className = "" }) {
   return (
     <div className={`bg-gradient-to-br from-[#1f1f1f] to-[#191919] border border-[#F3BA18]/20 rounded-2xl p-6 ${className}`}>
@@ -122,18 +125,12 @@ function FameFuturesCTA({ className = "" }) {
         grow their brand, audience, revenue, and market value — preparing them for the Fame
         Exchange.
       </p>
-      <a
-        href="https://famefutures.com"
-        target="_blank"
-        rel="noopener noreferrer"
-        onClick={(e) => {
-          e.preventDefault();
-          openExternal("https://famefutures.com");
-        }}
+      <Link
+        to="/futures/dashboard"
         className="block w-full sm:w-auto sm:inline-block text-center bg-[#F3BA18] text-black px-6 py-2.5 rounded-lg font-semibold text-sm hover:bg-[#dbb934] transition-colors"
       >
         Start Building Your Asset!
-      </a>
+      </Link>
     </div>
   );
 }

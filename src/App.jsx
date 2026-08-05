@@ -97,6 +97,7 @@ const AddAdminTeam = lazy(() => import("./pages/admin/teams/AddAdminTeam"));
 const AdminProductsListings = lazy(() => import("./pages/admin/AdminProductsListings"));
 const AddProduct = lazy(() => import("./pages/admin/AddProduct"));
 const FuturesPage = lazy(() => import("./pages/futures/FuturesPage"));
+const FuturesDashboard = lazy(() => import("./pages/futures/FuturesDashboard"));
 
 // Spinner shown while any lazy page chunk loads
 const PageLoader = () => (
@@ -564,10 +565,17 @@ export default function App() {
             }
           />
 
-          {/* Futures tier (Fame Futures) */}
+          {/* Pre-IPO pledge-campaign flow — distinct from the Fame Futures
+              creator-development dashboard below, both under this nav tab
+              (see the plan file for why). */}
           <Route
             path="futures"
             element={<FuturesPage />}
+          />
+          {/* Fame Futures creator-development dashboard (Base44 rebuild) */}
+          <Route
+            path="futures/dashboard"
+            element={<FuturesDashboard />}
           />
 
           {/* future_musicians Page */}
