@@ -8,8 +8,10 @@ const AddAdminTeam = () => {
   const [form, setForm] = useState({
     name: "",
     title: "",
-    // bio: "",
+    bio: "",
+    linkedinUrl: "",
     isVisible: true,
+    featuredOnHome: false,
     order: 0,
   });
 
@@ -40,7 +42,6 @@ const AddAdminTeam = () => {
   const validate = () => {
     if (!form.name?.trim()) return "Name is required.";
     if (!form.title?.trim()) return "Title is required.";
-    // if (!form.bio?.trim()) return "Bio is required.";
     return "";
   };
 
@@ -48,8 +49,10 @@ const AddAdminTeam = () => {
     const fd = new FormData();
     fd.append("name", form.name.trim());
     fd.append("title", form.title.trim());
-    // fd.append("bio", form.bio.trim());
+    fd.append("bio", form.bio.trim());
+    fd.append("linkedinUrl", form.linkedinUrl.trim());
     fd.append("isVisible", String(form.isVisible));
+    fd.append("featuredOnHome", String(form.featuredOnHome));
     fd.append("order", String(Number(form.order) || 0));
     if (file) fd.append("imageUrl", file);
     return fd;
@@ -73,8 +76,10 @@ const AddAdminTeam = () => {
       setForm({
         name: "",
         title: "",
-        //  bio: "",
+        bio: "",
+        linkedinUrl: "",
         isVisible: true,
+        featuredOnHome: false,
         order: 0,
       });
       setFile(null);
@@ -143,6 +148,26 @@ const AddAdminTeam = () => {
             </div>
           </div>
 
+          {/* LinkedIn */}
+          <div>
+            <label className="block text-white text-sm font-medium mb-2">
+              LinkedIn URL
+            </label>
+            <div className="flex items-center border rounded-lg px-4 py-3 bg-[#2d2d2d]">
+              <input
+                type="url"
+                name="linkedinUrl"
+                value={form.linkedinUrl}
+                onChange={handleChange}
+                placeholder="https://www.linkedin.com/in/..."
+                className="bg-transparent outline-none w-full text-white placeholder-gray-400"
+              />
+            </div>
+            <p className="text-xs text-gray-500 mt-1">
+              Powers the LinkedIn button on their bio page — left blank hides it.
+            </p>
+          </div>
+
           {/* Visible toggle */}
           <div className="flex items-center gap-3">
             <input
@@ -160,6 +185,26 @@ const AddAdminTeam = () => {
               }`}
             >
               Visible on site
+            </label>
+          </div>
+
+          {/* Featured on homepage toggle */}
+          <div className="flex items-center gap-3">
+            <input
+              id="featuredOnHome"
+              type="checkbox"
+              name="featuredOnHome"
+              checked={form.featuredOnHome}
+              onChange={handleBoolean}
+              className="rounded h-5 w-5"
+            />
+            <label
+              htmlFor="featuredOnHome"
+              className={`text-sm ${
+                form.featuredOnHome ? "gredient-text" : "text-gray-400"
+              }`}
+            >
+              Show in homepage carousel
             </label>
           </div>
 
@@ -185,10 +230,10 @@ const AddAdminTeam = () => {
         </div>
 
         {/* Bio */}
-        {/* <div className="grid grid-cols-1 gap-6">
+        <div className="grid grid-cols-1 gap-6">
           <div>
             <label className="block text-white text-sm font-medium mb-2">
-              Biography*
+              Biography
             </label>
             <div className="border rounded-lg px-4 py-3 bg-[#2d2d2d]">
               <textarea
@@ -198,11 +243,10 @@ const AddAdminTeam = () => {
                 rows={6}
                 placeholder="Write a short bio…"
                 className="bg-transparent outline-none w-full text-white placeholder-gray-400"
-                required
               />
             </div>
           </div>
-        </div> */}
+        </div>
 
         {/* Image */}
         <div className="grid grid-cols-1 gap-6">

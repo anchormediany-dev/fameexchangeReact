@@ -18,9 +18,11 @@ const OurTeam = () => {
   const { data, isLoading, isError, error, refetch, isFetching } =
     useGetTeamQuery();
 
-  // From API: [{ _id, name, title, bio, imageUrl, isVisible, ... }]
+  // From API: [{ _id, name, title, bio, imageUrl, isVisible, featuredOnHome, ... }]
+  // featuredOnHome is the homepage-carousel opt-in — everyone isVisible
+  // still shows on the full /our-team page regardless of this flag.
   const teamMembers = Array.isArray(data?.data)
-    ? data.data.filter((m) => m?.isVisible)
+    ? data.data.filter((m) => m?.isVisible && m?.featuredOnHome)
     : [];
 
   const truncate = (text = "", max = 50) => {
@@ -186,7 +188,10 @@ const OurTeam = () => {
       </div>
 
       <div className="flex justify-center">
-        <Link to="/our-team" state={{ teamMembers }}>
+        {/* No state passed — /our-team fetches the full team itself, since
+            teamMembers here is filtered to the homepage-carousel subset
+            (featuredOnHome) and would otherwise wrongly limit that page too. */}
+        <Link to="/our-team">
           <button className="custom-button-two">VIEW ALL</button>
         </Link>
       </div>

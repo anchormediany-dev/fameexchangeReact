@@ -1,5 +1,5 @@
 // pages/team/OurTeam.jsx
-import { useLocation, Link } from "react-router-dom";
+import { Link } from "react-router-dom";
 import imageText from "../../assets/images/fame-exchange-image-text.png";
 import { imgSrc } from "../../utils/imgSrc";
 import { FaLinkedinIn } from "react-icons/fa";
@@ -10,23 +10,14 @@ import { useGetTeamQuery } from "../../app/authApi";
 const FALLBACK_IMG =
   "https://images.unsplash.com/photo-1527980965255-d3b416303d12?auto=format&fit=crop&w=1200&q=60";
 
-const OurTeam = ({ teamMembers: propTeamMembers }) => {
-  // Navigation state (from the homepage carousel's "View All" link) renders
-  // instantly with no loading flicker when available, but a direct visit —
-  // bookmark, shared link, refresh — has neither a prop nor state, so this
-  // always also fetches live as the real source of truth.
-  const location = useLocation();
-  const stateMembers = location.state?.teamMembers;
+const OurTeam = () => {
+  // The full team, independent of the homepage carousel's featuredOnHome
+  // subset — always fetched live so a direct visit (bookmark, shared link,
+  // refresh) works the same as coming from the homepage.
   const { data, isLoading } = useGetTeamQuery();
-  const fetchedMembers = Array.isArray(data?.data)
+  const teamMembers = Array.isArray(data?.data)
     ? data.data.filter((m) => m?.isVisible)
     : [];
-
-  const teamMembers = Array.isArray(propTeamMembers)
-    ? propTeamMembers
-    : Array.isArray(stateMembers)
-    ? stateMembers
-    : fetchedMembers;
 
   const openLink = (url) => {
     if (!url) return;
