@@ -109,48 +109,40 @@ const OurTeam = () => {
                 member.linkedin ||
                 member.linkedin_link ||
                 member.linkedinProfile ||
-                "https://www.linkedin.com";
-              const websiteUrl =
-                member.websiteUrl ||
-                member.website ||
-                member.site ||
-                member.website_link ||
-                "https://thefameexchange.com";
+                "";
+              const bioUrl = member.slug ? `/team/${member.slug}` : null;
 
               return (
                 <SwiperSlide key={member._id || member.id}>
                   {/* group enables group-hover: classes */}
                   <div className="rounded-lg overflow-hidden transition-transform duration-300 hover:scale-105 h-full flex flex-col group">
                     <div className="relative aspect-square overflow-hidden">
-                      {/* Team member image */}
-                      <img
-                        src={imgSrc(member.imageUrl, FALLBACK_IMG)}
-                        alt={member.name || "Team member"}
-                        className="w-full h-full object-cover"
-                        loading="lazy"
-                      />
+                      {/* Team member image — links to their bio page */}
+                      <Link to={bioUrl || "#"}>
+                        <img
+                          src={imgSrc(member.imageUrl, FALLBACK_IMG)}
+                          alt={member.name || "Team member"}
+                          className="w-full h-full object-cover"
+                          loading="lazy"
+                        />
+                      </Link>
 
                       {/* Hover icons bar, bottom of image */}
                       <div className="absolute inset-x-0 bottom-0 flex justify-center pb-3 opacity-0 translate-y-3 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-300">
                         <div className="flex items-center gap-3 bg-[#171717] rounded-full px-4 py-2">
-                          {/* Website icon */}
-                          <button
-                            type="button"
-                            onClick={() => openLink(websiteUrl)}
+                          {/* Bio page icon */}
+                          <Link
+                            to={bioUrl || "#"}
                             className={
                               "p-2 rounded-full transition-colors " +
-                              (websiteUrl
+                              (bioUrl
                                 ? "bg-white hover:bg-[#a38b41] cursor-pointer"
-                                : "bg-white/5 cursor-not-allowed opacity-60")
+                                : "bg-white/5 cursor-not-allowed opacity-60 pointer-events-none")
                             }
-                            aria-label={
-                              websiteUrl
-                                ? `${member.name || "Team member"} website`
-                                : "Website not available"
-                            }
+                            aria-label={`${member.name || "Team member"} bio page`}
                           >
                             <FiGlobe className="w-4 h-4 text-white" />
-                          </button>
+                          </Link>
 
                           {/* LinkedIn icon */}
                           <button
@@ -175,9 +167,11 @@ const OurTeam = () => {
                     </div>
 
                     <div className="p-6 text-center">
-                      <h4 className="text-white custom-heading-seven">
-                        {member.name}
-                      </h4>
+                      <Link to={bioUrl || "#"}>
+                        <h4 className="text-white custom-heading-seven hover:text-[#a38b41] transition-colors">
+                          {member.name}
+                        </h4>
+                      </Link>
                       <p className="text-white">{member.title}</p>
                       <p className="text-gray-400 text-sm mt-2">
                         {truncate(member.bio, 80)}

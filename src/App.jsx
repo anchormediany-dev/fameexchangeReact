@@ -58,6 +58,7 @@ const ConfirmationStep = lazy(() => import("./pages/checkout_pages/steps/Confirm
 const FutureMusicians = lazy(() => import("./pages/future_musicians/FutureMusicians"));
 const ContactPage = lazy(() => import("./pages/contact/ContactPage"));
 const OurTeam = lazy(() => import("./pages/team/OurTeam"));
+const TeamMemberBioPage = lazy(() => import("./pages/team/TeamMemberBioPage"));
 const CustomerReview = lazy(() => import("./pages/customer_review/CustomerReview"));
 const BrandedTalentSharesPage = lazy(() => import("./pages/branded_talent_shares/BrandedTalentSharesPage"));
 const AllProducts = lazy(() => import("./pages/AllProducts"));
@@ -854,6 +855,14 @@ export default function App() {
           element={
             <MotionPageWrapper>
               <FeaturedTalentPage />
+            </MotionPageWrapper>
+          }
+        />
+        <Route
+          path="team/:slug"
+          element={
+            <MotionPageWrapper>
+              <TeamMemberBioPage />
             </MotionPageWrapper>
           }
         />
