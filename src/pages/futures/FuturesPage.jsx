@@ -3,9 +3,8 @@ import { Link } from "react-router-dom";
 import { useGetFuturesTalentsQuery } from "../../app/tradingApi";
 import { useSelector } from "react-redux";
 import PledgeModal from "./PledgeModal";
-import { FiStar, FiClock, FiTrendingUp, FiUsers, FiExternalLink } from "react-icons/fi";
+import { FiStar, FiClock, FiTrendingUp, FiUsers } from "react-icons/fi";
 import MotionPageWrapper from "../../components/MotionPageWrapper";
-import { openExternal } from "../../utils/nativeLinks";
 
 // FameScore is 0-100. Note there's no single "score >= X means qualified"
 // number anymore — qualification is a multi-factor gate (total followers,
@@ -135,26 +134,23 @@ function FameFuturesCTA({ className = "" }) {
   );
 }
 
-// Companion box, same style, sitting directly underneath the explainer —
-// links out to the membership-sponsorship page on famefutures.com.
+// Companion box, same style, sitting directly underneath the explainer.
+// Was an external famefutures.com/membership link; goes to the in-app
+// dashboard now (full "gift a membership to a specific talent" UI is a
+// future enhancement — this gets a sponsor to a real, working starting
+// point today).
 function SponsorMembershipCTA({ className = "" }) {
   return (
     <div className={`bg-gradient-to-br from-[#1f1f1f] to-[#191919] border border-[#F3BA18]/20 rounded-2xl p-6 ${className}`}>
       <h3 className="text-white font-bold text-base mb-1.5">
         Would you like to sponsor a future's membership?
       </h3>
-      <a
-        href="https://famefutures.com/membership"
-        target="_blank"
-        rel="noopener noreferrer"
-        onClick={(e) => {
-          e.preventDefault();
-          openExternal("https://famefutures.com/membership");
-        }}
+      <Link
+        to="/futures/dashboard"
         className="mt-3 block w-full sm:w-auto sm:inline-block text-center bg-[#F3BA18] text-black px-6 py-2.5 rounded-lg font-semibold text-sm hover:bg-[#dbb934] transition-colors"
       >
         Click Here!
-      </a>
+      </Link>
     </div>
   );
 }
@@ -178,19 +174,6 @@ export default function FuturesPage() {
                 <span className="text-[#F3BA18] text-xs uppercase tracking-widest font-semibold">
                   Fame Exchange
                 </span>
-                <span className="text-gray-600 text-xs">×</span>
-                <a
-                  href="https://famefutures.com"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  onClick={(e) => {
-                    e.preventDefault();
-                    openExternal("https://famefutures.com");
-                  }}
-                  className="text-[#F3BA18] text-xs uppercase tracking-widest font-semibold flex items-center gap-1 hover:underline"
-                >
-                  famefutures.com <FiExternalLink className="w-3 h-3" />
-                </a>
               </div>
               <h1 className="text-4xl md:text-5xl font-black leading-tight">
                 Invest in Tomorrow's{" "}

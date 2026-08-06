@@ -1,11 +1,11 @@
 import { useState } from "react";
+import { Link } from "react-router-dom";
 import { Elements, CardElement, useStripe, useElements } from "@stripe/react-stripe-js";
 import { loadStripe } from "@stripe/stripe-js";
 import { useStartFanPledgeMutation, useConfirmFanPledgeMutation } from "../../app/tradingApi";
 import { toast } from "react-toastify";
 import { FiX, FiLock, FiStar } from "react-icons/fi";
 import fameCoin from "../../assets/home/thecoin.png";
-import { openExternal } from "../../utils/nativeLinks";
 
 const stripePromise = loadStripe(import.meta.env.VITE_STRIPE_PUBLISHABLE_KEY);
 
@@ -286,18 +286,13 @@ export default function PledgeModal({ talent, onClose }) {
               </ul>
             </div>
             <div className="flex flex-col gap-2">
-              <a
-                href="https://famefutures.com"
-                target="_blank"
-                rel="noopener noreferrer"
-                onClick={(e) => {
-                  e.preventDefault();
-                  openExternal("https://famefutures.com");
-                }}
-                className="block custom-button-two py-3 rounded-lg font-semibold text-sm"
+              <Link
+                to="/futures/dashboard"
+                onClick={onClose}
+                className="block custom-button-two py-3 rounded-lg font-semibold text-sm text-center"
               >
                 Track on Fame Futures →
-              </a>
+              </Link>
               <button
                 onClick={onClose}
                 className="text-gray-500 text-sm hover:text-gray-300 transition py-1"
