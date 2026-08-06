@@ -100,6 +100,8 @@ const FuturesPage = lazy(() => import("./pages/futures/FuturesPage"));
 const FuturesDashboard = lazy(() => import("./pages/futures/FuturesDashboard"));
 const FameTeam = lazy(() => import("./pages/futures/FameTeam"));
 const AdvisorChat = lazy(() => import("./pages/futures/AdvisorChat"));
+const FuturesCreatorProfile = lazy(() => import("./pages/futures/FuturesCreatorProfile"));
+const ExpertInviteSubmit = lazy(() => import("./pages/futures/ExpertInviteSubmit"));
 
 // Spinner shown while any lazy page chunk loads
 const PageLoader = () => (
@@ -587,6 +589,19 @@ export default function App() {
           <Route
             path="futures/advisor/:advisorKey"
             element={<AdvisorChat />}
+          />
+          {/* Fame Futures public creator profile + crowdfunding/content
+              (Phase 6) — the landing point for a fan-tier subscribe or
+              exclusive-content share link. */}
+          <Route
+            path="futures/creator/:userId"
+            element={<FuturesCreatorProfile />}
+          />
+          {/* Public, no account needed — an outside expert's tokenized
+              invite link to submit a video lesson (Phase 6). */}
+          <Route
+            path="futures/expert-invite/:token"
+            element={<ExpertInviteSubmit />}
           />
 
           {/* future_musicians Page */}

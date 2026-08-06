@@ -129,6 +129,11 @@ export const api = createApi({
     "FuturesXPRedemptions",
     "FuturesReferral",
     "FuturesDailyPlan",
+    "FuturesExclusiveContent",
+    "FuturesVideoLessons",
+    "FuturesProjects",
+    "FuturesExpertInvites",
+    "FuturesCollabRequests",
   ],
   endpoints: () => ({}),
 });

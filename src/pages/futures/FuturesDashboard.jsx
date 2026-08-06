@@ -12,6 +12,9 @@ import {
   FiGift,
   FiShare2,
   FiCopy,
+  FiImage,
+  FiBriefcase,
+  FiMail,
 } from "react-icons/fi";
 import { toast } from "react-toastify";
 import Navbar from "../../components/Navbar";
@@ -43,6 +46,13 @@ import {
   useGetMyDailyPlanQuery,
   useGenerateDailyPlanMutation,
   useCompleteDailyTaskMutation,
+  useGetMyExclusiveContentQuery,
+  useCreateExclusiveContentMutation,
+  useDeleteExclusiveContentMutation,
+  useGetMyProjectsQuery,
+  useCreateProjectMutation,
+  useGetMyExpertInvitesQuery,
+  useCreateExpertInviteMutation,
 } from "../../app/futuresHubApi";
 
 // Phase 2 built identity + the qualification gate. Phase 3 (this file's
@@ -610,6 +620,377 @@ function MissionsSection() {
   );
 }
 
+// ── Talent: share your public page ──────────────────────────────────────
+function SharePageSection({ userId }) {
+  const link = `${window.location.origin}/futures/creator/${userId}`;
+  const handleCopy = () => {
+    navigator.clipboard
+      .writeText(link)
+      .then(() => toast.success("Link copied!"))
+      .catch(() => toast.error("Couldn't copy — long-press or select the link to copy it manually."));
+  };
+  return (
+    <div className="mt-10">
+      <h2 className="text-white font-bold text-xl mb-1">Your Public Page</h2>
+      <p className="text-gray-400 text-sm mb-3">
+        Share this link so fans can subscribe, back your projects, and unlock exclusive content.
+      </p>
+      <div className="flex gap-2 max-w-md">
+        <input
+          readOnly
+          value={link}
+          className="flex-1 bg-[#191919] border border-[#2a2a2a] rounded-lg px-3 py-2.5 text-xs text-gray-300 outline-none"
+        />
+        <button
+          type="button"
+          onClick={handleCopy}
+          className="bg-gradient-to-r from-[#a18a3f] to-[#e6ca7c] text-black rounded-lg px-3 hover:brightness-110 transition-all"
+        >
+          <FiCopy size={16} />
+        </button>
+      </div>
+    </div>
+  );
+}
+
+// ── Talent: manage exclusive content ────────────────────────────────────
+function ExclusiveContentSection() {
+  const { data: contentRes, isLoading } = useGetMyExclusiveContentQuery();
+  const { data: tiersRes } = useGetMyFanTiersQuery();
+  const [createContent, { isLoading: creating }] = useCreateExclusiveContentMutation();
+  const [deleteContent] = useDeleteExclusiveContentMutation();
+  const [showForm, setShowForm] = useState(false);
+  const [form, setForm] = useState({ title: "", type: "photo", content_url: "", tierId: "" });
+
+  const content = contentRes?.data || [];
+  const tiers = tiersRes?.data || [];
+
+  const handleCreate = async (e) => {
+    e.preventDefault();
+    if (!form.title.trim() || !form.content_url.trim()) {
+      toast.error("Title and content URL are required.");
+      return;
+    }
+    try {
+      await createContent({
+        title: form.title.trim(),
+        type: form.type,
+        content_url: form.content_url.trim(),
+        tierId: form.tierId || null,
+        status: "published",
+      }).unwrap();
+      setForm({ title: "", type: "photo", content_url: "", tierId: "" });
+      setShowForm(false);
+      toast.success("Content published.");
+    } catch (err) {
+      toast.error(err?.data?.message || "Couldn't publish content.");
+    }
+  };
+
+  if (isLoading) return null;
+
+  return (
+    <div className="mt-10">
+      <div className="flex items-center justify-between mb-1">
+        <h2 className="text-white font-bold text-xl flex items-center gap-2">
+          <FiImage className="text-[#a38b41]" /> Exclusive Content
+        </h2>
+        <button
+          type="button"
+          onClick={() => setShowForm((v) => !v)}
+          className="text-[#a38b41] text-sm font-semibold hover:underline"
+        >
+          {showForm ? "Cancel" : "+ New Post"}
+        </button>
+      </div>
+      <p className="text-gray-400 text-sm mb-5">Post content for your subscribers — gate it by tier or leave open to all.</p>
+
+      {showForm && (
+        <form onSubmit={handleCreate} className="bg-[#191919] border border-[#2a2a2a] rounded-2xl p-5 mb-5 space-y-3">
+          <input
+            type="text"
+            value={form.title}
+            onChange={(e) => setForm((f) => ({ ...f, title: e.target.value }))}
+            placeholder="Title"
+            className="w-full bg-[#111111] border border-[#2a2a2a] rounded-lg px-3 py-2 text-sm text-white placeholder-gray-500 outline-none focus:border-[#a38b41]"
+          />
+          <select
+            value={form.type}
+            onChange={(e) => setForm((f) => ({ ...f, type: e.target.value }))}
+            className="w-full bg-[#111111] border border-[#2a2a2a] rounded-lg px-3 py-2 text-sm text-white outline-none focus:border-[#a38b41]"
+          >
+            <option value="photo">Photo</option>
+            <option value="video">Video</option>
+            <option value="audio">Audio</option>
+            <option value="lesson">Lesson</option>
+          </select>
+          <input
+            type="url"
+            value={form.content_url}
+            onChange={(e) => setForm((f) => ({ ...f, content_url: e.target.value }))}
+            placeholder="Content URL"
+            className="w-full bg-[#111111] border border-[#2a2a2a] rounded-lg px-3 py-2 text-sm text-white placeholder-gray-500 outline-none focus:border-[#a38b41]"
+          />
+          <select
+            value={form.tierId}
+            onChange={(e) => setForm((f) => ({ ...f, tierId: e.target.value }))}
+            className="w-full bg-[#111111] border border-[#2a2a2a] rounded-lg px-3 py-2 text-sm text-white outline-none focus:border-[#a38b41]"
+          >
+            <option value="">Open to all subscribers</option>
+            {tiers.map((t) => (
+              <option key={t._id} value={t._id}>
+                Requires: {t.name} (${t.price}/mo)
+              </option>
+            ))}
+          </select>
+          <button
+            type="submit"
+            disabled={creating}
+            className="w-full bg-gradient-to-r from-[#a18a3f] to-[#e6ca7c] text-black font-semibold py-2.5 rounded-lg hover:brightness-110 transition-all disabled:opacity-60"
+          >
+            {creating ? "Publishing…" : "Publish"}
+          </button>
+        </form>
+      )}
+
+      {content.length === 0 ? (
+        <p className="text-gray-500 text-sm">No content yet — post something for your subscribers.</p>
+      ) : (
+        <div className="space-y-2">
+          {content.map((c) => (
+            <div key={c._id} className="flex items-center justify-between bg-[#191919] border border-[#2a2a2a] rounded-xl p-4">
+              <div>
+                <p className="text-white text-sm font-semibold">{c.title}</p>
+                <p className="text-gray-500 text-xs mt-0.5 capitalize">{c.type}</p>
+              </div>
+              <button
+                type="button"
+                onClick={() => deleteContent(c._id)}
+                className="text-gray-500 hover:text-red-400 transition p-1.5"
+              >
+                <FiTrash2 size={16} />
+              </button>
+            </div>
+          ))}
+        </div>
+      )}
+    </div>
+  );
+}
+
+// ── Talent: crowdfunding projects ───────────────────────────────────────
+function ProjectsSection({ userId }) {
+  const { data: projectsRes, isLoading } = useGetMyProjectsQuery(userId);
+  const [createProject, { isLoading: creating }] = useCreateProjectMutation();
+  const [showForm, setShowForm] = useState(false);
+  const [form, setForm] = useState({ title: "", description: "", funding_goal: "" });
+
+  const projects = projectsRes?.data || [];
+
+  const handleCreate = async (e) => {
+    e.preventDefault();
+    if (!form.title.trim()) {
+      toast.error("Give your project a title.");
+      return;
+    }
+    try {
+      await createProject({
+        title: form.title.trim(),
+        description: form.description.trim(),
+        funding_goal: Number(form.funding_goal) || 0,
+        status: "active",
+      }).unwrap();
+      setForm({ title: "", description: "", funding_goal: "" });
+      setShowForm(false);
+      toast.success("Project created.");
+    } catch (err) {
+      toast.error(err?.data?.message || "Couldn't create project.");
+    }
+  };
+
+  if (isLoading) return null;
+
+  return (
+    <div className="mt-10">
+      <div className="flex items-center justify-between mb-1">
+        <h2 className="text-white font-bold text-xl flex items-center gap-2">
+          <FiBriefcase className="text-[#a38b41]" /> Crowdfunding Projects
+        </h2>
+        <button
+          type="button"
+          onClick={() => setShowForm((v) => !v)}
+          className="text-[#a38b41] text-sm font-semibold hover:underline"
+        >
+          {showForm ? "Cancel" : "+ New Project"}
+        </button>
+      </div>
+      <p className="text-gray-400 text-sm mb-5">Let fans crowdfund what you're building — visible on your public page.</p>
+
+      {showForm && (
+        <form onSubmit={handleCreate} className="bg-[#191919] border border-[#2a2a2a] rounded-2xl p-5 mb-5 space-y-3">
+          <input
+            type="text"
+            value={form.title}
+            onChange={(e) => setForm((f) => ({ ...f, title: e.target.value }))}
+            placeholder="Project title (e.g. Debut EP Recording)"
+            className="w-full bg-[#111111] border border-[#2a2a2a] rounded-lg px-3 py-2 text-sm text-white placeholder-gray-500 outline-none focus:border-[#a38b41]"
+          />
+          <textarea
+            value={form.description}
+            onChange={(e) => setForm((f) => ({ ...f, description: e.target.value }))}
+            placeholder="What are you building?"
+            rows={2}
+            className="w-full bg-[#111111] border border-[#2a2a2a] rounded-lg px-3 py-2 text-sm text-white placeholder-gray-500 outline-none focus:border-[#a38b41] resize-none"
+          />
+          <input
+            type="number"
+            min="1"
+            value={form.funding_goal}
+            onChange={(e) => setForm((f) => ({ ...f, funding_goal: e.target.value }))}
+            placeholder="Funding goal ($)"
+            className="w-full bg-[#111111] border border-[#2a2a2a] rounded-lg px-3 py-2 text-sm text-white placeholder-gray-500 outline-none focus:border-[#a38b41]"
+          />
+          <button
+            type="submit"
+            disabled={creating}
+            className="w-full bg-gradient-to-r from-[#a18a3f] to-[#e6ca7c] text-black font-semibold py-2.5 rounded-lg hover:brightness-110 transition-all disabled:opacity-60"
+          >
+            {creating ? "Creating…" : "Create Project"}
+          </button>
+        </form>
+      )}
+
+      {projects.length === 0 ? (
+        <p className="text-gray-500 text-sm">No projects yet — create one to start crowdfunding.</p>
+      ) : (
+        <div className="space-y-2">
+          {projects.map((p) => (
+            <div key={p._id} className="bg-[#191919] border border-[#2a2a2a] rounded-xl p-4">
+              <p className="text-white text-sm font-semibold">{p.title}</p>
+              <p className="text-gray-500 text-xs mt-0.5">
+                ${(p.total_raised || 0).toLocaleString()} raised of ${(p.funding_goal || 0).toLocaleString()}
+              </p>
+            </div>
+          ))}
+        </div>
+      )}
+    </div>
+  );
+}
+
+// ── Talent: invite outside experts to record a lesson ───────────────────
+function ExpertInvitesSection() {
+  const { data: invitesRes, isLoading } = useGetMyExpertInvitesQuery();
+  const [createInvite, { isLoading: creating }] = useCreateExpertInviteMutation();
+  const [showForm, setShowForm] = useState(false);
+  const [form, setForm] = useState({ expert_name: "", expert_title: "", message: "" });
+
+  const invites = invitesRes?.data || [];
+
+  const handleCreate = async (e) => {
+    e.preventDefault();
+    if (!form.expert_name.trim()) {
+      toast.error("Give the expert's name.");
+      return;
+    }
+    try {
+      const res = await createInvite({
+        expert_name: form.expert_name.trim(),
+        expert_title: form.expert_title.trim(),
+        message: form.message.trim(),
+      }).unwrap();
+      const link = `${window.location.origin}/futures/expert-invite/${res.data.token}`;
+      try {
+        await navigator.clipboard.writeText(link);
+        toast.success("Invite created — link copied to clipboard!");
+      } catch {
+        toast.success(`Invite created! Link: ${link}`);
+      }
+      setForm({ expert_name: "", expert_title: "", message: "" });
+      setShowForm(false);
+    } catch (err) {
+      toast.error(err?.data?.message || "Couldn't create invite.");
+    }
+  };
+
+  if (isLoading) return null;
+
+  return (
+    <div className="mt-10">
+      <div className="flex items-center justify-between mb-1">
+        <h2 className="text-white font-bold text-xl flex items-center gap-2">
+          <FiMail className="text-[#a38b41]" /> Expert Invites
+        </h2>
+        <button
+          type="button"
+          onClick={() => setShowForm((v) => !v)}
+          className="text-[#a38b41] text-sm font-semibold hover:underline"
+        >
+          {showForm ? "Cancel" : "+ Invite Expert"}
+        </button>
+      </div>
+      <p className="text-gray-400 text-sm mb-5">
+        Invite an outside expert to record a lesson via a link — no FameExchange account needed.
+      </p>
+
+      {showForm && (
+        <form onSubmit={handleCreate} className="bg-[#191919] border border-[#2a2a2a] rounded-2xl p-5 mb-5 space-y-3">
+          <input
+            type="text"
+            value={form.expert_name}
+            onChange={(e) => setForm((f) => ({ ...f, expert_name: e.target.value }))}
+            placeholder="Expert's name"
+            className="w-full bg-[#111111] border border-[#2a2a2a] rounded-lg px-3 py-2 text-sm text-white placeholder-gray-500 outline-none focus:border-[#a38b41]"
+          />
+          <input
+            type="text"
+            value={form.expert_title}
+            onChange={(e) => setForm((f) => ({ ...f, expert_title: e.target.value }))}
+            placeholder="Their title (optional)"
+            className="w-full bg-[#111111] border border-[#2a2a2a] rounded-lg px-3 py-2 text-sm text-white placeholder-gray-500 outline-none focus:border-[#a38b41]"
+          />
+          <textarea
+            value={form.message}
+            onChange={(e) => setForm((f) => ({ ...f, message: e.target.value }))}
+            placeholder="Personal message (optional)"
+            rows={2}
+            className="w-full bg-[#111111] border border-[#2a2a2a] rounded-lg px-3 py-2 text-sm text-white placeholder-gray-500 outline-none focus:border-[#a38b41] resize-none"
+          />
+          <button
+            type="submit"
+            disabled={creating}
+            className="w-full bg-gradient-to-r from-[#a18a3f] to-[#e6ca7c] text-black font-semibold py-2.5 rounded-lg hover:brightness-110 transition-all disabled:opacity-60"
+          >
+            {creating ? "Creating…" : "Create Invite Link"}
+          </button>
+        </form>
+      )}
+
+      {invites.length === 0 ? (
+        <p className="text-gray-500 text-sm">No invites yet.</p>
+      ) : (
+        <div className="space-y-2">
+          {invites.map((inv) => (
+            <div key={inv._id} className="flex items-center justify-between bg-[#191919] border border-[#2a2a2a] rounded-xl p-4">
+              <div>
+                <p className="text-white text-sm font-semibold">{inv.expert_name}</p>
+                <p className="text-gray-500 text-xs mt-0.5">{inv.expert_title}</p>
+              </div>
+              <p
+                className={`text-xs font-semibold capitalize ${
+                  inv.status === "accepted" ? "text-emerald-400" : "text-gray-500"
+                }`}
+              >
+                {inv.status}
+              </p>
+            </div>
+          ))}
+        </div>
+      )}
+    </div>
+  );
+}
+
 // ── Fan: XP reward catalog + redemption ─────────────────────────────────
 function XPRewardsSection() {
   const { data: rewardsRes, isLoading } = useGetXPRewardsQuery();
@@ -692,8 +1073,10 @@ function ReferralSection() {
   const link = `${window.location.origin}/futures/dashboard?ref=${info.referralCode}`;
 
   const handleCopy = () => {
-    navigator.clipboard.writeText(link);
-    toast.success("Referral link copied!");
+    navigator.clipboard
+      .writeText(link)
+      .then(() => toast.success("Referral link copied!"))
+      .catch(() => toast.error("Couldn't copy — long-press or select the link to copy it manually."));
   };
 
   return (
@@ -805,11 +1188,15 @@ function DashboardContent() {
         </div>
         {talentProfile ? (
           <>
+            <SharePageSection userId={talentProfile.userId} />
             <CareerRoadmapSection />
             <DailyPlanSection />
             <MissionsSection />
             <MembershipSection />
             <FanTiersSection />
+            <ProjectsSection userId={talentProfile.userId} />
+            <ExclusiveContentSection />
+            <ExpertInvitesSection />
           </>
         ) : (
           <>

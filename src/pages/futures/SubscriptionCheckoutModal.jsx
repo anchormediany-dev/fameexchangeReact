@@ -18,7 +18,7 @@ const CARD_STYLE = {
   },
 };
 
-function CardForm({ clientSecret, priceLabel, onSuccess, onCancel, busy, setBusy }) {
+function CardForm({ clientSecret, priceLabel, ctaVerb, onSuccess, onCancel, busy, setBusy }) {
   const stripe = useStripe();
   const elements = useElements();
   const [cardError, setCardError] = useState("");
@@ -79,7 +79,7 @@ function CardForm({ clientSecret, priceLabel, onSuccess, onCancel, busy, setBusy
           disabled={busy || !stripe}
           className="flex-1 custom-button-two py-3 rounded-lg font-semibold text-sm disabled:opacity-50"
         >
-          {busy ? "Processing…" : `Subscribe ${priceLabel}`}
+          {busy ? "Processing…" : `${ctaVerb} ${priceLabel}`}
         </button>
       </div>
     </form>
@@ -94,12 +94,17 @@ function CardForm({ clientSecret, priceLabel, onSuccess, onCancel, busy, setBusy
 // Props:
 //   title, subtitle, priceLabel — display only
 //   startCheckout: async () => { clientSecret } — calls the right backend
-//     endpoint (membership vs fan-subscription) and returns the client secret
+//     endpoint (membership / fan-subscription / one-time project support —
+//     confirmCardPayment works identically for a subscription's first
+//     invoice PaymentIntent and a plain one-time PaymentIntent) and
+//     returns the client secret
+//   ctaVerb: button label prefix before priceLabel, e.g. "Subscribe" or "Support"
 //   onClose, onSuccess(name?)
 export default function SubscriptionCheckoutModal({
   title,
   subtitle,
   priceLabel,
+  ctaVerb = "Subscribe",
   startCheckout,
   onClose,
   onSuccess,
@@ -170,11 +175,12 @@ export default function SubscriptionCheckoutModal({
             <CardForm
               clientSecret={clientSecret}
               priceLabel={priceLabel}
+              ctaVerb={ctaVerb}
               onCancel={onClose}
               busy={busy}
               setBusy={setBusy}
               onSuccess={() => {
-                toast.success("Subscribed!");
+                toast.success(ctaVerb === "Subscribe" ? "Subscribed!" : "Thank you for your support!");
                 onSuccess?.();
               }}
             />

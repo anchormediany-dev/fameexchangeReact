@@ -198,6 +198,84 @@ export const futuresHubApi = api.injectEndpoints({
       }),
       invalidatesTags: ["FuturesDailyPlan"],
     }),
+
+    // ── Content (Phase 6) ──────────────────────────────────────────────
+    getMyExclusiveContent: builder.query({
+      query: () => "/futures-hub/exclusive-content",
+      providesTags: ["FuturesExclusiveContent"],
+    }),
+
+    getTalentExclusiveContent: builder.query({
+      query: (talentId) => `/futures-hub/content/exclusive/${talentId}`,
+      providesTags: (result, error, talentId) => [{ type: "FuturesExclusiveContent", id: talentId }],
+    }),
+
+    createExclusiveContent: builder.mutation({
+      query: (body) => ({ url: "/futures-hub/exclusive-content", method: "POST", body }),
+      invalidatesTags: ["FuturesExclusiveContent"],
+    }),
+
+    deleteExclusiveContent: builder.mutation({
+      query: (id) => ({ url: `/futures-hub/exclusive-content/${id}`, method: "DELETE" }),
+      invalidatesTags: ["FuturesExclusiveContent"],
+    }),
+
+    getVideoLessons: builder.query({
+      query: () => "/futures-hub/content/video-lessons",
+      providesTags: ["FuturesVideoLessons"],
+    }),
+
+    getTalentProjects: builder.query({
+      query: (talentId) => `/futures-hub/projects?talentId=${talentId}`,
+      providesTags: (result, error, talentId) => [{ type: "FuturesProjects", id: talentId }],
+    }),
+
+    getMyProjects: builder.query({
+      query: (talentId) => `/futures-hub/projects?talentId=${talentId}`,
+      providesTags: ["FuturesProjects"],
+    }),
+
+    createProject: builder.mutation({
+      query: (body) => ({ url: "/futures-hub/projects", method: "POST", body }),
+      invalidatesTags: ["FuturesProjects"],
+    }),
+
+    startProjectSupport: builder.mutation({
+      query: (body) => ({ url: "/futures-hub/billing/project-support/start", method: "POST", body }),
+      invalidatesTags: (result, error, body) => [{ type: "FuturesProjects", id: body.projectId }, "FuturesProjects"],
+    }),
+
+    getMyExpertInvites: builder.query({
+      query: () => "/futures-hub/expert-invites",
+      providesTags: ["FuturesExpertInvites"],
+    }),
+
+    createExpertInvite: builder.mutation({
+      query: (body) => ({ url: "/futures-hub/expert-invites", method: "POST", body }),
+      invalidatesTags: ["FuturesExpertInvites"],
+    }),
+
+    getExpertInviteByToken: builder.query({
+      query: (token) => `/futures-hub/content/expert-invite/${token}`,
+    }),
+
+    submitExpertLesson: builder.mutation({
+      query: ({ token, ...body }) => ({
+        url: `/futures-hub/content/expert-invite/${token}/submit`,
+        method: "POST",
+        body,
+      }),
+    }),
+
+    getCollabRequests: builder.query({
+      query: () => "/futures-hub/collab-requests",
+      providesTags: ["FuturesCollabRequests"],
+    }),
+
+    createCollabRequest: builder.mutation({
+      query: (body) => ({ url: "/futures-hub/collab-requests", method: "POST", body }),
+      invalidatesTags: ["FuturesCollabRequests"],
+    }),
   }),
 });
 
@@ -237,4 +315,19 @@ export const {
   useGetMyDailyPlanQuery,
   useGenerateDailyPlanMutation,
   useCompleteDailyTaskMutation,
+  useGetMyExclusiveContentQuery,
+  useGetTalentExclusiveContentQuery,
+  useCreateExclusiveContentMutation,
+  useDeleteExclusiveContentMutation,
+  useGetVideoLessonsQuery,
+  useGetTalentProjectsQuery,
+  useGetMyProjectsQuery,
+  useCreateProjectMutation,
+  useStartProjectSupportMutation,
+  useGetMyExpertInvitesQuery,
+  useCreateExpertInviteMutation,
+  useGetExpertInviteByTokenQuery,
+  useSubmitExpertLessonMutation,
+  useGetCollabRequestsQuery,
+  useCreateCollabRequestMutation,
 } = futuresHubApi;
