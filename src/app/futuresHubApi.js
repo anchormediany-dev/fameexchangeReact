@@ -144,6 +144,60 @@ export const futuresHubApi = api.injectEndpoints({
       }),
       invalidatesTags: (result, error, { advisorKey }) => [{ type: "FuturesAdvisorChat", id: advisorKey }],
     }),
+
+    // ── Gamification (Phase 5) ────────────────────────────────────────
+    getMyMissions: builder.query({
+      query: () => "/futures-hub/missions",
+      providesTags: ["FuturesMissions"],
+    }),
+
+    createMission: builder.mutation({
+      query: (body) => ({ url: "/futures-hub/missions", method: "POST", body }),
+      invalidatesTags: ["FuturesMissions"],
+    }),
+
+    completeMission: builder.mutation({
+      query: (id) => ({ url: `/futures-hub/gamification/missions/${id}/complete`, method: "POST" }),
+      invalidatesTags: ["FuturesMissions", "FuturesHubTalentProfile"],
+    }),
+
+    getXPRewards: builder.query({
+      query: () => "/futures-hub/xp-rewards?status=active",
+      providesTags: ["FuturesXPRewards"],
+    }),
+
+    redeemXPReward: builder.mutation({
+      query: (rewardId) => ({ url: "/futures-hub/gamification/xp/redeem", method: "POST", body: { rewardId } }),
+      invalidatesTags: ["FuturesXPRewards", "FuturesXPRedemptions", "FuturesHubFanProfile"],
+    }),
+
+    getMyXPRedemptions: builder.query({
+      query: () => "/futures-hub/gamification/xp/redemptions",
+      providesTags: ["FuturesXPRedemptions"],
+    }),
+
+    getMyReferralInfo: builder.query({
+      query: () => "/futures-hub/gamification/referral/me",
+      providesTags: ["FuturesReferral"],
+    }),
+
+    getMyDailyPlan: builder.query({
+      query: (date) => `/futures-hub/daily-plans?date=${date}`,
+      providesTags: ["FuturesDailyPlan"],
+    }),
+
+    generateDailyPlan: builder.mutation({
+      query: () => ({ url: "/futures-hub/gamification/daily-plan/generate", method: "POST" }),
+      invalidatesTags: ["FuturesDailyPlan"],
+    }),
+
+    completeDailyTask: builder.mutation({
+      query: ({ planId, taskId }) => ({
+        url: `/futures-hub/gamification/daily-plan/${planId}/tasks/${taskId}/complete`,
+        method: "POST",
+      }),
+      invalidatesTags: ["FuturesDailyPlan"],
+    }),
   }),
 });
 
@@ -173,4 +227,14 @@ export const {
   useSelectAdvisorsMutation,
   useGetAdvisorHistoryQuery,
   useSendAdvisorMessageMutation,
+  useGetMyMissionsQuery,
+  useCreateMissionMutation,
+  useCompleteMissionMutation,
+  useGetXPRewardsQuery,
+  useRedeemXPRewardMutation,
+  useGetMyXPRedemptionsQuery,
+  useGetMyReferralInfoQuery,
+  useGetMyDailyPlanQuery,
+  useGenerateDailyPlanMutation,
+  useCompleteDailyTaskMutation,
 } = futuresHubApi;
