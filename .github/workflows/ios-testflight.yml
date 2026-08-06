@@ -1,8 +1,15 @@
 # Builds the iOS app (Capacitor-wrapped) and uploads it to TestFlight.
 #
-# Manual trigger only (workflow_dispatch) — this pipeline hasn't been proven
-# against a real macOS runner yet, so it's deliberately not wired to auto-run
-# on every push until a first real run has been verified end-to-end.
+# Manual trigger only (workflow_dispatch).
+#
+# CURRENT_PROJECT_VERSION (the build number) is overridden per run below
+# rather than left at whatever's checked into project.pbxproj — Apple
+# rejects an upload whose build number was already used for this
+# MARKETING_VERSION, and that rejection happens during async processing on
+# Apple's side, not as a failure here, so a stale hardcoded number fails
+# silently from this workflow's point of view (confirmed: two earlier runs
+# both uploaded build 2 and both reported success here). github.run_number
+# always increases, so it can never collide with a prior run's build number.
 #
 # Signing is fully manual (not Xcode's automatic signing) — a brand-new
 # Apple Developer account can't reliably bootstrap distribution signing via
@@ -98,6 +105,7 @@ jobs:
             -configuration Release \
             -destination "generic/platform=iOS" \
             -archivePath "$RUNNER_TEMP/App.xcarchive" \
+            CURRENT_PROJECT_VERSION="${{ github.run_number }}" \
             archive
 
       - name: Export IPA
