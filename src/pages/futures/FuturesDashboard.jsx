@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
-import { FiUser, FiUsers, FiArrowRight, FiCheck, FiTrash2 } from "react-icons/fi";
+import { FiUser, FiUsers, FiArrowRight, FiCheck, FiTrash2, FiCompass } from "react-icons/fi";
 import { toast } from "react-toastify";
 import Navbar from "../../components/Navbar";
 import Footer from "../../components/Footer";
@@ -20,6 +20,8 @@ import {
   useCreateFanTierMutation,
   useDeleteFanTierMutation,
   useGetMyFanSubscriptionsQuery,
+  useGetMyCareerRoadmapQuery,
+  useGenerateCareerRoadmapMutation,
 } from "../../app/futuresHubApi";
 
 // Phase 2 built identity + the qualification gate. Phase 3 (this file's
@@ -304,6 +306,91 @@ function FanTiersSection() {
   );
 }
 
+// ── Talent: AI-generated career roadmap (Phase 4) ──────────────────────────
+function CareerRoadmapSection() {
+  const { data: roadmapRes, isLoading } = useGetMyCareerRoadmapQuery();
+  const [generateRoadmap, { isLoading: generating }] = useGenerateCareerRoadmapMutation();
+
+  const roadmap = roadmapRes?.data?.[0];
+
+  const handleGenerate = async () => {
+    try {
+      await generateRoadmap().unwrap();
+      toast.success("Roadmap generated!");
+    } catch (err) {
+      toast.error(err?.data?.message || "Couldn't generate roadmap.");
+    }
+  };
+
+  if (isLoading) return null;
+
+  return (
+    <div className="mt-10">
+      <div className="flex items-center justify-between mb-1">
+        <h2 className="text-white font-bold text-xl flex items-center gap-2">
+          <FiCompass className="text-[#a38b41]" /> Career Roadmap
+        </h2>
+        <button
+          type="button"
+          onClick={handleGenerate}
+          disabled={generating}
+          className="text-[#a38b41] text-sm font-semibold hover:underline disabled:opacity-50"
+        >
+          {generating ? "Generating…" : roadmap ? "Regenerate" : "Generate My Roadmap"}
+        </button>
+      </div>
+      <p className="text-gray-400 text-sm mb-5">
+        AI-generated, grounded in your creator profile.
+      </p>
+
+      {!roadmap ? (
+        <p className="text-gray-500 text-sm">
+          No roadmap yet — generate one to get a concrete 30/90-day plan.
+        </p>
+      ) : (
+        <div className="bg-[#191919] border border-[#2a2a2a] rounded-2xl p-5 space-y-5">
+          <div>
+            <p className="text-[#a38b41] text-xs uppercase tracking-wider font-semibold mb-1">
+              Current Position
+            </p>
+            <p className="text-gray-300 text-sm">{roadmap.current_position}</p>
+          </div>
+          <div>
+            <p className="text-[#a38b41] text-xs uppercase tracking-wider font-semibold mb-1">
+              Next Milestone
+            </p>
+            <p className="text-gray-300 text-sm">{roadmap.next_milestone}</p>
+          </div>
+          <div>
+            <p className="text-[#a38b41] text-xs uppercase tracking-wider font-semibold mb-2">
+              30-Day Plan
+            </p>
+            <ul className="space-y-1.5">
+              {roadmap.thirty_day_plan?.map((item, i) => (
+                <li key={i} className="text-gray-300 text-sm flex gap-2">
+                  <span className="text-[#a38b41]">•</span> {item}
+                </li>
+              ))}
+            </ul>
+          </div>
+          <div>
+            <p className="text-[#a38b41] text-xs uppercase tracking-wider font-semibold mb-2">
+              90-Day Vision
+            </p>
+            <ul className="space-y-1.5">
+              {roadmap.ninety_day_vision?.map((item, i) => (
+                <li key={i} className="text-gray-300 text-sm flex gap-2">
+                  <span className="text-[#a38b41]">•</span> {item}
+                </li>
+              ))}
+            </ul>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}
+
 // ── Fan: talents I currently support ────────────────────────────────────
 function FanSupportingSection() {
   const { data: subsRes, isLoading } = useGetMyFanSubscriptionsQuery();
@@ -367,6 +454,7 @@ function DashboardContent() {
         </div>
         {talentProfile ? (
           <>
+            <CareerRoadmapSection />
             <MembershipSection />
             <FanTiersSection />
           </>
@@ -374,8 +462,8 @@ function DashboardContent() {
           <FanSupportingSection />
         )}
         <p className="text-gray-500 text-sm mt-10 text-center">
-          AI coaching and missions are coming online in the next phase of this build — check
-          back soon.
+          AI advisor chat and missions are coming online in the next phase of this build —
+          check back soon.
         </p>
       </div>
     );

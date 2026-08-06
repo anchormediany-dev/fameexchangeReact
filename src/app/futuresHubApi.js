@@ -106,6 +106,25 @@ export const futuresHubApi = api.injectEndpoints({
       query: (id) => ({ url: `/futures-hub/billing/fan-subscription/${id}/cancel`, method: "POST" }),
       invalidatesTags: ["FuturesFanSubscription"],
     }),
+
+    // ── AI advisor (Phase 4) ──────────────────────────────────────────
+    // Career roadmap fetch reuses the generic CRUD mount from Phase 1
+    // (routes/futuresHubRoutes.js's mountCrud("career-roadmap", ...)) —
+    // scoped to the caller's own record automatically.
+    getMyCareerRoadmap: builder.query({
+      query: () => "/futures-hub/career-roadmap",
+      providesTags: ["FuturesCareerRoadmap"],
+    }),
+
+    generateCareerRoadmap: builder.mutation({
+      query: () => ({ url: "/futures-hub/advisor/roadmap", method: "POST" }),
+      invalidatesTags: ["FuturesCareerRoadmap"],
+    }),
+
+    getAdvisors: builder.query({
+      query: () => "/futures-hub/advisor",
+      providesTags: ["FuturesAdvisors"],
+    }),
   }),
 });
 
@@ -129,4 +148,7 @@ export const {
   useGetMySubscribersQuery,
   useStartFanSubscriptionCheckoutMutation,
   useCancelFanSubscriptionMutation,
+  useGetMyCareerRoadmapQuery,
+  useGenerateCareerRoadmapMutation,
+  useGetAdvisorsQuery,
 } = futuresHubApi;

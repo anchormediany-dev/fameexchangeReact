@@ -121,6 +121,8 @@ export const api = createApi({
     "FuturesFanTiers",
     "FuturesMembership",
     "FuturesFanSubscription",
+    "FuturesCareerRoadmap",
+    "FuturesAdvisors",
   ],
   endpoints: () => ({}),
 });
