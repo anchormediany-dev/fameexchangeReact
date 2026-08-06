@@ -118,6 +118,9 @@ export const api = createApi({
     "KYC",
     "FuturesHubTalentProfile",
     "FuturesHubFanProfile",
+    "FuturesFanTiers",
+    "FuturesMembership",
+    "FuturesFanSubscription",
   ],
   endpoints: () => ({}),
 });
