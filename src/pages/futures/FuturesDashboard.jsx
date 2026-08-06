@@ -439,9 +439,9 @@ function DashboardContent() {
     return <div className="text-center text-gray-400 py-24">Loading…</div>;
   }
 
-  // Already has a profile — Phase 3 adds real billing (Membership / fan
-  // tiers) on top of Phase 2's identity layer. AI coaching, missions, etc.
-  // still land in later phases.
+  // Already has a profile — Phase 3 added real billing (Membership / fan
+  // tiers), Phase 4 added the AI advisor team. Missions/gamification still
+  // land in a later phase.
   if (talentProfile || fanProfile) {
     const name = talentProfile ? talentProfile.stage_name : fanProfile.display_name;
     return (
@@ -451,6 +451,14 @@ function DashboardContent() {
           <p className="text-gray-400">
             Your Fame Futures {talentProfile ? "creator" : "fan"} profile is set up.
           </p>
+          {talentProfile && (
+            <Link
+              to="/futures/team"
+              className="inline-flex items-center gap-2 mt-4 text-[#a38b41] text-sm font-semibold hover:underline"
+            >
+              Meet your Fame Team <FiArrowRight />
+            </Link>
+          )}
         </div>
         {talentProfile ? (
           <>
@@ -462,7 +470,7 @@ function DashboardContent() {
           <FanSupportingSection />
         )}
         <p className="text-gray-500 text-sm mt-10 text-center">
-          AI advisor chat and missions are coming online in the next phase of this build —
+          Fan missions and gamification are coming online in the next phase of this build —
           check back soon.
         </p>
       </div>

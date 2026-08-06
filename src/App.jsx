@@ -98,6 +98,8 @@ const AdminProductsListings = lazy(() => import("./pages/admin/AdminProductsList
 const AddProduct = lazy(() => import("./pages/admin/AddProduct"));
 const FuturesPage = lazy(() => import("./pages/futures/FuturesPage"));
 const FuturesDashboard = lazy(() => import("./pages/futures/FuturesDashboard"));
+const FameTeam = lazy(() => import("./pages/futures/FameTeam"));
+const AdvisorChat = lazy(() => import("./pages/futures/AdvisorChat"));
 
 // Spinner shown while any lazy page chunk loads
 const PageLoader = () => (
@@ -576,6 +578,15 @@ export default function App() {
           <Route
             path="futures/dashboard"
             element={<FuturesDashboard />}
+          />
+          {/* Fame Futures AI advisor roster + chat (Phase 4) */}
+          <Route
+            path="futures/team"
+            element={<FameTeam />}
+          />
+          <Route
+            path="futures/advisor/:advisorKey"
+            element={<AdvisorChat />}
           />
 
           {/* future_musicians Page */}

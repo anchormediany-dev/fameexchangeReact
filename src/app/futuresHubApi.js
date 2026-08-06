@@ -125,6 +125,25 @@ export const futuresHubApi = api.injectEndpoints({
       query: () => "/futures-hub/advisor",
       providesTags: ["FuturesAdvisors"],
     }),
+
+    selectAdvisors: builder.mutation({
+      query: (advisorKeys) => ({ url: "/futures-hub/advisor/select", method: "POST", body: { advisorKeys } }),
+      invalidatesTags: ["FuturesAdvisors"],
+    }),
+
+    getAdvisorHistory: builder.query({
+      query: (advisorKey) => `/futures-hub/advisor/${advisorKey}/history`,
+      providesTags: (result, error, advisorKey) => [{ type: "FuturesAdvisorChat", id: advisorKey }],
+    }),
+
+    sendAdvisorMessage: builder.mutation({
+      query: ({ advisorKey, content }) => ({
+        url: `/futures-hub/advisor/${advisorKey}/message`,
+        method: "POST",
+        body: { content },
+      }),
+      invalidatesTags: (result, error, { advisorKey }) => [{ type: "FuturesAdvisorChat", id: advisorKey }],
+    }),
   }),
 });
 
@@ -151,4 +170,7 @@ export const {
   useGetMyCareerRoadmapQuery,
   useGenerateCareerRoadmapMutation,
   useGetAdvisorsQuery,
+  useSelectAdvisorsMutation,
+  useGetAdvisorHistoryQuery,
+  useSendAdvisorMessageMutation,
 } = futuresHubApi;
