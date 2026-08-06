@@ -1,0 +1,95 @@
+# Builds the Android app (Capacitor-wrapped) and publishes it to the Play
+# Store's internal testing track.
+#
+# versionCode is set per run from github.run_number (see
+# android/app/build.gradle's resolvedVersionCode) — Google Play rejects a
+# re-upload that reuses a versionCode, and iOS's equivalent workflow hit
+# exactly that failure mode from a hardcoded number before it was fixed,
+# so this starts dynamic from day one instead of waiting to get bitten.
+#
+# NOTE: the upload-to-Play-Store step needs two things that don't exist yet
+# and can only be set up by a human with Play Console access (no API for
+# either): (1) the app listing itself must be created and given one manual
+# first release — Play Console has no API to create a brand-new app or its
+# very first release, and (2) a Google Cloud service account with Play
+# Console API access granted (Play Console → Setup → API access), whose
+# JSON key becomes the PLAY_STORE_SERVICE_ACCOUNT_JSON secret below. Until
+# both exist, this workflow will build and sign correctly but fail at the
+# final upload step — that's expected, not a bug in this file.
+#
+# Repo secrets this workflow needs:
+#   ANDROID_KEYSTORE_BASE64       - base64-encoded release .keystore file
+#   ANDROID_KEYSTORE_PASSWORD     - that keystore's store password
+#   ANDROID_KEY_ALIAS             - signing key alias
+#   ANDROID_KEY_PASSWORD          - signing key password
+#   PLAY_STORE_SERVICE_ACCOUNT_JSON - Google Cloud service account JSON key
+#     with Play Console API access (see note above — not yet configured)
+#   VITE_API_BASE_URL / VITE_STRIPE_PUBLISHABLE_KEY / VITE_SECRET_KEY /
+#   VITE_GOOGLE_MAPS_KEY / VITE_SENTRY_DSN - same as deploy.yml, since the
+#     Capacitor build embeds the same web bundle.
+name: Android Play Store
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+
+jobs:
+  build-and-upload:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: ".nvmrc"
+          cache: "npm"
+
+      - run: npm ci
+
+      - run: npm run build
+        env:
+          VITE_API_BASE_URL: ${{ secrets.VITE_API_BASE_URL }}
+          VITE_STRIPE_PUBLISHABLE_KEY: ${{ secrets.VITE_STRIPE_PUBLISHABLE_KEY }}
+          VITE_SECRET_KEY: ${{ secrets.VITE_SECRET_KEY }}
+          VITE_GOOGLE_MAPS_KEY: ${{ secrets.VITE_GOOGLE_MAPS_KEY }}
+          VITE_SENTRY_DSN: ${{ secrets.VITE_SENTRY_DSN }}
+
+      # Copies dist/ into android/app/src/main/assets/public for us.
+      - run: npx cap sync android
+
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: "17"
+
+      - name: Decode signing keystore
+        run: echo "${{ secrets.ANDROID_KEYSTORE_BASE64 }}" | base64 --decode > android/app/release.keystore
+
+      - name: Write keystore.properties
+        run: |
+          cat > android/keystore.properties <<EOF
+          storeFile=release.keystore
+          storePassword=${{ secrets.ANDROID_KEYSTORE_PASSWORD }}
+          keyAlias=${{ secrets.ANDROID_KEY_ALIAS }}
+          keyPassword=${{ secrets.ANDROID_KEY_PASSWORD }}
+          EOF
+
+      - name: Build signed release bundle
+        working-directory: android
+        env:
+          ANDROID_VERSION_CODE: ${{ github.run_number }}
+        run: ./gradlew bundleRelease
+
+      - name: Upload to Play Store (internal testing track)
+        uses: r0adkll/upload-google-play@v1
+        with:
+          serviceAccountJsonPlainText: ${{ secrets.PLAY_STORE_SERVICE_ACCOUNT_JSON }}
+          packageName: com.fameexchange.app
+          releaseFiles: android/app/build/outputs/bundle/release/app-release.aab
+          track: internal
+          status: completed
+
+      - name: Clean up signing material
+        if: always()
+        run: rm -f android/app/release.keystore android/keystore.properties

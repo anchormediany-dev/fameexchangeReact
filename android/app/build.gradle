@@ -12,6 +12,12 @@ if (hasKeystoreProperties) {
     keystoreProperties.load(new FileInputStream(keystorePropertiesFile))
 }
 
+// Google Play rejects a re-upload whose versionCode was already used —
+// CI sets ANDROID_VERSION_CODE per run (see android-deploy.yml) so every
+// auto-published release gets a genuinely new one. Local builds fall back
+// to 1, same as before this was made dynamic.
+def resolvedVersionCode = (System.getenv('ANDROID_VERSION_CODE') ?: '1').toInteger()
+
 android {
     namespace "com.fameexchange.app"
     compileSdkVersion rootProject.ext.compileSdkVersion
@@ -19,7 +25,7 @@ android {
         applicationId "com.fameexchange.app"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 1
+        versionCode resolvedVersionCode
         versionName "1.0"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         aaptOptions {
