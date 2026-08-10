@@ -98,7 +98,6 @@ const AdminProductsListings = lazy(() => import("./pages/admin/AdminProductsList
 const AddProduct = lazy(() => import("./pages/admin/AddProduct"));
 const FuturesPage = lazy(() => import("./pages/futures/FuturesPage"));
 const FuturesDashboard = lazy(() => import("./pages/futures/FuturesDashboard"));
-const FameTeam = lazy(() => import("./pages/futures/FameTeam"));
 const AdvisorChat = lazy(() => import("./pages/futures/AdvisorChat"));
 const FuturesCreatorProfile = lazy(() => import("./pages/futures/FuturesCreatorProfile"));
 const ExpertInviteSubmit = lazy(() => import("./pages/futures/ExpertInviteSubmit"));
@@ -569,41 +568,6 @@ export default function App() {
             }
           />
 
-          {/* Pre-IPO pledge-campaign flow — distinct from the Fame Futures
-              creator-development dashboard below, both under this nav tab
-              (see the plan file for why). */}
-          <Route
-            path="futures"
-            element={<FuturesPage />}
-          />
-          {/* Fame Futures creator-development dashboard (Base44 rebuild) */}
-          <Route
-            path="futures/dashboard"
-            element={<FuturesDashboard />}
-          />
-          {/* Fame Futures AI advisor roster + chat (Phase 4) */}
-          <Route
-            path="futures/team"
-            element={<FameTeam />}
-          />
-          <Route
-            path="futures/advisor/:advisorKey"
-            element={<AdvisorChat />}
-          />
-          {/* Fame Futures public creator profile + crowdfunding/content
-              (Phase 6) — the landing point for a fan-tier subscribe or
-              exclusive-content share link. */}
-          <Route
-            path="futures/creator/:userId"
-            element={<FuturesCreatorProfile />}
-          />
-          {/* Public, no account needed — an outside expert's tokenized
-              invite link to submit a video lesson (Phase 6). */}
-          <Route
-            path="futures/expert-invite/:token"
-            element={<ExpertInviteSubmit />}
-          />
-
           {/* future_musicians Page */}
           <Route
             path="future"
@@ -813,6 +777,34 @@ export default function App() {
             }
           />
         </Route>
+
+        {/* Fame Futures — deliberately OUTSIDE MainLayout: every page in
+            this block renders its own chrome (either the site Navbar/Footer
+            directly, as the pledge/chat/profile pages do, or the dedicated
+            sidebar shell for the dashboard) — nesting under MainLayout would
+            double up the site Navbar/Footer on top of that. Paths need a
+            leading "/" now that they're top-level, not relative to "/". */}
+        {/* Pre-IPO pledge-campaign flow — distinct from the Fame Futures
+            creator-development dashboard below, both under this nav tab
+            (see the plan file for why). */}
+        <Route path="/futures" element={<FuturesPage />} />
+        {/* Fame Futures creator-development dashboard (Base44 rebuild) —
+            wildcard so FuturesDashboard.jsx can run its own nested <Routes>
+            for the sidebar-shell sub-pages (My Fame Team, Daily Plan,
+            Membership, Projects, etc). */}
+        <Route path="/futures/dashboard/*" element={<FuturesDashboard />} />
+        {/* Old bookmarked path — My Fame Team now lives inside the sidebar
+            shell at /futures/dashboard/team. */}
+        <Route path="/futures/team" element={<Navigate to="/futures/dashboard/team" replace />} />
+        <Route path="/futures/advisor/:advisorKey" element={<AdvisorChat />} />
+        {/* Fame Futures public creator profile + crowdfunding/content
+            (Phase 6) — the landing point for a fan-tier subscribe or
+            exclusive-content share link. */}
+        <Route path="/futures/creator/:userId" element={<FuturesCreatorProfile />} />
+        {/* Public, no account needed — an outside expert's tokenized invite
+            link to submit a video lesson (Phase 6). */}
+        <Route path="/futures/expert-invite/:token" element={<ExpertInviteSubmit />} />
+
         {/* Dashboard Pages */}
         {/* <Route
           path="dashboard"

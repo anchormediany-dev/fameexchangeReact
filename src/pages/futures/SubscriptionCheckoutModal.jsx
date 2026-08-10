@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Elements, CardElement, useStripe, useElements } from "@stripe/react-stripe-js";
 import { loadStripe } from "@stripe/stripe-js";
 import { toast } from "react-toastify";
@@ -113,8 +113,17 @@ export default function SubscriptionCheckoutModal({
   const [clientSecret, setClientSecret] = useState(null);
   const [errorMsg, setErrorMsg] = useState("");
   const [busy, setBusy] = useState(false);
+  // startCheckout() isn't just a fetch — it creates a real Stripe
+  // subscription (and a FuturesMembership record) server-side, so it must
+  // fire at most once per modal open. The `cancelled` flag alone only
+  // guards the resulting setState, not the call itself, so React 18
+  // StrictMode's mount→cleanup→remount in dev was firing it twice,
+  // racing two real checkout-start requests against each other.
+  const startedRef = useRef(false);
 
   useEffect(() => {
+    if (startedRef.current) return;
+    startedRef.current = true;
     let cancelled = false;
     (async () => {
       try {

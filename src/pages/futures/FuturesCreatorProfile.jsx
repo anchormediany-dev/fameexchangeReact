@@ -113,9 +113,19 @@ function ProjectCard({ project }) {
   const progress = project.funding_goal > 0 ? Math.min(100, (project.total_raised / project.funding_goal) * 100) : 0;
 
   return (
-    <div className="bg-[#191919] border border-[#2a2a2a] rounded-2xl p-5">
+    <div className="bg-[#191919] border border-[#2a2a2a] rounded-2xl overflow-hidden">
+      {project.image_url && (
+        <img src={project.image_url} alt={project.title} className="w-full aspect-video object-cover" />
+      )}
+      <div className="p-5">
       <p className="text-white font-bold">{project.title}</p>
       {project.description && <p className="text-gray-400 text-sm mt-1">{project.description}</p>}
+      {project.video_url && (
+        <video src={project.video_url} controls className="w-full rounded-lg mt-3 bg-black" />
+      )}
+      {project.audio_url && (
+        <audio src={project.audio_url} controls className="w-full mt-3" />
+      )}
       <div className="mt-4 mb-1 flex items-center justify-between text-sm">
         <span className="font-semibold text-[#a38b41]">${(project.total_raised || 0).toLocaleString()}</span>
         <span className="text-gray-500">of ${(project.funding_goal || 0).toLocaleString()}</span>
@@ -131,7 +141,7 @@ function ProjectCard({ project }) {
           disabled={project.status !== "active"}
           className="w-full mt-4 py-2 rounded-lg bg-gradient-to-r from-[#a18a3f] to-[#e6ca7c] text-black text-xs font-semibold hover:brightness-110 transition disabled:opacity-40"
         >
-          {project.status === "active" ? "Support This Project" : "Funding Closed"}
+          {project.status === "active" ? "Fund This Project" : "Funding Closed"}
         </button>
       ) : (
         <div className="mt-4 flex gap-2">
@@ -159,7 +169,7 @@ function ProjectCard({ project }) {
         <SubscriptionCheckoutModal
           title={project.title}
           priceLabel={`$${Number(amount).toLocaleString()}`}
-          ctaVerb="Support"
+          ctaVerb="Fund"
           startCheckout={() =>
             startProjectSupport({ projectId: project._id, amount: Number(amount) }).unwrap()
           }
@@ -170,6 +180,7 @@ function ProjectCard({ project }) {
           }}
         />
       )}
+      </div>
     </div>
   );
 }

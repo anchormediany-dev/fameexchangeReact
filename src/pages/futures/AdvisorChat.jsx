@@ -74,7 +74,7 @@ function ChatContent({ advisorKey }) {
           Choose {advisor.name} as one of your bonus advisors, or upgrade your membership to
           unlock the full team.
         </p>
-        <Link to="/futures/team" className="text-[#a38b41] font-semibold text-sm hover:underline">
+        <Link to="/futures/dashboard/team" className="text-[#a38b41] font-semibold text-sm hover:underline">
           Back to My Fame Team
         </Link>
       </div>
@@ -83,14 +83,24 @@ function ChatContent({ advisorKey }) {
 
   return (
     <div className="max-w-2xl mx-auto py-10 px-4 flex flex-col" style={{ minHeight: "70vh" }}>
-      <Link to="/futures/team" className="inline-flex items-center gap-1.5 text-gray-400 text-sm hover:text-white transition mb-4">
+      <Link to="/futures/dashboard/team" className="inline-flex items-center gap-1.5 text-gray-400 text-sm hover:text-white transition mb-4">
         <FiArrowLeft /> My Fame Team
       </Link>
-      <div className="mb-4">
-        <h1 className="text-2xl font-black text-white">
-          {advisor.name} <span className="text-[#a38b41]">· {advisor.title}</span>
-        </h1>
-        <p className="text-gray-500 text-sm">{advisor.role}</p>
+      <div className="mb-4 flex items-center gap-3">
+        {advisor.avatar_url && (
+          <img
+            src={advisor.avatar_url}
+            alt={advisor.name}
+            onError={(e) => { e.currentTarget.style.display = "none"; }}
+            className="w-12 h-12 rounded-full object-cover border border-[#2a2a2a] shrink-0"
+          />
+        )}
+        <div>
+          <h1 className="text-2xl font-black text-white">
+            {advisor.name} <span className="text-[#a38b41]">· {advisor.title}</span>
+          </h1>
+          <p className="text-gray-500 text-sm">{advisor.role}</p>
+        </div>
       </div>
 
       <div className="flex-1 space-y-3 mb-4 overflow-y-auto">

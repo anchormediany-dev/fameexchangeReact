@@ -1,17 +1,34 @@
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { toast } from "react-toastify";
-import { FiLock, FiMessageCircle, FiCheck } from "react-icons/fi";
-import Navbar from "../../components/Navbar";
-import Footer from "../../components/Footer";
-import MotionPageWrapper from "../../components/MotionPageWrapper";
-import AuthGate from "../../components/AuthGate";
-import {
-  useGetAdvisorsQuery,
-  useSelectAdvisorsMutation,
-} from "../../app/futuresHubApi";
+import { FiLock, FiMessageCircle, FiCheck, FiUser } from "react-icons/fi";
+import { useGetAdvisorsQuery, useSelectAdvisorsMutation } from "../../../app/futuresHubApi";
+import TeamIntroVideo from "./TeamIntroVideo";
 
 const MAX_SELECTED = 5;
+
+function AdvisorAvatar({ advisor, locked, size = 56 }) {
+  const [failed, setFailed] = useState(false);
+  const showImage = advisor.avatar_url && !failed;
+
+  return (
+    <div
+      className="rounded-full overflow-hidden shrink-0 bg-[#111111] border border-[#2a2a2a] flex items-center justify-center"
+      style={{ width: size, height: size }}
+    >
+      {showImage ? (
+        <img
+          src={advisor.avatar_url}
+          alt={advisor.name}
+          onError={() => setFailed(true)}
+          className={`w-full h-full object-cover ${locked ? "grayscale opacity-50" : ""}`}
+        />
+      ) : (
+        <FiUser className="text-gray-600" size={size * 0.45} />
+      )}
+    </div>
+  );
+}
 
 function AdvisorCard({ advisor, selecting, isSelected, onToggleSelect, canSelect }) {
   const locked = !advisor.unlocked;
@@ -28,11 +45,16 @@ function AdvisorCard({ advisor, selecting, isSelected, onToggleSelect, canSelect
             : "border-[#2a2a2a] bg-[#191919] hover:border-[#444]"
         } disabled:opacity-40`}
       >
-        <div className="flex items-center justify-between mb-2">
-          <p className="text-white font-bold">{advisor.name}</p>
-          {isSelected && <FiCheck className="text-[#a38b41]" />}
+        <div className="flex items-center gap-3 mb-2">
+          <AdvisorAvatar advisor={advisor} locked={false} size={44} />
+          <div className="flex-1 min-w-0">
+            <div className="flex items-center justify-between">
+              <p className="text-white font-bold truncate">{advisor.name}</p>
+              {isSelected && <FiCheck className="text-[#a38b41] shrink-0" />}
+            </div>
+            <p className="text-[#a38b41] text-xs font-semibold">{advisor.title}</p>
+          </div>
         </div>
-        <p className="text-[#a38b41] text-xs font-semibold mb-1">{advisor.title}</p>
         <p className="text-gray-500 text-xs">{advisor.role}</p>
       </button>
     );
@@ -44,11 +66,16 @@ function AdvisorCard({ advisor, selecting, isSelected, onToggleSelect, canSelect
         locked ? "border-[#2a2a2a] bg-[#161616] opacity-60" : "border-[#2a2a2a] bg-[#191919] hover:border-[#a38b41]/40"
       } transition-all`}
     >
-      <div className="flex items-center justify-between mb-2">
-        <p className="text-white font-bold">{advisor.name}</p>
-        {locked ? <FiLock className="text-gray-600" size={14} /> : <FiMessageCircle className="text-[#a38b41]" size={14} />}
+      <div className="flex items-center gap-3 mb-2">
+        <AdvisorAvatar advisor={advisor} locked={locked} size={56} />
+        <div className="flex-1 min-w-0">
+          <div className="flex items-center justify-between gap-2">
+            <p className="text-white font-bold truncate">{advisor.name}</p>
+            {locked ? <FiLock className="text-gray-600 shrink-0" size={14} /> : <FiMessageCircle className="text-[#a38b41] shrink-0" size={14} />}
+          </div>
+          <p className="text-[#a38b41] text-xs font-semibold">{advisor.title}</p>
+        </div>
       </div>
-      <p className="text-[#a38b41] text-xs font-semibold mb-1">{advisor.title}</p>
       <p className="text-gray-500 text-xs">{advisor.role}</p>
       {advisor.free && <p className="text-emerald-400 text-[10px] font-semibold uppercase tracking-wide mt-3">Free</p>}
     </div>
@@ -58,7 +85,7 @@ function AdvisorCard({ advisor, selecting, isSelected, onToggleSelect, canSelect
   return <Link to={`/futures/advisor/${advisor.key}`}>{cardBody}</Link>;
 }
 
-function FameTeamContent() {
+export default function FameTeamPage() {
   const { data: advisorsRes, isLoading } = useGetAdvisorsQuery();
   const [selectAdvisors, { isLoading: saving }] = useSelectAdvisorsMutation();
   const [selecting, setSelecting] = useState(false);
@@ -95,12 +122,9 @@ function FameTeamContent() {
   }
 
   return (
-    <div className="max-w-5xl mx-auto py-20 px-4">
-      <div className="flex items-center justify-between mb-2 flex-wrap gap-3">
+    <div>
+      <div className="flex items-center justify-between mb-4 flex-wrap gap-3">
         <div>
-          <p className="text-[#a38b41] text-xs uppercase tracking-widest font-semibold mb-1">
-            Fame Futures
-          </p>
           <h1 className="text-3xl font-black text-white">My Fame Team</h1>
           <p className="text-gray-400 mt-1">Your {advisors.length} AI advisors, working around the clock.</p>
         </div>
@@ -114,6 +138,8 @@ function FameTeamContent() {
           </button>
         )}
       </div>
+
+      <TeamIntroVideo />
 
       {selecting && (
         <div className="bg-[#191919] border border-[#a38b41]/30 rounded-2xl p-4 mb-6 flex items-center justify-between flex-wrap gap-3">
@@ -158,24 +184,5 @@ function FameTeamContent() {
           ))}
       </div>
     </div>
-  );
-}
-
-export default function FameTeam() {
-  return (
-    <MotionPageWrapper>
-      <div className="bg-[#171717] min-h-screen text-white">
-        <Navbar />
-        <div className="pt-32">
-          <AuthGate
-            title="Sign in to Fame Futures"
-            message="Sign in to your Fame Exchange account to see your Fame Team."
-          >
-            <FameTeamContent />
-          </AuthGate>
-        </div>
-        <Footer />
-      </div>
-    </MotionPageWrapper>
   );
 }

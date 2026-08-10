@@ -267,6 +267,175 @@ export const futuresHubApi = api.injectEndpoints({
       }),
     }),
 
+    // ── Fan Missions (Phase 2) ───────────────────────────────
+    getMyFanMissions: builder.query({
+      query: () => "/futures-hub/fan-missions/mine",
+      providesTags: ["FuturesFanMissions"],
+    }),
+    createFanMission: builder.mutation({
+      query: (body) => ({ url: "/futures-hub/fan-missions", method: "POST", body }),
+      invalidatesTags: ["FuturesFanMissions"],
+    }),
+    generateFanMissionIdeas: builder.mutation({
+      query: () => ({ url: "/futures-hub/fan-missions/generate", method: "POST" }),
+    }),
+    getActiveFanMissions: builder.query({
+      query: () => "/futures-hub/fan-missions/active",
+      providesTags: ["FuturesActiveFanMissions"],
+    }),
+    submitFanMission: builder.mutation({
+      query: ({ missionId, proof_note }) => ({
+        url: `/futures-hub/fan-missions/${missionId}/submit`,
+        method: "POST",
+        body: { proof_note },
+      }),
+      invalidatesTags: ["FuturesActiveFanMissions"],
+    }),
+    getMissionSubmissions: builder.query({
+      query: (status) => `/futures-hub/fan-missions/submissions${status ? `?status=${status}` : ""}`,
+      providesTags: ["FuturesMissionSubmissions"],
+    }),
+    reviewMissionSubmission: builder.mutation({
+      query: ({ id, decision }) => ({
+        url: `/futures-hub/fan-missions/submissions/${id}/review`,
+        method: "POST",
+        body: { decision },
+      }),
+      invalidatesTags: ["FuturesMissionSubmissions", "FuturesFanMissions"],
+    }),
+
+    // ── Fan engagement (Phase 2) ─────────────────────────────
+    getReferralDashboard: builder.query({
+      query: () => "/futures-hub/fan-engagement/referrals",
+      providesTags: ["FuturesReferralDashboard"],
+    }),
+    getFanProgress: builder.query({
+      query: () => "/futures-hub/fan-engagement/fan-progress",
+      providesTags: ["FuturesFanProgress"],
+    }),
+    getFanLeaderboard: builder.query({
+      query: () => "/futures-hub/fan-engagement/leaderboard",
+      providesTags: ["FuturesFanLeaderboard"],
+    }),
+    getTalentFanLeaderboard: builder.query({
+      query: (talentId) => `/futures-hub/fan-engagement/leaderboard/${talentId}`,
+      providesTags: ["FuturesFanLeaderboard"],
+    }),
+    getGlobalLeaderboard: builder.query({
+      query: () => "/futures-hub/fan-engagement/global-leaderboard",
+      providesTags: ["FuturesFanLeaderboard"],
+    }),
+    sendFanShoutout: builder.mutation({
+      query: (body) => ({ url: "/futures-hub/fan-engagement/shoutout", method: "POST", body }),
+    }),
+
+    // ── Growth Studio (Phase 3) ──────────────────────────────
+    getMyContentIdeas: builder.query({
+      query: (type) => `/futures-hub/growth-studio${type ? `?type=${type}` : ""}`,
+      providesTags: ["FuturesContentIdeas"],
+    }),
+    generateContentIdeas: builder.mutation({
+      query: (type) => ({ url: "/futures-hub/growth-studio/generate", method: "POST", body: { type } }),
+      invalidatesTags: ["FuturesContentIdeas"],
+    }),
+    deleteContentIdea: builder.mutation({
+      query: (id) => ({ url: `/futures-hub/growth-studio/${id}`, method: "DELETE" }),
+      invalidatesTags: ["FuturesContentIdeas"],
+    }),
+
+    // ── Content Calendar (Phase 3) ───────────────────────────
+    getMyCalendarPosts: builder.query({
+      query: () => "/futures-hub/calendar-posts",
+      providesTags: ["FuturesCalendarPosts"],
+    }),
+    createCalendarPost: builder.mutation({
+      query: (body) => ({ url: "/futures-hub/calendar-posts", method: "POST", body }),
+      invalidatesTags: ["FuturesCalendarPosts"],
+    }),
+    updateCalendarPost: builder.mutation({
+      query: ({ id, ...body }) => ({ url: `/futures-hub/calendar-posts/${id}`, method: "PUT", body }),
+      invalidatesTags: ["FuturesCalendarPosts"],
+    }),
+    deleteCalendarPost: builder.mutation({
+      query: (id) => ({ url: `/futures-hub/calendar-posts/${id}`, method: "DELETE" }),
+      invalidatesTags: ["FuturesCalendarPosts"],
+    }),
+
+    // ── Monetization Lab (Phase 3) ───────────────────────────
+    getMyMonetizationStrategy: builder.query({
+      query: () => "/futures-hub/monetization/me",
+      providesTags: ["FuturesMonetizationStrategy"],
+    }),
+    generateMonetizationStrategy: builder.mutation({
+      query: () => ({ url: "/futures-hub/monetization/generate", method: "POST" }),
+      invalidatesTags: ["FuturesMonetizationStrategy"],
+    }),
+
+    // ── Messages (Phase 4) ───────────────────────────────────
+    getMyConversations: builder.query({
+      query: () => "/futures-hub/messages/conversations",
+      providesTags: ["FuturesConversations"],
+    }),
+    getFanConversation: builder.query({
+      query: () => "/futures-hub/messages/fan/conversation",
+      providesTags: ["FuturesConversations"],
+    }),
+    getConversationMessages: builder.query({
+      query: (id) => `/futures-hub/messages/conversations/${id}/messages`,
+      providesTags: (result, error, id) => [{ type: "FuturesMessages", id }],
+    }),
+    sendConversationMessage: builder.mutation({
+      query: ({ id, content }) => ({
+        url: `/futures-hub/messages/conversations/${id}/messages`,
+        method: "POST",
+        body: { content },
+      }),
+      invalidatesTags: (result, error, { id }) => [{ type: "FuturesMessages", id }, "FuturesConversations"],
+    }),
+
+    // ── Moderation (Phase 4) ──────────────────────────────────
+    getFlaggedFans: builder.query({
+      query: () => "/futures-hub/moderation/flagged",
+      providesTags: ["FuturesFlaggedFans"],
+    }),
+    clearFanFlag: builder.mutation({
+      query: (fanUserId) => ({ url: `/futures-hub/moderation/${fanUserId}/clear`, method: "POST" }),
+      invalidatesTags: ["FuturesFlaggedFans"],
+    }),
+
+    // ── Insights (Phase 4) ────────────────────────────────────
+    getInsights: builder.query({
+      query: () => "/futures-hub/insights",
+    }),
+    getGrowthInsights: builder.query({
+      query: () => "/futures-hub/insights/growth",
+    }),
+
+    // ── Fame Live / Webinars (Phase 5) ───────────────────────
+    getWebinars: builder.query({
+      query: (talentId) => `/futures-hub/webinars?talentId=${talentId}`,
+      providesTags: ["FuturesWebinars"],
+    }),
+    createWebinar: builder.mutation({
+      query: (body) => ({ url: "/futures-hub/webinars", method: "POST", body }),
+      invalidatesTags: ["FuturesWebinars"],
+    }),
+
+    // ── Brand Protection (Phase 5) ────────────────────────────
+    getMyContractReviews: builder.query({
+      query: () => "/futures-hub/brand-protection/reviews",
+      providesTags: ["FuturesContractReviews"],
+    }),
+    reviewContract: builder.mutation({
+      query: (formData) => ({ url: "/futures-hub/brand-protection/review", method: "POST", body: formData }),
+      invalidatesTags: ["FuturesContractReviews"],
+    }),
+
+    // ── Help (Phase 6) ────────────────────────────────────────
+    askHelpQuestion: builder.mutation({
+      query: (question) => ({ url: "/futures-hub/help/ask", method: "POST", body: { question } }),
+    }),
+
     getCollabRequests: builder.query({
       query: () => "/futures-hub/collab-requests",
       providesTags: ["FuturesCollabRequests"],
@@ -330,4 +499,39 @@ export const {
   useSubmitExpertLessonMutation,
   useGetCollabRequestsQuery,
   useCreateCollabRequestMutation,
+  useGetMyFanMissionsQuery,
+  useCreateFanMissionMutation,
+  useGenerateFanMissionIdeasMutation,
+  useGetActiveFanMissionsQuery,
+  useSubmitFanMissionMutation,
+  useGetMissionSubmissionsQuery,
+  useReviewMissionSubmissionMutation,
+  useGetReferralDashboardQuery,
+  useGetFanProgressQuery,
+  useGetFanLeaderboardQuery,
+  useGetTalentFanLeaderboardQuery,
+  useGetGlobalLeaderboardQuery,
+  useSendFanShoutoutMutation,
+  useGetMyContentIdeasQuery,
+  useGenerateContentIdeasMutation,
+  useDeleteContentIdeaMutation,
+  useGetMyCalendarPostsQuery,
+  useCreateCalendarPostMutation,
+  useUpdateCalendarPostMutation,
+  useDeleteCalendarPostMutation,
+  useGetMyMonetizationStrategyQuery,
+  useGenerateMonetizationStrategyMutation,
+  useGetMyConversationsQuery,
+  useGetFanConversationQuery,
+  useGetConversationMessagesQuery,
+  useSendConversationMessageMutation,
+  useGetFlaggedFansQuery,
+  useClearFanFlagMutation,
+  useGetInsightsQuery,
+  useGetGrowthInsightsQuery,
+  useGetWebinarsQuery,
+  useCreateWebinarMutation,
+  useGetMyContractReviewsQuery,
+  useReviewContractMutation,
+  useAskHelpQuestionMutation,
 } = futuresHubApi;
