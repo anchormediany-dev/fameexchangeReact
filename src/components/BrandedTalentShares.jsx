@@ -376,6 +376,115 @@ const TalentTokenTicker = ({
             );
           };
 
+          const renderMobileCard = (token, index) => {
+            const change = toNum(token?.change);
+            const isPositive =
+              typeof token?.isPositive === "boolean"
+                ? token.isPositive
+                : (change ?? 0) >= 0;
+            const imageUrl =
+              token?.image ||
+              token?.images?.[0]?.fileUrl ||
+              token?.profile_picture ||
+              "";
+            return (
+              <motion.div
+                key={token?._id || index}
+                custom={token?._id || index}
+                variants={tableRowVariant}
+                initial="hidden"
+                animate={controls}
+                className="rounded-xl border border-gray-600/30 bg-gradient-to-br from-[#1a1a1a]/90 to-[#252525]/90 backdrop-blur-xl p-4 shadow-lg"
+              >
+                <div className="flex items-center gap-3 mb-3">
+                  <img
+                    src={imgSrc(imageUrl)}
+                    alt={token?.name || token?.token_brand_name || "talent"}
+                    onError={handleImageError}
+                    className="w-12 h-12 rounded-full object-cover border-2 border-gray-600 shadow-lg bg-[#1f1f1f] shrink-0"
+                  />
+                  <div className="min-w-0 flex-1">
+                    <Link
+                      to={`/talent-profile/${token?._id}`}
+                      className="text-sm font-bold text-white truncate block"
+                    >
+                      {token?.name || token?.token_brand_name || "___"}
+                    </Link>
+                    <div className="text-xs text-gray-400 truncate">
+                      {token?.token_name || token?.token_brand_name || "___"}
+                    </div>
+                  </div>
+                  <div className="w-20 h-10 shrink-0 flex items-center justify-center">
+                    {Array.isArray(token?.performance) &&
+                    token.performance.length > 0 ? (
+                      <D3Chart
+                        data={token.performance}
+                        color={isPositive ? "#1fbaa1" : "#e3495d"}
+                        width={80}
+                        height={40}
+                        index={index}
+                      />
+                    ) : (
+                      <span className="text-gray-500 text-xs">___</span>
+                    )}
+                  </div>
+                </div>
+
+                <div className="grid grid-cols-2 gap-y-2 gap-x-4 text-sm mb-3">
+                  <div>
+                    <div className="text-gray-500 text-xs">BTS Worth</div>
+                    <div className="font-medium text-gray-200">
+                      {fmtMoney(token?.bts_worth ?? token?.networth)}
+                    </div>
+                  </div>
+                  <div>
+                    <div className="text-gray-500 text-xs">Cost / Unit</div>
+                    <div className="font-semibold text-gray-100">
+                      {fmtMoney(token?.cost_per_unit)}
+                    </div>
+                  </div>
+                  <div>
+                    <div className="text-gray-500 text-xs">Change</div>
+                    <div
+                      className={`font-bold ${
+                        isPositive ? "text-[#1fbaa1]" : "text-[#e3495d]"
+                      }`}
+                    >
+                      {fmtChange(token?.change)}{" "}
+                      {token?.change_percent !== undefined &&
+                        token?.change_percent !== null && (
+                          <span className="text-[10px] opacity-80">
+                            ({fmtPct(token?.change_percent)})
+                          </span>
+                        )}
+                    </div>
+                  </div>
+                  <div>
+                    <div className="text-gray-500 text-xs">Volume</div>
+                    <div className="text-gray-200">
+                      {fmtNumber(token?.volume)}
+                    </div>
+                  </div>
+                </div>
+
+                <div className="flex items-center gap-3">
+                  <Link
+                    to={`/trade-talent/${token?._id}`}
+                    className="flex-1 flex justify-center"
+                  >
+                    <button className="custom-button-two w-full">TRADE</button>
+                  </Link>
+                  <Link
+                    to={`/talent-profile/${token?._id}`}
+                    className="text-xs underline text-gray-300 shrink-0"
+                  >
+                    View Profile
+                  </Link>
+                </div>
+              </motion.div>
+            );
+          };
+
           const renderTableHeader = (compact = false) => (
             <div
               className={`grid grid-cols-8 gap-2 ${
@@ -392,45 +501,62 @@ const TalentTokenTicker = ({
             </div>
           );
 
+          // Mobile: stacked cards for both usages of this component (Home's
+          // top-8 preview and the full /branded-tokens-shares listing) — the
+          // 8-column min-w-[1000px] table below forced horizontal scrolling
+          // on every phone, same problem TradingDashboard's mobile view
+          // already solved.
+          const mobileCards = (
+            <div className="md:hidden space-y-3">
+              {items.map((token, index) => renderMobileCard(token, index))}
+            </div>
+          );
+
           if (viewAll) {
             // Home page: render the SAME single-row wide table as /branded-tokens-shares
             // but limited to top 8 with a "Discover More" button below.
             return (
-              <motion.div
-                variants={fadeInUpVariant}
-                initial="hidden"
-                animate={controls}
-                transition={{ delay: 0.3 }}
-                className="overflow-x-auto"
-              >
-                <div className="min-w-[1000px] bg-gradient-to-br from-[#1a1a1a]/90 to-[#252525]/90 backdrop-blur-xl rounded-3xl border border-gray-600/30 overflow-hidden shadow-2xl">
-                  {renderTableHeader(false)}
-                  <div className="divide-y divide-gray-700/30">
-                    {items.map((token, index) => renderTableRow(token, index))}
+              <>
+                {mobileCards}
+                <motion.div
+                  variants={fadeInUpVariant}
+                  initial="hidden"
+                  animate={controls}
+                  transition={{ delay: 0.3 }}
+                  className="hidden md:block overflow-x-auto"
+                >
+                  <div className="min-w-[1000px] bg-gradient-to-br from-[#1a1a1a]/90 to-[#252525]/90 backdrop-blur-xl rounded-3xl border border-gray-600/30 overflow-hidden shadow-2xl">
+                    {renderTableHeader(false)}
+                    <div className="divide-y divide-gray-700/30">
+                      {items.map((token, index) => renderTableRow(token, index))}
+                    </div>
                   </div>
-                </div>
-              </motion.div>
+                </motion.div>
+              </>
             );
           }
 
           // Branded shares page: keep wide table layout with reduced columns
           return (
-            <motion.div
-              variants={fadeInUpVariant}
-              initial="hidden"
-              animate={controls}
-              transition={{ delay: 0.3 }}
-              className="overflow-x-auto"
-            >
-              <div className="min-w-[1000px] bg-gradient-to-br from-[#1a1a1a]/90 to-[#252525]/90 backdrop-blur-xl rounded-3xl border border-gray-600/30 overflow-hidden shadow-2xl">
-                {renderTableHeader(false)}
+            <>
+              {mobileCards}
+              <motion.div
+                variants={fadeInUpVariant}
+                initial="hidden"
+                animate={controls}
+                transition={{ delay: 0.3 }}
+                className="hidden md:block overflow-x-auto"
+              >
+                <div className="min-w-[1000px] bg-gradient-to-br from-[#1a1a1a]/90 to-[#252525]/90 backdrop-blur-xl rounded-3xl border border-gray-600/30 overflow-hidden shadow-2xl">
+                  {renderTableHeader(false)}
 
-                {/* Table Body */}
-                <div className="divide-y divide-gray-700/30 h-[1000px] overflow-y-auto overflow-x-hidden">
-                  {items.map((token, index) => renderTableRow(token, index))}
+                  {/* Table Body */}
+                  <div className="divide-y divide-gray-700/30 h-[1000px] overflow-y-auto overflow-x-hidden">
+                    {items.map((token, index) => renderTableRow(token, index))}
+                  </div>
                 </div>
-              </div>
-            </motion.div>
+              </motion.div>
+            </>
           );
         })()}
         {viewAll && (
