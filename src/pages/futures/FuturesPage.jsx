@@ -41,7 +41,7 @@ function TalentCard({ talent, onPledge, isLoggedIn }) {
             src={img}
             alt={talent.name}
             loading="lazy"
-            className="w-full h-full object-cover object-center transition-transform duration-500 group-hover:scale-105"
+            className="w-full h-full object-cover object-top transition-transform duration-500 group-hover:scale-105"
             onError={(e) => { e.currentTarget.style.display = "none"; }}
           />
         ) : (
