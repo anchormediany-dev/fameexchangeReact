@@ -61,6 +61,7 @@ const OurTeam = lazy(() => import("./pages/team/OurTeam"));
 const TeamMemberBioPage = lazy(() => import("./pages/team/TeamMemberBioPage"));
 const CustomerReview = lazy(() => import("./pages/customer_review/CustomerReview"));
 const BrandedTalentSharesPage = lazy(() => import("./pages/branded_talent_shares/BrandedTalentSharesPage"));
+const PodcastPage = lazy(() => import("./pages/podcast/PodcastPage"));
 const AllProducts = lazy(() => import("./pages/AllProducts"));
 const DownloadAppPage = lazy(() => import("./pages/download_app/DownloadAppPage"));
 const FeaturedTalentPage = lazy(() => import("./pages/featured_talent/FeaturedTalentPage"));
@@ -773,6 +774,16 @@ export default function App() {
             element={
               <MotionPageWrapper>
                 <BrandedTalentSharesPage />
+              </MotionPageWrapper>
+            }
+          />
+          {/* FameX Podcast — real YouTube-sourced episode list, see
+              src/pages/podcast/PodcastPage.jsx */}
+          <Route
+            path="podcast"
+            element={
+              <MotionPageWrapper>
+                <PodcastPage />
               </MotionPageWrapper>
             }
           />

@@ -5,7 +5,7 @@ import { openExternal } from "../../utils/nativeLinks";
 
 const Podcast = () => {
   const navigate = useNavigate();
-  const handlePodcastClick = () => navigate("/signup/fan");
+  const handlePodcastClick = () => navigate("/podcast");
   // Animation variants
   const fadeInUp = {
     hidden: {
