@@ -66,8 +66,6 @@ const AllProducts = lazy(() => import("./pages/AllProducts"));
 const DownloadAppPage = lazy(() => import("./pages/download_app/DownloadAppPage"));
 const FeaturedTalentPage = lazy(() => import("./pages/featured_talent/FeaturedTalentPage"));
 const ProductCheckoutPage = lazy(() => import("./pages/product_checkout/ProductCheckoutPage"));
-const BrandedTokens = lazy(() => import("./pages/branded_tokens/BrandedTokens"));
-const TalentTokens = lazy(() => import("./pages/talent_tokens/TalentTokens"));
 const FAQ = lazy(() => import("./pages/FAQ"));
 const Faq = lazy(() => import("./pages/faq/Faq"));
 const HowToBuySell = lazy(() => import("./pages/how_to_buy_sell/HowToBuySell"));
@@ -825,24 +823,6 @@ export default function App() {
             </MotionPageWrapper>
           }
         /> */}
-
-        {/* Token Pages */}
-        <Route
-          path="branded-tokens"
-          element={
-            <MotionPageWrapper>
-              <BrandedTokens />
-            </MotionPageWrapper>
-          }
-        />
-        <Route
-          path="talent-tokens"
-          element={
-            <MotionPageWrapper>
-              <TalentTokens />
-            </MotionPageWrapper>
-          }
-        />
 
         {/* Support and Help Pages */}
         {/* <Route
