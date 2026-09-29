@@ -109,9 +109,18 @@ const ClosePositionModal = ({ position, onClose, onSuccess }) => {
                     </span>
                   </div>
                   <div className="flex justify-between text-sm">
-                    <span className="text-gray-400">Close Fee (0.5%)</span>
+                    <span className="text-gray-400">Close Fee ({preview.fee_rate}%)</span>
                     <span className="text-white font-mono">-${Number(preview.fees).toFixed(2)}</span>
                   </div>
+                  <div className="flex justify-between text-sm">
+                    <span className="text-gray-400">Talent Royalty ({preview.royalty_rate}%)</span>
+                    <span className="text-white font-mono">-${Number(preview.royalty).toFixed(2)}</span>
+                  </div>
+                  {preview.in_promo_window && (
+                    <p className="text-emerald-400 text-xs">
+                      Launch promo — fees and royalty waived for this talent right now.
+                    </p>
+                  )}
                   <div className="border-t border-[#1f1f1f] my-2" />
                   <div className="flex justify-between text-base font-semibold">
                     <span className="text-gray-300">You Receive</span>

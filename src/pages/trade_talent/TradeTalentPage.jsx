@@ -433,11 +433,22 @@ const TradeTalentPage = () => {
                     </span>
                   </div>
                   <div className="flex justify-between">
-                    <span className="text-gray-400">Fee (0.5%)</span>
+                    <span className="text-gray-400">Fee ({previewData.fee_rate}%)</span>
                     <span className="text-white font-mono">
                       -${fmt(previewData.fee)}
                     </span>
                   </div>
+                  <div className="flex justify-between">
+                    <span className="text-gray-400">Talent Royalty ({previewData.royalty_rate}%)</span>
+                    <span className="text-white font-mono">
+                      -${fmt(previewData.royalty)}
+                    </span>
+                  </div>
+                  {previewData.in_promo_window && (
+                    <p className="text-emerald-400 text-xs">
+                      Launch promo — fees and royalty waived for this talent right now.
+                    </p>
+                  )}
                   <div className="border-t border-[#1f1f1f] my-1" />
                   <div className="flex justify-between font-semibold">
                     <span className="text-gray-300">Total Required</span>
