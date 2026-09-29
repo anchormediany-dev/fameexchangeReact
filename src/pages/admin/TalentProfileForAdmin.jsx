@@ -126,7 +126,7 @@ const TalentProfileForAdmin = () => {
 
       <section className=" px-4 md:px-8 container mx-auto ">
         <div className="rounded-xl p-6 bg-[#1f1f1f]">
-          <PortfolioDashboardForFan userData={data} />
+          <PortfolioDashboardForFan talentId={id} />
         </div>
       </section>
     </section>

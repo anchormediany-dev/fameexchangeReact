@@ -1,138 +1,123 @@
 import { useState } from "react";
-import {
-  LineChart,
-  Line,
-  XAxis,
-  YAxis,
-  Tooltip,
-  ResponsiveContainer,
-} from "recharts";
-import { SlSettings } from "react-icons/sl";
-import PurchaseConfirmationModal from "../../components/PurchaseConfirmationModal";
-const data = [
-  { time: "1", value: 0.003 },
-  { time: "2", value: 0.002 },
-  { time: "3", value: 0.0018 },
-  { time: "4", value: 0.0025 },
-  { time: "5", value: 0.004 },
-  { time: "6", value: 0.0035 },
-  { time: "7", value: 0.0045 },
-  { time: "8", value: 0.004 },
-  { time: "9", value: 0.005 },
-  { time: "10", value: 0.0048 },
-  { time: "11", value: 0.0052 },
-  { time: "12", value: 0.005 },
-];
+import { useSelector } from "react-redux";
+import { Link } from "react-router-dom";
+import CandlestickChart from "../../components/CandlestickChart";
+import { useGetTalentChartQuery, useGetOpenPositionsQuery } from "../../app/tradingApi";
 
-export default function PortfolioDashboardForFan({ userData }) {
-  const [isModalOpen, setIsModalOpen] = useState(false);
+const RANGES = ["1D", "1W", "1M", "3M", "1Y", "5Y", "10Y"];
+const fmt = (n, d = 2) => Number(n || 0).toFixed(d);
+const fmtPnl = (v) => (v >= 0 ? `+$${fmt(v)}` : `-$${fmt(Math.abs(v))}`);
+const pnlColor = (v) => (v > 0 ? "text-green-400" : v < 0 ? "text-red-400" : "text-gray-400");
 
-  const handleCloseModal = () => {
-    setIsModalOpen(false);
-  };
+export default function PortfolioDashboardForFan({ talentId }) {
+  const [range, setRange] = useState("1D");
+  const isLoggedIn = !!useSelector((s) => s?.auth?.user);
+
+  const { data: chartData, isLoading: chartLoading } = useGetTalentChartQuery(
+    { id: talentId, range },
+    { skip: !talentId }
+  );
+  const { data: positionsData, isLoading: positionsLoading } = useGetOpenPositionsQuery(
+    { talent_id: talentId, limit: 1 },
+    { skip: !talentId || !isLoggedIn }
+  );
+
+  const candles = chartData?.data || [];
+  const position = positionsData?.positions?.[0] || null;
 
   return (
     <section>
       <div className="container">
-        {/* Portfolio Overview */}
-        <div className="mb-6 z-10 relative">
-          <h1 className="text-xl md:text-3xl font-semibold">
-            {userData?.data?.profile?.name} Portfolio Is Worth{" "}
-            <span className="text-yellow-400">
-              {userData?.data?.networth[0]?.netWorth}{" "}
-              {userData?.data?.networth[0]?.currency}
-            </span>
-          </h1>
-          <p className="text-md md:text-xl text-yellow-300 mt-1">
-            USD Balance <span className="text-yellow-300">1808.24</span>
-          </p>
-          <p className="text-red-500 text-sm">(-2.01%)</p>
-        </div>
-
-        {/* Graph Filters + Advanced */}
+        {/* Chart range filters */}
         <div className="flex items-center justify-between mb-2">
           <div className="flex space-x-4 text-xs md:text-sm font-normal text-white">
-            {["LIVE", "1D", "1W", "1M", "2M", "1Y", "2Y"].map((label, i) => (
-              <span
-                key={i}
+            {RANGES.map((label) => (
+              <button
+                key={label}
+                type="button"
+                onClick={() => setRange(label)}
                 className={`cursor-pointer ${
-                  label === "1D" ? "text-yellow-400 font-semibold" : ""
+                  label === range ? "text-yellow-400 font-semibold" : "text-gray-400"
                 }`}
               >
                 {label}
-              </span>
+              </button>
             ))}
           </div>
-          <button className="flex items-center gap-2 px-3 py-1 rounded-full border border-gray-600 text-gray-300 text-xs hover:bg-gray-800 transition">
-            <SlSettings className="text-sm" />
-            Advanced
-          </button>
         </div>
 
-        {/* Chart Section */}
+        {/* Chart */}
         <div className="w-full h-48 md:h-72 mb-8 bg-[#151515] rounded-xl shadow-inner px-2 md:px-6 py-4">
-          <ResponsiveContainer width="100%" height="100%">
-            <LineChart
-              data={data}
-              margin={{ top: 10, right: 0, left: 0, bottom: 0 }}
-            >
-              <XAxis dataKey="time" hide />
-              <YAxis domain={["auto", "auto"]} hide />
-              <Tooltip
-                contentStyle={{ backgroundColor: "#111", border: "none" }}
-                labelStyle={{ color: "#fff" }}
-              />
-              <Line
-                type="monotone"
-                dataKey="value"
-                stroke="#ffffff"
-                strokeWidth={1.5}
-                dot={false}
-                strokeOpacity={0.9}
-                className="shadow-lg"
-                style={{
-                  filter: "drop-shadow(0 0 6px rgba(255, 255, 255, 0.4))",
-                }}
-              />
-            </LineChart>
-          </ResponsiveContainer>
+          {chartLoading ? (
+            <div className="w-full h-full flex items-center justify-center text-gray-500 text-sm">
+              Loading chart…
+            </div>
+          ) : candles.length > 0 ? (
+            <CandlestickChart data={candles} height={240} />
+          ) : (
+            <div className="w-full h-full flex items-center justify-center text-gray-500 text-sm">
+              No chart data available yet.
+            </div>
+          )}
         </div>
 
-        <div className=" relative z-10">
-          {/* Portfolio Metrics */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
-            <div className="bg-[#111] rounded-xl p-4 border border-[#404040]">
-              <h3 className="text-sm  font-normal">You Equity</h3>
-              <p className="text-primary text-2xl font-medium">$0.02525869</p>
-              <p className="text-white flex justify-between text-sm mt-2">
-                <span> Today's Return: </span>
-                <span>~$0.0098 (-2.95%)</span>
-              </p>
-              <p className="text-white flex justify-between text-sm mt-2">
-                <span> Total Return:</span>
-                <span>~$0.0098 (-2.95%)</span>
-              </p>
+        {/* Your position in this talent */}
+        <div className="relative z-10">
+          {!isLoggedIn ? (
+            <div className="bg-[#111] rounded-xl p-6 border border-[#404040] text-center">
+              <p className="text-gray-300 mb-3">Sign in to see your position in this talent.</p>
+              <Link
+                to="/login"
+                className="inline-block bg-yellow-400 text-black font-semibold px-5 py-2 rounded-lg hover:brightness-110 transition"
+              >
+                Sign In
+              </Link>
             </div>
+          ) : positionsLoading ? (
+            <div className="bg-[#111] rounded-xl p-6 border border-[#404040] text-center text-gray-500">
+              Loading your position…
+            </div>
+          ) : !position ? (
+            <div className="bg-[#111] rounded-xl p-6 border border-[#404040] text-center">
+              <p className="text-gray-300 mb-3">You don't own any shares of this talent yet.</p>
+              <Link
+                to={`/trade-talent/${talentId}`}
+                className="inline-block bg-yellow-400 text-black font-semibold px-5 py-2 rounded-lg hover:brightness-110 transition"
+              >
+                Start Trading
+              </Link>
+            </div>
+          ) : (
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+              <div className="bg-[#111] rounded-xl p-4 border border-[#404040]">
+                <h3 className="text-sm font-normal">Your Equity</h3>
+                <p className="text-primary text-2xl font-medium">
+                  ${fmt(position.units * position.current_price)}
+                </p>
+                <p className={`flex justify-between text-sm mt-2 ${pnlColor(position.unrealized_pnl)}`}>
+                  <span>Unrealized P&amp;L:</span>
+                  <span>
+                    {fmtPnl(position.unrealized_pnl)} ({fmt(position.unrealized_pnl_percent)}%)
+                  </span>
+                </p>
+              </div>
 
-            <div className="bg-[#111] rounded-xl p-4 border border-[#404040]">
-              <h3 className="text-sm  font-normal">You Average cost</h3>
-              <p className="text-primary text-2xl font-medium">$0.01425869</p>
-              <p className="text-white flex justify-between text-sm mt-2">
-                <span> Quantity </span>
-                <span>5.32</span>
-              </p>
-              <p className="text-white flex justify-between text-sm mt-2">
-                <span> Portfolio</span>
-                <span>85.23%</span>
-              </p>
+              <div className="bg-[#111] rounded-xl p-4 border border-[#404040]">
+                <h3 className="text-sm font-normal">Your Average Cost</h3>
+                <p className="text-primary text-2xl font-medium">${fmt(position.entry_price, 4)}</p>
+                <p className="text-white flex justify-between text-sm mt-2">
+                  <span>Shares</span>
+                  <span>{fmt(position.units, 0)}</span>
+                </p>
+                <p className="text-white flex justify-between text-sm mt-2">
+                  <span>Invested</span>
+                  <span>${fmt(position.invested_amount)}</span>
+                </p>
+              </div>
             </div>
-          </div>
+          )}
         </div>
       </div>
-      <PurchaseConfirmationModal
-        isOpen={isModalOpen}
-        onClose={handleCloseModal}
-      />
     </section>
   );
 }
