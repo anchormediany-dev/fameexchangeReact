@@ -5,7 +5,7 @@ import { FiUser, FiUsers, FiArrowRight } from "react-icons/fi";
 import Navbar from "../../components/Navbar";
 import Footer from "../../components/Footer";
 import MotionPageWrapper from "../../components/MotionPageWrapper";
-import AuthGate from "../../components/AuthGate";
+import FuturesPublicPreview from "./FuturesPublicPreview";
 import {
   useGetMyFuturesTalentProfileQuery,
   useGetMyFuturesFanProfileQuery,
@@ -259,14 +259,14 @@ function DashboardContent() {
 }
 
 export default function FuturesDashboard() {
+  // Logged-out visitors get a real, unblurred marketing preview of what the
+  // dashboard offers (see FuturesPublicPreview.jsx) instead of the
+  // AuthGate blur-and-modal wall — sign-up is prompted contextually, when
+  // they actually try to do something, not the instant they land here.
+  const user = useSelector((s) => s?.auth?.user);
   return (
     <MotionPageWrapper>
-      <AuthGate
-        title="Sign in to Fame Futures"
-        message="Sign in to your Fame Exchange account to get started."
-      >
-        <DashboardContent />
-      </AuthGate>
+      {user ? <DashboardContent /> : <FuturesPublicPreview />}
     </MotionPageWrapper>
   );
 }
