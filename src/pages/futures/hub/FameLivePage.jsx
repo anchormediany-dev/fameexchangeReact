@@ -1,6 +1,6 @@
 import { useState, useMemo } from "react";
 import { toast } from "react-toastify";
-import { FiVideo, FiCalendar, FiMail, FiUserPlus } from "react-icons/fi";
+import { FiVideo, FiCalendar, FiUserPlus } from "react-icons/fi";
 import {
   useGetMyFuturesTalentProfileQuery,
   useGetWebinarsQuery,

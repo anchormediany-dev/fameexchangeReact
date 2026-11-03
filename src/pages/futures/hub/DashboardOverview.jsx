@@ -6,7 +6,6 @@ import {
   FiZap,
   FiArrowRight,
   FiCheck,
-  FiTrash2,
   FiTarget,
   FiCopy,
 } from "react-icons/fi";
