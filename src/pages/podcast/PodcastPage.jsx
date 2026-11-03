@@ -3,6 +3,7 @@ import { FaYoutube } from "react-icons/fa";
 import { FiExternalLink, FiPlayCircle } from "react-icons/fi";
 import { useGetPodcastEpisodesQuery } from "../../app/podcastApi";
 import { openExternal } from "../../utils/nativeLinks";
+import certifiedBadge from "../../assets/images/fame-exchange-certified-badge.png";
 
 const FALLBACK_NAME = "FameX Podcast";
 const FALLBACK_DESCRIPTION =
@@ -31,13 +32,11 @@ const PodcastPage = () => {
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Header */}
         <div className="flex flex-col sm:flex-row items-center sm:items-start gap-6 mb-12 text-center sm:text-left">
-          {channel?.avatar && (
-            <img
-              src={channel.avatar}
-              alt={channel?.name || FALLBACK_NAME}
-              className="w-24 h-24 rounded-full object-cover border-2 border-[#a38b41]/40 shrink-0"
-            />
-          )}
+          <img
+            src={certifiedBadge}
+            alt="The Fame Exchange Certified"
+            className="w-24 h-24 object-contain shrink-0"
+          />
           <div>
             <h1 className="text-3xl sm:text-4xl font-black">{channel?.name || FALLBACK_NAME}</h1>
             <p className="text-gray-400 mt-2 max-w-2xl">

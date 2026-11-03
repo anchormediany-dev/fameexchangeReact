@@ -24,6 +24,7 @@ import ConfirmedRequestsCalendar from "../../components/talent_profile/Confirmed
 import PendingRequestsList from "../../components/talent_profile/PendingRequestsList";
 import { toast } from "react-toastify";
 import CalculatingNetworthPopupUser from "./CalculatingNetworthPopupUser";
+import DepositModal from "../../components/trading/DepositModal";
 const TalentProfile = () => {
   const userLocalData = JSON.parse(localStorage.getItem("user"));
   const userId = userLocalData?.id;
@@ -46,6 +47,7 @@ const TalentProfile = () => {
   const [showNetworthPopup, setShowNetworthPopup] = useState(false);
   const [networthResult, setNetworthResult] = useState(null);
   const [networthError, setNetworthError] = useState(null);
+  const [showDepositModal, setShowDepositModal] = useState(false);
   const buildPayloadFromGet = (root) => {
     const d = root?.data ?? root;
     const profile = d?.profile || {};
@@ -135,13 +137,11 @@ const TalentProfile = () => {
   // const { data: userData, isLoading, isError } = useGetUserByIdQuery(userId);
   // console.log(userData?.user?.name, "user data");
   const handleTradingChart = () => {
-    console.log("Opening trading chart...");
-    // Add chart logic here
+    navigate(`/trade-talent/${id}`);
   };
 
   const handleImportFunds = () => {
-    console.log("Importing more funds...");
-    // Add import funds logic here
+    setShowDepositModal(true);
   };
 
   return (
@@ -390,6 +390,9 @@ const TalentProfile = () => {
         error={networthError}
         onClose={() => setShowNetworthPopup(false)}
       />
+      {showDepositModal && (
+        <DepositModal onClose={() => setShowDepositModal(false)} />
+      )}
     </section>
   );
 };

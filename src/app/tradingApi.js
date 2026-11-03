@@ -298,11 +298,6 @@ export const tradingApi = api.injectEndpoints({
       }),
     }),
 
-    // ── FameScore ─────────────────────────────────────────
-    getFameScoreThresholds: builder.query({
-      query: () => "/famescore/thresholds",
-    }),
-
     // ── Futures tier ─────────────────────────────────────────
     getFuturesTalents: builder.query({
       query: () => "/futures",
@@ -393,7 +388,6 @@ export const {
   useGetLedgerEntriesQuery,
   useLazyVerifyLedgerQuery,
   // FameScore
-  useGetFameScoreThresholdsQuery,
   // Futures
   useGetFuturesTalentsQuery,
   useSimulatePledgeMutation,

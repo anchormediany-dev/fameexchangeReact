@@ -1,5 +1,3 @@
-import { useGetFameScoreThresholdsQuery } from "../app/tradingApi";
-
 const PLATFORM_LABELS = {
   youtube: "YouTube",
   tiktok: "TikTok",
@@ -15,37 +13,29 @@ const pct = (v) => `${(Number(v || 0) * 100).toFixed(1)}%`;
 const num = (v) => Number(v || 0).toLocaleString();
 
 /**
- * Shows exactly what qualification actually requires — the talent's real
- * per-platform breakdown (already returned by the API on talent.fame_score_
- * breakdown) plus the live threshold constants from the backend (never
- * hardcoded client-side, since they'd drift the moment either changes).
- * Content-only: no modal shell of its own, meant to be dropped into an
- * existing popup/page as a "step".
+ * Shows the talent's OWN real stats (their data — fully fine to show), but
+ * deliberately does NOT show the underlying qualification thresholds
+ * themselves. The exact formula (follower/engagement/platform-count
+ * minimums, growth-tiering percentages, single-platform alternative bar)
+ * used to be fetched live from GET /api/famescore/thresholds and displayed
+ * as direct "have X / need Y" comparisons — removed per product decision:
+ * the qualification bar is the "secret sauce" and shouldn't be
+ * reverse-engineerable from the product itself. Content-only: no modal
+ * shell of its own, meant to be dropped into an existing popup/page.
  */
 export default function FameScoreBreakdownView({ talent, onBack }) {
-  const { data, isLoading } = useGetFameScoreThresholdsQuery();
-  const thresholds = data?.thresholds;
-  const singlePlatform = data?.singlePlatformThresholds;
-  const growthTiering = data?.growthTiering;
-
   const breakdown = Array.isArray(talent?.fame_score_breakdown) ? talent.fame_score_breakdown : [];
-  const platformCount = breakdown.length;
-  const totalFollowers = breakdown.reduce((sum, p) => sum + (Number(p.followers) || 0), 0);
-  const avgEngagementRate = totalFollowers > 0
-    ? breakdown.reduce((sum, p) => sum + (Number(p.engagementRate) || 0) * (Number(p.followers) || 0), 0) / totalFollowers
-    : 0;
-  // growthQualifies is computed server-side (platformGrowthQualifies in
-  // famescoreService.js) — it accounts for account scale/maturity, not just
-  // a flat "growthRate > 0" check, so it must not be re-derived here.
-  const hasGrowth = breakdown.some((p) => p.growthQualifies);
+  const qualified = !!talent?.qualified;
 
   return (
     <div className="space-y-5 text-left">
-      <p className="text-gray-400 text-sm">
-        Qualification checks two independent paths — meet all the standard thresholds across your platforms, or clear the higher bar on a single platform alone.
-      </p>
+      <div className={`rounded-lg p-3 text-sm font-medium ${qualified ? "bg-emerald-500/10 text-emerald-400" : "bg-[#2a2a2a] text-gray-300"}`}>
+        {qualified
+          ? "You meet our qualification standards for becoming a tradeable Branded Talent Share."
+          : "You haven't yet met our qualification standards. Keep growing your real audience and engagement — consistent growth across multiple platforms is what we look for."}
+      </div>
 
-      {/* Per-platform breakdown */}
+      {/* Per-platform breakdown — the talent's own real data */}
       {breakdown.length > 0 && (
         <div className="space-y-2">
           <div className="text-gray-400 text-xs uppercase tracking-wider">Your Platforms</div>
@@ -71,38 +61,9 @@ export default function FameScoreBreakdownView({ talent, onBack }) {
         </div>
       )}
 
-      {/* Standard multi-platform path */}
-      <div className="space-y-2">
-        <div className="text-gray-400 text-xs uppercase tracking-wider">Standard Path (2+ Platforms)</div>
-        {isLoading || !thresholds ? (
-          <p className="text-gray-500 text-xs">Loading current thresholds…</p>
-        ) : (
-          <div className="bg-[#2a2a2a] rounded-lg p-3 space-y-2 text-sm">
-            <ThresholdRow label="Total followers" have={num(totalFollowers)} need={`${num(thresholds.minTotalFollowers)}+`} met={totalFollowers >= thresholds.minTotalFollowers} />
-            <ThresholdRow label="Avg. engagement rate" have={pct(avgEngagementRate)} need={`${pct(thresholds.minEngagementRate)}+`} met={avgEngagementRate >= thresholds.minEngagementRate} />
-            <ThresholdRow label="Platforms connected" have={platformCount} need={`${thresholds.minPlatforms}+`} met={platformCount >= thresholds.minPlatforms} />
-            <ThresholdRow label="Growth trend" have={hasGrowth ? "Qualifies" : "Not yet"} need={thresholds.requireGrowthTrend ? "Required" : "Not required"} met={!thresholds.requireGrowthTrend || hasGrowth} />
-          </div>
-        )}
-        {growthTiering && (
-          <p className="text-gray-500 text-xs px-1">
-            Growth requirement scales with account size/age: accounts under {growthTiering.matureAccountAgeMonths} months old need {pct(growthTiering.newAccountGrowthFloor)}+ growth; established accounts just need to avoid declining more than {pct(Math.abs(growthTiering.matureAccountGrowthFloor))}/month; accounts over {num(growthTiering.megaAccountThreshold)} followers can also qualify by adding {num(growthTiering.megaAccountAbsoluteGrowthFloor)}+ followers/month even if that's a small percentage.
-          </p>
-        )}
-      </div>
-
-      {/* Single-platform alternative path */}
-      <div className="space-y-2">
-        <div className="text-gray-400 text-xs uppercase tracking-wider">Or: Single-Platform Path</div>
-        {isLoading || !singlePlatform ? (
-          <p className="text-gray-500 text-xs">Loading current thresholds…</p>
-        ) : (
-          <p className="text-gray-400 text-xs bg-[#2a2a2a] rounded-lg p-3">
-            One platform alone clearing <span className="text-white font-semibold">{num(singlePlatform.minFollowers)}+ followers</span> and{" "}
-            <span className="text-white font-semibold">{pct(singlePlatform.minEngagementRate)}+ engagement</span> (plus growth trend) qualifies on its own — no need for a second platform.
-          </p>
-        )}
-      </div>
+      <p className="text-gray-500 text-xs px-1">
+        We look at your real reach, engagement, and growth trend across the platforms you've connected. We re-check periodically, so building real momentum over time matters more than any single snapshot.
+      </p>
 
       <button
         type="button"
@@ -111,17 +72,6 @@ export default function FameScoreBreakdownView({ talent, onBack }) {
       >
         ← Back
       </button>
-    </div>
-  );
-}
-
-function ThresholdRow({ label, have, need, met }) {
-  return (
-    <div className="flex items-center justify-between">
-      <span className="text-gray-400">{label}</span>
-      <span className={met ? "text-emerald-400" : "text-gray-300"}>
-        {have} <span className="text-gray-500">/ {need}</span> {met && "✓"}
-      </span>
     </div>
   );
 }

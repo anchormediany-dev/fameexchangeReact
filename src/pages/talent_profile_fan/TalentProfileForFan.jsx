@@ -1,28 +1,31 @@
+import { useState } from "react";
 import {
   FaChartLine,
   FaWallet,
 } from "react-icons/fa";
 import ImageSwitch from "./ImageSwitchFan";
 import { useGetTalentOverviewQuery } from "../../app/authApi";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import FriendsFanSection from "../../components/talent_profile_fan/FriendsFanSection";
 import EventsFanSection from "../../components/talent_profile_fan/EventsFanSection";
 import TalentLinksFan from "../../components/talent_profile_fan/TalentLinksFan";
 import PortfolioDashboardForFan from "./Portfolio";
+import DepositModal from "../../components/trading/DepositModal";
 
 const TalentProfileForFan = () => {
   const { id } = useParams();
+  const navigate = useNavigate();
   const { data } = useGetTalentOverviewQuery(id, {
     skip: !id,
   });
+  const [showDepositModal, setShowDepositModal] = useState(false);
+
   const handleTradingChart = () => {
-    console.log("Opening trading chart...");
-    // Add chart logic here
+    navigate(`/trade-talent/${id}`);
   };
 
   const handleImportFunds = () => {
-    console.log("Importing more funds...");
-    // Add import funds logic here
+    setShowDepositModal(true);
   };
 
   return (
@@ -194,6 +197,9 @@ const TalentProfileForFan = () => {
           <PortfolioDashboardForFan talentId={id} />
         </div>
       </section>
+      {showDepositModal && (
+        <DepositModal onClose={() => setShowDepositModal(false)} />
+      )}
     </section>
   );
 };

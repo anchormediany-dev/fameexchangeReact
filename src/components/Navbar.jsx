@@ -16,7 +16,7 @@ const defaultNavLinks = [
   { name: "Featured", path: "/featured-talent", isRoute: true },
   { name: "App", path: "/download-app", isRoute: true },
   { name: "Inverse", path: "/inverse", isRoute: true },
-  { name: "Podcast", scrollTo: "podcast" },
+  { name: "Podcast", path: "/podcast", isRoute: true },
   { name: "Futures", path: "/futures", isRoute: true },
   { name: "Merchandise", path: "/products", isRoute: true },
   { name: "Gigs & Events", path: "/events", isRoute: true },
